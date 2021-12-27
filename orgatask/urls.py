@@ -24,7 +24,7 @@ _account_urls = [
              next_page=reverse_lazy("orgatask:account-logout-done")),
          name="account-logout"),
     path('account/logout/done',
-         views.account_logout,
+         views.account_logout_done,
          name="account-logout-done"),
     path('account/register/',
          views.account_register,
@@ -69,7 +69,21 @@ _account_urls = [
 
 # App URLs
 _app_urls = [
+    path('app/',
+         views.app_main,
+         name="app-main"),
 
+    path('app/settings',
+         views.app_settings,
+         name="app-settings"),
+
+    path('app/api',
+         views.app_api,
+         name="app-api"),
+
+    path('app/manifest.json',
+         views.app_manifest,
+         name="app-manifest"),
 ]
 
 # All URLs
