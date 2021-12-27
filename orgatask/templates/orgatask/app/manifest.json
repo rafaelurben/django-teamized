@@ -1,0 +1,14 @@
+{
+    "name": "OrgaTask",
+    "short_name": "OrgaTask",
+    "start_url": "{% url 'orgatask:app-main' %}",
+    "scope": "{% url 'orgatask:app-main' %}",
+    "display": "standalone",
+    "background_color": "#000",
+    "theme_color": "#000",
+    "description": "Projekt- und Zeitplanung auf neuem Level.",
+    "dir": "ltr",
+    "lang": "de",
+    "prefer_related_applications": false,
+    "related_applications": []
+}

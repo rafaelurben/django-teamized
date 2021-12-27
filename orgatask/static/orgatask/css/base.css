@@ -1,0 +1,8 @@
+/* Base stylesheet for all OrgaTask pages */
+
+button,
+a {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
