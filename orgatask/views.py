@@ -26,15 +26,6 @@ def manifest(request):
     response["Service-Worker-Allowed"] = reverse('orgatask:home')
     return response
 
-# API views
-
-# TODO: write API decorators
-@login_required(login_url=reverse_lazy('account:login')+'?next=')
-def api(request):
-    "Process API calls"
-    # TODO: implement the API
-
-
 # Error views
 
 def notfound(request):
