@@ -1,8 +1,8 @@
 {
     "name": "OrgaTask",
     "short_name": "OrgaTask",
-    "start_url": "{% url 'orgatask:app-main' %}",
-    "scope": "{% url 'orgatask:app-main' %}",
+    "start_url": "{% url 'orgatask:app' %}",
+    "scope": "{% url 'orgatask:home' %}",
     "display": "standalone",
     "background_color": "#000",
     "theme_color": "#000",

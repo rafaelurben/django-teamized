@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="de">
 
-    {% load static %}
+    {% load i18n static %}
 
     <head>
         {% block head %}
@@ -13,6 +13,7 @@
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <meta name="apple-mobile-web-app-status-bar-style" content="black">
             <meta name="theme-color" content="#000"/>
+            <link rel="manifest" href="{% url "orgatask:manifest" %}">
 
             {% block stylesheets %}
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
@@ -20,19 +21,71 @@
                 <link rel="stylesheet" href="{% static 'orgatask/css/base.css' %}">
             {% endblock %}
 
-            {% block extrahead %}{% endblock %}
         {% endblock %}
+        {% block extrahead %}{% endblock %}
     </head>
 
     <body>
 
+        <!-- Menubar -->
+        {% block menubar %}
+            <nav id="menubar" class="navbar navbar-expand navbar-dark bg-dark">
+                {% block menubartitle %}
+                    <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'orgatask:home' %}">OrgaTask</a>
+                {% endblock menubartitle %}
+                <ul class="navbar-nav nav w-50 me-2 justify-content-center">
+                    {% block menubar_items_center %}
+                    {% endblock menubar_items_center %}
+                </ul>
+                <ul class="navbar-nav nav w-50 me-2 justify-content-end">
+                    {% block menubar_items_end %}
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item border rounded border-secondary ms-2">
+                                <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
+                                    <i class="fas fa-home"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item border rounded border-secondary ms-2">
+                                <a class="nav-link ms-1 me-1" href="{% url 'account:login' %}?next={% url 'orgatask:app' %}" title="{% translate "Login" %}">
+                                    <i class="fas fa-fw fa-sign-in-alt"></i>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item border rounded border-secondary ms-2">
+                                <a class="nav-link ms-1 me-1" href="{% url 'account:home' %}?next={% url 'orgatask:app' %}" title="{% translate "Account" %}">
+                                    <i class="fas fa-user"></i>
+                                    <span class="navbar-text ms-2">{{ user.username }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item border rounded border-secondary ms-2">
+                                <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
+                                    <i class="fas fa-home"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item border rounded border-secondary ms-2">
+                                <a class="nav-link ms-1 me-1" href="{% url 'account:logout' %}?next={% url 'orgatask:home' %}" title="{% translate "Ausloggen" %}">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endblock menubar_items_end %}
+                </ul>
+            </nav>
+        {% endblock menubar %}
         
-
+        <!-- Main content -->
+        {% block contentcontainer %}
+            <div class="px-4 py-3 container-fluid">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        {% endblock contentcontainer %}
         
+        <!-- Scripts -->
         {% block scripts %}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         
-        {% endblock %}
+        {% endblock scripts%}
     </body>
 
 </html>

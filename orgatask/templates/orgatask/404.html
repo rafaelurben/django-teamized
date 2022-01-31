@@ -1,5 +1,8 @@
+{% extends 'orgatask/base.html' %}
 {% load i18n %}
 
-[OrgaTask]
+{% block title %}404{% endblock %}
 
-{% translate "Diese Seite wurde leider nicht gefunden." %}
+{% block content %}
+    {% translate "Diese Seite wurde leider nicht gefunden." %}
+{% endblock content %}
