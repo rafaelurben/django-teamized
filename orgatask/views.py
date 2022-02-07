@@ -14,7 +14,7 @@ def home(request):
 
 # App views
 
-@login_required(login_url=reverse_lazy('orgatask:account-login'))
+@login_required(login_url=reverse_lazy('account:login'))
 def app(request):
     "Show the app page"
     return render(request, 'orgatask/app.html')
