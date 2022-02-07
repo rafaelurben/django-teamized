@@ -33,11 +33,9 @@
                 {% block menubartitle %}
                     <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'orgatask:home' %}">OrgaTask</a>
                 {% endblock menubartitle %}
-                <ul class="navbar-nav nav w-50 me-2 justify-content-center">
-                    {% block menubar_items_center %}
-                    {% endblock menubar_items_center %}
-                </ul>
-                <ul class="navbar-nav nav w-50 me-2 justify-content-end">
+                <ul class="navbar-nav nav w-100 me-2 justify-content-end">
+                    {% block additional_menubar_items %}
+                    {% endblock additional_menubar_items %}
                     {% block menubar_items_end %}
                         {% if not user.is_authenticated %}
                             <li class="nav-item border rounded border-secondary ms-2">

@@ -5,3 +5,24 @@
 
 {% block extrahead %}
 {% endblock extrahead %}
+
+{% block additional_menubar_items %}
+    <div class="btn-group border rounded border-secondary" role="group" aria-label="Org switcher">
+        <li class="nav-item border-secondary border-end">
+            <a class="nav-link ms-1 me-1" href="#orglist">
+                <i class="fas fa-list"></i>
+            </a>
+        </li>
+        <select class="form-select bg-dark text-white-50 border-dark" aria-label="Default select example">
+            <option selected>Personal Space</option>
+            <option value="1">Org One</option>
+            <option value="2">Org Two</option>
+            <option value="3">Org Three</option>
+        </select>
+        <li class="nav-item border-secondary border-start">
+            <a class="nav-link ms-1 me-1" href="#member">
+                <i class="fas fa-user-cog"></i>
+            </a>
+        </li>
+    </div>
+{% endblock additional_menubar_items %}
