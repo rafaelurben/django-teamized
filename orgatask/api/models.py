@@ -57,5 +57,5 @@ class ApiKey(models.Model):
         return self.user.has_perms(*args, **kwargs)
 
     class Meta:
-        verbose_name = "Api key"
-        verbose_name_plural = "Api keys"
+        verbose_name = "API key"
+        verbose_name_plural = "API keys"

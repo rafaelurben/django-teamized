@@ -18,12 +18,3 @@ class ApiKeyAdmin(admin.ModelAdmin):
     ]
 
     ordering = ('id', )
-
-    hidden = True
-
-#
-
-
-modeladmins = [
-    (ApiKey, ApiKeyAdmin),
-]

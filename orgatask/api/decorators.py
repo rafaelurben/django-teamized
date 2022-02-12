@@ -30,6 +30,8 @@ def protected(read=False, write=False, perms_required=()):
                     keyobject = ApiKey.objects.get(key=apikey)
 
                     if ((not read) or keyobject.read) and ((not write) or keyobject.write) and keyobject.has_perms(perms_required):
+                        request.user = keyobject.user
+                        request.api_key = keyobject
                         return function(request, *args, **kwargs)
 
                     return NO_PERMISSION_APIKEY

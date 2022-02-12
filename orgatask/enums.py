@@ -2,23 +2,43 @@
 
 from django.utils.translation import gettext as _
 
-ROLES = [
-    ('owner', _('Besitzer')),
-    ('admin', _('Administrator')),
-    ('member', _('Mitglied')),
-]
+class Roles:
+    "Roles an organization member can have"
 
-SCOPES = [
-    ('organization', _("Organisationsverwaltung")),
-    ('members', _("Mitgliederverwaltung")),
-    ('member', _("Mitgliedschaft & Einstellungen")),
-]
+    OWNER = 'owner'
+    ADMIN = 'admin'
+    MEMBER = 'member'
 
-ACTIONS = [
-    ('create', _("Erstellen")),
-    ('change', _("Ändern")),
-    ('delete', _("Löschen")),
-    ('invite', _("Einladen")),
-    ('join', _("Beitreten")),
-    ('leave', _("Verlassen")),
-]
+    ROLES = [
+        (OWNER, _('Besitzer')),
+        (ADMIN, _('Administrator')),
+        (MEMBER, _('Mitglied')),
+    ]
+
+class Scopes:
+    ORGANIZATION = 'organization'
+    MEMBERS = 'members'
+    MEMBER = 'member'
+
+    SCOPES = [
+        (ORGANIZATION, _("Organisationsverwaltung")),
+        (MEMBERS, _("Mitgliederverwaltung")),
+        (MEMBER, _("Mitgliedschaft & Einstellungen")),
+    ]
+
+class Actions:
+    CREATE = 'create'
+    CHANGE = 'change'
+    DELETE = 'delete'
+    INVITE = 'invite'
+    JOIN = 'join'
+    LEAVE = 'leave'
+
+    ACTIONS = [
+        (CREATE, _("Erstellen")),
+        (CHANGE, _("Ändern")),
+        (DELETE, _("Löschen")),
+        (INVITE, _("Einladen")),
+        (JOIN, _("Beitreten")),
+        (LEAVE, _("Verlassen")),
+    ]
