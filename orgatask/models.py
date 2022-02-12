@@ -47,18 +47,6 @@ class User(models.Model):
         verbose_name = _("Benutzer")
         verbose_name_plural = _("Benutzer")
 
-    def get_json(self):
-        """
-        Return a JSON representation of this object.
-        """
-        return {
-            "id": self.uid,
-            "username": self.auth_user.username,
-            "first_name": self.auth_user.first_name,
-            "last_name": self.auth_user.last_name,
-            "email": self.auth_user.email,
-        }
-
     def ensure_organization(self):
         """
         Ensure that the OrgaTask.User owns at least one OrgaTask.Organization.
@@ -170,22 +158,6 @@ class Member(models.Model):
     class Meta:
         verbose_name = _("Mitglied")
         verbose_name_plural = _("Mitglieder")
-
-    def get_json(self, include_org=False, include_user=False):
-        "Return a JSON representation of this object."
-        data = {
-            "id": self.uid,
-            "role": self.role,
-            "note": self.note,
-            "settings": self.settings,
-            "created_at": self.created_at.timestamp(),
-            "updated_at": self.updated_at.timestamp(),
-        }
-        if include_org:
-            data["organization"] = self.organization.get_json()
-        if include_user:
-            data["user"] = self.user.get_json()
-        return data
 
 
 # class OrgLog(models.Model):
