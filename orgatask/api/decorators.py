@@ -5,7 +5,7 @@ import uuid
 from functools import wraps
 
 from orgatask.api.constants import (
-    NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED, OBJ_NOT_FOUND
+    NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED, METHOD_NOT_ALLOWED, OBJ_NOT_FOUND
 )
 from orgatask.api.models import ApiKey
 
@@ -18,23 +18,31 @@ def _is_valid_uuid(val):
         return False
 
 
-def protected(read=False, write=False, perms_required=()):
+def api_view(allowed_methods=["get"], perms_required=()):
     """Decorator: Protect an api view from unauthorized access."""
     def decorator(function):
         @wraps(function)
         def wrap(request, *args, **kwargs):
+            if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
+                return METHOD_NOT_ALLOWED
+            
             apikey = request.GET.get("apikey", None)
 
             if apikey:
                 if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
                     keyobject = ApiKey.objects.get(key=apikey)
-
-                    if ((not read) or keyobject.read) and ((not write) or keyobject.write) and keyobject.has_perms(perms_required):
-                        request.user = keyobject.user
-                        request.api_key = keyobject
-                        return function(request, *args, **kwargs)
-
-                    return NO_PERMISSION_APIKEY
+                    
+                    if request.method.upper() == "GET":
+                        if not keyobject.read:
+                            return NO_PERMISSION_APIKEY
+                    elif not keyobject.write:
+                        return NO_PERMISSION_APIKEY
+                    elif not keyobject.has_perms(perms_required):
+                        return NO_PERMISSION_APIKEY
+                    
+                    request.user = keyobject.user
+                    request.api_key = keyobject
+                    return function(request, *args, **kwargs)
 
                 return APIKEY_INVALID
 
@@ -47,23 +55,6 @@ def protected(read=False, write=False, perms_required=()):
             return NOT_AUTHENTICATED
         return wrap
     return decorator
-
-# Shortcuts
-
-
-def api_read(perms_required=()):
-    """Decorator: Requires a read api key or a logged in user to access this view"""
-    return protected(read=True, write=False, perms_required=perms_required)
-
-
-def api_write(perms_required=()):
-    """Decorator: Requires a write api key or a logged in user to access this view"""
-    return protected(read=False, write=True, perms_required=perms_required)
-
-
-def api_readwrite(perms_required=()):
-    """Decorator: Requires a read/write api key or a logged in user to access this view"""
-    return protected(read=True, write=True, perms_required=perms_required)
 
 
 def require_object(model):

@@ -9,7 +9,10 @@ from orgatask.api import views
 urlpatterns = [
     # API views
 
-    path('user/info/get', views.user_userinfo_get, name='user_userinfo_get'),
+    path('profile', views.profile, name='api-profile'),
+    path('organizations', views.organizations, name='api-organizations'),
 
+
+    # Catch-all error view for 404 JSON responses
     re_path('.*', views.not_found, name="api-not-found")
 ]

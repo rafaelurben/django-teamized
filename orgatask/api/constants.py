@@ -32,7 +32,17 @@ OBJ_NOT_FOUND = JsonResponse({
     "message": "The object couln't be found!",
 }, status=400)
 
+METHOD_NOT_ALLOWED = JsonResponse({
+    "error": "method-not-allowed",
+    "message": "This method is not allowed for this endpoint!",
+}, status=405)
+
 SUCCESSFULLY_CHANGED = JsonResponse({
     "success": "change-successfull",
     "message": "Successfully changed object!"
 }, status=200)
+
+NOT_IMPLEMENTED = JsonResponse({
+    "error": "no-implemented",
+    "message": "This feature has not yet been implemented!",
+}, status=501)

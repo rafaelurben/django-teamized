@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.translation import gettext as _
 
 from orgatask.api.models import ApiKey
-from orgatask import enums
+from orgatask import enums, options
 
 import uuid
 
@@ -47,19 +47,37 @@ class User(models.Model):
         verbose_name = _("Benutzer")
         verbose_name_plural = _("Benutzer")
 
+    def create_organization(self, title, description):
+        """
+        Create a new organization and add this user as an owner.
+        """
+
+        organization = Organization.objects.create(
+            title=title,
+            description=description,
+        )
+        organization.join(self, role=enums.Roles.OWNER)
+        return organization
+
     def ensure_organization(self):
         """
-        Ensure that the OrgaTask.User owns at least one OrgaTask.Organization.
+        Ensure that the user owns at least one organization.
         If not, create one.
         """
 
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
-            organization = Organization.objects.create(
+            self.create_organization(
                 title=_("Persönlicher Arbeitsbereich"),
                 description=_(
                     "Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
             )
-            organization.join(self, role=enums.Roles.OWNER)
+
+    def can_create_organization(self):
+        """
+        Check if the user can create an organization.
+        """
+
+        return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_ORGANIZATIONS
 
 
 def get_default_organization_settings():
