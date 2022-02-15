@@ -7,10 +7,5 @@ $("document").ready(async function() {
     PageLoader.importFromURL();
     await Organizations.loadOrgs();
     PageLoader.exportToURL();
+    PageLoader.loadPage();
 })
-
-$('#orgswitcher').on("input", function() {
-    console.log("Switched Organization");
-    Organizations.updateSelectedOrg();
-    PageLoader.exportToURL();
-});

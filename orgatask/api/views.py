@@ -37,7 +37,7 @@ def organizations(request):
     user = request.orgatask_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all()
+        memberinstances = user.member_instances.all().order_by("organization__title")
         return JsonResponse({
             "organizations": [
                 {
@@ -47,6 +47,7 @@ def organizations(request):
                     "member": {
                         "id": mi.uid,
                         "role": mi.role,
+                        "role_text": mi.get_role_display(),
                     },
                 }
                 for mi in memberinstances

@@ -1,4 +1,5 @@
 import { handleError } from './utils.js';
+import * as PageLoader from './page-loader.js';
 
 const orgswitcher = $('#orgswitcher');
 
@@ -43,10 +44,18 @@ export function loadOrgs() {
     });
 }
 
-export function updateSelectedOrg() {
+export function switchOrgConfirm() {
     window.orgatask.selected_org_id = orgswitcher.val();
+    console.debug("Switched organization to: " + window.orgatask.selected_org_id);
+    PageLoader.exportToURL();
+    PageLoader.loadPage();
 }
 
 export function switchOrg(orgid) {
     orgswitcher.val(orgid);
+    switchOrgConfirm();
 }
+
+orgswitcher.on("input", () => {
+    switchOrgConfirm();
+});
