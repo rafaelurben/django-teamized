@@ -12,7 +12,7 @@ from orgatask.decorators import orgatask_prep
 
 def home(request):
     "Show the home page"
-    return render(request, 'orgatask/home.html')
+    return render(request, 'orgatask/home.html', {"indexable": True})
 
 # App views
 
