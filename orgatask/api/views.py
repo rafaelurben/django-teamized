@@ -37,6 +37,7 @@ def organizations(request):
     user = request.orgatask_user
 
     if request.method == "GET":
+        memberinstances = user.member_instances.all()
         return JsonResponse({
             "organizations": [
                 {
@@ -48,8 +49,9 @@ def organizations(request):
                         "role": mi.role,
                     },
                 }
-                for mi in user.member_instances.all()
+                for mi in memberinstances
             ],
+            "default_org_id": memberinstances[0].organization.uid,
         })
     elif request.method == "POST":
         if not user.can_create_organization():

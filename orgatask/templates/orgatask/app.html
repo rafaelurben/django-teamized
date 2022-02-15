@@ -7,17 +7,14 @@
 {% endblock extrahead %}
 
 {% block additional_menubar_items %}
-    <div class="btn-group border rounded border-secondary" role="group" aria-label="Org switcher">
+    <div class="btn-group border rounded border-secondary" role="group" aria-label="Org list">
         <li class="nav-item border-secondary border-end">
             <a class="nav-link ms-1 me-1" href="#orglist">
                 <i class="fas fa-list"></i>
             </a>
         </li>
-        <select class="form-select bg-dark text-white-50 border-dark" aria-label="Default select example">
-            <option selected>Personal Space</option>
-            <option value="1">Org One</option>
-            <option value="2">Org Two</option>
-            <option value="3">Org Three</option>
+        <select id="orgswitcher" class="form-select bg-dark text-white-50 border-dark" aria-label="Org switcher">
+            <option selected>Loading...</option>
         </select>
         <li class="nav-item border-secondary border-start">
             <a class="nav-link ms-1 me-1" href="#member">
@@ -26,3 +23,12 @@
         </li>
     </div>
 {% endblock additional_menubar_items %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        document.api_base_url = '{% url "orgatask:home" %}api/';
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'orgatask/js/app.js' %}" type="module"></script>
+{% endblock scripts %}
