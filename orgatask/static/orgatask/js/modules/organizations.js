@@ -1,4 +1,4 @@
-import { handleError } from './utils.js';
+import { handleError, handleSuccess } from './utils.js';
 import * as PageLoader from './page-loader.js';
 
 const orgswitcher = $('#orgswitcher');
@@ -56,6 +56,7 @@ export function createOrg(title, description) {
             success: async data => {
                 await loadOrgs()
                 switchOrg(data.id);
+                handleSuccess(data);
                 resolve(data);
             },
             error: handleError,
@@ -66,7 +67,7 @@ export function createOrg(title, description) {
 export function createOrgSwal() {
     return new Promise(async resolve => {
         const { value } = await Swal.fire({
-            title: 'Multiple inputs',
+            title: 'Organisation erstellen',
             html:
                 '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
                 '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',

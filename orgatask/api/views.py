@@ -68,7 +68,6 @@ def organizations(request):
         title = request.POST.get("title", "")[:49]
         description = request.POST.get("description", "")
         
-        print(request.POST, title, description)
         if not title or not description:
             return DATA_INVALID
         
@@ -77,6 +76,10 @@ def organizations(request):
         return JsonResponse({
             "success": True,
             "id": org.uid,
+            "alert": {
+                "title": _("Organisation erstellt."),
+                "text": _("Die Organisation wurde erfolgreich erstellt."),
+            }
         })
 
 

@@ -13,3 +13,15 @@ export function handleError(request) {
         })
     }
 }
+
+export function handleSuccess(data) {
+    Swal.fire({
+        toast: true,
+        icon: "success",
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        ...data.alert
+    })
+}
