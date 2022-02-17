@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED
+from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID
 from orgatask.api.decorators import require_object, api_view
 from orgatask.decorators import orgatask_prep
 from orgatask.models import User, Organization
@@ -29,6 +29,7 @@ def profile(request):
 
 
 @api_view(["get", "post"])
+@csrf_exempt
 @orgatask_prep()
 def organizations(request):
     """
@@ -60,12 +61,23 @@ def organizations(request):
                 "error": "organization_limit_reached",
                 "alert": {
                     "title": _("Organisationslimit erreicht."),
-                    "description": _("Du hast das maximale Limit an Organisationen erreicht, welche du besitzen kannst."),
+                    "text": _("Du hast das maximale Limit an Organisationen erreicht, welche du besitzen kannst."),
                 }
             }, status=400)
-
-        # TODO: Create organization /Q: What format is the request body?
-        return NOT_IMPLEMENTED
+        
+        title = request.POST.get("title", "")[:49]
+        description = request.POST.get("description", "")
+        
+        print(request.POST, title, description)
+        if not title or not description:
+            return DATA_INVALID
+        
+        org = user.create_organization(title, description)
+        
+        return JsonResponse({
+            "success": True,
+            "id": org.uid,
+        })
 
 
 def not_found(request):

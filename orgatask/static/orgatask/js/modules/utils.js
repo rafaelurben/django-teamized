@@ -1,4 +1,5 @@
-export function handleError(jsondata) {
+export function handleError(request) {
+    let jsondata = request.responseJSON;
     if (jsondata.alert) {
         Swal.fire({
             icon: 'error',
@@ -6,8 +7,8 @@ export function handleError(jsondata) {
         })
     } else {
         Swal.fire({
-            title: 'Error!',
-            text: 'Es ist ein Fehler aufgetreten!',
+            title: `Fehler ${request.status}`,
+            html: `Es ist ein Fehler aufgetreten:<br><br>${jsondata.message}<br>(error ${jsondata.error})`,
             icon: 'error',
         })
     }

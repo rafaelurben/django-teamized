@@ -1,6 +1,8 @@
 import * as Organizations from '../organizations.js';
+import * as PageLoader from '../page-loader.js';
 
-function handleButtonClick(event) {
+
+async function handleButtonClick(event) {
     var button = event.target;
     var action = button.dataset.action;
     var org_id = button.dataset.id;
@@ -11,13 +13,17 @@ function handleButtonClick(event) {
 
     } else if (action === "leave") {
 
+    } else if (action === "create") {
+        await Organizations.createOrgSwal("Testname", "Testdescription");
+        await Organizations.loadOrgs();
+        PageLoader.loadPage();
     }
 }
 
 export default function buildPage(container) {
     console.debug("loaded pages/orglist.js");
 
-    const table = $('<table id="orglisttable" class="table table-borderless align-middle"></table>');
+    const table = $('<table class="table table-borderless align-middle"></table>');
     window.orgatask.organizations.forEach(org => {
         var tr = $(`<tr></tr>`);
 
@@ -68,5 +74,11 @@ export default function buildPage(container) {
     });
     container.append(table)
 
-    $("#orglisttable a").click(handleButtonClick);
+    container.append($(`
+        <div class="w-100 border border-dark rounded p-2">
+            <span class="mx-3">Neue Organisation:</span>
+            <a href="#" class="m-2 btn btn-outline-primary border-1" data-action="create">Organisation erstellen</a>
+        </div>`))
+
+    $("#maincontent a[data-action]").click(handleButtonClick);
 }

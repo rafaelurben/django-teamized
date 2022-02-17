@@ -44,6 +44,51 @@ export function loadOrgs() {
     });
 }
 
+export function createOrg(title, description) {
+    return new Promise(resolve => {
+        $.ajax({
+            url: document.api_base_url + 'organizations',
+            type: 'POST',
+            data: {
+                title: title,
+                description: description,
+            },
+            success: async data => {
+                await loadOrgs()
+                switchOrg(data.id);
+                resolve(data);
+            },
+            error: handleError,
+        });
+    });
+}
+
+export function createOrgSwal() {
+    return new Promise(async resolve => {
+        const { value } = await Swal.fire({
+            title: 'Multiple inputs',
+            html:
+                '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
+                '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Erstellen',
+            cancelButtonText: 'Abbrechen',
+            preConfirm: () => {
+                const title = document.getElementById('swal-input-title').value;
+                const description = document.getElementById('swal-input-description').value;
+                
+                return new Promise(async resolve => {
+                    await createOrg(title, description);
+                    resolve("resolved");
+                })
+            },
+        })
+
+        resolve(value);
+    });
+}
+
 export function switchOrgConfirm() {
     window.orgatask.selected_org_id = orgswitcher.val();
     console.debug("Switched organization to: " + window.orgatask.selected_org_id);
