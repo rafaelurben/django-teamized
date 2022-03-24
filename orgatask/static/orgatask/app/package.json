@@ -1,0 +1,18 @@
+{
+  "name": "orgatask-reactapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx babel src --out-dir build --presets @babel/preset-react",
+    "build-live": "npx babel --watch src --out-dir build --presets @babel/preset-react"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-react": "^7.16.7",
+    "@babel/cli": "^7.17.6"
+  }
+}

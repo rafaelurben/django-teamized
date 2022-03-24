@@ -4,24 +4,27 @@
 {% block title %}{% translate "App" %}{% endblock title %}
 
 {% block extrahead %}
+    <!-- Sweetalert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
 {% endblock extrahead %}
 
 {% block additional_menubar_items %}
-    <div class="btn-group border rounded border-secondary" role="group" aria-label="Team list">
-        <li class="nav-item border-secondary border-end">
-            <a class="nav-link ms-1 me-1" data-page="teamlist" href="#">
-                <i class="fas fa-list"></i>
-            </a>
-        </li>
-        <select id="teamswitcher" class="form-select bg-dark text-white-50 border-dark" aria-label="Team switcher">
-            <option selected>Loading...</option>
-        </select>
-        <li class="nav-item border-secondary border-start">
-            <a class="nav-link ms-1 me-1" data-page="settings" href="#">
-                <i class="fas fa-user-cog"></i>
-            </a>
-        </li>
+    <div id="orgatask_appmenubar">
+        <div class="btn-group border rounded border-secondary" role="group" aria-label="Team list">
+            <li class="nav-item border-secondary border-end">
+                <a class="nav-link ms-1 me-1" data-page="teamlist" href="#">
+                    <i class="fas fa-list"></i>
+                </a>
+            </li>
+            <select id="teamswitcher" class="form-select bg-dark text-white-50 border-dark" aria-label="Team switcher">
+                <option selected>Loading...</option>
+            </select>
+            <li class="nav-item border-secondary border-start">
+                <a class="nav-link ms-1 me-1" data-page="settings" href="#">
+                    <i class="fas fa-user-cog"></i>
+                </a>
+            </li>
+        </div>
     </div>
 {% endblock additional_menubar_items %}
 
@@ -30,7 +33,20 @@
     <script>
         document.api_base_url = '{% url "orgatask:home" %}api/';
     </script>
+
+    <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <!-- JQuery -->	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{% static 'orgatask/js/app.js' %}" type="module"></script>
+    <!-- React -->
+    {% if debug %}
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    {% else %}
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    {% endif %}
+
+    <!-- App -->
+    <script src="{% static 'orgatask/app/build/app.js' %}" type="module"></script>
 {% endblock scripts %}
