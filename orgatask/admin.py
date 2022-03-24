@@ -10,8 +10,8 @@ from orgatask import models
 class UserAdminMemberInstanceInline(admin.TabularInline):
     model = models.Member
     extra = 0
-    verbose_name = _("Organisation")
-    verbose_name_plural = _("Organisation")
+    verbose_name = _("Team")
+    verbose_name_plural = _("Teams")
 
 @admin.register(models.User)
 class UserAdmin(admin.ModelAdmin):
@@ -32,21 +32,21 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ('uid', )
 
 
-class OrganizationAdminMemberInline(admin.TabularInline):
+class TeamAdminMemberInline(admin.TabularInline):
     model = models.Member
     extra = 0
     verbose_name = _("Mitglied")
     verbose_name_plural = _("Mitglieder")
 
 
-@admin.register(models.Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+@admin.register(models.Team)
+class TeamAdmin(admin.ModelAdmin):
     list_display = ['uid', 'title', 'description']
     list_filter = []
 
     readonly_fields = ('uid',)
 
-    inlines = [OrganizationAdminMemberInline]
+    inlines = [TeamAdminMemberInline]
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'title', 'description',)}),

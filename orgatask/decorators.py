@@ -19,7 +19,7 @@ def orgatask_prep():
             if getattr(request.user, 'orgatask_user', None) is None:
                 models.User.objects.create(auth_user=request.user)
             request.orgatask_user = request.user.orgatask_user
-            request.orgatask_user.ensure_organization()
+            request.orgatask_user.ensure_team()
 
             return function(request, *args, **kwargs)
         return wrap

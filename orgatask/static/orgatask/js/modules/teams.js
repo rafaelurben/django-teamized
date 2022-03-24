@@ -1,39 +1,39 @@
 import { handleError, handleSuccess } from './utils.js';
 import * as PageLoader from './page-loader.js';
 
-const orgswitcher = $('#orgswitcher');
+const teamswitcher = $('#teamswitcher');
 
-export function loadOrgs() {
+export function loadTeams() {
     return new Promise(resolve => {
         $.getJSON({
-            url: document.api_base_url + 'organizations', 
+            url: document.api_base_url + 'teams', 
             success: function(data) {
-                orgswitcher.empty();
+                teamswitcher.empty();
 
-                window.orgatask.organizations = data.organizations;
-                window.orgatask.default_org_id = data.default_org_id;
-                if (!window.orgatask.selected_org_id) {
-                    // No org selected; select default
-                    window.orgatask.selected_org_id = data.default_org_id;
+                window.orgatask.teams = data.teams;
+                window.orgatask.default_team_id = data.default_team_id;
+                if (!window.orgatask.selected_team_id) {
+                    // No team selected; select default
+                    window.orgatask.selected_team_id = data.default_team_id;
                 } else {
-                    // Org selected; check if it is valid
+                    // Team selected; check if it is valid
                     var validated = false;
-                    window.orgatask.organizations.forEach(org => {
-                        if (org.id === window.orgatask.selected_org_id) {
+                    window.orgatask.teams.forEach(team => {
+                        if (team.id === window.orgatask.selected_team_id) {
                             validated = true;
                         }
                     });
                     if (!validated) {
-                        // Org not valid; fall back to default
-                        window.orgatask.selected_org_id = data.default_org_id;
+                        // Team not valid; fall back to default
+                        window.orgatask.selected_team_id = data.default_team_id;
                     }
                 }
 
-                window.orgatask.organizations.forEach(org => {
-                    if (org.id === window.orgatask.selected_org_id) {
-                        orgswitcher.append(`<option selected value="${org.id}">${org.title}</option>`);
+                window.orgatask.teams.forEach(team => {
+                    if (team.id === window.orgatask.selected_team_id) {
+                        teamswitcher.append(`<option selected value="${team.id}">${team.title}</option>`);
                     } else {
-                        orgswitcher.append(`<option value="${org.id}">${org.title}</option>`);
+                        teamswitcher.append(`<option value="${team.id}">${team.title}</option>`);
                     }
                 });
 
@@ -44,18 +44,18 @@ export function loadOrgs() {
     });
 }
 
-export function createOrg(title, description) {
+export function createTeam(title, description) {
     return new Promise(resolve => {
         $.ajax({
-            url: document.api_base_url + 'organizations',
+            url: document.api_base_url + 'teams',
             type: 'POST',
             data: {
                 title: title,
                 description: description,
             },
             success: async data => {
-                await loadOrgs()
-                switchOrg(data.id);
+                await loadTeams()
+                switchTeam(data.id);
                 handleSuccess(data);
                 resolve(data);
             },
@@ -64,10 +64,10 @@ export function createOrg(title, description) {
     });
 }
 
-export function createOrgSwal() {
+export function createTeamSwal() {
     return new Promise(async resolve => {
         const { value } = await Swal.fire({
-            title: 'Organisation erstellen',
+            title: 'Team erstellen',
             html:
                 '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
                 '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',
@@ -80,7 +80,7 @@ export function createOrgSwal() {
                 const description = document.getElementById('swal-input-description').value;
                 
                 return new Promise(async resolve => {
-                    await createOrg(title, description);
+                    await createTeam(title, description);
                     resolve("resolved");
                 })
             },
@@ -90,18 +90,18 @@ export function createOrgSwal() {
     });
 }
 
-export function switchOrgConfirm() {
-    window.orgatask.selected_org_id = orgswitcher.val();
-    console.debug("Switched organization to: " + window.orgatask.selected_org_id);
+export function switchTeamConfirm() {
+    window.orgatask.selected_team_id = teamswitcher.val();
+    console.debug("Switched team to: " + window.orgatask.selected_team_id);
     PageLoader.exportToURL();
     PageLoader.loadPage();
 }
 
-export function switchOrg(orgid) {
-    orgswitcher.val(orgid);
-    switchOrgConfirm();
+export function switchTeam(teamid) {
+    teamswitcher.val(teamid);
+    switchTeamConfirm();
 }
 
-orgswitcher.on("input", () => {
-    switchOrgConfirm();
+teamswitcher.on("input", () => {
+    switchTeamConfirm();
 });

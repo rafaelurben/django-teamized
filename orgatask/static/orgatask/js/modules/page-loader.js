@@ -1,9 +1,9 @@
-import loadPageOrglist from './pages/orglist.js';
+import loadPageTeamlist from './pages/teamlist.js';
 
 const maincontent = $('#maincontent');
 
 const pageList = [
-    "orglist",
+    "teamlist",
     "settings",
 ]
 
@@ -18,7 +18,7 @@ export function exportToURL() {
 
     var url = new URL(window.location);
     url.searchParams.set('page', window.orgatask.current_page);
-    url.searchParams.set('selected_org_id', window.orgatask.selected_org_id);
+    url.searchParams.set('selected_team_id', window.orgatask.selected_team_id);
 
     window.history.pushState(
         {},
@@ -30,7 +30,7 @@ export function exportToURL() {
 export function importFromURL() {
     const url = new URL(window.location);
     window.orgatask.current_page = url.searchParams.get('page');
-    window.orgatask.selected_org_id = url.searchParams.get('selected_org_id');
+    window.orgatask.selected_team_id = url.searchParams.get('selected_team_id');
 
     ensureExistingPage();
 }
@@ -39,8 +39,8 @@ export function loadPage() {
     maincontent.empty();
 
     switch (window.orgatask.current_page) {
-        case 'orglist':
-            loadPageOrglist(maincontent);
+        case 'teamlist':
+            loadPageTeamlist(maincontent);
             break;
         case 'settings':
             console.debug("LOAD SETTINGS page");

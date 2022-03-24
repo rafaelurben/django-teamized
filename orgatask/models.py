@@ -47,45 +47,45 @@ class User(models.Model):
         verbose_name = _("Benutzer")
         verbose_name_plural = _("Benutzer")
 
-    def create_organization(self, title, description):
+    def create_team(self, title, description):
         """
-        Create a new organization and add this user as an owner.
+        Create a new team and add this user as an owner.
         """
 
-        organization = Organization.objects.create(
+        team = Team.objects.create(
             title=title,
             description=description,
         )
-        organization.join(self, role=enums.Roles.OWNER)
-        return organization
+        team.join(self, role=enums.Roles.OWNER)
+        return team
 
-    def ensure_organization(self):
+    def ensure_team(self):
         """
-        Ensure that the user owns at least one organization.
+        Ensure that the user owns at least one team.
         If not, create one.
         """
 
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
-            self.create_organization(
+            self.create_team(
                 title=_("Persönlicher Arbeitsbereich"),
                 description=_(
                     "Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
             )
 
-    def can_create_organization(self):
+    def can_create_team(self):
         """
-        Check if the user can create an organization.
+        Check if the user can create a team.
         """
 
-        return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_ORGANIZATIONS
+        return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_TEAMS
 
 
-def get_default_organization_settings():
+def get_default_team_settings():
     return {"key": "value"}
 
 
-class Organization(models.Model):
-    "An organization"
+class Team(models.Model):
+    "A team"
 
     uid = models.UUIDField(
         primary_key=True,
@@ -102,7 +102,7 @@ class Organization(models.Model):
     )
     settings = models.JSONField(
         blank=True,
-        default=get_default_organization_settings,
+        default=get_default_team_settings,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -114,29 +114,29 @@ class Organization(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _("Organisation")
-        verbose_name_plural = _("Organisationen")
+        verbose_name = _("Team")
+        verbose_name_plural = _("Teams")
 
     def is_member(self, user: User):
         """
-        Check if a user is a member of the organization.
+        Check if a user is a member of the team.
         """
 
         return self.members.filter(user=user).exists()
 
     def join(self, user: User, role: str = enums.Roles.MEMBER):
-        "Add a user to the organization if they are not already a member"
+        "Add a user to the team if they are not already a member"
 
         if not self.is_member(user):
             Member.objects.create(
-                organization=self,
+                team=self,
                 user=user,
                 role=role,
             )
 
 
 class Member(models.Model):
-    "Connection between User and Organization"
+    "Connection between User and Team"
 
     uid = models.UUIDField(
         primary_key=True,
@@ -144,8 +144,8 @@ class Member(models.Model):
         editable=False,
     )
 
-    organization = models.ForeignKey(
-        to="Organization",
+    team = models.ForeignKey(
+        to="Team",
         related_name="members",
         on_delete=models.CASCADE,
     )
@@ -169,7 +169,7 @@ class Member(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user} <-> {self.organization}"
+        return f"{self.user} <-> {self.team}"
 
     objects = models.Manager()
 
@@ -178,8 +178,8 @@ class Member(models.Model):
         verbose_name_plural = _("Mitglieder")
 
 
-# class OrgLog(models.Model):
-#     "Used for logging changes in an organization"
+# class TeamLog(models.Model):
+#     "Used for logging changes in a team"
 
 #     uid = models.UUIDField(
 #         primary_key=True,
@@ -187,8 +187,8 @@ class Member(models.Model):
 #         editable=False,
 #     )
 
-#     organization = models.ForeignKey(
-#         to='Organization',
+#     team = models.ForeignKey(
+#         to='Team',
 #         related_name="logs",
 #         on_delete=models.CASCADE,
 #     )
@@ -201,7 +201,7 @@ class Member(models.Model):
 
 #     scope = models.CharField(
 #         max_length=16,
-#         default=enums.Scopes.ORGANIZATION,
+#         default=enums.Scopes.TEAM,
 #         choices=enums.Scopes.SCOPES,
 #     )
 #     action = models.CharField(

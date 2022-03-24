@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID
 from orgatask.api.decorators import require_object, api_view
 from orgatask.decorators import orgatask_prep
-from orgatask.models import User, Organization
+from orgatask.models import User, Team
 
 
 @api_view(["get"])
@@ -31,20 +31,20 @@ def profile(request):
 @api_view(["get", "post"])
 @csrf_exempt
 @orgatask_prep()
-def organizations(request):
+def teams(request):
     """
-    Endpoint for managing organizations.
+    Endpoint for managing teams.
     """
     user = request.orgatask_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all().order_by("organization__title")
+        memberinstances = user.member_instances.all().order_by("team__title")
         return JsonResponse({
-            "organizations": [
+            "teams": [
                 {
-                    "id": mi.organization.uid,
-                    "title": mi.organization.title,
-                    "description": mi.organization.description,
+                    "id": mi.team.uid,
+                    "title": mi.team.title,
+                    "description": mi.team.description,
                     "member": {
                         "id": mi.uid,
                         "role": mi.role,
@@ -53,15 +53,15 @@ def organizations(request):
                 }
                 for mi in memberinstances
             ],
-            "default_org_id": memberinstances[0].organization.uid,
+            "default_team_id": memberinstances[0].team.uid,
         })
     elif request.method == "POST":
-        if not user.can_create_organization():
+        if not user.can_create_team():
             return JsonResponse({
-                "error": "organization_limit_reached",
+                "error": "team_limit_reached",
                 "alert": {
-                    "title": _("Organisationslimit erreicht."),
-                    "text": _("Du hast das maximale Limit an Organisationen erreicht, welche du besitzen kannst."),
+                    "title": _("Teamlimit erreicht."),
+                    "text": _("Du hast das maximale Limit an Teams erreicht, welche du besitzen kannst."),
                 }
             }, status=400)
         
@@ -71,14 +71,14 @@ def organizations(request):
         if not title or not description:
             return DATA_INVALID
         
-        org = user.create_organization(title, description)
+        team = user.create_team(title, description)
         
         return JsonResponse({
             "success": True,
-            "id": org.uid,
+            "id": team.uid,
             "alert": {
-                "title": _("Organisation erstellt."),
-                "text": _("Die Organisation wurde erfolgreich erstellt."),
+                "title": _("Team erstellt."),
+                "text": _("Das Team wurde erfolgreich erstellt."),
             }
         })
 

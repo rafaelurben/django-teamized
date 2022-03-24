@@ -3,7 +3,7 @@
 from django.utils.translation import gettext as _
 
 class Roles:
-    "Roles an organization member can have"
+    "Roles a team member can have"
 
     OWNER = 'owner'
     ADMIN = 'admin'
@@ -16,12 +16,12 @@ class Roles:
     ]
 
 class Scopes:
-    ORGANIZATION = 'organization'
+    TEAM = 'team'
     MEMBERS = 'members'
     MEMBER = 'member'
 
     SCOPES = [
-        (ORGANIZATION, _("Organisationsverwaltung")),
+        (TEAM, _("Teamverwaltung")),
         (MEMBERS, _("Mitgliederverwaltung")),
         (MEMBER, _("Mitgliedschaft & Einstellungen")),
     ]

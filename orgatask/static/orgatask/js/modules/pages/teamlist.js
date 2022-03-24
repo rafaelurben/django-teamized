@@ -1,69 +1,69 @@
-import * as Organizations from '../organizations.js';
+import * as Teams from '../teams.js';
 import * as PageLoader from '../page-loader.js';
 
 
 async function handleButtonClick(event) {
     var button = event.target;
     var action = button.dataset.action;
-    var org_id = button.dataset.id;
+    var teamid = button.dataset.id;
     
     if (action === "change_to") {
-        Organizations.switchOrg(org_id);
+        Teams.switchTeam(teamid);
     } else if (action === "manage") {
 
     } else if (action === "leave") {
 
     } else if (action === "create") {
-        await Organizations.createOrgSwal("Testname", "Testdescription");
-        await Organizations.loadOrgs();
+        await Teams.createTeamSwal("Testname", "Testdescription");
+        await Teams.loadTeams();
         PageLoader.loadPage();
     }
 }
 
 export default function buildPage(container) {
-    console.debug("loaded pages/orglist.js");
+    console.debug("loaded pages/teamlist.js");
 
     const table = $('<table class="table table-borderless align-middle"></table>');
-    window.orgatask.organizations.forEach(org => {
+    window.orgatask.teams.forEach(team => {
         var tr = $(`<tr></tr>`);
 
         tr.append($(
             `<td class="py-2">` +
-            `<b>${org.title}</b><br>` +
-            `<span>${org.description}</span>` +
+            `<b>${team.title}</b><br>` +
+            `<span>${team.description}</span>` +
             `</td>`
         ));
 
         tr.append($(
             `<td>` +
-            `<b>${org.member.role_text}</b>` +
+            `<b>${team.member.role_text}</b>` +
             `</td>`
         ));
 
-        if (org.id !== window.orgatask.selected_org_id) {
+        if (team.id !== window.orgatask.selected_team_id) {
             tr.append($(
                 `<td>` +
-                `<a href="#" class="btn btn-outline-success border-1" data-id="${org.id}" data-action="change_to">Wechseln zu</a>` +
+                `<a href="#" class="btn btn-outline-success border-1" data-id="${team.id}" data-action="change_to">Wechseln zu</a>` +
                 `</td>`
             ));
         } else {
             tr.append($("<td></td>"));
         }
 
-        if (org.member.role === "owner" || org.member.role === "admin") {
+        if (team.member.role === "owner" || team.member.role === "admin") {
             tr.append($(
                 `<td>` +
-                `<a href="#" class="btn btn-outline-dark border-1" data-id="${org.id}" data-action="manage">Verwalten</a>` +
+                `<a href="#" class="btn btn-outline-dark border-1" data-id="${team.id}" data-action="manage">Verwalten</a>` +
                 `</td>`
             ));
         } else {
             tr.append($("<td></td>"));
         }
 
-        if (org.member.role !== "owner") {
+        if (team.member.role !== "owner") {
             tr.append($(
                 `<td>` +
-                `<a href="#" class="btn btn-outline-danger border-1" data-id="${org.id}" data-action="leave">Verlassen</a>` +
+                `<a href="#" class="btn btn-outline-danger border-1" data-id="${team.id}" data-action="leave">Verlassen</a>` +
                 `</td>`
             ));
         } else {
@@ -76,8 +76,8 @@ export default function buildPage(container) {
 
     container.append($(`
         <div class="w-100 border border-dark rounded p-2">
-            <span class="mx-3">Neue Organisation:</span>
-            <a href="#" class="m-2 btn btn-outline-primary border-1" data-action="create">Organisation erstellen</a>
+            <span class="mx-3">Neues Team:</span>
+            <a href="#" class="m-2 btn btn-outline-primary border-1" data-action="create">Team erstellen</a>
         </div>`))
 
     $("#maincontent a[data-action]").click(handleButtonClick);

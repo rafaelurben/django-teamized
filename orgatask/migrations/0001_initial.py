@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=50)),
                 ('description', models.TextField(blank=True, default='')),
-                ('settings', models.JSONField(blank=True, default=orgatask.models.get_default_organization_settings)),
+                ('settings', models.JSONField(blank=True, default=orgatask.models.get_default_team_settings)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],

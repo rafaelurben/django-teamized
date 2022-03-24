@@ -10,7 +10,7 @@ urlpatterns = [
     # API views
 
     path('profile', views.profile, name='api-profile'),
-    path('organizations', views.organizations, name='api-organizations'),
+    path('teams', views.teams, name='api-teams'),
 
 
     # Catch-all error view for 404 JSON responses
