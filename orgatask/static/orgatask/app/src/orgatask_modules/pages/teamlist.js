@@ -40,7 +40,7 @@ export default function buildPage(container) {
             `</td>`
         ));
 
-        if (team.id !== window.orgatask.selected_team_id) {
+        if (team.id !== window.orgatask.selectedTeamId) {
             tr.append($(
                 `<td>` +
                 `<a href="#" class="btn btn-outline-success border-1" data-id="${team.id}" data-action="change_to">Wechseln zu</a>` +

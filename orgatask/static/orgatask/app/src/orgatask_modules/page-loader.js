@@ -18,7 +18,7 @@ export function exportToURL() {
 
     var url = new URL(window.location);
     url.searchParams.set('page', window.orgatask.current_page);
-    url.searchParams.set('selected_team_id', window.orgatask.selected_team_id);
+    url.searchParams.set('selectedTeamId', window.orgatask.selectedTeamId);
 
     window.history.pushState(
         {},
@@ -30,7 +30,7 @@ export function exportToURL() {
 export function importFromURL() {
     const url = new URL(window.location);
     window.orgatask.current_page = url.searchParams.get('page');
-    window.orgatask.selected_team_id = url.searchParams.get('selected_team_id');
+    window.orgatask.selectedTeamId = url.searchParams.get('selectedTeamId');
 
     ensureExistingPage();
 }
