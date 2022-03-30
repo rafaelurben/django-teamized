@@ -1,5 +1,5 @@
-import { handleError, handleSuccess } from "./utils.js";
-import * as PageLoader from "./page-loader.js";
+import { handleError, handleSuccess } from "./handlers.js";
+import * as Navigation from "./navigation.js";
 import AppMenubar from "../components/menubar.js";
 
 const APPMENUBAR_CONTAINER = document.getElementById("orgatask_appmenubar");
@@ -91,12 +91,17 @@ export function createTeamSwal() {
 }
 
 export function switchTeam(teamId) {
+  if (window.orgatask.selectedTeamId === teamId) {
+    // Already selected; no action needed
+    return;
+  }
+  console.debug("Switching team to: " + teamId);
+
   window.orgatask.selectedTeamId = teamId;
-  console.debug("Switching team to: " + window.orgatask.selectedTeamId);
   validateSelectedTeam();
   renderMenubar();
-  PageLoader.exportToURL();
-  PageLoader.loadPage();
+  Navigation.exportToURL();
+  Navigation.loadPage();
 }
 
 export function renderMenubar() {

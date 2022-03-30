@@ -1,4 +1,4 @@
-import loadPageTeamlist from './pages/teamlist.js';
+import loadPageTeamlist from '../orgatask_modules/pages/teamlist.js';
 
 const maincontent = $('#maincontent');
 
@@ -16,24 +16,32 @@ function ensureExistingPage() {
 export function exportToURL() {
     ensureExistingPage();
 
-    var url = new URL(window.location);
-    url.searchParams.set('page', window.orgatask.currentPage);
-    url.searchParams.set('selectedTeamId', window.orgatask.selectedTeamId);
+    // Export the pagename and teamid to the URL
 
-    window.history.pushState(
-        {
-            page: window.orgatask.currentPage,
-            selectedTeamId: window.orgatask.selectedTeamId,
-        },
-        "OrgaTask",
-        url.href,
-    );
+    var oldurl = new URL(window.location);
+    var newurl = new URL(window.location);
+    newurl.searchParams.set('p', window.orgatask.currentPage);
+    newurl.searchParams.set('t', window.orgatask.selectedTeamId);
+
+    if (oldurl.href !== newurl.href) {
+        // Add page to history if the URL has changed (i.e. changed the page url)
+        window.history.pushState(
+            {
+                page: window.orgatask.currentPage,
+                selectedTeamId: window.orgatask.selectedTeamId,
+            },
+            "OrgaTask",
+            newurl.href,
+        );
+    }
 }
 
 export function importFromURL() {
+    // Import the pagename and teamid from the URL
+
     const url = new URL(window.location);
-    window.orgatask.currentPage = url.searchParams.get('page');
-    window.orgatask.selectedTeamId = url.searchParams.get('selectedTeamId');
+    window.orgatask.currentPage = url.searchParams.get('p');
+    window.orgatask.selectedTeamId = url.searchParams.get('t');
 
     ensureExistingPage();
 }
@@ -48,7 +56,7 @@ export function loadPage() {
         case 'settings':
             console.debug("LOAD SETTINGS page");
             break;
-        default: 
+        default:
             Swal.fire({
                 icon: "error",
                 title: "Error",

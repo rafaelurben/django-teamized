@@ -1,5 +1,5 @@
-import * as Teams from '../teams.js';
-import * as PageLoader from '../page-loader.js';
+import * as Teams from '../../utils/teams.js';
+import * as Navigation from '../../utils/navigation.js';
 
 
 async function handleButtonClick(event) {
@@ -16,7 +16,7 @@ async function handleButtonClick(event) {
     } else if (action === "create") {
         await Teams.createTeamSwal("Testname", "Testdescription");
         await Teams.loadTeams();
-        PageLoader.loadPage();
+        Navigation.loadPage();
     }
 }
 
