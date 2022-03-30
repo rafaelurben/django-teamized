@@ -1,10 +1,5 @@
 import { handleError, handleSuccess } from "./handlers.js";
 import * as Navigation from "./navigation.js";
-import AppMenubar from "../components/menubar.js";
-
-const APPMENUBAR_CONTAINER = document.getElementById("orgatask_appmenubar");
-
-$("document").ready(() => renderMenubar([], ""));
 
 function validateSelectedTeam() {
   if (window.orgatask.selectedTeamId) {
@@ -33,7 +28,7 @@ export function loadTeams() {
         window.orgatask.defaultTeamId = data.defaultTeamId;
         validateSelectedTeam();
 
-        renderMenubar(window.orgatask.teams, window.orgatask.selectedTeamId, switchTeam);
+        Navigation.renderMenubar();
 
         resolve("resolved");
       },
@@ -99,20 +94,7 @@ export function switchTeam(teamId) {
 
   window.orgatask.selectedTeamId = teamId;
   validateSelectedTeam();
-  renderMenubar();
+  Navigation.renderMenubar();
   Navigation.exportToURL();
   Navigation.loadPage();
-}
-
-export function renderMenubar() {
-  let data = window.orgatask;
-  console.debug("Rendering menubar with", data.teams, data.selectedTeamId);
-  ReactDOM.render(
-    <AppMenubar
-      teams={data.teams}
-      selectedTeamId={data.selectedTeamId}
-      onTeamSelect={switchTeam}
-    />,
-    APPMENUBAR_CONTAINER
-  );
 }

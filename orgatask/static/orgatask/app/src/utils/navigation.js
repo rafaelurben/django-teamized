@@ -1,6 +1,7 @@
-import loadPageTeamlist from '../orgatask_modules/pages/teamlist.js';
+import PageLoader from "../components/pageloader.js";
+import AppMenubar from "../components/menubar.js";
+import * as Teams from './teams.js';
 
-const maincontent = $('#maincontent');
 
 const pageList = [
     "teamlist",
@@ -47,22 +48,16 @@ export function importFromURL() {
 }
 
 export function loadPage() {
-    maincontent.empty();
+    ensureExistingPage();
 
-    switch (window.orgatask.currentPage) {
-        case 'teamlist':
-            loadPageTeamlist(maincontent);
-            break;
-        case 'settings':
-            console.debug("LOAD SETTINGS page");
-            break;
-        default:
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Seite wurde nicht gefunden.",
-            })
-    }
+    let data = window.orgatask;
+    ReactDOM.render(
+        <PageLoader
+            page={data.currentPage}
+            data={data}
+        />,
+        document.getElementById("maincontent")
+    );
 }
 
 export function selectPage(page) {
@@ -70,4 +65,17 @@ export function selectPage(page) {
     window.orgatask.currentPage = page;
     exportToURL();
     loadPage();
+}
+
+export function renderMenubar() {
+    let data = window.orgatask;
+    ReactDOM.render(
+        <AppMenubar
+            teams={data.teams}
+            selectedTeamId={data.selectedTeamId}
+            onTeamSelect={Teams.switchTeam}
+            onPageSelect={selectPage}
+        />,
+        document.getElementById("orgatask_appmenubar")
+    );
 }

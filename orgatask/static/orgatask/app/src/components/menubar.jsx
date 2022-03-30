@@ -9,24 +9,29 @@ export default class AppMenubar extends React.Component {
   constructor(props) {
     super(props);
     this.handleTeamSelect = this.handleTeamSelect.bind(this);
+    this.selectPage = this.selectPage.bind(this);
   }
 
   handleTeamSelect(e) {
     this.props.onTeamSelect(e.target.value);
   }
 
+  selectPage = (page) => (e) => {
+    this.props.onPageSelect(page);
+  };
+
   render() {
     let teamlist;
     if (this.props.teams.length == 0) {
-        teamlist = <option value="">Laden...</option>;
+      teamlist = <option value="">Laden...</option>;
     } else {
-        teamlist = this.props.teams.map((team) => {
-            return (
-                <option key={team.id} value={team.id}>
-                    {team.title}
-                </option>
-            );
-        });
+      teamlist = this.props.teams.map((team) => {
+        return (
+          <option key={team.id} value={team.id}>
+            {team.title}
+          </option>
+        );
+      });
     }
 
     return (
@@ -35,10 +40,13 @@ export default class AppMenubar extends React.Component {
         role="group"
         aria-label="team management menubar"
       >
-
         {/* Team list button */}
         <li className="nav-item border-secondary border-end">
-          <a className="nav-link ms-1 me-1" data-page="teamlist" href="#">
+          <a
+            className="nav-link ms-1 me-1"
+            onClick={this.selectPage("teamlist")}
+            href="#"
+          >
             <i className="fas fa-list"></i>
           </a>
         </li>
@@ -56,7 +64,11 @@ export default class AppMenubar extends React.Component {
 
         {/* Team option button */}
         <li className="nav-item border-secondary border-start">
-          <a className="nav-link ms-1 me-1" data-page="settings" href="#">
+          <a
+            className="nav-link ms-1 me-1"
+            onClick={this.selectPage("settings")}
+            href="#"
+          >
             <i className="fas fa-user-cog"></i>
           </a>
         </li>
