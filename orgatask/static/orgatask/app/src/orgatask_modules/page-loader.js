@@ -8,8 +8,8 @@ const pageList = [
 ]
 
 function ensureExistingPage() {
-    if (!pageList.includes(window.orgatask.current_page)) {
-        window.orgatask.current_page = pageList[0];
+    if (!pageList.includes(window.orgatask.currentPage)) {
+        window.orgatask.currentPage = pageList[0];
     }
 }
 
@@ -17,11 +17,14 @@ export function exportToURL() {
     ensureExistingPage();
 
     var url = new URL(window.location);
-    url.searchParams.set('page', window.orgatask.current_page);
+    url.searchParams.set('page', window.orgatask.currentPage);
     url.searchParams.set('selectedTeamId', window.orgatask.selectedTeamId);
 
     window.history.pushState(
-        {},
+        {
+            page: window.orgatask.currentPage,
+            selectedTeamId: window.orgatask.selectedTeamId,
+        },
         "OrgaTask",
         url.href,
     );
@@ -29,7 +32,7 @@ export function exportToURL() {
 
 export function importFromURL() {
     const url = new URL(window.location);
-    window.orgatask.current_page = url.searchParams.get('page');
+    window.orgatask.currentPage = url.searchParams.get('page');
     window.orgatask.selectedTeamId = url.searchParams.get('selectedTeamId');
 
     ensureExistingPage();
@@ -38,7 +41,7 @@ export function importFromURL() {
 export function loadPage() {
     maincontent.empty();
 
-    switch (window.orgatask.current_page) {
+    switch (window.orgatask.currentPage) {
         case 'teamlist':
             loadPageTeamlist(maincontent);
             break;
@@ -56,11 +59,7 @@ export function loadPage() {
 
 export function selectPage(page) {
     console.debug("Select page: " + page);
-    window.orgatask.current_page = page;
+    window.orgatask.currentPage = page;
     exportToURL();
     loadPage();
 }
-
-$("a[data-page]").click(e => {
-    selectPage(e.currentTarget.dataset.page);
-});

@@ -6,6 +6,23 @@ const APPMENUBAR_CONTAINER = document.getElementById("orgatask_appmenubar");
 
 $("document").ready(() => renderMenubar([], ""));
 
+function validateSelectedTeam() {
+  if (window.orgatask.selectedTeamId) {
+    // Team selected; check if it is valid
+
+    for (let team of window.orgatask.teams) {
+      if (team.id === window.orgatask.selectedTeamId) {
+        // Team exists; no action needed
+        return;
+      }
+    }
+  }
+  
+  // No team selected or team doesn't exist; select default
+  console.log("No team selected or team doesn't exist; falling back to default");
+  window.orgatask.selectedTeamId = window.orgatask.defaultTeamId;
+}
+
 export function loadTeams() {
   return new Promise((resolve) => {
     $.getJSON({
@@ -13,23 +30,8 @@ export function loadTeams() {
       success: function (data) {
 
         window.orgatask.teams = data.teams;
-        window.orgatask.default_team_id = data.default_team_id;
-        if (!window.orgatask.selectedTeamId) {
-          // No team selected; select default
-          window.orgatask.selectedTeamId = data.default_team_id;
-        } else {
-          // Team selected; check if it is valid
-          var validated = false;
-          window.orgatask.teams.forEach((team) => {
-            if (team.id === window.orgatask.selectedTeamId) {
-              validated = true;
-            }
-          });
-          if (!validated) {
-            // Team not valid; fall back to default
-            window.orgatask.selectedTeamId = data.default_team_id;
-          }
-        }
+        window.orgatask.defaultTeamId = data.defaultTeamId;
+        validateSelectedTeam();
 
         renderMenubar(window.orgatask.teams, window.orgatask.selectedTeamId, switchTeam);
 
@@ -91,12 +93,13 @@ export function createTeamSwal() {
 export function switchTeam(teamId) {
   window.orgatask.selectedTeamId = teamId;
   console.debug("Switching team to: " + window.orgatask.selectedTeamId);
+  validateSelectedTeam();
   renderMenubar();
   PageLoader.exportToURL();
   PageLoader.loadPage();
 }
 
-function renderMenubar() {
+export function renderMenubar() {
   let data = window.orgatask;
   console.debug("Rendering menubar with", data.teams, data.selectedTeamId);
   ReactDOM.render(

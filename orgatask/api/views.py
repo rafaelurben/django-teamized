@@ -53,7 +53,7 @@ def teams(request):
                 }
                 for mi in memberinstances
             ],
-            "default_team_id": memberinstances[0].team.uid,
+            "defaultTeamId": memberinstances[0].team.uid,
         })
     elif request.method == "POST":
         if not user.can_create_team():
