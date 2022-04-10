@@ -16,6 +16,8 @@ export default class AppMenubar extends React.Component {
     this.props.onTeamSelect(e.target.value);
   }
 
+  // Note: Calling this function with the page parameter returns a new function
+  // that will be called when an event fires.
   selectPage = (page) => (e) => {
     this.props.onPageSelect(page);
   };
@@ -36,18 +38,18 @@ export default class AppMenubar extends React.Component {
 
     return (
       <div
-        className="btn-group border rounded border-secondary"
+        className="btn-group border rounded border-secondary ms-2"
         role="group"
         aria-label="team management menubar"
       >
         {/* Team list button */}
         <li className="nav-item border-secondary border-end">
           <a
-            className="nav-link ms-1 me-1"
+            className="nav-link mx-1 px-2"
             onClick={this.selectPage("teamlist")}
             href="#"
           >
-            <i className="fas fa-list"></i>
+            <i className="fas fa-fw fa-list"></i>
           </a>
         </li>
 
@@ -65,11 +67,11 @@ export default class AppMenubar extends React.Component {
         {/* Team option button */}
         <li className="nav-item border-secondary border-start">
           <a
-            className="nav-link ms-1 me-1"
+            className="nav-link mx-1 px-2"
             onClick={this.selectPage("settings")}
             href="#"
           >
-            <i className="fas fa-user-cog"></i>
+            <i className="fas fa-fw fa-user-cog"></i>
           </a>
         </li>
       </div>

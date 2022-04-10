@@ -31,45 +31,65 @@
 
         <!-- Menubar -->
         {% block menubar %}
-            <nav id="menubar" class="navbar navbar-expand navbar-dark bg-dark">
-                {% block menubartitle %}
-                    <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'orgatask:home' %}">OrgaTask</a>
-                {% endblock menubartitle %}
-                <ul class="navbar-nav nav w-100 me-2 justify-content-end">
-                    {% block additional_menubar_items %}
-                    {% endblock additional_menubar_items %}
-                    {% block menubar_items_end %}
-                        {% if not user.is_authenticated %}
-                            <li class="nav-item border rounded border-secondary ms-2">
-                                <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
-                                    <i class="fas fa-home"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item border rounded border-secondary ms-2">
-                                <a class="nav-link ms-1 me-1" href="{% url 'account:login' %}?next={% url 'orgatask:app' %}" title="{% translate "Login" %}">
-                                    <i class="fas fa-fw fa-sign-in-alt"></i>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item border rounded border-secondary ms-2">
-                                <a class="nav-link ms-1 me-1" href="{% url 'account:home' %}?next={% url 'orgatask:app' %}" title="{% translate "Account" %}">
-                                    <i class="fas fa-user"></i>
-                                    <span class="navbar-text ms-2">{{ user.username }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item border rounded border-secondary ms-2">
-                                <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
-                                    <i class="fas fa-home"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item border rounded border-secondary ms-2">
-                                <a class="nav-link ms-1 me-1" href="{% url 'account:logout' %}?next={% url 'orgatask:home' %}" title="{% translate "Ausloggen" %}">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endblock menubar_items_end %}
-                </ul>
+            <nav id="menubar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <style>
+                    @media (min-width: 992px) {
+                        .border-lg {
+                            border: 1px solid #ccc;
+                        }
+                    }
+                </style>
+
+                <div class="container-fluid">
+                    {% block menubartitle %}
+                        <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'orgatask:home' %}">OrgaTask</a>
+                    {% endblock menubartitle %}
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav nav w-100 me-1 mb-2 justify-content-end">
+                            {% block additional_menubar_items %}
+                            {% endblock additional_menubar_items %}
+                            {% block menubar_items_end %}
+                                {% if not user.is_authenticated %}
+                                    <li class="nav-item border-lg rounded border-secondary ms-2">
+                                        <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
+                                            <i class="fas fa-fw fa-home"></i>
+                                            <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item border-lg rounded border-secondary ms-2">
+                                        <a class="nav-link ms-1 me-1" href="{% url 'account:login' %}?next={% url 'orgatask:app' %}" title="{% translate "Login" %}">
+                                            <i class="fas fa-fw fa-sign-in-alt"></i>
+                                            <span class="d-lg-none ms-2">{% translate "Login" %}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="nav-item border-lg rounded border-secondary ms-2">
+                                        <a class="nav-link ms-1 me-1" href="{% url 'account:home' %}?next={% url 'orgatask:app' %}" title="{% translate "Account" %}">
+                                            <i class="fas fa-fw fa-user"></i>
+                                            <span class="d-lg-none ms-2">{% translate "Account" %}:</span>
+                                            <span class="navbar-text ms-0 ms-lg-2">{{ user.username }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item border-lg rounded border-secondary ms-2">
+                                        <a class="nav-link ms-1 me-1" href="{% url 'orgatask:home' %}" title="{% translate "Startseite" %}">
+                                            <i class="fas fa-fw fa-home"></i>
+                                            <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item border-lg rounded border-secondary ms-2">
+                                        <a class="nav-link ms-1 me-1" href="{% url 'account:logout' %}?next={% url 'orgatask:home' %}" title="{% translate "Logout" %}">
+                                            <i class="fas fa-fw fa-sign-out-alt"></i>
+                                            <span class="d-lg-none ms-2">{% translate "Logout" %}</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endblock menubar_items_end %}
+                        </ul>
+                    </div>
+                </div>
             </nav>
         {% endblock menubar %}
         
