@@ -1,7 +1,7 @@
 import { handleError, handleSuccess } from "./handlers.js";
 import * as Navigation from "./navigation.js";
 
-function validateSelectedTeam() {
+export function ensureExistingTeam() {
   if (window.orgatask.selectedTeamId) {
     // Team selected; check if it is valid
 
@@ -26,7 +26,7 @@ export function loadTeams() {
 
         window.orgatask.teams = data.teams;
         window.orgatask.defaultTeamId = data.defaultTeamId;
-        validateSelectedTeam();
+        ensureExistingTeam();
 
         Navigation.renderMenubar();
 
@@ -93,8 +93,7 @@ export function switchTeam(teamId) {
   console.debug("Switching team to: " + teamId);
 
   window.orgatask.selectedTeamId = teamId;
-  validateSelectedTeam();
-  Navigation.renderMenubar();
   Navigation.exportToURL();
-  Navigation.loadPage();
+  Navigation.renderMenubar();
+  Navigation.renderPage();
 }

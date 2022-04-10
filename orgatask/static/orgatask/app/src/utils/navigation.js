@@ -16,6 +16,7 @@ function ensureExistingPage() {
 
 export function exportToURL() {
     ensureExistingPage();
+    Teams.ensureExistingTeam();
 
     // Export the pagename and teamid to the URL
 
@@ -25,7 +26,8 @@ export function exportToURL() {
     newurl.searchParams.set('t', window.orgatask.selectedTeamId);
 
     if (oldurl.href !== newurl.href) {
-        // Add page to history if the URL has changed (i.e. changed the page url)
+        // Add page to history if the URL has changed 
+        // (i.e. update the page url if there's something to change)
         window.history.pushState(
             {
                 page: window.orgatask.currentPage,
@@ -43,13 +45,9 @@ export function importFromURL() {
     const url = new URL(window.location);
     window.orgatask.currentPage = url.searchParams.get('p');
     window.orgatask.selectedTeamId = url.searchParams.get('t');
-
-    ensureExistingPage();
 }
 
-export function loadPage() {
-    ensureExistingPage();
-
+export function renderPage() {
     let data = window.orgatask;
     ReactDOM.render(
         <PageLoader
@@ -64,7 +62,7 @@ export function selectPage(page) {
     console.debug("Select page: " + page);
     window.orgatask.currentPage = page;
     exportToURL();
-    loadPage();
+    renderPage();
 }
 
 export function renderMenubar() {
@@ -78,4 +76,13 @@ export function renderMenubar() {
         />,
         document.getElementById("orgatask_appmenubar")
     );
+}
+
+export function handleHistoryNavigation() {
+    console.log("Navigated in history! Switching page...");
+    importFromURL();
+    ensureExistingPage();
+    Teams.ensureExistingTeam();
+    renderMenubar(); // only render the menubar because refetching the teams takes too much time
+    renderPage();
 }

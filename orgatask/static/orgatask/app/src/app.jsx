@@ -19,17 +19,9 @@ $("document").ready(async function () {
   Navigation.importFromURL();
   await Teams.loadTeams();
   Navigation.exportToURL();
-  Navigation.loadPage();
+  Navigation.renderPage();
 })
 
 // Allow navigation in history
 
-function onHistoryNavigated() {
-  console.log("Navigated in history! Switching page...");
-  Navigation.importFromURL();
-  Navigation.renderMenubar(); // only render the menubar because refetching the teams takes too much time
-  Navigation.exportToURL();
-  Navigation.loadPage();
-}
-
-$(window).bind("popstate", onHistoryNavigated);
+$(window).bind("popstate", Navigation.handleHistoryNavigation);
