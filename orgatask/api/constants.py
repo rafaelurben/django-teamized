@@ -21,6 +21,11 @@ NO_PERMISSION_APIKEY = JsonResponse({
 
 NO_PERMISSION_SESSION = JsonResponse({
     "error": "no-permission-session",
+    "message": _("Du hast keine Berechtigung dazu. (Authentifizierung via Session)"),
+}, status=403)
+
+NO_PERMISSION = JsonResponse({
+    "error": "no-permission",
     "message": _("Du hast keine Berechtigung dazu."),
 }, status=403)
 

@@ -57,16 +57,24 @@ def api_view(allowed_methods=["get"], perms_required=()):
     return decorator
 
 
-def require_object(model):
-    """Decorator: Requires an object with gived ID and passes it to the view"""
+def require_objects(config):
+    """Decorator to only call the view if objects with given ids exist
+    and automatically pass them instead of the ids.
+
+    Format: [("fieldname_in", Model, "fieldname_out")...]"""
 
     def decorator(function):
         @wraps(function)
-        def wrap(request, object_id, *args, **kwargs):
-            if model.objects.filter(pk=object_id).exists():
-                obj = model.objects.get(pk=object_id)
-                return function(request, obj, *args, **kwargs)
+        def wrap(request, *args, **kwargs):
+            for field_in, model, field_out in config:
+                objpk = kwargs.pop(field_in)
 
-            return OBJ_NOT_FOUND
+                if model.objects.filter(pk=objpk).exists():
+                    kwargs[field_out] = model.objects.get(pk=objpk)
+                    continue
+
+                return OBJ_NOT_FOUND
+
+            return function(request, *args, **kwargs)
         return wrap
     return decorator

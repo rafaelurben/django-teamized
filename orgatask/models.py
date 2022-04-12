@@ -117,17 +117,33 @@ class Team(models.Model):
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
 
-    def is_member(self, user: User):
+    def user_is_member(self, user: User):
         """
         Check if a user is a member of the team.
         """
 
         return self.members.filter(user=user).exists()
 
-    def join(self, user: User, role: str = enums.Roles.MEMBER):
-        "Add a user to the team if they are not already a member"
+    def user_is_admin(self, user: User):
+        """
+        Check if a user is an admin (or owner) of the team.
+        """
 
-        if not self.is_member(user):
+        return self.members.filter(user=user, role__in=[enums.Roles.ADMIN, enums.Roles.OWNER]).exists()
+    
+    def user_is_owner(self, user: User):
+        """
+        Check if a user is the owner of the team.
+        """
+
+        return self.members.filter(user=user, role=enums.Roles.OWNER).exists()
+
+    def join(self, user: User, role: str = enums.Roles.MEMBER):
+        """
+        Add a user to the team if they are not already a member
+        """
+
+        if not self.user_is_member(user):
             Member.objects.create(
                 team=self,
                 user=user,
