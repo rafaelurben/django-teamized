@@ -86,7 +86,7 @@ def teams(request):
 @api_view(["delete"])
 @csrf_exempt
 @orgatask_prep()
-@require_objects(["team", Team, "team"])
+@require_objects([("team", Team, "team")])
 def team(request, team: Team):
     """
     Endpoint for managing or deleting a team.
@@ -112,7 +112,7 @@ def team(request, team: Team):
 @api_view(["get", "post"])
 @csrf_exempt
 @orgatask_prep()
-@require_objects(["team", Team, "team"])
+@require_objects([("team", Team, "team")])
 def members(request, team: Team):
     if request.method == "GET":
         return NOT_IMPLEMENTED
@@ -123,7 +123,7 @@ def members(request, team: Team):
 @api_view(["delete"])
 @csrf_exempt
 @orgatask_prep()
-@require_objects(["team", Team, "team"], ["member", Member, "member"])
+@require_objects([("team", Team, "team"), ("member", Member, "member")])
 def member(request, team: Team, member: Member):
     if request.method == "DELETE":
         return NOT_IMPLEMENTED
