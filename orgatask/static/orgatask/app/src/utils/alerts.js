@@ -1,4 +1,5 @@
-export function handleError(request) {
+export function errorAlert(request) {
+    console.debug("Error: " + request.status + " " + request.statusText, request.responseJSON);
     let jsondata = request.responseJSON;
     if (jsondata.alert) {
         Swal.fire({
@@ -14,7 +15,7 @@ export function handleError(request) {
     }
 }
 
-export function handleSuccess(data) {
+export function successAlert(data) {
     Swal.fire({
         toast: true,
         icon: "success",
@@ -23,5 +24,21 @@ export function handleSuccess(data) {
         timer: 3000,
         timerProgressBar: true,
         ...data.alert
+    })
+}
+
+export function confirmAlert(text, callback) {
+    Swal.fire({
+        title: "Sicher?",
+        text: text,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        confirmButtonText: "Ja",
+        cancelButtonText: "Nein, abbrechen",
+    }).then((result) => {
+        if (result.value) {
+            callback();
+        }
     })
 }

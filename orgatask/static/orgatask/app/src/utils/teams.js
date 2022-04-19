@@ -1,4 +1,5 @@
-import { handleError, handleSuccess } from "./handlers.js";
+import { successAlert } from "./alerts.js";
+import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 
 export function ensureExistingTeam() {
@@ -18,70 +19,48 @@ export function ensureExistingTeam() {
   window.orgatask.selectedTeamId = window.orgatask.defaultTeamId;
 }
 
-export function loadTeams() {
-  return new Promise((resolve) => {
-    $.getJSON({
-      url: document.api_base_url + "teams",
-      success: function (data) {
+export async function loadTeams() {
+  await API.get("teams").then(
+    function (data) {
 
-        window.orgatask.teams = data.teams;
-        window.orgatask.defaultTeamId = data.defaultTeamId;
-        ensureExistingTeam();
+      window.orgatask.teams = data.teams;
+      window.orgatask.defaultTeamId = data.defaultTeamId;
+      ensureExistingTeam();
 
-        Navigation.renderMenubar();
-
-        resolve("resolved");
-      },
-      error: handleError,
-    });
-  });
+      Navigation.renderMenubar();
+    }
+  )
 }
 
-export function createTeam(title, description) {
-  return new Promise((resolve) => {
-    $.ajax({
-      url: document.api_base_url + "teams",
-      type: "POST",
-      data: {
-        title: title,
-        description: description,
-      },
-      success: async (data) => {
-        await loadTeams();
-        switchTeam(data.id);
-        handleSuccess(data);
-        resolve(data);
-      },
-      error: handleError,
-    });
-  });
+export async function createTeam(title, description) {
+  await API.post("teams", {
+    title: title,
+    description: description,
+  }).then(async (data) => {
+    await loadTeams();
+    switchTeam(data.id);
+    successAlert(data);
+  })
 }
 
-export function createTeamSwal() {
-  return new Promise(async (resolve) => {
-    const { value } = await Swal.fire({
-      title: "Team erstellen",
-      html:
-        '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
-        '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonText: "Erstellen",
-      cancelButtonText: "Abbrechen",
-      preConfirm: () => {
-        const title = document.getElementById("swal-input-title").value;
-        const description = document.getElementById(
-          "swal-input-description"
-        ).value;
+export async function createTeamSwal() {
+  await Swal.fire({
+    title: "Team erstellen",
+    html:
+      '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
+      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Erstellen",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const title = document.getElementById("swal-input-title").value;
+      const description = document.getElementById(
+        "swal-input-description"
+      ).value;
 
-        return new Promise(async (resolve) => {
-          await createTeam(title, description);
-          resolve("resolved");
-        });
-      },
-    });
-
-    resolve(value);
+      return await createTeam(title, description);
+    },
   });
 }
 
