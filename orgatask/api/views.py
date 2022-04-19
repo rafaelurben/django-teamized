@@ -69,7 +69,13 @@ def teams(request):
         description = request.POST.get("description", "")
 
         if not title or not description:
-            return DATA_INVALID
+            return JsonResponse({
+                "error": "data_invalid",
+                "alert": {
+                    "title": _("Daten ungültig."),
+                    "text": _("Bitte fülle alle Felder aus."),
+                }
+            }, status=400)
 
         team = user.create_team(title, description)
 

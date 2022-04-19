@@ -18,10 +18,14 @@ export function request(method, endpoint, data, ...opts) {
     })
 }
 
-export async function get(endpoint, data, ...opts) {
+export async function GET(endpoint, data, ...opts) {
     return await request("GET", endpoint, data, ...opts);
 }
 
-export async function post(endpoint, data, ...opts) {
+export async function POST(endpoint, data, ...opts) {
     return await request("POST", endpoint, data, ...opts);
+}
+
+export async function DELETE(endpoint, data, ...opts) {
+    return await request("DELETE", endpoint, data, ...opts);
 }

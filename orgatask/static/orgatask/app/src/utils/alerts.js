@@ -36,9 +36,7 @@ export function confirmAlert(text, callback) {
         confirmButtonColor: "#d33",
         confirmButtonText: "Ja",
         cancelButtonText: "Nein, abbrechen",
-    }).then((result) => {
-        if (result.value) {
-            callback();
-        }
+        showLoaderOnConfirm: true,
+        preConfirm: callback,
     })
 }

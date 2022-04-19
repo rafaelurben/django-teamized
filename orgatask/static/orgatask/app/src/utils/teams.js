@@ -1,4 +1,4 @@
-import { successAlert } from "./alerts.js";
+import { successAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 
@@ -20,7 +20,7 @@ export function ensureExistingTeam() {
 }
 
 export async function loadTeams() {
-  await API.get("teams").then(
+  await API.GET("teams").then(
     function (data) {
 
       window.orgatask.teams = data.teams;
@@ -33,7 +33,7 @@ export async function loadTeams() {
 }
 
 export async function createTeam(title, description) {
-  await API.post("teams", {
+  await API.POST("teams", {
     title: title,
     description: description,
   }).then(async (data) => {
@@ -59,6 +59,12 @@ export async function createTeamSwal() {
         "swal-input-description"
       ).value;
 
+      if (!title || !description) {
+        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        return false;
+      }
+
+      Swal.showLoading();
       return await createTeam(title, description);
     },
   });
@@ -75,4 +81,22 @@ export function switchTeam(teamId) {
   Navigation.exportToURL();
   Navigation.renderMenubar();
   Navigation.renderPage();
+}
+
+export async function deleteTeam(teamId) {
+  await API.DELETE("teams/"+teamId).then(async (data) => {
+    await loadTeams();
+    if (window.orgatask.selectedTeamId === teamId) {
+      switchTeam(window.orgatask.defaultTeamId);
+    }
+    Navigation.renderPage();
+    successAlert(data);
+  })
+}
+
+export function deleteTeamWithConfirmation(teamId, teamName) {
+  confirmAlert(
+    "Willst du das Team '"+teamName+"' ("+teamId+") wirklich löschen?", 
+    () => deleteTeam(teamId)
+  );
 }
