@@ -4,11 +4,13 @@ import uuid
 
 from functools import wraps
 
+from django.http import JsonResponse
+
 from orgatask.api.constants import (
     NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED, METHOD_NOT_ALLOWED, OBJ_NOT_FOUND
 )
 from orgatask.api.models import ApiKey
-
+from orgatask import exceptions
 
 def _is_valid_uuid(val):
     try:
@@ -23,36 +25,48 @@ def api_view(allowed_methods=["get"], perms_required=()):
     def decorator(function):
         @wraps(function)
         def wrap(request, *args, **kwargs):
-            if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
-                return METHOD_NOT_ALLOWED
-            
-            apikey = request.GET.get("apikey", None)
+            try:
+                if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
+                    return METHOD_NOT_ALLOWED
 
-            if apikey:
-                if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
-                    keyobject = ApiKey.objects.get(key=apikey)
-                    
-                    if request.method.upper() == "GET":
-                        if not keyobject.read:
+                apikey = request.GET.get("apikey", None)
+
+                if apikey:
+                    if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
+                        keyobject = ApiKey.objects.get(key=apikey)
+
+                        if request.method.upper() == "GET":
+                            if not keyobject.read:
+                                return NO_PERMISSION_APIKEY
+                        elif not keyobject.write:
                             return NO_PERMISSION_APIKEY
-                    elif not keyobject.write:
-                        return NO_PERMISSION_APIKEY
-                    elif not keyobject.has_perms(perms_required):
-                        return NO_PERMISSION_APIKEY
-                    
-                    request.user = keyobject.user
-                    request.api_key = keyobject
-                    return function(request, *args, **kwargs)
+                        elif not keyobject.has_perms(perms_required):
+                            return NO_PERMISSION_APIKEY
 
-                return APIKEY_INVALID
+                        request.user = keyobject.user
+                        request.api_key = keyobject
+                        return function(request, *args, **kwargs)
 
-            if request.user.is_authenticated:
-                if request.user.has_perms(perms_required):
-                    return function(request, *args, **kwargs)
+                    return APIKEY_INVALID
 
-                return NO_PERMISSION_SESSION
+                if request.user.is_authenticated:
+                    if request.user.has_perms(perms_required):
+                        return function(request, *args, **kwargs)
 
-            return NOT_AUTHENTICATED
+                    return NO_PERMISSION_SESSION
+
+                return NOT_AUTHENTICATED
+            except exceptions.AlertException as e:
+                return JsonResponse({
+                    "team": {
+                        "error": str(e.orgatask_name),
+                        "message": str(e.orgatask_message),
+                        "alert": {
+                            "title": "Fehler",
+                            "text": str(e.orgatask_message),
+                        },
+                    }
+                }, status=400)
         return wrap
     return decorator
 
