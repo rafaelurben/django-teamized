@@ -9,11 +9,13 @@ from orgatask.api import views
 urlpatterns = [
     # API views
 
-    path('profile', views.profile, name='api-profile'),
-    path('teams', views.teams, name='api-teams'),
-    path('teams/<team>', views.team, name='api-team'),
-    path('teams/<team>/members', views.members, name='api-members'),
-    path('teams/<team>/members/<member>', views.member, name='api-member'),
+    path('profile', views.endpoint_profile, name='api-profile'),
+    path('teams', views.endpoint_teams, name='api-teams'),
+    path('teams/<team>', views.endpoint_team, name='api-team'),
+    path('teams/<team>/members', views.endpoint_members, name='api-members'),
+    path('teams/<team>/members/<member>', views.endpoint_member, name='api-member'),
+    path('teams/<team>/invites', views.endpoint_invites, name='api-invites'),
+    path('teams/<team>/invites/<invite>', views.endpoint_invite, name='api-invite'),
 
 
     # Catch-all error view for 404 JSON responses
