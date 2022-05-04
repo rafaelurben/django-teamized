@@ -38,6 +38,15 @@ class TeamAdminMemberInline(admin.TabularInline):
     verbose_name = _("Mitglied")
     verbose_name_plural = _("Mitglieder")
 
+class TeamAdminInviteInline(admin.TabularInline):
+    model = models.Invite
+    extra = 0
+    verbose_name = _("Einladung")
+    verbose_name_plural = _("Einladungen")
+
+    readonly_fields = ('token', 'is_valid',)
+
+    fields = ('max_uses', 'uses_left', 'is_valid', 'valid_until', 'token',)
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
@@ -46,7 +55,7 @@ class TeamAdmin(admin.ModelAdmin):
 
     readonly_fields = ('uid',)
 
-    inlines = [TeamAdminMemberInline]
+    inlines = [TeamAdminMemberInline, TeamAdminInviteInline]
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'title', 'description',)}),
@@ -54,3 +63,16 @@ class TeamAdmin(admin.ModelAdmin):
     ]
 
     ordering = ('uid', )
+
+@admin.register(models.Invite)
+class InviteAdmin(admin.ModelAdmin):
+    list_display = ['uid', 'team', 'note', 'is_valid', 'max_uses', 'uses_left', 'valid_until']
+    list_filter = ['uses_left']
+
+    readonly_fields = ('uid', 'token')
+
+    fieldsets = [
+        ('Infos', {'fields': ('uid', 'team', 'note',)}),
+        ('Settings', {'fields': (('max_uses', 'uses_left'), 'valid_until')}),
+        ('Token', {'fields': ('token',), "classes": ('collapse',)})
+    ]
