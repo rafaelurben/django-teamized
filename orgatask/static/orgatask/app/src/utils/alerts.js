@@ -1,6 +1,16 @@
 export function errorAlert(request) {
-    console.debug("Error: " + request.status + " " + request.statusText, request.responseJSON);
-    let jsondata = request.responseJSON;
+    console.debug("Error: " + request.status + " " + request.statusText, request);
+    let jsondata;
+
+    if (request.hasOwnProperty("responseJSON")) {
+        jsondata = request.responseJSON;
+    } else {
+        jsondata = {
+            message: request.statusText,
+            error: request.status,
+        };
+    }
+
     if (jsondata.alert) {
         Swal.fire({
             icon: 'error',
@@ -8,7 +18,7 @@ export function errorAlert(request) {
         })
     } else {
         Swal.fire({
-            title: `Fehler ${request.status}`,
+            title: `Uupsie!`,
             html: `Es ist ein Fehler aufgetreten:<br><br>${jsondata.message}<br>(error ${jsondata.error})`,
             icon: 'error',
         })
