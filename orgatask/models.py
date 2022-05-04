@@ -176,6 +176,9 @@ class Team(models.Model):
         Set days_valid to 0 to use the default.
         """
 
+        if max_uses < 0:
+            max_uses = options.DEFAULT_INVITE_MAX_USES_FALLBACK
+
         if days_valid < 0:
             valid_until = None
         elif days_valid == 0.0:

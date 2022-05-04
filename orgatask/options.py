@@ -3,5 +3,6 @@
 # Maximal amount of teams a user can be the owner of
 MAX_OWNED_TEAMS = 3
 
-# Default invite validity in days
+# Invite settings
 DEFAULT_INVITE_EXPIRATION_DAYS = 7
+DEFAULT_INVITE_MAX_USES_FALLBACK = 10
