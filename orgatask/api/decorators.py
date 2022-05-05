@@ -4,8 +4,11 @@ import uuid
 
 from functools import wraps
 
+from django.db.models import fields
+
 from orgatask.api.constants import (
-    NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED, METHOD_NOT_ALLOWED, OBJ_NOT_FOUND
+    NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED,
+    METHOD_NOT_ALLOWED, OBJ_NOT_FOUND, NOT_AN_UUID
 )
 from orgatask.api.models import ApiKey
 from orgatask import exceptions
@@ -77,10 +80,18 @@ def require_objects(config):
                 if len(elem) == 3:
                     elem.append("pk")
 
-                field_in, model, field_out, key = elem
+                field_in, model, field_out, dbfieldname = elem
 
-                search = {key: kwargs.pop(field_in)}
+                if dbfieldname == "pk":
+                    dbfieldname = model._meta.pk.name
 
+                dbfield = model._meta.get_field(dbfieldname)
+                value = kwargs.pop(field_in)
+
+                if isinstance(dbfield, fields.UUIDField) and not _is_valid_uuid(value):
+                    return NOT_AN_UUID
+
+                search = {dbfieldname: value}
                 if model.objects.filter(**search).exists():
                     kwargs[field_out] = model.objects.get(**search)
                     continue

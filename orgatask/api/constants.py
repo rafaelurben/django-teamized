@@ -58,3 +58,8 @@ DATA_INVALID = JsonResponse({
     "error": "data-invalid",
     "message": _("Die Daten, die du angegeben hast, sind ungültig."),
 }, status=400)
+
+NOT_AN_UUID = JsonResponse({
+    "error": "not-an-uuid",
+    "message": _("Dies ist keine gültige UUID."),
+}, status=400)
