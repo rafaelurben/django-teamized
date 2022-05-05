@@ -64,16 +64,25 @@ def require_objects(config):
     """Decorator to only call the view if objects with given ids exist
     and automatically pass them instead of the ids.
 
-    Format: [("fieldname_in", Model, "fieldname_out")...]"""
+    Format: [["fieldname_in", Model, "fieldname_out", "pk"]...]"""
 
     def decorator(function):
         @wraps(function)
         def wrap(request, *args, **kwargs):
-            for field_in, model, field_out in config:
-                objpk = kwargs.pop(field_in)
+            for elem in config:
+                elem = list(elem)
 
-                if model.objects.filter(pk=objpk).exists():
-                    kwargs[field_out] = model.objects.get(pk=objpk)
+                if len(elem) == 2:
+                    elem.append(elem[0])
+                if len(elem) == 3:
+                    elem.append("pk")
+
+                field_in, model, field_out, key = elem
+
+                search = {key: kwargs.pop(field_in)}
+
+                if model.objects.filter(**search).exists():
+                    kwargs[field_out] = model.objects.get(**search)
                     continue
 
                 return OBJ_NOT_FOUND
