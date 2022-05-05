@@ -16,7 +16,8 @@ urlpatterns = [
     path('teams/<team>/members/<member>', views.endpoint_member, name='api-member'),
     path('teams/<team>/invites', views.endpoint_invites, name='api-invites'),
     path('teams/<team>/invites/<invite>', views.endpoint_invite, name='api-invite'),
-
+    path('teams/<team>/leave', views.endpoint_team_leave, name='api-team-leave'),
+    path('invites/<invite>/accept', views.endpoint_invite_accept, name='api-invite-accept'),
 
     # Catch-all error view for 404 JSON responses
     re_path('.*', views.not_found, name="api-not-found")

@@ -255,8 +255,81 @@ def endpoint_invite(request, team: Team, invite: Invite):
             "success": True,
             "id": invite.uid,
             "alert": {
-                "title": _("Einladung gelöscht."),
+                "title": _("Einladung gelöscht"),
                 "text": _("Die Einladung wurde erfolgreich gelöscht."),
+            }
+        })
+
+
+@api_view(["post"])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("team", Team, "team")])
+def endpoint_team_leave(request, team: Team):
+    """
+    Endpoint for leaving a team.
+    """
+
+    user = request.orgatask_user
+
+    if request.method == "POST":
+        if not team.user_is_member(user):
+            return NO_PERMISSION
+
+        member = team.get_member(user)
+
+        if member.is_owner():
+            return JsonResponse({
+                "error": "owner-can-not-leave",
+                "alert": {
+                    "title": _("Du bist Besitzer"),
+                    "text": _("Du kannst dein Team nicht verlassen, da du der Eigentümer bist."),
+                }
+            }, status=400)
+
+        member.delete()
+
+        return JsonResponse({
+            "success": True,
+            "id": team.uid,
+            "alert": {
+                "title": _("Team verlassen"),
+                "text": _("Du hast das Team %s verlassen.") % team.title,
+            }
+        })
+
+
+@api_view(["post"])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("invite", Invite, "invite", "token")])
+def endpoint_invite_accept(request, invite: Invite):
+    """
+    Endpoint for accepting an invite.
+    """
+
+    user = request.orgatask_user
+
+    if request.method == "POST":
+        if not invite.is_valid():
+            return JsonResponse({
+                "error": "invite-not-valid",
+                "alert": {
+                    "title": _("Einladung ungültig"),
+                    "text": _("Die Einladung ist nicht mehr gültig."),
+                }
+            }, status=400)
+
+        invite.accept(user)
+
+        team = invite.team
+
+        return JsonResponse({
+            "success": True,
+            "team": team.as_dict(),
+            "alert": {
+                "title": _("Einladung akzeptiert"),
+                "text": _("Du bist dem Team %s beigetreten.") % team.title,
             }
         })
 
