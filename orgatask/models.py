@@ -51,11 +51,11 @@ class User(models.Model):
 
     def as_dict(self) -> dict:
         return {
-            "id": self.user.uid,
-            "username": self.user.auth_user.username,
-            "email": self.user.auth_user.email,
-            "first_name": self.user.auth_user.first_name,
-            "last_name": self.user.auth_user.last_name,
+            "id": self.uid,
+            "username": self.auth_user.username,
+            "email": self.auth_user.email,
+            "first_name": self.auth_user.first_name,
+            "last_name": self.auth_user.last_name,
         }
 
     def create_team(self, title, description):
@@ -148,7 +148,7 @@ class Team(models.Model):
         """
 
         return self.members.filter(user=user, role__in=[enums.Roles.ADMIN, enums.Roles.OWNER]).exists()
-    
+
     def user_is_owner(self, user: User) -> bool:
         """
         Check if a user is the owner of the team.
@@ -177,8 +177,8 @@ class Team(models.Model):
 
     def create_invite(self, max_uses: int = 1, note: str = "", days_valid: float = 0.0):
         """
-        Create a new invite. 
-        
+        Create a new invite.
+
         Set days_valid to -1 to make it a permanent invite.
         Set days_valid to 0 to use the default.
         """
@@ -297,7 +297,7 @@ class Invite(models.Model):
 
     def get_time_left_days(self) -> float:
         "Get the time left in days until the invite expires."
-        
+
         if self.valid_until is None:
             return float("inf")
         else:
