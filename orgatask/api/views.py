@@ -76,7 +76,7 @@ def endpoint_teams(request):
 
         return JsonResponse({
             "success": True,
-            "id": team.uid,
+            "team": team.as_dict(),
             "alert": {
                 "title": _("Team erstellt"),
                 "text": _("Das Team wurde erfolgreich erstellt."),
@@ -101,8 +101,7 @@ def endpoint_team(request, team: Team):
 
         return JsonResponse({
             "id": team.uid,
-            "title": team.title,
-            "description": team.description,
+            "team": team.as_dict(),
         })
     if request.method == "DELETE":
         if not team.user_is_owner(user):
@@ -199,7 +198,7 @@ def endpoint_invites(request, team: Team):
     # Methods
     if request.method == "GET":
         invites = team.invites.all().order_by("valid_until")
-        
+
         return JsonResponse({
             "invites": [
                 i.as_dict()
@@ -219,8 +218,7 @@ def endpoint_invites(request, team: Team):
         inv = team.create_invite(uses, note, days)
         return JsonResponse({
             "success": True,
-            "id": inv.uid,
-            "token": inv.token,
+            "invite": inv.as_dict(),
             "alert": {
                 "title": _("Einladung erstellt"),
                 "text": _("Token für die Einladung: %s") % str(inv.token),

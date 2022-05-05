@@ -1,15 +1,14 @@
 """OrgaTask Models"""
 
+import uuid
+
 from django.db import models
 from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
-from orgatask.api.models import ApiKey
 from orgatask import enums, options, exceptions
-
-import uuid
 
 # Create your models here.
 
@@ -250,7 +249,7 @@ class Member(models.Model):
 
 class Invite(models.Model):
     "Invites for teams"
-    
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
