@@ -4,8 +4,6 @@ import uuid
 
 from functools import wraps
 
-from django.http import JsonResponse
-
 from orgatask.api.constants import (
     NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED, METHOD_NOT_ALLOWED, OBJ_NOT_FOUND
 )
@@ -56,17 +54,8 @@ def api_view(allowed_methods=["get"], perms_required=()):
                     return NO_PERMISSION_SESSION
 
                 return NOT_AUTHENTICATED
-            except exceptions.AlertException as e:
-                return JsonResponse({
-                    "team": {
-                        "error": str(e.orgatask_name),
-                        "message": str(e.orgatask_message),
-                        "alert": {
-                            "title": "Fehler",
-                            "text": str(e.orgatask_message),
-                        },
-                    }
-                }, status=400)
+            except exceptions.AlertException as exc:
+                return exc.get_response()
         return wrap
     return decorator
 
