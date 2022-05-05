@@ -1,6 +1,8 @@
 "use strict";
 
 import * as Teams from "../../utils/teams.js";
+import * as Navigation from "../../utils/navigation.js";
+
 
 /*
     The Page_TeamList component represents the "teamlist" page.
@@ -21,7 +23,8 @@ class TeamTableRow extends React.Component {
   }
 
   handleManageButtonClick() {
-    console.log("Manage button clicked!");
+    Teams.switchTeam(this.props.team.id);
+    Navigation.selectPage("teammanage");
   }
 
   handleLeaveButtonClick() {
@@ -65,7 +68,7 @@ class TeamTableRow extends React.Component {
           <td>
             <a
               href="#"
-              className="btn btn-outline-dark border-1 disabled" // temporarily disabled
+              className="btn btn-outline-dark border-1"
               onClick={this.handleManageButtonClick}
             >
               Verwalten

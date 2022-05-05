@@ -15,8 +15,13 @@ export default class PageLoader extends React.Component {
   render() {
     switch (this.props.page) {
       case "teamlist":
-        return <Page_TeamList teams={this.props.data.teams} selectedTeamId={this.props.data.selectedTeamId} />;
-      case "settings":
+        return (
+          <Page_TeamList
+            teams={this.props.data.teams}
+            selectedTeamId={this.props.data.selectedTeamId}
+          />
+        );
+      case "teammanage":
         return null;
     }
   }

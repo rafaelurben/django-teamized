@@ -68,7 +68,7 @@ export default class AppMenubar extends React.Component {
         <li className="nav-item border-secondary border-start">
           <a
             className="nav-link mx-1 px-2"
-            onClick={this.selectPage("settings")}
+            onClick={this.selectPage("teammanage")}
             href="#"
           >
             <i className="fas fa-fw fa-user-cog"></i>
