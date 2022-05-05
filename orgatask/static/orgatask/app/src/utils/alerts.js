@@ -25,6 +25,18 @@ export function errorAlert(request) {
     }
 }
 
+export function waitingAlert(text, options) {
+    Swal.fire({
+        title: "In Bearbeitung...",
+        text: text,
+        toast: true,
+        icon: "info",
+        position: 'top-right',
+        showConfirmButton: false,
+        ...options
+    })
+}
+
 export function successAlert(data) {
     Swal.fire({
         toast: true,
