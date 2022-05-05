@@ -28,11 +28,11 @@ class TeamTableRow extends React.Component {
   }
 
   handleLeaveButtonClick() {
-    console.log("Leave button clicked!");
+    Teams.leaveTeamWithConfirmation(this.props.team);
   }
 
   handleDeleteButtonClick() {
-    Teams.deleteTeamWithConfirmation(this.props.team.id, this.props.team.title);
+    Teams.deleteTeamWithConfirmation(this.props.team);
   }
 
   render() {
@@ -75,14 +75,22 @@ class TeamTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          <td>
+            <a
+              href="#"
+              className="btn btn-outline-dark border-1"
+              onClick={this.handleManageButtonClick}
+            >
+              Ansehen
+            </a>
+          </td>
         )}
         {/* Action: Leave/Delete */}
         {this.props.team.member.role !== "owner" ? (
           <td>
             <a
               href="#"
-              className="btn btn-outline-danger border-1 disabled" // temporarily disabled
+              className="btn btn-outline-danger border-1"
               onClick={this.handleLeaveButtonClick}
             >
               Verlassen

@@ -5,7 +5,7 @@ import * as Teams from './teams.js';
 
 const pageList = [
     "teamlist",
-    "settings",
+    "teammanage",
 ]
 
 function ensureExistingPage() {
