@@ -221,9 +221,11 @@ def endpoint_invites(request, team: Team):
             "invite": inv.as_dict(),
             "alert": {
                 "title": _("Einladung erstellt"),
-                "text": _("Token für die Einladung: %s") % str(inv.token),
+                "text": _("Token: %s") % str(inv.token),
                 "timer": 0,
                 "showConfirmButton": True,
+                "toast": False,
+                "position": "center",
             }
         })
 
