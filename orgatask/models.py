@@ -128,6 +128,13 @@ class Team(models.Model):
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
 
+    def as_dict(self) -> dict:
+        return {
+            "id": self.uid,
+            "title": self.title,
+            "description": self.description,
+        }
+
     def user_is_member(self, user: User) -> bool:
         """
         Check if a user is a member of the team.
