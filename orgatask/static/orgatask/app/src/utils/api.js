@@ -1,4 +1,4 @@
-import { errorAlert } from "./alerts.js";
+import { requestErrorAlert } from "./alerts.js";
 
 export function request(method, endpoint, data, ...opts) {
     return new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ export function request(method, endpoint, data, ...opts) {
             success: resolve,
             error: (e) => {
                 if (!opts.includes("no-error-handling")) {
-                    errorAlert(e);
+                    requestErrorAlert(e);
                 }
                 reject(e);
             },

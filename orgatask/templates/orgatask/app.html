@@ -6,6 +6,7 @@
 {% block extrahead %}
     <!-- Sweetalert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
+    <link rel="stylesheet" href="{% static 'orgatask/css/dashboard.css' %}">
 {% endblock extrahead %}
 
 {% block additional_menubar_items %}
@@ -36,3 +37,8 @@
     <!-- App -->
     <script src="{% static 'orgatask/app/build/app.js' %}" type="module"></script>
 {% endblock scripts %}
+
+{% block contentcontainer %}
+    <div class="w-100" id="maincontent">
+    </div>
+{% endblock contentcontainer %}

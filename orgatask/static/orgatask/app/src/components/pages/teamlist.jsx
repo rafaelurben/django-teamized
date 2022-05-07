@@ -1,8 +1,10 @@
 "use strict";
 
+import { validateUUID } from "../../utils/utils.js";
+import { errorAlert } from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
-
+import * as Dashboard from "../dashboard.js";
 
 /*
     The Page_TeamList component represents the "teamlist" page.
@@ -117,28 +119,64 @@ export default class Page_TeamList extends React.Component {
     super(props);
   }
 
+  joinTeam() {
+    let tokeninput = document.getElementById("invite-token");
+    let token = tokeninput.value;
+    
+    if (!validateUUID(token)) {
+      errorAlert(
+        "Ungültiges Format",
+        "Der Token muss dem UUID-Format entsprechen."
+      );
+    } else {
+      Teams.acceptInvite(token);
+      tokeninput.value = "";
+    }
+  }
+
   render() {
     let rows = this.props.teams.map((team) => {
       return <TeamTableRow key={team.id} team={team} selectedTeamId={this.props.selectedTeamId} />;
     });
 
+
     return (
-      <div>
-        <table className="table table-borderless align-middle">
-            <tbody>{rows}</tbody>
-        </table>
-        
-        <div className="w-100 border border-dark rounded p-2">
-          <span className="mx-3">Neues Team:</span>
-          <a
-            href="#"
-            className="m-2 btn btn-outline-primary border-1"
-            onClick={Teams.createTeamSwal}
-          >
-            Team erstellen
-          </a>
-        </div>
-      </div>
+      <Dashboard.DashboardContainer>
+        <Dashboard.DashboardColumn size="12">
+          <Dashboard.DashboardTile>
+            <table className="table table-borderless align-middle mb-0">
+              <tbody>{rows}</tbody>
+            </table>
+          </Dashboard.DashboardTile>
+
+          <Dashboard.DashboardTile>
+            <div>
+            </div>
+            <div className="input-group my-2">
+              <button
+                type="button"
+                className="btn btn-outline-primary border-1"
+                onClick={Teams.createTeamSwal}
+              >
+                Team erstellen
+              </button>
+              <input
+                id="invite-token"
+                type="text"
+                className="form-control"
+                placeholder="Token der Einladung"
+              />
+              <button
+                type="button"
+                className="btn btn-outline-primary border-1"
+                onClick={this.joinTeam}
+              >
+                Team beitreten
+              </button>
+            </div>
+          </Dashboard.DashboardTile>
+        </Dashboard.DashboardColumn>
+      </Dashboard.DashboardContainer>
     );
   }
 }

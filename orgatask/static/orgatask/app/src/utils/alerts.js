@@ -1,4 +1,4 @@
-export function errorAlert(request) {
+export function requestErrorAlert(request) {
     console.debug("Error: " + request.status + " " + request.statusText, request);
     let jsondata;
 
@@ -23,6 +23,14 @@ export function errorAlert(request) {
             icon: 'error',
         })
     }
+}
+
+export function errorAlert(title, message) {
+    Swal.fire({
+        title: title,
+        html: message,
+        icon: 'error',
+    })
 }
 
 export function waitingAlert(text, options) {
