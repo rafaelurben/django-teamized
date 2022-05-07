@@ -48,11 +48,9 @@ export function importFromURL() {
 }
 
 export function renderPage() {
-    let data = window.orgatask;
     ReactDOM.render(
         <PageLoader
-            page={data.currentPage}
-            data={data}
+            page={window.orgatask.currentPage}
         />,
         document.getElementById("maincontent")
     );
@@ -66,11 +64,10 @@ export function selectPage(page) {
 }
 
 export function renderMenubar() {
-    let data = window.orgatask;
     ReactDOM.render(
         <AppMenubar
-            teams={data.teams}
-            selectedTeamId={data.selectedTeamId}
+            teams={Teams.getTeamsList()}
+            selectedTeamId={window.orgatask.selectedTeamId}
             onTeamSelect={Teams.switchTeam}
             onPageSelect={selectPage}
         />,

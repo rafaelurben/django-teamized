@@ -8,10 +8,10 @@ import * as Utils from "./utils/utils.js";
 // Initialize empty data object
 
 window.orgatask = {
-  teams: [],
-  teamcache: {},
-  selectedTeamId: null,
+  currentPage: "teamlist",
   defaultTeamId: null,
+  selectedTeamId: null,
+  teamcache: {},
 };
 
 // Make namespaces available in the console (for debugging)

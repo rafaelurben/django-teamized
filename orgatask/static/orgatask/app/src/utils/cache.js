@@ -2,40 +2,39 @@
 
 import * as Teams from "./teams.js";
 
-export function addTeam(team, addtolist=true) {
-    // Add to teamcache
+export function getTeamsList() {
+    let teams = [];
+    for (let teamdata of Object.values(window.orgatask.teamcache)) {
+        teams.push(teamdata.team);
+    }
+    return teams;
+}
+
+export function addTeam(team) {
     window.orgatask.teamcache[team.id] = {
         "team": team,
         "members": {},
         "invites": {},
     };
-    // Add to teamlist
-    if (addtolist) {window.orgatask.teams.push(team)};
 }
 
 export async function deleteTeam(teamId) {
     // Delete the team from the teamcache
     delete window.orgatask.teamcache[teamId];
-    // Delete the team from the teamlist
-    for (let i = 0; i < window.orgatask.teams.length; i++) {
-        if (window.orgatask.teams[i].id === teamId) {
-            window.orgatask.teams.splice(i, 1);
-        }
-    }
     // Update the defaultTeamId
-    if (window.orgatask.teams.length === 0) {
+    let teamIds = Object.keys(window.orgatask.teamcache);
+    if (teamIds.length === 0) {
         // When no team is left, the backend automatically creates a new one
         // We need to refetch all teams in order to get the new one
         // This also sets the defaultTeamId
         await Teams.loadTeams();
     } else if (window.orgatask.defaultTeamId === teamId) {
         // When the default team is deleted, we need to switch to another team
-        window.orgatask.defaultTeamId = window.orgatask.teams[0].id;
+        window.orgatask.defaultTeamId = teamIds[0];
     }
 }
 
 export function updateTeamsCache(teams, defaultTeamId) {
-    window.orgatask.teams = teams;
     window.orgatask.defaultTeamId = defaultTeamId;
 
     let oldids = Object.keys(window.orgatask.teamcache);
@@ -46,12 +45,17 @@ export function updateTeamsCache(teams, defaultTeamId) {
             oldids.splice(oldids.indexOf(team.id), 1);
         }
 
-        // Add to cache if it doesn't exist; else replace
-        if (!(team.id in window.orgatask.teamcache)) {
-            addTeam(team, false)
-        } else {
+        // Update in cache if already there, else add
+        if (team.id in window.orgatask.teamcache) {
             window.orgatask.teamcache[team.id].team = team;
+        } else {
+            addTeam(team)
         }
+    }
+
+    // Remove teams that are no longer in the list
+    for (let teamId of oldids) {
+        delete window.orgatask.teamcache[teamId];
     }
 }
 

@@ -3,6 +3,7 @@
 import Page_TeamList from "./pages/teamlist.js";
 import Page_TeamManage from "./pages/teammanage.js";
 
+import * as Teams from "../utils/teams.js";
 
 /*
     This component is used to render the pages.
@@ -18,8 +19,8 @@ export default class PageLoader extends React.Component {
       case "teamlist":
         return (
           <Page_TeamList
-            teams={this.props.data.teams}
-            selectedTeamId={this.props.data.selectedTeamId}
+            teams={Teams.getTeamsList()}
+            selectedTeamId={window.orgatask.selectedTeamId}
           />
         );
       case "teammanage":

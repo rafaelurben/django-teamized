@@ -3,6 +3,7 @@ import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
 
+export { getTeamsList } from "./cache.js";
 
 export function ensureExistingTeam() {
   if (window.orgatask.selectedTeamId) {
@@ -44,6 +45,8 @@ export async function loadTeams() {
     }
   )
 }
+
+//// API calls ////
 
 // Team list
 
@@ -152,8 +155,9 @@ export async function deleteTeam(teamId) {
   await API.DELETE("teams/"+teamId).then(
     async (data) => {
       successAlert(data);
-      Cache.deleteTeam(teamId);
+      await Cache.deleteTeam(teamId);
       ensureExistingTeam();
+      Navigation.renderMenubar();
       Navigation.renderPage();
     }
   )
@@ -169,12 +173,15 @@ export function deleteTeamWithConfirmation(team) {
 // Team leave
 
 export async function leaveTeam(teamId) {
-  await API.POST(`teams/${teamId}/leave`).then(async (data) => {
-    successAlert(data);
-    Cache.deleteTeam(teamId);
-    ensureExistingTeam();
-    Navigation.renderPage();
-  })
+  await API.POST(`teams/${teamId}/leave`).then(
+    async (data) => {
+      successAlert(data);
+      await Cache.deleteTeam(teamId);
+      ensureExistingTeam();
+      Navigation.renderMenubar();
+      Navigation.renderPage();
+    }
+  )
 }
 
 export function leaveTeamWithConfirmation(team) {
