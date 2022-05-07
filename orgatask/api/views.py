@@ -357,17 +357,7 @@ def endpoint_invite_accept(request, invite: Invite):
     user = request.orgatask_user
 
     if request.method == "POST":
-        if not invite.is_valid():
-            return JsonResponse({
-                "error": "invite-not-valid",
-                "alert": {
-                    "title": _("Einladung ungültig"),
-                    "text": _("Die Einladung ist nicht mehr gültig."),
-                }
-            }, status=400)
-
         invite.accept(user)
-
         team = invite.team
 
         return JsonResponse({

@@ -315,16 +315,16 @@ class Invite(models.Model):
     def accept(self, user: User) -> None:
         "Use the invitation"
 
-        if not self.is_valid():
-            raise exceptions.AlertException(
-                text=_("Diese Einladung ist nicht mehr gültig."),
-                title=_("Einladung unültig"),
-                errorname="invite-invalid")
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
                 text=_("Du bist bereits in diesem Team."),
                 title=_("Bereits beigetreten"),
                 errorname="invite-already-member")
+        if not self.is_valid():
+            raise exceptions.AlertException(
+                text=_("Diese Einladung ist nicht mehr gültig."),
+                title=_("Einladung ungültig"),
+                errorname="invite-invalid")
 
         self.team.join(user)
 
