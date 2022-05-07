@@ -35,9 +35,9 @@ class TeamTableRow extends React.Component {
   render() {
     return (
       <tr>
-        {/* Title and description */}
+        {/* Name and description */}
         <td className="py-2">
-          <b>{this.props.team.title}</b>
+          <b>{this.props.team.name}</b>
           <br />
           <span>{this.props.team.description}</span>
         </td>

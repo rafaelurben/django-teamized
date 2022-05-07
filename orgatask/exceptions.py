@@ -7,8 +7,8 @@ class AlertException(Exception):
 
     def __init__(self, text, *args, title="Fehler", errorname="generic_error", **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.orgatask_text = text
         self.orgatask_title = title
+        self.orgatask_text = text
         self.orgatask_errorname = errorname
 
     def get_response(self) -> JsonResponse:

@@ -57,13 +57,13 @@ class User(models.Model):
             "last_name": self.auth_user.last_name,
         }
 
-    def create_team(self, title, description):
+    def create_team(self, name, description):
         """
         Create a new team and add this user as an owner.
         """
 
         team = Team.objects.create(
-            title=title,
+            name=name,
             description=description,
         )
         team.join(self, role=enums.Roles.OWNER)
@@ -77,7 +77,7 @@ class User(models.Model):
 
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
             self.create_team(
-                title=_("Persönlicher Arbeitsbereich"),
+                name=_("Persönlicher Arbeitsbereich"),
                 description=_(
                     "Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
             )
@@ -103,7 +103,7 @@ class Team(models.Model):
         editable=False,
     )
 
-    title = models.CharField(
+    name = models.CharField(
         max_length=50,
     )
     description = models.TextField(
@@ -119,7 +119,7 @@ class Team(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.title)
+        return str(self.name)
 
     objects = models.Manager()
 
@@ -130,7 +130,7 @@ class Team(models.Model):
     def as_dict(self) -> dict:
         return {
             "id": self.uid,
-            "title": self.title,
+            "name": self.name,
             "description": self.description,
         }
 

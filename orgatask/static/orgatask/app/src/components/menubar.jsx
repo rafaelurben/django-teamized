@@ -30,7 +30,7 @@ export default class AppMenubar extends React.Component {
       teamlist = this.props.teams.map((team) => {
         return (
           <option key={team.id} value={team.id}>
-            {team.title}
+            {team.name}
           </option>
         );
       });

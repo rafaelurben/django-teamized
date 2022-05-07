@@ -50,7 +50,7 @@ class TeamAdminInviteInline(admin.TabularInline):
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'title', 'description']
+    list_display = ['uid', 'name', 'description']
     list_filter = []
 
     readonly_fields = ('uid',)
@@ -58,7 +58,7 @@ class TeamAdmin(admin.ModelAdmin):
     inlines = [TeamAdminMemberInline, TeamAdminInviteInline]
 
     fieldsets = [
-        ('Infos', {'fields': ('uid', 'title', 'description',)}),
+        ('Infos', {'fields': ('uid', 'name', 'description',)}),
         ('Settings', {'fields': ('settings',)}),
     ]
 

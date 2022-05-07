@@ -59,9 +59,9 @@ export async function getTeams() {
 
 // Team creation
 
-export async function createTeam(title, description) {
+export async function createTeam(name, description) {
   return await API.POST("teams", {
-    title, description,
+    name, description,
   }).then(
     async (data) => {
       successAlert(data);
@@ -78,8 +78,8 @@ export async function createTeamSwal() {
   return (await Swal.fire({
     title: "Team erstellen",
     html:
-      '<label class="swal2-input-label" for="swal-input-title">Name:</label>' +
-      '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Teamname">' +
+      '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
+      '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">' +
       '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
       '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung">',
     focusConfirm: false,
@@ -87,27 +87,27 @@ export async function createTeamSwal() {
     confirmButtonText: "Erstellen",
     cancelButtonText: "Abbrechen",
     preConfirm: async () => {
-      const title = document.getElementById("swal-input-title").value;
+      const name = document.getElementById("swal-input-name").value;
       const description = document.getElementById(
         "swal-input-description"
       ).value;
 
-      if (!title || !description) {
+      if (!name || !description) {
         Swal.showValidationMessage("Bitte fülle alle Felder aus");
         return false;
       }
 
       Swal.showLoading();
-      return await createTeam(title, description);
+      return await createTeam(name, description);
     },
   })).value;
 }
 
 // Team edit
 
-export async function editTeam(teamId, title, description) {
+export async function editTeam(teamId, name, description) {
   return await API.POST(`teams/${teamId}`, {
-    title, description,
+    name, description,
   }).then(
     async (data) => {
       successAlert(data);
@@ -124,9 +124,9 @@ export async function editTeamSwal(team) {
   return (await Swal.fire({
     title: "Team bearbeiten",
     html:
-      `<p>Team: ${team.title}</p>` +
-      '<label class="swal2-input-label" for="swal-input-title">Name:</label>' +
-      `<input type="text" id="swal-input-title" class="swal2-input" placeholder="${team.title}" value="${team.title}">` +
+      `<p>Team: ${team.name}</p>` +
+      '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
+      `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">` +
       '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
       `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>`,
     focusConfirm: false,
@@ -134,18 +134,18 @@ export async function editTeamSwal(team) {
     confirmButtonText: "Aktualisieren",
     cancelButtonText: "Abbrechen",
     preConfirm: async () => {
-      const title = document.getElementById("swal-input-title").value;
+      const name = document.getElementById("swal-input-name").value;
       const description = document.getElementById(
         "swal-input-description"
       ).value;
 
-      if (!title || !description) {
+      if (!name || !description) {
         Swal.showValidationMessage("Bitte fülle alle Felder aus");
         return false;
       }
 
       Swal.showLoading();
-      return await editTeam(team.id, title, description);
+      return await editTeam(team.id, name, description);
     },
   })).value;
 }
@@ -167,7 +167,7 @@ export async function deleteTeam(teamId) {
 
 export function deleteTeamWithConfirmation(team) {
   confirmAlert(
-    `Willst du das Team '${team.title}' (${team.id}) wirklich löschen?`, 
+    `Willst du das Team '${team.name}' (${team.id}) wirklich löschen?`, 
     () => deleteTeam(team.id)
   );
 }
@@ -187,7 +187,7 @@ export async function leaveTeam(teamId) {
 
 export function leaveTeamWithConfirmation(team) {
   confirmAlert(
-    `Willst du das Team '${team.title}' (${team.id}) wirklich verlassen?`,
+    `Willst du das Team '${team.name}' (${team.id}) wirklich verlassen?`,
     () => leaveTeam(team.id)
   );
 }
@@ -227,7 +227,7 @@ export async function deleteMember(teamId, memberId) {
 
 export function deleteMemberWithConfirmation(team, member) {
   confirmAlert(
-    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) aus dem Team ${team.title} entfernen?`,
+    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) aus dem Team ${team.name} entfernen?`,
     () => deleteMember(team.id, member.id)
   );
 }
@@ -259,7 +259,7 @@ export async function createInviteSwal(team) {
   return (await Swal.fire({
     title: `Einladung erstellen`,
     html:
-      `<p>Team: ${team.title}</p>` +	
+      `<p>Team: ${team.name}</p>` +	
       '<label class="swal2-input-label" for="swal-input-uses">Anzahl Benutzungen:</label>' +
       '<input type="number" id="swal-input-uses" class="swal2-input" value="1">' +
       '<label class="swal2-input-label" for="swal-input-days">Gültigkeit in Tagen:</label>' +

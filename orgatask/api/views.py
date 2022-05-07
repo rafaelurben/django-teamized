@@ -33,12 +33,12 @@ def endpoint_teams(request):
     user = request.orgatask_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all().select_related('team').order_by("team__title")
+        memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
         return JsonResponse({
             "teams": [
                 {
                     "id": mi.team.uid,
-                    "title": mi.team.title,
+                    "name": mi.team.name,
                     "description": mi.team.description,
                     "member": {
                         "id": mi.uid,
@@ -60,10 +60,10 @@ def endpoint_teams(request):
                 }
             }, status=400)
 
-        title = request.POST.get("title", "")[:49]
+        name = request.POST.get("name", "")[:49]
         description = request.POST.get("description", "")
 
-        if not title or not description:
+        if not name or not description:
             return JsonResponse({
                 "error": "data_invalid",
                 "alert": {
@@ -72,7 +72,7 @@ def endpoint_teams(request):
                 }
             }, status=400)
 
-        team = user.create_team(title, description)
+        team = user.create_team(name, description)
 
         return JsonResponse({
             "success": True,
@@ -107,10 +107,10 @@ def endpoint_team(request, team: Team):
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
-        title = request.POST.get("title", "")[:49]
+        name = request.POST.get("name", "")[:49]
         description = request.POST.get("description", "")
 
-        team.title = title
+        team.name = name
         team.description = description
         team.save()
         return JsonResponse({
@@ -340,7 +340,7 @@ def endpoint_team_leave(request, team: Team):
             "id": team.uid,
             "alert": {
                 "title": _("Team verlassen"),
-                "text": _("Du hast das Team %s verlassen.") % team.title,
+                "text": _("Du hast das Team %s verlassen.") % team.name,
             }
         })
 
@@ -365,7 +365,7 @@ def endpoint_invite_accept(request, invite: Invite):
             "team": team.as_dict(),
             "alert": {
                 "title": _("Einladung akzeptiert"),
-                "text": _("Du bist dem Team %s beigetreten.") % team.title,
+                "text": _("Du bist dem Team %s beigetreten.") % team.name,
             }
         })
 
