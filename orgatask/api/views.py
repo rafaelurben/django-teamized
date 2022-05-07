@@ -36,21 +36,12 @@ def endpoint_teams(request):
         memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
         return JsonResponse({
             "teams": [
-                {
-                    "id": mi.team.uid,
-                    "name": mi.team.name,
-                    "description": mi.team.description,
-                    "member": {
-                        "id": mi.uid,
-                        "role": mi.role,
-                        "role_text": mi.get_role_display(),
-                    },
-                }
+                mi.team.as_dict(included_member=mi.as_dict())
                 for mi in memberinstances
             ],
             "defaultTeamId": memberinstances[0].team.uid,
         })
-    elif request.method == "POST":
+    if request.method == "POST":
         if not user.can_create_team():
             return JsonResponse({
                 "error": "team_limit_reached",
@@ -73,10 +64,11 @@ def endpoint_teams(request):
             }, status=400)
 
         team = user.create_team(name, description)
+        member = team.get_member(user)
 
         return JsonResponse({
             "success": True,
-            "team": team.as_dict(),
+            "team": team.as_dict(included_member=member),
             "alert": {
                 "title": _("Team erstellt"),
                 "text": _("Das Team wurde erfolgreich erstellt."),
@@ -116,7 +108,7 @@ def endpoint_team(request, team: Team):
         return JsonResponse({
             "success": True,
             "id": team.uid,
-            "team": team.as_dict(),
+            "team": team.as_dict(included_member=team.get_member(user)),
             "alert": {
                 "title": _("Team geändert"),
                 "text": _("Das Team wurde erfolgreich geändert."),
@@ -357,12 +349,12 @@ def endpoint_invite_accept(request, invite: Invite):
     user = request.orgatask_user
 
     if request.method == "POST":
-        invite.accept(user)
+        member = invite.accept(user)
         team = invite.team
 
         return JsonResponse({
             "success": True,
-            "team": team.as_dict(),
+            "team": team.as_dict(included_member=member.as_dict()),
             "alert": {
                 "title": _("Einladung akzeptiert"),
                 "text": _("Du bist dem Team %s beigetreten.") % team.name,

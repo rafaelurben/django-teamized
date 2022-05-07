@@ -1,16 +1,15 @@
 import { successAlert, confirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
+import * as Cache from "./cache.js";
+
 
 export function ensureExistingTeam() {
   if (window.orgatask.selectedTeamId) {
     // Team selected; check if it is valid
-
-    for (let team of window.orgatask.teams) {
-      if (team.id === window.orgatask.selectedTeamId) {
-        // Team exists; no action needed
-        return;
-      }
+    if (window.orgatask.selectedTeamId in window.orgatask.teamcache) {
+      // Team is in cache, so it must be a valid team id
+      return;
     }
   }
   
@@ -35,14 +34,12 @@ export function switchTeam(teamId) {
 // Team loading
 
 export async function loadTeams() {
-  return await API.GET("teams").then(
-    (data) => {
-      window.orgatask.teams = data.teams;
-      window.orgatask.defaultTeamId = data.defaultTeamId;
+  return await getTeams().then(
+    (teams) => {
       ensureExistingTeam();
 
       Navigation.renderMenubar();
-      return data.teams;
+      return teams;
     }
   )
 }
@@ -52,6 +49,7 @@ export async function loadTeams() {
 export async function getTeams() {
   return await API.GET("teams").then(
     (data) => {
+      Cache.updateTeamsCache(data.teams, data.defaultTeamId);
       return data.teams;
     }
   )
@@ -111,10 +109,7 @@ export async function editTeam(teamId, name, description) {
   }).then(
     async (data) => {
       successAlert(data);
-
-      await loadTeams();
-      switchTeam(data.team.id);
-
+      window.orgatask.teamcache[teamId].team = data.team;
       return data.team;
     }
   )
@@ -155,12 +150,12 @@ export async function editTeamSwal(team) {
 export async function deleteTeam(teamId) {
   await API.DELETE("teams/"+teamId).then(
     async (data) => {
-      await loadTeams();
+      successAlert(data);
+      Cache.deleteTeam(teamId);
       if (window.orgatask.selectedTeamId === teamId) {
         switchTeam(window.orgatask.defaultTeamId);
       }
       Navigation.renderPage();
-      successAlert(data);
     }
   )
 }
@@ -176,12 +171,12 @@ export function deleteTeamWithConfirmation(team) {
 
 export async function leaveTeam(teamId) {
   await API.POST(`teams/${teamId}/leave`).then(async (data) => {
-    await loadTeams();
+    successAlert(data);
+    Cache.deleteTeam(teamId);
     if (window.orgatask.selectedTeamId === teamId) {
       switchTeam(window.orgatask.defaultTeamId);
     }
     Navigation.renderPage();
-    successAlert(data);
   })
 }
 
@@ -197,6 +192,7 @@ export function leaveTeamWithConfirmation(team) {
 export async function getMembers(teamId) {
   return await API.GET(`teams/${teamId}/members`).then(
     (data) => {
+      Cache.updateMembersCache(teamId, data.members);
       return data.members;
     }
   )
@@ -210,6 +206,7 @@ export async function editMember(teamId, memberId, role) {
   }).then(
     (data) => {
       successAlert(data);
+      window.orgatask.teachcache[teamId].members[memberId] = data.member;
       return data.id;
     }
   )
@@ -221,6 +218,7 @@ export async function deleteMember(teamId, memberId) {
   await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
     async (data) => {
       successAlert(data);
+      delete window.orgatask.teamcache[teamId].members[memberId];
     }
   )
 }
@@ -234,9 +232,10 @@ export function deleteMemberWithConfirmation(team, member) {
 
 // Invite list
 
-export async function loadInvites(teamId) {
+export async function getInvites(teamId) {
   return await API.GET(`teams/${teamId}/invites`).then(
     (data) => {
+      Cache.updateInvitesCache(teamId, data.invites);
       return data.invites;
     }
   )
@@ -250,6 +249,7 @@ export async function createInvite(teamId, note, uses, days) {
   }).then(
     (data) => {
       successAlert(data);
+      window.orgatask.teamcache[teamdId].invites[data.invite.id] = data.invite;
       return data.invite;
     }
   )
@@ -294,6 +294,7 @@ export async function deleteInvite(teamId, inviteId) {
   await API.DELETE(`teams/${teamId}/invites/${inviteId}`).then(
     async (data) => {
       successAlert(data);
+      delete window.orgatask.teamcache[teamdId].invites[inviteId];
     }
   )
 }
@@ -310,10 +311,10 @@ export function deleteInviteWithConfirmation(team, invite) {
 export async function acceptInvite(token) {
   waitingAlert("Einladung wird akzeptiert...");
   return await API.POST(`invites/${token}/accept`).then(
-    async (data) => {
+    (data) => {
       successAlert(data);
 
-      await loadTeams();
+      Cache.addTeam(data.team);
       switchTeam(data.team.id);
 
       return data.team;

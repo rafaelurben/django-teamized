@@ -127,12 +127,15 @@ class Team(models.Model):
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
 
-    def as_dict(self) -> dict:
-        return {
+    def as_dict(self, included_member=None) -> dict:
+        data = {
             "id": self.uid,
             "name": self.name,
             "description": self.description,
         }
+        if included_member:
+            data["member"] = included_member
+        return data
 
     def user_is_member(self, user: User) -> bool:
         """
@@ -161,11 +164,12 @@ class Team(models.Model):
         """
 
         if not self.user_is_member(user):
-            Member.objects.create(
+            return Member.objects.create(
                 team=self,
                 user=user,
                 role=role,
             )
+        return self.get_member(user)
 
     def get_member(self, user: User):
         """
@@ -234,6 +238,13 @@ class Member(models.Model):
     class Meta:
         verbose_name = _("Mitglied")
         verbose_name_plural = _("Mitglieder")
+
+    def as_dict(self) -> dict:
+        return {
+            "id": self.uid,
+            "role": self.role,
+            "role_text": self.get_role_display(),
+        }
 
     def is_admin(self):
         """
@@ -329,10 +340,10 @@ class Invite(models.Model):
                 title=_("Einladung ungültig"),
                 errorname="invite-invalid")
 
-        self.team.join(user)
-
         self.uses_left -= 1
         self.save()
+
+        return self.team.join(user)
 
 
 # class TeamLog(models.Model):
