@@ -2,12 +2,15 @@
 
 import * as Teams from "./teams.js";
 
-export function addTeam(team) {
+export function addTeam(team, addtolist=true) {
+    // Add to teamcache
     window.orgatask.teamcache[team.id] = {
         "team": team,
-        "members": [],
-        "invites": [],
+        "members": {},
+        "invites": {},
     };
+    // Add to teamlist
+    if (addtolist) {window.orgatask.teams.push(team)};
 }
 
 export async function deleteTeam(teamId) {
@@ -16,7 +19,7 @@ export async function deleteTeam(teamId) {
     // Delete the team from the teamlist
     for (let i = 0; i < window.orgatask.teams.length; i++) {
         if (window.orgatask.teams[i].id === teamId) {
-            delete window.orgatask.teams[i];
+            window.orgatask.teams.splice(i, 1);
         }
     }
     // Update the defaultTeamId
@@ -40,12 +43,12 @@ export function updateTeamsCache(teams, defaultTeamId) {
     for (let team of teams) {
         // Remove from oldidlist if it is still there
         if (oldids.includes(team.id)) {
-            delete oldids[team.id]
+            oldids.splice(oldids.indexOf(team.id), 1);
         }
 
         // Add to cache if it doesn't exist; else replace
         if (!(team.id in window.orgatask.teamcache)) {
-            addTeam(team)
+            addTeam(team, false)
         } else {
             window.orgatask.teamcache[team.id].team = team;
         }

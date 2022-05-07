@@ -16,6 +16,7 @@ export function ensureExistingTeam() {
   // No team selected or team doesn't exist; select default
   console.log("No team selected or team doesn't exist; falling back to default");
   window.orgatask.selectedTeamId = window.orgatask.defaultTeamId;
+  switchTeam(window.orgatask.selectedTeamId);
 }
 
 export function switchTeam(teamId) {
@@ -64,7 +65,7 @@ export async function createTeam(name, description) {
     async (data) => {
       successAlert(data);
 
-      await loadTeams();
+      Cache.addTeam(data.team);
       switchTeam(data.team.id);
 
       return data.team;
@@ -152,9 +153,7 @@ export async function deleteTeam(teamId) {
     async (data) => {
       successAlert(data);
       Cache.deleteTeam(teamId);
-      if (window.orgatask.selectedTeamId === teamId) {
-        switchTeam(window.orgatask.defaultTeamId);
-      }
+      ensureExistingTeam();
       Navigation.renderPage();
     }
   )
@@ -173,9 +172,7 @@ export async function leaveTeam(teamId) {
   await API.POST(`teams/${teamId}/leave`).then(async (data) => {
     successAlert(data);
     Cache.deleteTeam(teamId);
-    if (window.orgatask.selectedTeamId === teamId) {
-      switchTeam(window.orgatask.defaultTeamId);
-    }
+    ensureExistingTeam();
     Navigation.renderPage();
   })
 }
