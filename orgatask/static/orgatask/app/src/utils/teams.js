@@ -47,6 +47,16 @@ export async function loadTeams() {
   )
 }
 
+// Team list
+
+export async function getTeams() {
+  return await API.GET("teams").then(
+    (data) => {
+      return data.teams;
+    }
+  )
+}
+
 // Team creation
 
 export async function createTeam(title, description) {
@@ -68,8 +78,10 @@ export async function createTeamSwal() {
   return (await Swal.fire({
     title: "Team erstellen",
     html:
-      '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Titel">' +
-      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung">',
+      '<label class="swal2-input-label" for="swal-input-title">Name:</label>' +
+      '<input type="text" id="swal-input-title" class="swal2-input" placeholder="Teamname">' +
+      '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
+      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung">',
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",
@@ -87,6 +99,53 @@ export async function createTeamSwal() {
 
       Swal.showLoading();
       return await createTeam(title, description);
+    },
+  })).value;
+}
+
+// Team edit
+
+export async function editTeam(teamId, title, description) {
+  return await API.POST(`teams/${teamId}`, {
+    title, description,
+  }).then(
+    async (data) => {
+      successAlert(data);
+
+      await loadTeams();
+      switchTeam(data.team.id);
+
+      return data.team;
+    }
+  )
+}
+
+export async function editTeamSwal(team) {
+  return (await Swal.fire({
+    title: "Team bearbeiten",
+    html:
+      `<p>Team: ${team.title}</p>` +
+      '<label class="swal2-input-label" for="swal-input-title">Name:</label>' +
+      `<input type="text" id="swal-input-title" class="swal2-input" placeholder="${team.title}" value="${team.title}">` +
+      '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
+      `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>`,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Aktualisieren",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const title = document.getElementById("swal-input-title").value;
+      const description = document.getElementById(
+        "swal-input-description"
+      ).value;
+
+      if (!title || !description) {
+        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await editTeam(team.id, title, description);
     },
   })).value;
 }
@@ -130,6 +189,46 @@ export function leaveTeamWithConfirmation(team) {
   confirmAlert(
     `Willst du das Team '${team.title}' (${team.id}) wirklich verlassen?`,
     () => leaveTeam(team.id)
+  );
+}
+
+// Member list
+
+export async function getMembers(teamId) {
+  return await API.GET(`teams/${teamId}/members`).then(
+    (data) => {
+      return data.members;
+    }
+  )
+}
+
+// Member edit
+
+export async function editMember(teamId, memberId, role) {
+  return await API.POST(`teams/${teamId}/members/${memberId}`, {
+    role,
+  }).then(
+    (data) => {
+      successAlert(data);
+      return data.id;
+    }
+  )
+}
+
+// Member deletion
+
+export async function deleteMember(teamId, memberId) {
+  await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
+    async (data) => {
+      successAlert(data);
+    }
+  )
+}
+
+export function deleteMemberWithConfirmation(team, member) {
+  confirmAlert(
+    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) aus dem Team ${team.title} entfernen?`,
+    () => deleteMember(team.id, member.id)
   );
 }
 
