@@ -5,11 +5,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
+from orgatask import enums
 from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
 from orgatask.models import User, Member, Team, Invite
-
 
 @api_view(["get"])
 @orgatask_prep()
@@ -84,7 +84,7 @@ def endpoint_teams(request):
         })
 
 
-@api_view(["get", "delete"])
+@api_view(["get", "post", "delete"])
 @csrf_exempt
 @orgatask_prep()
 @require_objects([("team", Team, "team")])
@@ -102,6 +102,25 @@ def endpoint_team(request, team: Team):
         return JsonResponse({
             "id": team.uid,
             "team": team.as_dict(),
+        })
+    if request.method == "POST":
+        if not team.user_is_owner(user):
+            return NO_PERMISSION
+
+        title = request.POST.get("title", "")[:49]
+        description = request.POST.get("description", "")
+
+        team.title = title
+        team.description = description
+        team.save()
+        return JsonResponse({
+            "success": True,
+            "id": team.uid,
+            "team": team.as_dict(),
+            "alert": {
+                "title": _("Team geändert"),
+                "text": _("Das Team wurde erfolgreich geändert."),
+            }
         })
     if request.method == "DELETE":
         if not team.user_is_owner(user):
@@ -148,13 +167,13 @@ def endpoint_members(request, team: Team):
         })
 
 
-@api_view(["delete"])
+@api_view(["post", "delete"])
 @csrf_exempt
 @orgatask_prep()
 @require_objects([("team", Team, "team"), ("member", Member, "member")])
 def endpoint_member(request, team: Team, member: Member):
     """
-    Endpoint for deleting members
+    Endpoint for editing and deleting members
     """
 
     # Check if member is in team
@@ -165,11 +184,38 @@ def endpoint_member(request, team: Team, member: Member):
     user = request.orgatask_user
     if not team.user_is_admin(user):
         return NO_PERMISSION
-    if member.is_admin() and not team.user_is_owner(user):
-        return NO_PERMISSION
 
     # Methods
+    if request.method == "POST":
+        role = request.POST.get("role", member.role)
+
+        if role != member.role and not team.user_is_owner(user):
+            # Only owner can change the role of a member
+            return NO_PERMISSION
+        if member.role == enums.Roles.OWNER:
+            # Owners cannot change their roles
+            return NO_PERMISSION
+        if role not in [enums.Roles.MEMBER, enums.Roles.ADMIN]:
+            # Check if role is valid
+            return DATA_INVALID
+
+        member.role = role
+        member.save()
+        return JsonResponse({
+            "success": True,
+            "id": member.uid,
+            "alert": {
+                "title": _("Mitglied aktualisiert"),
+                "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+            }
+        })
+
+
     if request.method == "DELETE":
+        if member.is_admin() and not team.user_is_owner(user):
+            # Can't delete an admin if not owner
+            return NO_PERMISSION
+
         member.delete()
         return JsonResponse({
             "success": True,

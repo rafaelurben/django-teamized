@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 class AlertException(Exception):
     "Exception class for errors that should be alerted to the user"
-    
+
     def __init__(self, text, *args, title="Fehler", errorname="generic_error", **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.orgatask_text = text
