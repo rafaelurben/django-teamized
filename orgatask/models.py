@@ -250,6 +250,9 @@ class Member(models.Model):
 class Invite(models.Model):
     "Invites for teams"
 
+    NOT_FOUND_TITLE = _("Einladung ungültig")
+    NOT_FOUND_TEXT = _("Eine Einladung mit dem angegebenen Token konnte nicht gefunden werden.")
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,

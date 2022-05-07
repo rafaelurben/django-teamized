@@ -5,6 +5,8 @@ import uuid
 from functools import wraps
 
 from django.db.models import fields
+from django.http import JsonResponse
+from django.utils.translation import gettext as _
 
 from orgatask.api.constants import (
     NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED,
@@ -95,6 +97,16 @@ def require_objects(config):
                 if model.objects.filter(**search).exists():
                     kwargs[field_out] = model.objects.get(**search)
                     continue
+
+                if hasattr(model, "NOT_FOUND_TEXT"):
+                    return JsonResponse({
+                        "error": "object-not-found",
+                        "message": _("Dieses Objekt konnte nicht gefunden werden."),
+                        "alert": {
+                            "title": getattr(model, "NOT_FOUND_TITLE", _("Objekt nicht gefunden")),
+                            "text": getattr(model, "NOT_FOUND_TEXT")
+                        }
+                    }, status=400)
 
                 return OBJ_NOT_FOUND
 
