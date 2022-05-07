@@ -141,7 +141,7 @@ export default class Page_TeamList extends React.Component {
 
 
     return (
-      <Dashboard.DashboardContainer>
+      <Dashboard.Dashboard title="Deine Teams">
         <Dashboard.DashboardColumn size="12">
           <Dashboard.DashboardTile>
             <table className="table table-borderless align-middle mb-0">
@@ -176,7 +176,7 @@ export default class Page_TeamList extends React.Component {
             </div>
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
-      </Dashboard.DashboardContainer>
+      </Dashboard.Dashboard>
     );
   }
 }

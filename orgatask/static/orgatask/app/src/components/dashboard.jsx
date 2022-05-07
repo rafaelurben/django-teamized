@@ -4,14 +4,23 @@
     This component is made to be reused. It represents a part of the dashboard.
 */
 
-export class DashboardContainer extends React.Component {
+export class Dashboard extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    let title = "";
+
+    if (this.props.hasOwnProperty("title")) {
+      title = (
+        <h4 className="dashboard-title mt-3 ms-3 text-bold">{this.props.title}</h4>
+      );
+    }
+
     return (
       <div className="container-fluid p-0">
+        {title}
         {this.props.children}
       </div>
     );
