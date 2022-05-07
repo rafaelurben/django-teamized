@@ -127,14 +127,14 @@ class Team(models.Model):
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
 
-    def as_dict(self, included_member=None) -> dict:
+    def as_dict(self, member=None) -> dict:
         data = {
             "id": self.uid,
             "name": self.name,
             "description": self.description,
         }
-        if included_member:
-            data["member"] = included_member
+        if member:
+            data["member"] = member.as_dict()
         return data
 
     def user_is_member(self, user: User) -> bool:

@@ -1,6 +1,5 @@
 """OrgaTask API views"""
 
-from django.db import models
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
@@ -36,7 +35,7 @@ def endpoint_teams(request):
         memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
         return JsonResponse({
             "teams": [
-                mi.team.as_dict(included_member=mi.as_dict())
+                mi.team.as_dict(member=mi)
                 for mi in memberinstances
             ],
             "defaultTeamId": memberinstances[0].team.uid,
@@ -64,11 +63,10 @@ def endpoint_teams(request):
             }, status=400)
 
         team = user.create_team(name, description)
-        member = team.get_member(user)
 
         return JsonResponse({
             "success": True,
-            "team": team.as_dict(included_member=member),
+            "team": team.as_dict(member=team.get_member(user)),
             "alert": {
                 "title": _("Team erstellt"),
                 "text": _("Das Team wurde erfolgreich erstellt."),
@@ -93,7 +91,7 @@ def endpoint_team(request, team: Team):
 
         return JsonResponse({
             "id": team.uid,
-            "team": team.as_dict(),
+            "team": team.as_dict(member=team.get_member(user)),
         })
     if request.method == "POST":
         if not team.user_is_owner(user):
@@ -108,7 +106,7 @@ def endpoint_team(request, team: Team):
         return JsonResponse({
             "success": True,
             "id": team.uid,
-            "team": team.as_dict(included_member=team.get_member(user)),
+            "team": team.as_dict(member=team.get_member(user)),
             "alert": {
                 "title": _("Team geändert"),
                 "text": _("Das Team wurde erfolgreich geändert."),
@@ -354,7 +352,7 @@ def endpoint_invite_accept(request, invite: Invite):
 
         return JsonResponse({
             "success": True,
-            "team": team.as_dict(included_member=member.as_dict()),
+            "team": team.as_dict(member=member),
             "alert": {
                 "title": _("Einladung akzeptiert"),
                 "text": _("Du bist dem Team %s beigetreten.") % team.name,
