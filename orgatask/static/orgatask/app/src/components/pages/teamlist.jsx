@@ -6,11 +6,6 @@ import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
 
-/*
-    The Page_TeamList component represents the "teamlist" page.
-    The TeamTableRow represents a single row in the team table on the team list.
-*/
-
 class TeamTableRow extends React.Component {
   constructor(props) {
     super(props);
@@ -141,7 +136,7 @@ export default class Page_TeamList extends React.Component {
 
 
     return (
-      <Dashboard.Dashboard title="Deine Teams">
+      <Dashboard.Dashboard title="Deine Teams" subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei.">
         <Dashboard.DashboardColumn size="12">
           <Dashboard.DashboardTile>
             <table className="table table-borderless align-middle mb-0">
@@ -150,8 +145,6 @@ export default class Page_TeamList extends React.Component {
           </Dashboard.DashboardTile>
 
           <Dashboard.DashboardTile>
-            <div>
-            </div>
             <div className="input-group my-2">
               <button
                 type="button"

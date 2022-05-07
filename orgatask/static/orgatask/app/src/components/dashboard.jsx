@@ -10,18 +10,23 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    let title = "";
+    let content = [];
 
     if (this.props.hasOwnProperty("title")) {
-      title = (
-        <h4 className="dashboard-title mt-3 ms-3 text-bold">{this.props.title}</h4>
+      content.push(
+        <h4 key="title" className="dashboard-title mt-3 ms-3 text-bold">{this.props.title}</h4>
       );
     }
+    if (this.props.hasOwnProperty("subtitle")) {
+      content.push(
+        <h6 key="subtitle" className="dashboard-subtitle mt-2 ms-3">{this.props.subtitle}</h6>
+      )
+    }
+    content.push(this.props.children)
 
     return (
       <div className="container-fluid p-0">
-        {title}
-        {this.props.children}
+        {content}
       </div>
     );
   }

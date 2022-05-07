@@ -1,6 +1,7 @@
 "use strict";
 
 import Page_TeamList from "./pages/teamlist.js";
+import Page_TeamManage from "./pages/teammanage.js";
 
 
 /*
@@ -22,7 +23,13 @@ export default class PageLoader extends React.Component {
           />
         );
       case "teammanage":
-        return null;
+        return (
+          <Page_TeamManage
+            team={null}
+            members={null}
+            invites={null}
+          />
+        );
     }
   }
 }
