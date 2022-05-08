@@ -244,6 +244,7 @@ class Member(models.Model):
             "id": self.uid,
             "role": self.role,
             "role_text": self.get_role_display(),
+            "user": self.user.as_dict(),
         }
 
     def is_admin(self):

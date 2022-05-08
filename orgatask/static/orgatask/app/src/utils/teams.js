@@ -210,9 +210,23 @@ export async function editMember(teamId, memberId, role) {
   }).then(
     (data) => {
       successAlert(data);
-      window.orgatask.teachcache[teamId].members[memberId] = data.member;
+      window.orgatask.teamcache[teamId].members[memberId] = data.member;
       return data.id;
     }
+  )
+}
+
+export async function promoteMemberWithConfirmation(team, member) {
+  confirmAlert(
+    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Administrator des Teams ${team.name} befördern?`,
+    () => editMember(team.id, member.id, "admin")
+  )
+}
+
+export async function demoteMemberWithConfirmation(team, member) {
+  confirmAlert(
+    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Mitglied des Teams ${team.name} degradieren?`,
+    () => editMember(team.id, member.id, "member")
   )
 }
 

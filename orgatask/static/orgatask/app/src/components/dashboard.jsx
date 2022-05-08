@@ -19,8 +19,15 @@ export class Dashboard extends React.Component {
     }
     if (this.props.hasOwnProperty("subtitle")) {
       content.push(
-        <h6 key="subtitle" className="dashboard-subtitle mt-2 ms-3">{this.props.subtitle}</h6>
+        <h5 key="subtitle" className="dashboard-subtitle mt-2 ms-3">{this.props.subtitle}</h5>
       )
+    }
+    if (this.props.hasOwnProperty("text")) {
+      content.push(
+        <p key="text" className="dashboard-text mt-2 ms-3">
+          {this.props.text}
+        </p>
+      );
     }
     content.push(this.props.children)
 

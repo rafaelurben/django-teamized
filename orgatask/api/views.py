@@ -194,6 +194,7 @@ def endpoint_member(request, team: Team, member: Member):
         return JsonResponse({
             "success": True,
             "id": member.uid,
+            "member": member.as_dict(),
             "alert": {
                 "title": _("Mitglied aktualisiert"),
                 "text": _("Das Mitglied wurde erfolgreich aktualisiert."),

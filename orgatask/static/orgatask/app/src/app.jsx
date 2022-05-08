@@ -33,6 +33,17 @@ $("document").ready(async function () {
   await Teams.loadTeams();
   Navigation.exportToURL();
   Navigation.renderPage();
+
+  // Build caches
+  let promises = [];
+  for (let team of Teams.getTeamsList()) {
+    promises.push(Teams.getMembers(team.id));
+    if (team.member.role === "owner") {
+      promises.push(Teams.getInvites(team.id));
+    }
+  }
+  await Promise.all(promises);
+  Navigation.renderPage();
 });
 
 // Add event listener for page navigation

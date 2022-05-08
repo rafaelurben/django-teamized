@@ -24,11 +24,12 @@ export default class PageLoader extends React.Component {
           />
         );
       case "teammanage":
+        let teamdata = window.orgatask.teamcache[window.orgatask.selectedTeamId];
         return (
           <Page_TeamManage
-            team={null}
-            members={null}
-            invites={null}
+            team={teamdata.team}
+            members={teamdata.members}
+            invites={teamdata.invites}
           />
         );
     }

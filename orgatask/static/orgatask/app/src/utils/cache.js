@@ -2,6 +2,8 @@
 
 import * as Teams from "./teams.js";
 
+// Lookups
+
 export function getTeamsList() {
     let teams = [];
     for (let teamdata of Object.values(window.orgatask.teamcache)) {
@@ -9,6 +11,8 @@ export function getTeamsList() {
     }
     return teams;
 }
+
+// Add and remove teams from cache
 
 export function addTeam(team) {
     window.orgatask.teamcache[team.id] = {
@@ -33,6 +37,8 @@ export async function deleteTeam(teamId) {
         window.orgatask.defaultTeamId = teamIds[0];
     }
 }
+
+// Bulk update cache
 
 export function updateTeamsCache(teams, defaultTeamId) {
     window.orgatask.defaultTeamId = defaultTeamId;
