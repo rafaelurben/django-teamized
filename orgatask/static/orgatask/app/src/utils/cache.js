@@ -14,12 +14,28 @@ export function getTeamsList() {
 
 // Add and remove teams from cache
 
+function updateTeam(team) {
+    if (team.hasOwnProperty("members")) {
+        window.orgatask.teamcache[team.id].members = {}
+        updateMembersCache(team.id, team.members);
+        delete team.members;
+    }
+    if (team.hasOwnProperty("invites")) {
+        window.orgatask.teamcache[team.id].invites = {}
+        updateInvitesCache(team.id, team.invites);
+        delete team.invites;
+    }
+    window.orgatask.teamcache[team.id].team = team;
+}
+
 export function addTeam(team) {
+    console.log("addTeam", team)
     window.orgatask.teamcache[team.id] = {
-        "team": team,
+        "team": {},
         "members": {},
         "invites": {},
     };
+    updateTeam(team);
 }
 
 export async function deleteTeam(teamId) {
@@ -31,7 +47,7 @@ export async function deleteTeam(teamId) {
         // When no team is left, the backend automatically creates a new one
         // We need to refetch all teams in order to get the new one
         // This also sets the defaultTeamId
-        await Teams.loadTeams();
+        await Teams.loadTeams(true);
     } else if (window.orgatask.defaultTeamId === teamId) {
         // When the default team is deleted, we need to switch to another team
         window.orgatask.defaultTeamId = teamIds[0];
@@ -41,6 +57,7 @@ export async function deleteTeam(teamId) {
 // Bulk update cache
 
 export function updateTeamsCache(teams, defaultTeamId) {
+    console.log(teams)
     window.orgatask.defaultTeamId = defaultTeamId;
 
     let oldids = Object.keys(window.orgatask.teamcache);
@@ -53,7 +70,7 @@ export function updateTeamsCache(teams, defaultTeamId) {
 
         // Update in cache if already there, else add
         if (team.id in window.orgatask.teamcache) {
-            window.orgatask.teamcache[team.id].team = team;
+            updateTeam(team);
         } else {
             addTeam(team)
         }
@@ -77,17 +94,4 @@ export function updateInvitesCache(teamId, invites) {
     for (let invite of invites) {
         window.orgatask.teamcache[teamId].invites[invite.id] = invite;
     }
-}
-
-// Build cache
-
-export async function buildMemberInvitesCache() {
-    let promises = [];
-    for (let team of Teams.getTeamsList()) {
-        promises.push(Teams.getMembers(team.id));
-        if (team.member.role === "owner") {
-            promises.push(Teams.getInvites(team.id));
-        }
-    }
-    await Promise.all(promises);
 }

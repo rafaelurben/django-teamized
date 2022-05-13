@@ -30,12 +30,8 @@ window._OrgaTask = {
 $("document").ready(async function () {
   Navigation.renderMenubar();
   Navigation.importFromURL();
-  await Teams.loadTeams();
+  await Teams.loadTeams(true); // Load teams from API and build cache
   Navigation.exportToURL();
-  Navigation.renderPage();
-
-  // Build caches
-  await Cache.buildMemberInvitesCache();
   Navigation.renderPage();
 });
 

@@ -35,8 +35,8 @@ export function switchTeam(teamId) {
 
 // Team loading
 
-export async function loadTeams() {
-  return await getTeams().then(
+export async function loadTeams(full=false) {
+  return await getTeams(full).then(
     (teams) => {
       ensureExistingTeam();
 
@@ -50,8 +50,8 @@ export async function loadTeams() {
 
 // Team list
 
-export async function getTeams() {
-  return await API.GET("teams").then(
+export async function getTeams(full=false) {
+  return await API.GET(full ? "teams?full=true" : "teams").then(
     (data) => {
       Cache.updateTeamsCache(data.teams, data.defaultTeamId);
       return data.teams;
