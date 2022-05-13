@@ -247,11 +247,11 @@ def endpoint_invites(request, team: Team):
         try:
             uses = int(request.POST.get("uses", 1))
         except ValueError:
-            uses = 1
+            uses = None
         try:
             days = float(request.POST.get("days", 0.0))
         except ValueError:
-            days = 0.0
+            days = None
         inv = team.create_invite(uses, note, days)
         return JsonResponse({
             "success": True,
@@ -267,13 +267,13 @@ def endpoint_invites(request, team: Team):
         })
 
 
-@api_view(["delete"])
+@api_view(["post", "delete"])
 @csrf_exempt
 @orgatask_prep()
 @require_objects([("team", Team, "team"), ("invite", Invite, "invite")])
 def endpoint_invite(request, team: Team, invite: Invite):
     """
-    Endpoint for deleting invites
+    Endpoint for update and deleting invites
     """
 
     # Check if invite belongs to team
@@ -286,6 +286,27 @@ def endpoint_invite(request, team: Team, invite: Invite):
         return NO_PERMISSION
 
     # Methods
+    if request.method == "POST":
+        note = request.POST.get("note", "")
+        try:
+            uses = int(request.POST.get("uses", 1))
+        except ValueError:
+            uses = None
+        try:
+            days = float(request.POST.get("days", 0.0))
+        except ValueError:
+            days = None
+
+        invite.update(uses, note, days)
+        return JsonResponse({
+            "success": True,
+            "id": invite.uid,
+            "invite": invite.as_dict(),
+            "alert": {
+                "title": _("Einladung geändert"),
+                "text": _("Die Einladung wurde erfolgreich geändert."),
+            }
+        })
     if request.method == "DELETE":
         invite.delete()
         return JsonResponse({

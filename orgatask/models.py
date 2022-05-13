@@ -178,24 +178,14 @@ class Team(models.Model):
 
         return self.members.get(user=user)
 
-    def create_invite(self, max_uses: int = 1, note: str = "", days_valid: float = 0.0):
+    def create_invite(self, uses_left: int = 1, note: str = "", days_valid: float = 0.0):
         """
-        Create a new invite.
-
-        Set days_valid to -1 to make it a permanent invite.
-        Set days_valid to 0 to use the default.
+        Create a new invite. See Invite.update() for more information about the parameters.
         """
 
-        if max_uses < 0:
-            max_uses = options.DEFAULT_INVITE_MAX_USES_FALLBACK
-
-        if days_valid < 0:
-            valid_until = None
-        elif days_valid == 0.0:
-            valid_until = timezone.now() + timezone.timedelta(days=options.DEFAULT_INVITE_EXPIRATION_DAYS)
-        else:
-            valid_until = timezone.now() + timezone.timedelta(days=days_valid)
-        return self.invites.create(max_uses=max_uses, uses_left=max_uses, valid_until=valid_until, note=note)
+        invite = self.invites.create()
+        invite.update(uses_left=uses_left, note=note, days_valid=days_valid)
+        return invite
 
 class Member(models.Model):
     "Connection between User and Team"
@@ -282,8 +272,8 @@ class Invite(models.Model):
         on_delete=models.CASCADE,
     )
 
-    max_uses = models.PositiveIntegerField(default=1)
     uses_left = models.PositiveIntegerField(default=1)
+    uses_used = models.PositiveIntegerField(default=0)
 
     note = models.TextField(blank=True, default="")
 
@@ -306,7 +296,8 @@ class Invite(models.Model):
             "note": self.note,
             "is_valid": self.is_valid(),
             "uses_left": self.uses_left,
-            "expires": self.valid_until.timestamp(),
+            "uses_used": self.uses_used,
+            "valid_until": None if self.valid_until is None else self.valid_until.timestamp(),
         }
 
     def get_time_left_days(self) -> float:
@@ -314,8 +305,7 @@ class Invite(models.Model):
 
         if self.valid_until is None:
             return float("inf")
-        else:
-            return (self.valid_until - timezone.now()).total_days()
+        return (self.valid_until - timezone.now()).total_days()
 
     @admin.display(boolean=True)
     def is_valid(self) -> bool:
@@ -323,7 +313,7 @@ class Invite(models.Model):
 
         if self.uses_left <= 0:
             return False
-        if self.valid_until and (self.valid_until - timezone.now()).total_seconds() <= 0:
+        if self.valid_until is not None and (self.valid_until - timezone.now()).total_seconds() <= 0:
             return False
         return True
 
@@ -342,10 +332,36 @@ class Invite(models.Model):
                 errorname="invite-invalid")
 
         self.uses_left -= 1
+        self.uses_used += 1
         self.save()
 
         return self.team.join(user)
 
+    def update(self, uses_left: int = None, note: str = None, days_valid: float = None):
+        """
+        Update the invite
+
+        Set days_valid to -1 to make it a permanent invite.
+        Set days_valid to 0 to use the default.
+        """
+
+        if uses_left is not None:
+            if uses_left < 0:
+                self.uses_left = options.DEFAULT_INVITE_USES
+            else:
+                self.uses_left = uses_left
+
+        if days_valid is not None:
+            if days_valid < 0:
+                self.valid_until = None
+            elif days_valid == 0.0:
+                self.valid_until = timezone.now() + \
+                    timezone.timedelta(days=options.DEFAULT_INVITE_EXPIRATION_DAYS)
+            else:
+                self.valid_until = timezone.now() + timezone.timedelta(days=days_valid)
+
+        self.note = note
+        self.save()
 
 # class TeamLog(models.Model):
 #     "Used for logging changes in a team"
