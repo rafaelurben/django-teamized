@@ -127,7 +127,7 @@ class Team(models.Model):
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
 
-    def as_dict(self, member=None) -> dict:
+    def as_dict(self, member=None, full:bool=False) -> dict:
         data = {
             "id": self.uid,
             "name": self.name,
@@ -135,6 +135,9 @@ class Team(models.Model):
         }
         if member:
             data["member"] = member.as_dict()
+        if full:
+            data["members"] = [m.as_dict() for m in self.members.all()]
+            data["invites"] = [i.as_dict() for i in self.invites.all()]
         return data
 
     def user_is_member(self, user: User) -> bool:

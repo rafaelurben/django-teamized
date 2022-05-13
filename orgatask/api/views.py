@@ -32,10 +32,14 @@ def endpoint_teams(request):
     user = request.orgatask_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
+        full = bool(request.GET.get("full", False))
+        if full:
+            memberinstances = user.member_instances.all().select_related('team').prefetch_related('team__members').prefetch_related('team__invites').order_by("team__name")
+        else:
+            memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
         return JsonResponse({
             "teams": [
-                mi.team.as_dict(member=mi)
+                mi.team.as_dict(member=mi, full=full)
                 for mi in memberinstances
             ],
             "defaultTeamId": memberinstances[0].team.uid,
