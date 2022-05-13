@@ -76,7 +76,7 @@ export async function createTeam(name, description) {
   )
 }
 
-export async function createTeamSwal() {
+export async function createTeamPopup() {
   return (await Swal.fire({
     title: "Team erstellen",
     html:
@@ -119,7 +119,7 @@ export async function editTeam(teamId, name, description) {
   )
 }
 
-export async function editTeamSwal(team) {
+export async function editTeamPopup(team) {
   return (await Swal.fire({
     title: "Team bearbeiten",
     html:
@@ -163,10 +163,10 @@ export async function deleteTeam(teamId) {
   )
 }
 
-export function deleteTeamWithConfirmation(team) {
-  confirmAlert(
+export async function deleteTeamPopup(team) {
+  await confirmAlert(
     `Willst du das Team '${team.name}' (${team.id}) wirklich löschen?`, 
-    () => deleteTeam(team.id)
+    async () => await deleteTeam(team.id)
   );
 }
 
@@ -184,10 +184,10 @@ export async function leaveTeam(teamId) {
   )
 }
 
-export function leaveTeamWithConfirmation(team) {
-  confirmAlert(
+export async function leaveTeamPopup(team) {
+  return await confirmAlert(
     `Willst du das Team '${team.name}' (${team.id}) wirklich verlassen?`,
-    () => leaveTeam(team.id)
+    async () => await leaveTeam(team.id)
   );
 }
 
@@ -216,24 +216,24 @@ export async function editMember(teamId, memberId, role) {
   )
 }
 
-export async function promoteMemberWithConfirmation(team, member) {
-  confirmAlert(
+export async function promoteMemberPopup(team, member) {
+  return await confirmAlert(
     `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Administrator des Teams ${team.name} befördern?`,
-    () => editMember(team.id, member.id, "admin")
+    async () => await editMember(team.id, member.id, "admin")
   )
 }
 
-export async function demoteMemberWithConfirmation(team, member) {
-  confirmAlert(
+export async function demoteMemberPopup(team, member) {
+  return await confirmAlert(
     `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Mitglied des Teams ${team.name} degradieren?`,
-    () => editMember(team.id, member.id, "member")
+    async () => await editMember(team.id, member.id, "member")
   )
 }
 
 // Member deletion
 
 export async function deleteMember(teamId, memberId) {
-  await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
+  return await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
     async (data) => {
       successAlert(data);
       delete window.orgatask.teamcache[teamId].members[memberId];
@@ -241,10 +241,10 @@ export async function deleteMember(teamId, memberId) {
   )
 }
 
-export function deleteMemberWithConfirmation(team, member) {
-  confirmAlert(
+export async function deleteMemberPopup(team, member) {
+  return await confirmAlert(
     `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) aus dem Team ${team.name} entfernen?`,
-    () => deleteMember(team.id, member.id)
+    async () => await deleteMember(team.id, member.id)
   );
 }
 
@@ -267,13 +267,13 @@ export async function createInvite(teamId, note, uses, days) {
   }).then(
     (data) => {
       successAlert(data);
-      window.orgatask.teamcache[teamdId].invites[data.invite.id] = data.invite;
+      window.orgatask.teamcache[teamId].invites[data.invite.id] = data.invite;
       return data.invite;
     }
   )
 }
 
-export async function createInviteSwal(team) {
+export async function createInvitePopup(team) {
   return (await Swal.fire({
     title: `Einladung erstellen`,
     html:
@@ -306,21 +306,69 @@ export async function createInviteSwal(team) {
   })).value;
 }
 
+// Invite edit
+
+export async function editInvite(teamId, inviteId, note, uses, days) {
+  return await API.POST(`teams/${teamId}/invites/${inviteId}`, {
+    note, uses, days
+  }).then(
+    (data) => {
+      successAlert(data);
+      window.orgatask.teamcache[teamId].invites[data.invite.id] = data.invite;
+      return data.invite;
+    }
+  )
+}
+
+export async function editInvitePopup(team, invite) {
+  let days = (new Date(invite.valid_until * 1000) - new Date()) / 86400000;
+  return (await Swal.fire({
+    title: "Einladung bearbeiten",
+    html:
+      `<p>Team: ${team.name}</p>` +
+      '<label class="swal2-input-label" for="swal-input-uses">Anzahl Benutzungen:</label>' +
+      `<input type="number" id="swal-input-uses" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">` +
+      '<label class="swal2-input-label" for="swal-input-days">Gültigkeit in Tagen:</label>' +
+      `<input type="number" id="swal-input-days" class= "swal2-input" value="${days}" placeholder="${days}">` +
+      '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
+      `<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>`,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Aktualisieren",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const uses = document.getElementById("swal-input-uses").value;
+      const days = document.getElementById("swal-input-days").value;
+      const note = document.getElementById(
+        "swal-input-note"
+      ).value;
+
+      if (!uses || !days || !note) {
+        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await editInvite(team.id, invite.id, note, uses, days);
+    },
+  })).value;
+}
+
 // Invite deletion
 
 export async function deleteInvite(teamId, inviteId) {
   await API.DELETE(`teams/${teamId}/invites/${inviteId}`).then(
     async (data) => {
       successAlert(data);
-      delete window.orgatask.teamcache[teamdId].invites[inviteId];
+      delete window.orgatask.teamcache[teamId].invites[inviteId];
     }
   )
 }
 
-export function deleteInviteWithConfirmation(team, invite) {
-  confirmAlert(
+export async function deleteInvitePopup(team, invite) {
+  await confirmAlert(
     `Willst du die Einladung '${invite.note}' (Token ${invite.token}) wirklich löschen?`,
-    () => deleteInvite(team.id, invite.id)
+    async () => await deleteInvite(team.id, invite.id)
   );
 }
 

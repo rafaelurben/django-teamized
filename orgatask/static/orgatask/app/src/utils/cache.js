@@ -78,3 +78,16 @@ export function updateInvitesCache(teamId, invites) {
         window.orgatask.teamcache[teamId].invites[invite.id] = invite;
     }
 }
+
+// Build cache
+
+export async function buildMemberInvitesCache() {
+    let promises = [];
+    for (let team of Teams.getTeamsList()) {
+        promises.push(Teams.getMembers(team.id));
+        if (team.member.role === "owner") {
+            promises.push(Teams.getInvites(team.id));
+        }
+    }
+    await Promise.all(promises);
+}

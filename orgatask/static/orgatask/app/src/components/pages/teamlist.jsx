@@ -25,11 +25,11 @@ class TeamTableRow extends React.Component {
   }
 
   handleLeaveButtonClick() {
-    Teams.leaveTeamWithConfirmation(this.props.team);
+    Teams.leaveTeamPopup(this.props.team);
   }
 
   handleDeleteButtonClick() {
-    Teams.deleteTeamWithConfirmation(this.props.team);
+    Teams.deleteTeamPopup(this.props.team);
   }
 
   render() {
@@ -37,19 +37,18 @@ class TeamTableRow extends React.Component {
       <tr>
         {/* Name and description */}
         <td className="py-2">
-          <b>{this.props.team.name}</b>
+          <span>{this.props.team.name}</span>
           <br />
-          <span>{this.props.team.description}</span>
+          <i>{this.props.team.description}</i>
         </td>
         {/* Member role */}
         <td>
-          <b>{this.props.team.member.role_text}</b>
+          <span>{this.props.team.member.role_text}</span>
         </td>
         {/* Action: Switch to */}
         {this.props.team.id !== this.props.selectedTeamId ? (
           <td>
             <a
-              href="#"
               className="btn btn-outline-success border-1"
               onClick={this.handleSwitchToButtonClick}
             >
@@ -64,7 +63,6 @@ class TeamTableRow extends React.Component {
         this.props.team.member.role === "admin" ? (
           <td>
             <a
-              href="#"
               className="btn btn-outline-dark border-1"
               onClick={this.handleManageButtonClick}
             >
@@ -74,7 +72,6 @@ class TeamTableRow extends React.Component {
         ) : (
           <td>
             <a
-              href="#"
               className="btn btn-outline-dark border-1"
               onClick={this.handleManageButtonClick}
             >
@@ -86,7 +83,6 @@ class TeamTableRow extends React.Component {
         {this.props.team.member.role !== "owner" ? (
           <td>
             <a
-              href="#"
               className="btn btn-outline-danger border-1"
               onClick={this.handleLeaveButtonClick}
             >
@@ -96,7 +92,6 @@ class TeamTableRow extends React.Component {
         ) : (
           <td>
             <a
-              href="#"
               className="btn btn-outline-danger border-1"
               onClick={this.handleDeleteButtonClick}
             >
@@ -140,6 +135,12 @@ export default class Page_TeamList extends React.Component {
         <Dashboard.DashboardColumn size="12">
           <Dashboard.DashboardTile>
             <table className="table table-borderless align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Name &amp; Beschreibung</th>
+                  <th>Rolle</th>
+                </tr>
+              </thead>
               <tbody>{rows}</tbody>
             </table>
           </Dashboard.DashboardTile>
@@ -149,7 +150,7 @@ export default class Page_TeamList extends React.Component {
               <button
                 type="button"
                 className="btn btn-outline-primary border-1"
-                onClick={Teams.createTeamSwal}
+                onClick={Teams.createTeamPopup}
               >
                 Team erstellen
               </button>

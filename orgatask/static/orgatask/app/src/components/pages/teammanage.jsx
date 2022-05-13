@@ -16,29 +16,27 @@ class TeamMembersTableRow extends React.Component {
     this.handleTeamDeleteButtonClick = this.handleTeamDeleteButtonClick.bind(this);
   }
 
-  handlePromoteButtonClick() {
-    Teams.promoteMemberWithConfirmation(this.props.team, this.props.member);
+  async handlePromoteButtonClick() {
+    await Teams.promoteMemberPopup(this.props.team, this.props.member);
     Navigation.renderPage();
   }
 
-  handleDemoteButtonClick() {
-    Teams.demoteMemberWithConfirmation(this.props.team, this.props.member);
+  async handleDemoteButtonClick() {
+    await Teams.demoteMemberPopup(this.props.team, this.props.member);
     Navigation.renderPage();
   }
 
   handleLeaveButtonClick() {
-    Teams.leaveTeamWithConfirmation(this.props.team);
-    Navigation.renderPage();
+    Teams.leaveTeamPopup(this.props.team);
   }
 
-  handleRemoveButtonClick() {
-    Teams.deleteMemberWithConfirmation(this.props.team, this.props.member);
+  async handleRemoveButtonClick() {
+    await Teams.deleteMemberPopup(this.props.team, this.props.member);
     Navigation.renderPage();
   }
 
   handleTeamDeleteButtonClick() {
-    Teams.deleteTeamWithConfirmation(this.props.team);
-    Navigation.renderPage();
+    Teams.deleteTeamPopup(this.props.team);
   }
 
   render() {
@@ -49,84 +47,131 @@ class TeamMembersTableRow extends React.Component {
       <tr>
         {/* Name and description */}
         <td className="py-2">
-          <b>
-            {`${member.user.last_name} ${member.user.first_name}`}
-          </b>
+          <span>{`${member.user.last_name} ${member.user.first_name}`}</span>
           <br />
-          <span>{member.user.email}</span>
+          <i>{member.user.email}</i>
         </td>
         {/* Member role */}
         <td>
-          <b>{member.role_text}</b>
+          <span>{member.role_text}</span>
         </td>
         {/* Action: Promote/Demote */}
-        {
-          loggedinmember.role === "owner" &&
-          member.role !== "owner" ? (
-            member.role === "member" ? (
-              <td>
-                <a
-                  href="#"
-                  className="btn btn-outline-dark border-1"
-                  onClick={this.handlePromoteButtonClick}
-                >
-                  Befördern
-                </a>
-              </td>
-            ) : (
-              <td>
-                <a
-                  href="#"
-                  className="btn btn-outline-dark border-1"
-                  onClick={this.handleDemoteButtonClick}
-                >
-                  Degradieren
-                </a>
-              </td>
-            )
+        {loggedinmember.role === "owner" && member.role !== "owner" ? (
+          member.role === "member" ? (
+            <td>
+              <a
+                className="btn btn-outline-dark border-1"
+                onClick={this.handlePromoteButtonClick}
+              >
+                Befördern
+              </a>
+            </td>
           ) : (
-            <td></td>
-          )}
-          {/* Action: Leave/Delete */}
-          {member.id === loggedinmember.id ? (
-            loggedinmember.role === "owner" ? (
-              <td>
-                <a
-                  href="#"
-                  className="btn btn-outline-danger border-1"
-                  onClick={this.handleTeamDeleteButtonClick}
-                >
-                  Team löschen
-                </a>
-              </td>
-            ) : (
-              <td>
-                <a
-                  href="#"
-                  className="btn btn-outline-danger border-1"
-                  onClick={this.handleLeaveButtonClick}
-                >
-                  Verlassen
-                </a>
-              </td>
-            )
-          ) : (
-            loggedinmember.role === "owner" ||
-            (loggedinmember.role === "admin" && member.role === "member") ? (
-              <td>
-                <a
-                  href="#"
-                  className="btn btn-outline-danger border-1"
-                  onClick={this.handleRemoveButtonClick}
-                >
-                  Entfernen
-                </a>
-              </td>
-            ) : (
-              <td></td>
-            )
+            <td>
+              <a
+                className="btn btn-outline-dark border-1"
+                onClick={this.handleDemoteButtonClick}
+              >
+                Degradieren
+              </a>
+            </td>
           )
-        }
+        ) : (
+          <td></td>
+        )}
+        {/* Action: Leave/Delete */}
+        {member.id === loggedinmember.id ? (
+          loggedinmember.role === "owner" ? (
+            <td>
+              <a
+                className="btn btn-outline-danger border-1"
+                onClick={this.handleTeamDeleteButtonClick}
+              >
+                Team löschen
+              </a>
+            </td>
+          ) : (
+            <td>
+              <a
+                className="btn btn-outline-danger border-1"
+                onClick={this.handleLeaveButtonClick}
+              >
+                Verlassen
+              </a>
+            </td>
+          )
+        ) : loggedinmember.role === "owner" ||
+          (loggedinmember.role === "admin" && member.role === "member") ? (
+          <td>
+            <a
+              className="btn btn-outline-danger border-1"
+              onClick={this.handleRemoveButtonClick}
+            >
+              Entfernen
+            </a>
+          </td>
+        ) : (
+          <td></td>
+        )}
+      </tr>
+    );
+  }
+}
+
+class TeamInvitesTableRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+  }
+
+  async handleDeleteButtonClick() {
+    await Teams.deleteInvitePopup(this.props.team, this.props.invite);
+    Navigation.renderPage();
+  }
+
+  async handleEditButtonClick() {
+    await Teams.editInvitePopup(this.props.team, this.props.invite);
+    Navigation.renderPage();
+  }
+
+  render() {
+    let invite = this.props.invite;
+
+    return (
+      <tr>
+        {/* Token and note */}
+        <td className="py-2">
+          <span>{`${invite.token}`}</span>
+          <br />
+          <i>{invite.note}</i>
+        </td>
+        {/* Valid until */}
+        <td>
+          <span>{new Date(invite.valid_until*1000).toLocaleString()}</span>
+        </td>
+        {/* Uses */}
+        <td className="text-align-end">
+          <span>{invite.uses_used}/{invite.uses_left}</span>
+        </td>
+        {/* Action: Edit */}
+        <td>
+          <a
+            className="btn btn-outline-dark border-1"
+            onClick={this.handleEditButtonClick}
+          >
+            Bearbeiten
+          </a>
+        </td>
+        {/* Action: Delete */}
+        <td>
+          <a
+            className="btn btn-outline-danger border-1"
+            onClick={this.handleDeleteButtonClick}
+          >
+            Einladung löschen
+          </a>
+        </td>
       </tr>
     );
   }
@@ -135,11 +180,12 @@ class TeamMembersTableRow extends React.Component {
 export default class Page_TeamManage extends React.Component {
   constructor(props) {
     super(props);
-    this.createInviteSwal = this.createInviteSwal.bind(this);
+    this.handleInviteCreateButtonClick = this.handleInviteCreateButtonClick.bind(this);
   }
 
-  createInviteSwal() {
-    Teams.createInviteSwal(this.props.team);
+  async handleInviteCreateButtonClick() {
+    await Teams.createInvitePopup(this.props.team);
+    Navigation.renderPage();
   }
 
   render() {
@@ -147,56 +193,80 @@ export default class Page_TeamManage extends React.Component {
       return (
         <TeamMembersTableRow
           key={member.id}
-          team={this.props.team}
           member={member}
+          team={this.props.team}
           loggedinmember={this.props.team.member}
         />
       );
     });
 
-    // let inviterows = this.props.teams.map((team) => {
-    //   return (
-    //     <TeamInvitesTableRow
-    //       key={team.id}
-    //       team={team}
-    //       selectedTeamId={this.props.selectedTeamId}
-    //     />
-    //   );
-    // });
+    let inviterows = Object.values(this.props.invites).map((invite) => {
+      return (
+        <TeamInvitesTableRow 
+          key={invite.id}
+          invite={invite}
+          team={this.props.team}
+        />
+      );
+    });
+
+    if (inviterows.length == 0) {
+      inviterows = (
+        <tr>
+          <td>Keine Einladungen vorhanden</td>
+        </tr>
+      );
+    }
 
     return (
-      <Dashboard.Dashboard title="Dein Team" subtitle={this.props.team.name} text={this.props.team.description}>
+      <Dashboard.Dashboard
+        title="Dein Team"
+        subtitle="Überblick über die Mitglieder deines Teams."
+      >
         <Dashboard.DashboardColumn size="12">
           <Dashboard.DashboardTile>
             <table className="table table-borderless align-middle mb-0">
-              <tbody>
-                {memberrows}
-              </tbody>
+              <thead>
+                <tr>
+                  <th>Name &amp; E-Mail</th>
+                  <th>Rolle</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>{memberrows}</tbody>
             </table>
           </Dashboard.DashboardTile>
 
-          {
-            this.props.team.member.role === "owner" ? (
-              <Dashboard.DashboardTile>
-                <table className="table table-borderless align-middle mb-0">
-                  <tbody>
-                    {/* {inviterows} */}
-                    <tr>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-outline-primary border-1"
-                          onClick={this.createInviteSwal}
-                        >
-                          Einladung erstellen
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </Dashboard.DashboardTile>
-            ) : (<wbr></wbr>)
-          }
+          {this.props.team.member.role === "owner" ? (
+            <Dashboard.DashboardTile>
+              <table className="table table-borderless align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Token &amp; Notiz</th>
+                    <th>Gültig bis</th>
+                    <th>Verwendungen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inviterows}
+                  <tr>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary border-1"
+                        onClick={this.handleInviteCreateButtonClick}
+                      >
+                        Einladung erstellen
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </Dashboard.DashboardTile>
+          ) : (
+            <wbr></wbr>
+          )}
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
     );

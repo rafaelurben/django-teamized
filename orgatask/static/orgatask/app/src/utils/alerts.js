@@ -57,8 +57,8 @@ export function successAlert(data) {
     })
 }
 
-export function confirmAlert(text, callback) {
-    Swal.fire({
+export async function confirmAlert(text, callback) {
+    return await Swal.fire({
         title: "Sicher?",
         text: text,
         icon: "warning",

@@ -35,14 +35,7 @@ $("document").ready(async function () {
   Navigation.renderPage();
 
   // Build caches
-  let promises = [];
-  for (let team of Teams.getTeamsList()) {
-    promises.push(Teams.getMembers(team.id));
-    if (team.member.role === "owner") {
-      promises.push(Teams.getInvites(team.id));
-    }
-  }
-  await Promise.all(promises);
+  await Cache.buildMemberInvitesCache();
   Navigation.renderPage();
 });
 
