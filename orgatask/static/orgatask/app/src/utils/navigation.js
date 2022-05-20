@@ -37,8 +37,8 @@ export function exportToURL(options) {
         }
     
         // Remove parameters
-        for (const key in removeParams) {
-            newurl.searchParams.delete(key);
+        for (const index in removeParams) {
+            newurl.searchParams.delete(removeParams[index]);
         }
     }
 
