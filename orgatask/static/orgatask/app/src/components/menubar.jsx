@@ -71,7 +71,7 @@ export default class AppMenubar extends React.Component {
             onClick={this.selectPage("teammanage")}
             href="#"
           >
-            <i className="fas fa-fw fa-user-cog"></i>
+            <i className="fas fa-fw fa-users"></i>
           </a>
         </li>
       </div>

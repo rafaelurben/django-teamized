@@ -132,6 +132,7 @@ export default class Page_TeamList extends React.Component {
       return <TeamTableRow key={team.id} team={team} selectedTeamId={this.props.selectedTeamId} />;
     });
 
+    const prefilledInviteToken = new URL(window.location.href).searchParams.get("invite", "");
 
     return (
       <Dashboard.Dashboard title="Deine Teams" subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei.">
@@ -162,6 +163,7 @@ export default class Page_TeamList extends React.Component {
                 type="text"
                 className="form-control"
                 placeholder="Token der Einladung"
+                defaultValue={prefilledInviteToken}
               />
               <button
                 type="button"

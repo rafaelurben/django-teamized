@@ -14,17 +14,35 @@ function ensureExistingPage() {
     }
 }
 
-export function exportToURL() {
+export function exportToURL(options) {
     ensureExistingPage();
     Teams.ensureExistingTeam();
 
-    // Export the pagename and teamid to the URL
-
-    var oldurl = new URL(window.location);
+    const oldurl = new URL(window.location);
     var newurl = new URL(window.location);
+    
+    // Export the pagename and teamid to the URL
     newurl.searchParams.set('p', window.orgatask.currentPage);
     newurl.searchParams.set('t', window.orgatask.selectedTeamId);
 
+    if (options) {
+        let additionalParams;
+        let removeParams;
+
+        ({additionalParams = {}, removeParams = [] } = options);
+
+        // Add the additional parameters
+        for (const key in additionalParams) {
+            newurl.searchParams.set(key, additionalParams[key]);
+        }
+    
+        // Remove parameters
+        for (const key in removeParams) {
+            newurl.searchParams.delete(key);
+        }
+    }
+
+    // If the URL has changed, update the URL
     if (oldurl.href !== newurl.href) {
         // Add page to history if the URL has changed 
         // (i.e. update the page url if there's something to change)

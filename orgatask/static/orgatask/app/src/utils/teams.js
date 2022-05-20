@@ -381,6 +381,7 @@ export async function acceptInvite(token) {
       successAlert(data);
 
       Cache.addTeam(data.team);
+      Navigation.exportToURL({removeParams: ["invite"]});
       switchTeam(data.team.id);
 
       return data.team;
