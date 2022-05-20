@@ -164,7 +164,7 @@ export async function deleteTeam(teamId) {
 }
 
 export async function deleteTeamPopup(team) {
-  await confirmAlert(
+  return await confirmAlert(
     `Willst du das Team '${team.name}' (${team.id}) wirklich löschen?`, 
     async () => await deleteTeam(team.id)
   );

@@ -66,9 +66,25 @@ export class DashboardTile extends React.Component {
   }
 
   render() {
+    let content = [];
+
+    if (this.props.hasOwnProperty("title")) {
+      content.push(
+        <h5 key="title" className="dashboard-tile-title px-1 text-bold">
+          {this.props.title}
+        </h5>
+      );
+    }
+    if (this.props.hasOwnProperty("title")) {
+      content.push(
+        <hr key="hr" className="mb-1" />
+      );
+    }
+    content.push(this.props.children);
+
     return (
       <div className="dashboard-tile row border border-dark rounded rounded-5 p-2 m-3 overflow-scroll">
-        {this.props.children}
+        {content}
       </div>
     );
   }

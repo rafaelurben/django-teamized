@@ -13,7 +13,7 @@ class TeamMembersTableRow extends React.Component {
     this.handleDemoteButtonClick = this.handleDemoteButtonClick.bind(this);
     this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
-    this.handleTeamDeleteButtonClick = this.handleTeamDeleteButtonClick.bind(this);
+    
   }
 
   async handlePromoteButtonClick() {
@@ -26,17 +26,16 @@ class TeamMembersTableRow extends React.Component {
     Navigation.renderPage();
   }
 
-  handleLeaveButtonClick() {
-    Teams.leaveTeamPopup(this.props.team);
+  async handleLeaveButtonClick() {
+    const response = await Teams.leaveTeamPopup(this.props.team);
+    if (response.isConfirmed) {
+      Navigation.selectPage("teamlist");
+    }
   }
 
   async handleRemoveButtonClick() {
     await Teams.deleteMemberPopup(this.props.team, this.props.member);
     Navigation.renderPage();
-  }
-
-  handleTeamDeleteButtonClick() {
-    Teams.deleteTeamPopup(this.props.team);
   }
 
   render() {
@@ -46,8 +45,12 @@ class TeamMembersTableRow extends React.Component {
     return (
       <tr>
         {/* Name and description */}
+        <td>
+          <span>{member.user.first_name} {member.user.last_name}</span>
+        </td>
+        {/* Username and email */}
         <td className="py-2">
-          <span>{`${member.user.last_name} ${member.user.first_name}`}</span>
+          <span>{member.user.username}</span>
           <br />
           <i>{member.user.email}</i>
         </td>
@@ -81,16 +84,7 @@ class TeamMembersTableRow extends React.Component {
         )}
         {/* Action: Leave/Delete */}
         {member.id === loggedinmember.id ? (
-          loggedinmember.role === "owner" ? (
-            <td>
-              <a
-                className="btn btn-outline-danger border-1"
-                onClick={this.handleTeamDeleteButtonClick}
-              >
-                Team löschen
-              </a>
-            </td>
-          ) : (
+          loggedinmember.role !== "owner" ? (
             <td>
               <a
                 className="btn btn-outline-danger border-1"
@@ -99,6 +93,8 @@ class TeamMembersTableRow extends React.Component {
                 Verlassen
               </a>
             </td>
+          ) : (
+            <td></td>
           )
         ) : loggedinmember.role === "owner" ||
           (loggedinmember.role === "admin" && member.role === "member") ? (
@@ -181,11 +177,26 @@ export default class Page_TeamManage extends React.Component {
   constructor(props) {
     super(props);
     this.handleInviteCreateButtonClick = this.handleInviteCreateButtonClick.bind(this);
+    this.handleTeamEditButtonClick = this.handleTeamEditButtonClick.bind(this);
+    this.handleTeamDeleteButtonClick = this.handleTeamDeleteButtonClick.bind(this);
   }
 
   async handleInviteCreateButtonClick() {
     await Teams.createInvitePopup(this.props.team);
     Navigation.renderPage();
+  }
+
+  async handleTeamEditButtonClick() {
+    await Teams.editTeamPopup(this.props.team);
+    Navigation.renderPage();
+  }
+
+  async handleTeamDeleteButtonClick() {
+    const response = await Teams.deleteTeamPopup(this.props.team);
+    console.log(response)
+    if (response.isConfirmed) {
+      Navigation.selectPage("teamlist");
+    }
   }
 
   render() {
@@ -199,6 +210,14 @@ export default class Page_TeamManage extends React.Component {
         />
       );
     });
+
+    if (memberrows.length == 0) {
+      memberrows = (
+        <tr>
+          <td>Mitglieder wurden noch nicht geladen, bitte lade neu!</td>
+        </tr>
+      );
+    }
 
     let inviterows = Object.values(this.props.invites).map((invite) => {
       return (
@@ -218,17 +237,61 @@ export default class Page_TeamManage extends React.Component {
       );
     }
 
+    let inforows = [
+      (
+        <tr key="name">
+          <th>Name:</th>
+          <td>{this.props.team.name}</td>
+        </tr>
+      ),
+      (
+        <tr key="description" style={{whiteSpace: "pre"}}>
+          <th>Beschreibung:</th>
+          <td>{this.props.team.description}</td>
+        </tr>
+      )
+    ]
+
+    if (this.props.team.member.role === "owner") {
+      inforows.push(
+        <tr key="settings">
+          <th>Einstellungen:</th>
+          <td>
+            <a
+              className="btn btn-outline-dark border-1"
+              onClick={this.handleTeamEditButtonClick}
+            >
+              Team bearbeiten
+            </a>
+            <a
+              className="btn btn-outline-danger border-1 ms-1"
+              onClick={this.handleTeamDeleteButtonClick}
+            >
+              Team löschen
+            </a>
+          </td>
+        </tr>
+      );
+    }
+
     return (
       <Dashboard.Dashboard
         title="Dein Team"
-        subtitle="Überblick über die Mitglieder deines Teams."
+        subtitle="Infos über dein ausgewähltes Team."
       >
         <Dashboard.DashboardColumn size="12">
-          <Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Teaminfos">
+            <table className="table table-borderless mb-0">
+              <tbody>{inforows}</tbody>
+            </table>
+          </Dashboard.DashboardTile>
+
+          <Dashboard.DashboardTile title="Mitglieder">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th>Name &amp; E-Mail</th>
+                  <th>Name</th>
+                  <th>Benutzername &amp; E-Mail</th>
                   <th>Rolle</th>
                   <th></th>
                   <th></th>
@@ -239,7 +302,7 @@ export default class Page_TeamManage extends React.Component {
           </Dashboard.DashboardTile>
 
           {this.props.team.member.role === "owner" ? (
-            <Dashboard.DashboardTile>
+            <Dashboard.DashboardTile title="Einladungen">
               <table className="table table-borderless align-middle mb-0">
                 <thead>
                   <tr>

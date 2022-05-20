@@ -52,15 +52,18 @@ class TeamTableRow extends React.Component {
               className="btn btn-outline-success border-1"
               onClick={this.handleSwitchToButtonClick}
             >
-              Wechseln zu
+              Auswählen
             </a>
           </td>
         ) : (
-          <td></td>
+          <td>
+            <a className="btn btn-outline-success border-1 disabled">
+              Ausgewählt
+            </a>
+          </td>
         )}
-        {/* Action: Manage */}
-        {this.props.team.member.role === "owner" ||
-        this.props.team.member.role === "admin" ? (
+        {/* Action: Edit */}
+        {this.props.team.member.role === "owner" || this.props.team.member.role === "admin" ? (
           <td>
             <a
               className="btn btn-outline-dark border-1"
@@ -133,7 +136,7 @@ export default class Page_TeamList extends React.Component {
     return (
       <Dashboard.Dashboard title="Deine Teams" subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei.">
         <Dashboard.DashboardColumn size="12">
-          <Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Teamübersicht">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
@@ -145,8 +148,8 @@ export default class Page_TeamList extends React.Component {
             </table>
           </Dashboard.DashboardTile>
 
-          <Dashboard.DashboardTile>
-            <div className="input-group my-2">
+          <Dashboard.DashboardTile title="Team erstellen oder beitreten">
+            <div className="input-group my-2 px-1">
               <button
                 type="button"
                 className="btn btn-outline-primary border-1"
