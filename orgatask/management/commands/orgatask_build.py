@@ -20,7 +20,7 @@ class Command(BaseCommand):
         filepath = os.path.abspath(__file__)
         folderpath = os.path.dirname(os.path.dirname(os.path.dirname(filepath)))
 
-        newcwd = os.path.join(folderpath, "static", "orgatask", "app")
+        newcwd = os.path.join(folderpath, "app")
         os.chdir(newcwd)
 
         self.stdout.write(self.style.SUCCESS("Building OrgaTask app..."))

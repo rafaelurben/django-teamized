@@ -130,4 +130,5 @@ dmypy.json
 
 # --- CUSTOM ---
 
-node_modules/
+orgatask/app/node_modules/
+orgatask/static/orgatask/app
