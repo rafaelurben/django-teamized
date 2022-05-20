@@ -10,7 +10,7 @@ body {
     flex: 1;
 }
 
-.sidebar .nav-link > i {
+#orgatask_appsidebar .nav-link>i {
     margin-right: 0.5rem;
 }
 
@@ -18,4 +18,33 @@ body {
     margin-left: -1rem;
     margin-right: -1rem;
     box-sizing: content-box;
+}
+
+#orgatask_app:not(.sidebar-visible) #orgatask_appsidebar {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    /* CSS overrides on smaller screens where the menu is collapsed */
+
+    #orgatask_appmenubar {
+        padding-top: 0.6rem;
+        padding-bottom: 0.3rem;
+    }
+
+    #orgatask_app.sidebar-visible #orgatask_maincontent {
+        display: none;
+    }
+
+    #orgatask_app.sidebar-visible #orgatask_appsidebar {
+        width: 100vw;
+    }
+}
+
+@media (min-width: 992px) {
+    /* CSS overrides on bigger screens where the menu isn't collapsed */
+
+    #orgatask_app.sidebar-visible #orgatask_appsidebar {
+        width: 280px;
+    }
 }

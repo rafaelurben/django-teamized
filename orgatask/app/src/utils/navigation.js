@@ -68,7 +68,7 @@ export function importFromURL() {
 }
 
 export function toggleSidebar() {
-    document.getElementById('orgatask_appsidebar').classList.toggle('d-none');
+    document.getElementById('orgatask_app').classList.toggle('sidebar-visible');
 }
 
 export function renderSidebar() {
