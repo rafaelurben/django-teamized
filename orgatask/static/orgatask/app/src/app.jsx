@@ -50,3 +50,4 @@ $("document").ready(async function () {
 // Add event listener for page navigation
 
 $(window).bind("popstate", Navigation.handleHistoryNavigation);
+$("#menubartitle").click(Navigation.toggleSidebar);

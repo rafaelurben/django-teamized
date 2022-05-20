@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="{% static 'orgatask/css/app.css' %}">
 {% endblock extrahead %}
 
+{% block menubartitle %}
+    <a id="menubartitle" class="navbar-brand ms-3" href="#">
+        <i class="fas fa-fw fa-bars me-1"></i>
+        OrgaTask
+    </a>
+{% endblock menubartitle %}
+
 {% block additional_menubar_items %}
     <div id="orgatask_appmenubar">
         <!-- Filled by React -->

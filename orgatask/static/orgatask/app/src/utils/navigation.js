@@ -67,6 +67,10 @@ export function importFromURL() {
     window.orgatask.selectedTeamId = url.searchParams.get('t');
 }
 
+export function toggleSidebar() {
+    document.getElementById('orgatask_appsidebar').classList.toggle('d-none');
+}
+
 export function renderSidebar() {
     ReactDOM.render(
         <AppSidebar

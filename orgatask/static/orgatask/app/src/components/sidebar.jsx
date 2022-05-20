@@ -2,6 +2,7 @@
 
 /*
     This component is used to render the sidebar.
+    Most of it is inspired or copied from https://getbootstrap.com/docs/5.1/examples/sidebars/
 */
 
 export default class AppSidebar extends React.Component {
