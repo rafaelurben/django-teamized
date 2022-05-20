@@ -1,5 +1,7 @@
 import PageLoader from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
+import AppSidebar from "../components/sidebar.js";
+import * as Utils from './utils.js';
 import * as Teams from './teams.js';
 
 
@@ -65,20 +67,29 @@ export function importFromURL() {
     window.orgatask.selectedTeamId = url.searchParams.get('t');
 }
 
+export function renderSidebar() {
+    ReactDOM.render(
+        <AppSidebar
+            page={window.orgatask.currentPage}
+            user={{
+                username: window.orgatask.user.username,
+                avatarUrl: Utils.getGravatarUrl(window.orgatask.user.email),
+                isAdmin: Teams.isCurrentTeamAdmin(),
+            }}
+            onPageSelect={selectPage}
+        />,
+        document.getElementById("orgatask_appsidebar")
+    );
+}
+
 export function renderPage() {
     ReactDOM.render(
         <PageLoader
             page={window.orgatask.currentPage}
         />,
-        document.getElementById("maincontent")
+        document.getElementById("orgatask_maincontent")
     );
-}
-
-export function selectPage(page) {
-    console.debug("Select page: " + page);
-    window.orgatask.currentPage = page;
-    exportToURL();
-    renderPage();
+    renderSidebar();
 }
 
 export function renderMenubar() {
@@ -91,6 +102,14 @@ export function renderMenubar() {
         />,
         document.getElementById("orgatask_appmenubar")
     );
+    renderSidebar();
+}
+
+export function selectPage(page) {
+    console.debug("Select page: " + page);
+    window.orgatask.currentPage = page;
+    exportToURL();
+    renderPage();
 }
 
 export function handleHistoryNavigation() {

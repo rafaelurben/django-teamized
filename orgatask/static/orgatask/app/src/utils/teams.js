@@ -5,6 +5,18 @@ import * as Cache from "./cache.js";
 
 export { getTeamsList } from "./cache.js";
 
+export function getCurentTeamData() {
+    return window.orgatask.teamcache[window.orgatask.selectedTeamId];
+}
+
+export function isCurrentTeamAdmin() {
+    const teamdata = getCurentTeamData();
+    if (teamdata) {
+        return ['owner', 'admin'].includes(teamdata.team.member.role);
+    }
+    return false;
+}
+
 export function ensureExistingTeam() {
   if (window.orgatask.selectedTeamId) {
     // Team selected; check if it is valid
@@ -47,6 +59,17 @@ export async function loadTeams(full=false) {
 }
 
 //// API calls ////
+
+// User profile
+
+export async function getProfile() {
+  return await API.GET('profile').then(
+    (data) => {
+      window.orgatask.user = data.user;
+      return data.user;
+    }
+  );
+}
 
 // Team list
 

@@ -6,7 +6,7 @@
 {% block extrahead %}
     <!-- Sweetalert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
-    <link rel="stylesheet" href="{% static 'orgatask/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'orgatask/css/app.css' %}">
 {% endblock extrahead %}
 
 {% block additional_menubar_items %}
@@ -39,6 +39,10 @@
 {% endblock scripts %}
 
 {% block contentcontainer %}
-    <div class="w-100" id="maincontent">
+    <div id="orgatask_app" class="d-flex">
+        <div id="orgatask_appsidebar">
+        </div>
+        <div class="w-100 h-100 overflow-scroll" id="orgatask_maincontent">
+        </div>
     </div>
 {% endblock contentcontainer %}

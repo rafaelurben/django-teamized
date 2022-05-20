@@ -1,0 +1,21 @@
+/* Style overrides for the app */
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#orgatask_app {
+    flex: 1;
+}
+
+.sidebar .nav-link > i {
+    margin-right: 0.5rem;
+}
+
+.dashboard-tile > hr {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    box-sizing: content-box;
+}

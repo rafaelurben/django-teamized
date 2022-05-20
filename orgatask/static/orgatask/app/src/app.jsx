@@ -5,31 +5,43 @@ import * as Navigation from "./utils/navigation.js";
 import * as Teams from "./utils/teams.js";
 import * as Utils from "./utils/utils.js";
 
-// Initialize empty data object
-
-window.orgatask = {
-  currentPage: "teamlist",
-  defaultTeamId: null,
-  selectedTeamId: null,
-  teamcache: {},
-};
-
 // Make namespaces available in the console (for debugging)
 
-window._OrgaTask = {
-  Alerts,
-  API,
-  Cache,
-  Navigation,
-  Teams,
-  Utils,
-};
+  window._OrgaTask = {
+    Alerts,
+    API,
+    Cache,
+    Navigation,
+    Teams,
+    Utils,
+  };
+
+// Initialize empty data object
+
+function initialize() {
+
+  window.orgatask = {
+    currentPage: "teamlist",
+    defaultTeamId: null,
+    selectedTeamId: null,
+    teamcache: {},
+    user: {
+      id: null,
+      username: "loading...",
+      email: "loading...",
+    },
+  };
+}
+
+initialize();
 
 // Perform tasks after page load
 
 $("document").ready(async function () {
   Navigation.renderMenubar();
   Navigation.importFromURL();
+  window.orgatask.user = await Teams.getProfile();
+  Navigation.renderSidebar();
   await Teams.loadTeams(true); // Load teams from API and build cache
   Navigation.exportToURL();
   Navigation.renderPage();
