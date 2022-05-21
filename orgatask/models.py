@@ -14,13 +14,9 @@ from orgatask import enums, options, exceptions
 # Create your models here.
 
 
-def get_default_user_settings():
-    return {"key": "value"}
-
-
 class User(models.Model):
     """
-    An intermediary model for user settings and database relations.
+    An intermediary model to extend the auth user model.
     """
 
     uid = models.UUIDField(
@@ -33,11 +29,6 @@ class User(models.Model):
         to=settings.AUTH_USER_MODEL,
         related_name="orgatask_user",
         on_delete=models.CASCADE,
-    )
-
-    settings = models.JSONField(
-        blank=True,
-        default=get_default_user_settings,
     )
 
     def __str__(self):
@@ -97,10 +88,6 @@ class User(models.Model):
         return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_TEAMS
 
 
-def get_default_team_settings():
-    return {"key": "value"}
-
-
 class Team(models.Model):
     "A team"
 
@@ -116,10 +103,6 @@ class Team(models.Model):
     description = models.TextField(
         blank=True,
         default="",
-    )
-    settings = models.JSONField(
-        blank=True,
-        default=get_default_team_settings,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
