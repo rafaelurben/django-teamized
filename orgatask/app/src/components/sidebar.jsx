@@ -64,7 +64,7 @@ export default class AppSidebar extends React.Component {
             aria-expanded="false"
           >
             <img
-              src={this.props.user.avatarUrl}
+              src={this.props.user.avatar_url}
               alt=""
               width="32"
               height="32"

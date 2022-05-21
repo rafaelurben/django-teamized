@@ -1,7 +1,6 @@
 import PageLoader from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
 import AppSidebar from "../components/sidebar.js";
-import * as Utils from './utils.js';
 import * as Teams from './teams.js';
 
 
@@ -81,11 +80,8 @@ export function renderSidebar() {
     ReactDOM.render(
         <AppSidebar
             page={window.orgatask.currentPage}
-            user={{
-                username: window.orgatask.user.username,
-                avatarUrl: Utils.getGravatarUrl(window.orgatask.user.email),
-                isAdmin: Teams.isCurrentTeamAdmin(),
-            }}
+            user={window.orgatask.user}
+            isAdmin={Teams.isCurrentTeamAdmin()}
             onPageSelect={selectPage}
         />,
         document.getElementById("orgatask_appsidebar")

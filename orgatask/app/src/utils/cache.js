@@ -29,7 +29,6 @@ function updateTeam(team) {
 }
 
 export function addTeam(team) {
-    console.log("addTeam", team)
     window.orgatask.teamcache[team.id] = {
         "team": {},
         "members": {},
@@ -57,7 +56,6 @@ export async function deleteTeam(teamId) {
 // Bulk update cache
 
 export function updateTeamsCache(teams, defaultTeamId) {
-    console.log(teams)
     window.orgatask.defaultTeamId = defaultTeamId;
 
     let oldids = Object.keys(window.orgatask.teamcache);

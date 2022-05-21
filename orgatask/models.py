@@ -1,6 +1,7 @@
 """OrgaTask Models"""
 
 import uuid
+import hashlib
 
 from django.db import models
 from django.conf import settings
@@ -55,7 +56,13 @@ class User(models.Model):
             "email": self.auth_user.email,
             "first_name": self.auth_user.first_name,
             "last_name": self.auth_user.last_name,
+            "avatar_url": self.avatar_url,
         }
+
+    @property
+    def avatar_url(self):
+        mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
+        return "https://www.gravatar.com/avatar/"+mailhash
 
     def create_team(self, name, description):
         """

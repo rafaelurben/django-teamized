@@ -13,7 +13,6 @@ class TeamMembersTableRow extends React.Component {
     this.handleDemoteButtonClick = this.handleDemoteButtonClick.bind(this);
     this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
-    
   }
 
   async handlePromoteButtonClick() {
@@ -44,15 +43,27 @@ class TeamMembersTableRow extends React.Component {
 
     return (
       <tr>
+        {/* Avatar */}
+        <td>
+          <img
+            src={member.user.avatar_url}
+            alt={`Avatar von ${member.username}`}
+            width="32"
+            height="32"
+            className="rounded-circle"
+          />
+        </td>
         {/* Name and description */}
         <td>
-          <span>{member.user.first_name} {member.user.last_name}</span>
+          <span>
+            {member.user.first_name} {member.user.last_name}
+          </span>
         </td>
         {/* Username and email */}
         <td className="py-2">
           <span>{member.user.username}</span>
           <br />
-          <i>{member.user.email}</i>
+          <a href={"mailto:" + member.user.email}>{member.user.email}</a>
         </td>
         {/* Member role */}
         <td>
@@ -225,7 +236,6 @@ export default class Page_TeamManage extends React.Component {
 
   async handleTeamDeleteButtonClick() {
     const response = await Teams.deleteTeamPopup(this.props.team);
-    console.log(response)
     if (response.isConfirmed) {
       Navigation.selectPage("teamlist");
     }
@@ -322,6 +332,7 @@ export default class Page_TeamManage extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
+                  <th width="32px"></th>
                   <th>Name</th>
                   <th>Benutzername &amp; E-Mail</th>
                   <th>Rolle</th>
@@ -361,7 +372,7 @@ export default class Page_TeamManage extends React.Component {
               </table>
             </Dashboard.DashboardTile>
           ) : (
-            <span></span>
+            null
           )}
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
