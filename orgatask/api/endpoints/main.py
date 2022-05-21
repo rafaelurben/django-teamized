@@ -1,4 +1,4 @@
-"""OrgaTask API views"""
+"""Main API endpoints"""
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,7 +8,7 @@ from orgatask import enums
 from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
-from orgatask.models import User, Member, Team, Invite
+from orgatask.models import Member, Team, Invite
 
 @api_view(["get"])
 @orgatask_prep()
@@ -384,11 +384,3 @@ def endpoint_invite_accept(request, invite: Invite):
                 "text": _("Du bist dem Team %s beigetreten.") % team.name,
             }
         })
-
-
-def not_found(request):
-    """
-    Return a json 404 error message
-    """
-
-    return ENDPOINT_NOT_FOUND
