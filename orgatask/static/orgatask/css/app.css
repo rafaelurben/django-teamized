@@ -12,15 +12,19 @@ body {
 }
 
 #orgatask_appsidebar .nav-link>i {
-    margin-right: 0.5rem; /* Add some space between the icon and the text */
+    /* Sidebar icons */
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    bottom: 0.1rem;
+    position: relative
 }
 
 #orgatask_app:not(.sidebar-visible) #orgatask_appsidebar {
     display: none;
 }
 
-@media (max-width: 992px) {
-    /* CSS overrides on smaller screens where the menu is collapsed */
+@media (max-width: 991px) {
+    /* CSS overrides on smaller screens where the menu is collapsible */
 
     #orgatask_appmenubar {
         padding-top: 0.6rem;

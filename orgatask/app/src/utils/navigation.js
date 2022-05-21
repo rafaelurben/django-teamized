@@ -71,6 +71,12 @@ export function toggleSidebar() {
     document.getElementById('orgatask_app').classList.toggle('sidebar-visible');
 }
 
+export function hideSidebarOnMobile() {
+    if (window.innerWidth < 992) {
+        document.getElementById('orgatask_app').classList.remove('sidebar-visible');
+    }
+}
+
 export function renderSidebar() {
     ReactDOM.render(
         <AppSidebar
@@ -114,6 +120,7 @@ export function selectPage(page) {
     window.orgatask.currentPage = page;
     exportToURL();
     renderPage();
+    hideSidebarOnMobile();
 }
 
 export function handleHistoryNavigation() {

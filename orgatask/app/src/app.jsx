@@ -38,6 +38,7 @@ initialize();
 // Perform tasks after page load
 
 $("document").ready(async function () {
+  Navigation.hideSidebarOnMobile();
   Navigation.renderMenubar();
   Navigation.importFromURL();
   window.orgatask.user = await Teams.getProfile();
