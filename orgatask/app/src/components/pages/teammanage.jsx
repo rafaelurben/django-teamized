@@ -1,6 +1,6 @@
 "use strict";
 
-import { errorAlert } from "../../utils/alerts.js";
+import { successAlert } from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
@@ -117,8 +117,11 @@ class TeamMembersTableRow extends React.Component {
 class TeamInvitesTableRow extends React.Component {
   constructor(props) {
     super(props);
+    this.inviteurl = window.location.href.split("?")[0] + "?invite=" + this.props.invite.token;
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+    this.copyToken = this.copyToken.bind(this);
+    this.copyURL = this.copyURL.bind(this);
   }
 
   async handleDeleteButtonClick() {
@@ -131,24 +134,53 @@ class TeamInvitesTableRow extends React.Component {
     Navigation.renderPage();
   }
 
+  copyToken() {
+    navigator.clipboard.writeText(this.props.invite.token);
+    successAlert({
+      alert: {
+        title: "Token kopiert",
+        text: "Der Token wurde in die Zwischenablage kopiert.",
+      },
+    });
+  }
+
+  copyURL() {
+    navigator.clipboard.writeText(this.inviteurl);
+    successAlert({
+      alert: {
+        title: "Link kopiert",
+        text: "Der Link wurde in die Zwischenablage kopiert.",
+      },
+    });
+  }
+
   render() {
     let invite = this.props.invite;
 
     return (
       <tr>
-        {/* Token and note */}
-        <td className="py-2">
-          <span>{`${invite.token}`}</span>
-          <br />
-          <i>{invite.note}</i>
+        {/* Note */}
+        <td>
+          <span>{invite.note}</span>
+        </td>
+        {/* Share */}
+        <td>
+          <abbr title={invite.token} className="me-1" onClick={this.copyToken}>
+            <i className="fas fa-key"></i>
+          </abbr>
+          <abbr title={this.inviteurl} onClick={this.copyURL}>
+            <i className="fas fa-link"></i>
+          </abbr>
         </td>
         {/* Valid until */}
         <td>
-          <span>{new Date(invite.valid_until*1000).toLocaleString()}</span>
+          <span>{new Date(invite.valid_until * 1000).toLocaleString()}</span>
         </td>
         {/* Uses */}
         <td className="text-align-end">
-          <span>{invite.uses_used}/{invite.uses_left}</span>
+          <span>
+            {invite.uses_used}/{invite.uses_left}
+          </span>
         </td>
         {/* Action: Edit */}
         <td>
@@ -306,7 +338,8 @@ export default class Page_TeamManage extends React.Component {
               <table className="table table-borderless align-middle mb-0">
                 <thead>
                   <tr>
-                    <th>Token &amp; Notiz</th>
+                    <th>Notiz</th>
+                    <th>Teilen</th>
                     <th>Gültig bis</th>
                     <th>Verwendungen</th>
                   </tr>
