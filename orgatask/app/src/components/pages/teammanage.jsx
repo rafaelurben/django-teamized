@@ -328,7 +328,7 @@ export default class Page_TeamManage extends React.Component {
               </table>
             </Dashboard.DashboardTile>
           ) : (
-            <wbr></wbr>
+            <span></span>
           )}
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
