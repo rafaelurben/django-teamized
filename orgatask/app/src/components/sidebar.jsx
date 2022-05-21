@@ -58,11 +58,10 @@ export default class AppSidebar extends React.Component {
         <div className="dropup">
           <a
             href="#"
-            className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+            className="d-flex align-items-center text-white text-decoration-none dropdown-toggle me-2"
             id="dropdownUser1"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            style={{whiteSpace: "pre"}}
           >
             <img
               src={this.props.user.avatarUrl}
@@ -71,7 +70,7 @@ export default class AppSidebar extends React.Component {
               height="32"
               className="rounded-circle me-2"
             />
-            <strong>{this.props.user.username} </strong>
+            <strong className="me-2">{this.props.user.username}</strong>
           </a>
           <ul
             className="dropdown-menu dropdown-menu-dark text-small shadow"
