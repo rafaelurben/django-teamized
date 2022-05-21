@@ -128,6 +128,6 @@ export function handleHistoryNavigation() {
     importFromURL();
     ensureExistingPage();
     Teams.ensureExistingTeam();
-    renderMenubar(); // only render the menubar because refetching the teams takes too much time
+    renderMenubar();
     renderPage();
 }

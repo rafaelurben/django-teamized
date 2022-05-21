@@ -77,7 +77,7 @@ export default class AppSidebar extends React.Component {
             aria-labelledby="dropdownUser1"
           >
             <li>
-              <a className="dropdown-item" href="/account/?next=/orgatask/">
+              <a className="dropdown-item" href="/account/?next=/orgatask/app/">
                 Account
               </a>
             </li>

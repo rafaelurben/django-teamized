@@ -57,10 +57,10 @@ export function successAlert(data) {
     })
 }
 
-export async function confirmAlert(text, callback) {
+export async function confirmAlert(html, callback, title) {
     return await Swal.fire({
-        title: "Sicher?",
-        text: text,
+        title: title || "Sicher?",
+        html: html,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -69,4 +69,10 @@ export async function confirmAlert(text, callback) {
         showLoaderOnConfirm: true,
         preConfirm: callback,
     })
+}
+
+export async function doubleConfirmAlert(html, callback) {
+    return await confirmAlert(html, async () => {
+        return await confirmAlert(html+"<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>", callback, "Absolut sicher?")
+    });
 }

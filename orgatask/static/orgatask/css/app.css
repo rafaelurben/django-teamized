@@ -39,3 +39,8 @@ body {
         width: 100vw;
     }
 }
+
+body.swal2-shown:not(.swal2-no-backdrop) {
+    overflow: scroll;
+    height: 100vh !important;
+}

@@ -1,4 +1,4 @@
-import { successAlert, confirmAlert, waitingAlert } from "./alerts.js";
+import { successAlert, confirmAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
@@ -187,8 +187,9 @@ export async function deleteTeam(teamId) {
 }
 
 export async function deleteTeamPopup(team) {
-  return await confirmAlert(
-    `Willst du das Team '${team.name}' (${team.id}) wirklich löschen?`, 
+  return await doubleConfirmAlert(
+    "Willst du folgendes Team wirklich löschen?<br /><br />" +
+    `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br /><b>ID:</b> ${team.id}`, 
     async () => await deleteTeam(team.id)
   );
 }
@@ -209,7 +210,8 @@ export async function leaveTeam(teamId) {
 
 export async function leaveTeamPopup(team) {
   return await confirmAlert(
-    `Willst du das Team '${team.name}' (${team.id}) wirklich verlassen?`,
+    "Willst du folgendes Team wirklich verlassen?<br /><br />" +
+    `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br /><b>ID:</b> ${team.id}`, 
     async () => await leaveTeam(team.id)
   );
 }
@@ -390,7 +392,8 @@ export async function deleteInvite(teamId, inviteId) {
 
 export async function deleteInvitePopup(team, invite) {
   await confirmAlert(
-    `Willst du die Einladung '${invite.note}' (Token ${invite.token}) wirklich löschen?`,
+    "Willst du folgende Einladung wirklich löschen?<br /><br />"+
+    `<b>Notiz:</b> ${invite.note} <br /><b>Token: </b>${invite.token}`,
     async () => await deleteInvite(team.id, invite.id)
   );
 }
