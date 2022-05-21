@@ -29,10 +29,18 @@ export default class AppSidebar extends React.Component {
   render() {
     
     return (
-      <div
-        className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar h-100"
-      >
+      <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar h-100">
         <ul className="nav nav-pills flex-column mb-auto">
+          <li>
+            <a
+              href="#"
+              className={this.getLinkClass("home")}
+              onClick={this.selectPage("home")}
+            >
+              <i className="fas fa-fw fa-home" />
+              Startseite
+            </a>
+          </li>
           <li>
             <a
               href="#"

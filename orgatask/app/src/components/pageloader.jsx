@@ -1,5 +1,6 @@
 "use strict";
 
+import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
 import Page_TeamManage from "./pages/teammanage.js";
 
@@ -16,6 +17,12 @@ export default class PageLoader extends React.Component {
 
   render() {
     switch (this.props.page) {
+      case "home":
+        return (
+          <Page_Home 
+            user={window.orgatask.user} 
+          />
+        );
       case "teamlist":
         return (
           <Page_TeamList

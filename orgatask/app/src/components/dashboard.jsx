@@ -32,7 +32,7 @@ export class Dashboard extends React.Component {
     content.push(this.props.children)
 
     return (
-      <div className="container-fluid p-0">
+      <div className="dashboard container-fluid p-0">
         {content}
       </div>
     );
@@ -45,7 +45,7 @@ export class DashboardColumn extends React.Component {
 
     let sizes = props.sizes || {};
 
-    this.colClass = `col-${props.size}`;
+    this.colClass = `dashboard-column col-${props.size}`;
     for (let breakpoint of Object.keys(sizes)) {
       this.colClass += ` col-${breakpoint}-${sizes[breakpoint]}`;
     }

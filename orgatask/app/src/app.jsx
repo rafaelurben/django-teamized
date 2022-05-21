@@ -21,7 +21,7 @@ import * as Utils from "./utils/utils.js";
 function initialize() {
 
   window.orgatask = {
-    currentPage: "teamlist",
+    currentPage: "home",
     defaultTeamId: null,
     selectedTeamId: null,
     teamcache: {},
