@@ -403,13 +403,14 @@ export async function deleteInvitePopup(team, invite) {
 export async function acceptInvite(token) {
   waitingAlert("Einladung wird akzeptiert...");
   return await API.POST(`invites/${token}/accept`).then(
-    (data) => {
+    async (data) => {
       successAlert(data);
 
       Cache.addTeam(data.team);
       Navigation.exportToURL({removeParams: ["invite"]});
       switchTeam(data.team.id);
 
+      await getMembers(data.team.id);
       return data.team;
     }
   )

@@ -253,14 +253,6 @@ export default class Page_TeamManage extends React.Component {
       );
     });
 
-    if (memberrows.length == 0) {
-      memberrows = (
-        <tr>
-          <td>Mitglieder wurden noch nicht geladen, bitte lade neu!</td>
-        </tr>
-      );
-    }
-
     let inviterows = Object.values(this.props.invites).map((invite) => {
       return (
         <TeamInvitesTableRow 
