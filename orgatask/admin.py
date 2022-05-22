@@ -26,7 +26,7 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'auth_user',)}),
-        ('Settings', {'fields': ('settings',)}),
+        ('Settings', {'fields': ()}),
     ]
 
     ordering = ('uid', )
@@ -59,7 +59,7 @@ class TeamAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'name', 'description',)}),
-        ('Settings', {'fields': ('settings',)}),
+        ('Settings', {'fields': ()}),
     ]
 
     ordering = ('uid', )
