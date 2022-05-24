@@ -25,11 +25,21 @@ export function requestErrorAlert(request) {
     }
 }
 
-export function errorAlert(title, message) {
+export function errorAlert(title, message, options) {
     Swal.fire({
         title: title,
         html: message,
         icon: 'error',
+        ...options
+    })
+}
+
+export function infoAlert(title, message, options) {
+    Swal.fire({
+        title: title,
+        html: message,
+        icon: 'info',
+        ...options
     })
 }
 
@@ -57,7 +67,7 @@ export function successAlert(data) {
     })
 }
 
-export async function confirmAlert(html, callback, title) {
+export async function confirmAlert(html, callback, title, options) {
     return await Swal.fire({
         title: title || "Sicher?",
         html: html,
@@ -68,6 +78,7 @@ export async function confirmAlert(html, callback, title) {
         cancelButtonText: "Nein, abbrechen",
         showLoaderOnConfirm: true,
         preConfirm: callback,
+        ...options
     })
 }
 

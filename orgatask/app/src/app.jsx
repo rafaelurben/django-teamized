@@ -46,6 +46,7 @@ $("document").ready(async function () {
   await Teams.loadTeams(true); // Load teams from API and build cache
   Navigation.exportToURL();
   Navigation.renderPage();
+  Teams.checkURLInvite();
 });
 
 // Add event listener for page navigation

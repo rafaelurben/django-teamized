@@ -65,7 +65,7 @@ def api_view(allowed_methods=["get"], perms_required=()):
     return decorator
 
 
-def require_objects(config):
+def require_objects(config, allow_none=False):
     """Decorator to only call the view if objects with given ids exist
     and automatically pass them instead of the ids.
 
@@ -96,6 +96,10 @@ def require_objects(config):
                 search = {dbfieldname: value}
                 if model.objects.filter(**search).exists():
                     kwargs[field_out] = model.objects.get(**search)
+                    continue
+
+                if allow_none:
+                    kwargs[field_out] = None
                     continue
 
                 if hasattr(model, "NOT_FOUND_TEXT"):

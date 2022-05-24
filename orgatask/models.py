@@ -310,8 +310,8 @@ class Invite(models.Model):
             return False
         return True
 
-    def accept(self, user: User) -> None:
-        "Use the invitation"
+    def check_validity_for_user(self, user: User) -> bool:
+        "Check if an user can use an invite - raise AlertEcxeption if not."
 
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
@@ -323,6 +323,10 @@ class Invite(models.Model):
                 text=_("Diese Einladung ist nicht mehr gültig."),
                 title=_("Einladung ungültig"),
                 errorname="invite-invalid")
+        return True
+
+    def accept(self, user: User) -> None:
+        "Use the invitation (IMPORTANT: Check validity first via check_validity_for_user()!)"
 
         self.uses_left -= 1
         self.uses_used += 1

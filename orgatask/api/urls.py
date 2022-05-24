@@ -17,6 +17,7 @@ urlpatterns = [
     path('teams/<team>/invites', ep.main.endpoint_invites, name='api-invites'),
     path('teams/<team>/invites/<invite>', ep.main.endpoint_invite, name='api-invite'),
     path('teams/<team>/leave', ep.main.endpoint_team_leave, name='api-team-leave'),
+    path('invites/<invite>/info', ep.main.endpoint_invite_info, name='api-invite-info'),
     path('invites/<invite>/accept', ep.main.endpoint_invite_accept, name='api-invite-accept'),
 
     # Catch-all error view for 404 JSON responses

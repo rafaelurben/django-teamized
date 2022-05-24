@@ -1,7 +1,8 @@
-import { successAlert, confirmAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
+import { successAlert, confirmAlert, infoAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
+import * as Utils from "./utils.js";
 
 export { getTeamsList } from "./cache.js";
 
@@ -123,7 +124,11 @@ export async function createTeamPopup() {
       }
 
       Swal.showLoading();
-      return await createTeam(name, description);
+      return await createTeam(name, description).then(
+        () => {
+          Navigation.selectPage('teammanage');
+        }
+      );
     },
   })).value;
 }
@@ -398,6 +403,21 @@ export async function deleteInvitePopup(team, invite) {
   );
 }
 
+// Invite check
+
+export async function checkInvite(token) {
+  return await API.GET(`invites/${token}/info`, {}, "no-error-handling").then(
+    async (data) => {
+      return data;
+    }
+  ).catch(
+    (error) => {
+      return {"status": "invite-invalid"}
+    }
+  )
+}
+
+
 // Invite accept
 
 export async function acceptInvite(token) {
@@ -407,11 +427,52 @@ export async function acceptInvite(token) {
       successAlert(data);
 
       Cache.addTeam(data.team);
-      Navigation.exportToURL({removeParams: ["invite"]});
       switchTeam(data.team.id);
+      Navigation.exportToURL({removeParams: ["invite"]});
 
       await getMembers(data.team.id);
       return data.team;
     }
   )
+}
+
+// Invite from URL
+
+export async function checkURLInvite() {
+  const token = new URL(window.location.href).searchParams.get("invite", "");
+
+  if (!token) {
+    return;
+  }
+
+  if (!Utils.validateUUID(token)) {
+    infoAlert(
+      "Keine gültige Einladung",
+      "Jemand hat versucht, dich einzuladen, jedoch liegt die Einladung nicht in einem korrekten Format vor."
+    );
+    Navigation.exportToURL({ removeParams: ["invite"] });
+    return;
+  } 
+
+  const data = await checkInvite(token);
+  console.log(data)
+  if (data.status == "invite-valid") {
+    const team = data.team;
+    confirmAlert(
+      "Möchtest du folgendem Team beitreten?<br /><br />" +
+      `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br />`,
+      async () => {
+        await acceptInvite(token);
+        Navigation.selectPage('teammanage');
+      },
+      "Du wurdest eingeladen",
+      {icon: "info", confirmButtonColor: "green", confirmButtonText: "Einladung akzeptieren", cancelButtonText: "Nein, später"}
+    )
+  } else {
+    infoAlert(
+      "Keine gültige Einladung",
+      "Jemand hat versucht, dich einzuladen, jedoch ist die Einladung nicht mehr gültig oder du bist dem Team bereits beigetreten."
+    );
+    Navigation.exportToURL({ removeParams: ["invite"] });
+  }
 }

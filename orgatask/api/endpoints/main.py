@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from orgatask import enums
+from orgatask import enums, exceptions
 from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
@@ -360,6 +360,31 @@ def endpoint_team_leave(request, team: Team):
             }
         })
 
+@api_view(['get'])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("invite", Invite, "invite", "token")], allow_none=True)
+def endpoint_invite_info(request, invite: Invite):
+    """
+    Endpoint for getting information about an invite.
+    """
+
+    user = request.orgatask_user
+
+    if request.method == "GET":
+        if invite is None:
+            raise exceptions.AlertException(
+                text=_("Deine Einladung existiert leider nicht (mehr), sorry."),
+                title=_("Einladung nicht gefunden"),
+                errorname="invite-not-found",
+            )
+
+        invite.check_validity_for_user(user)
+
+        return JsonResponse({
+            "status": "invite-valid",
+            "team": invite.team.as_dict()
+        })
 
 @api_view(["post"])
 @csrf_exempt
@@ -373,6 +398,7 @@ def endpoint_invite_accept(request, invite: Invite):
     user = request.orgatask_user
 
     if request.method == "POST":
+        invite.check_validity_for_user(user)
         member = invite.accept(user)
         team = invite.team
 
