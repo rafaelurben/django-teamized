@@ -30,7 +30,7 @@ export default class AppSidebar extends React.Component {
     
     return (
       <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar h-100">
-        <ul className="nav nav-pills flex-column mb-auto">
+        <ul className="nav nav-pills flex-column mb-auto flex-nowrap overflow-scroll">
           <li>
             <a
               href="#"
