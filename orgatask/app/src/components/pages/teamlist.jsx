@@ -142,7 +142,7 @@ export default class Page_TeamList extends React.Component {
               <thead>
                 <tr>
                   <th>Name &amp; Beschreibung</th>
-                  <th>Rolle</th>
+                  <th>Deine Rolle</th>
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
