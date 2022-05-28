@@ -267,7 +267,7 @@ export default class Page_TeamManage extends React.Component {
     if (inviterows.length == 0) {
       inviterows = (
         <tr>
-          <td>Keine Einladungen vorhanden</td>
+          <td colSpan="4">Keine Einladungen vorhanden</td>
         </tr>
       );
     }
