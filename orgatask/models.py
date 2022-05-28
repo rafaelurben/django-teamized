@@ -75,7 +75,7 @@ class User(models.Model):
 
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
             self.create_team(
-                name=_("Persönlicher Arbeitsbereich"),
+                name=_("Team von %s") % self.auth_user.username,
                 description=_(
                     "Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
             )
