@@ -113,11 +113,15 @@ export function renderMenubar() {
 }
 
 export function selectPage(page) {
-    console.debug("Select page: " + page);
-    window.orgatask.currentPage = page;
-    exportToURL();
-    renderPage();
-    hideSidebarOnMobile();
+    if (pageList.includes(page)) {
+        console.debug("Select page: " + page);
+        window.orgatask.currentPage = page;
+        exportToURL();
+        renderPage();
+        hideSidebarOnMobile();
+    } else {
+        console.error("Invalid page: " + page);
+    }
 }
 
 export function handleHistoryNavigation() {

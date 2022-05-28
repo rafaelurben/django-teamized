@@ -27,7 +27,23 @@ export default class AppSidebar extends React.Component {
   }
 
   render() {
-    
+    let adminPages = null;
+    if (this.props.isAdmin) {
+      adminPages = [
+        <hr className="my-1" key="hr-admin" />,
+        <li key="page-admin">
+          <a
+            href="#"
+            className={this.getLinkClass("adminhome")+" text-decoration-line-through"} // TODO: Implement
+            onClick={this.selectPage("adminhome")}
+          >
+            <i className="fas fa-fw fa-key" />
+            Admin
+          </a>
+        </li>,
+      ];
+    }
+
     return (
       <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar h-100">
         <ul className="nav nav-pills flex-column mb-auto flex-nowrap overflow-scroll">
@@ -51,6 +67,7 @@ export default class AppSidebar extends React.Component {
               Teams
             </a>
           </li>
+          <hr className="my-1"/>
           <li>
             <a
               href="#"
@@ -61,6 +78,17 @@ export default class AppSidebar extends React.Component {
               Team
             </a>
           </li>
+          <li>
+            <a
+              href="#"
+              className={this.getLinkClass("worktime")+" text-decoration-line-through"} // TODO: Implement
+              onClick={this.selectPage("worktime")}
+            >
+              <i className="fas fa-fw fa-business-time" />
+              Arbeitszeit
+            </a>
+          </li>
+          {adminPages}
         </ul>
         <hr />
         <div className="dropup">
