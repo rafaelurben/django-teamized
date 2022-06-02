@@ -20,6 +20,12 @@ urlpatterns = [
     path('invites/<invite>/info', ep.main.endpoint_invite_info, name='api-invite-info'),
     path('invites/<invite>/accept', ep.main.endpoint_invite_accept, name='api-invite-accept'),
 
+    # WorkTime API views
+
+    path('teams/<team>/worksessions/tracking/start', ep.workingtime.endpoint_tracking_start, name='api-workingtime-tracking-start'),
+    path('me/worksessions/tracking/live', ep.workingtime.endpoint_tracking_live, name='api-workingtime-tracking-live'),
+    path('me/worksessions/tracking/stop', ep.workingtime.endpoint_tracking_stop, name='api-workingtime-tracking-stop'),
+
     # Catch-all error view for 404 JSON responses
     re_path('.*', ep.endpoint_not_found, name="api-not-found")
 ]

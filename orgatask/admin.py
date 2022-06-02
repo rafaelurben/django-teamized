@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = []
 
     readonly_fields = ('uid',)
-
+    search_fields = ('uid', 'auth_user__username', 'auth_user__email', 'auth_user__first_name', 'auth_user__last_name')
     autocomplete_fields = ('auth_user',)
 
     inlines = [UserAdminMemberInstanceInline]
@@ -31,6 +31,12 @@ class UserAdmin(admin.ModelAdmin):
 
     ordering = ('uid', )
 
+@admin.register(models.Member)
+class MemberAdmin(admin.ModelAdmin):
+    list_display = ['uid', 'user', 'team', 'role', 'note']
+
+    readonly_fields = ('uid',)
+    search_fields = ('uid', 'user__uid', 'user__auth_user__username', 'user__auth_user__email', 'user__auth_user__first_name', 'user__auth_user__last_name', 'team__uid', 'team__name', 'team__description', 'team__note', 'role', 'note')
 
 class TeamAdminMemberInline(admin.TabularInline):
     model = models.Member
@@ -54,6 +60,7 @@ class TeamAdmin(admin.ModelAdmin):
     list_filter = []
 
     readonly_fields = ('uid',)
+    search_fields = ('uid', 'name', 'description',)
 
     inlines = [TeamAdminMemberInline, TeamAdminInviteInline]
 
@@ -75,4 +82,20 @@ class InviteAdmin(admin.ModelAdmin):
         ('Infos', {'fields': ('uid', 'team', 'note',)}),
         ('Settings', {'fields': (('uses_left', 'uses_used'), 'valid_until')}),
         ('Token', {'fields': ('token',), "classes": ('collapse',)})
+    ]
+
+@admin.register(models.WorkSession)
+class WorkSessionAdmin(admin.ModelAdmin):
+    list_display = ['uid', 'time_start', 'time_end', 'duration', 'is_ended', 'is_created_via_tracking']
+
+    readonly_fields = ('uid', 'duration', )
+
+    autocomplete_fields = ('user', 'member', 'team',)
+
+    fieldsets = [
+        (None, {'fields': ('uid',)}),
+        ('Verbindungen', {'fields': ('user', 'member', 'team')}),
+        ('Zeiten', {'fields': ('time_start', 'time_end', 'duration')}),
+        ('Notizen', {'fields': ('note',)}),
+        ('Status', {'fields': ('is_ended', 'is_created_via_tracking')})
     ]

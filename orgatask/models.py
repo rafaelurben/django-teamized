@@ -2,6 +2,7 @@
 
 import uuid
 import hashlib
+import typing
 
 from django.db import models
 from django.conf import settings
@@ -86,6 +87,15 @@ class User(models.Model):
         """
 
         return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_TEAMS
+
+    def get_active_work_session(self) -> typing.Union["WorkSession", None]:
+        """
+        Get the active work session for this user.
+        """
+
+        if self.work_sessions.filter(is_ended=False, is_created_via_tracking=True).exists():
+            return self.work_sessions.get(is_ended=False, is_created_via_tracking=True)
+        return None
 
 
 class Team(models.Model):
@@ -358,6 +368,79 @@ class Invite(models.Model):
                 self.valid_until = timezone.now() + timezone.timedelta(days=days_valid)
 
         self.note = note
+        self.save()
+
+class WorkSession(models.Model):
+    "Model for logging work sessions"
+
+    uid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    """ [Author's note]
+    Adding user, team and member to the model leads to data redundancy, but it makes
+    it possible to keep the object even after the user or team is deleted or
+    after the user leaves the team the session was created in.
+    """
+    user = models.ForeignKey(
+        to="User",
+        related_name="work_sessions",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    member = models.ForeignKey(
+        to="Member",
+        related_name="work_sessions",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    team = models.ForeignKey(
+        to="Team",
+        related_name="work_sessions",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+
+    time_start = models.DateTimeField(default=timezone.now)
+    time_end = models.DateTimeField(null=True, blank=True, default=None)
+
+    is_created_via_tracking = models.BooleanField(default=False)
+    is_ended = models.BooleanField(default=False)
+
+    note = models.TextField(blank=True, default="")
+
+    @property
+    def duration(self) -> float:
+        "Get the (current) session duration in seconds"
+
+        if self.time_end is None:
+            return (timezone.now() - self.time_start).total_seconds()
+        return (self.time_end - self.time_start).total_seconds()
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _("Sitzung")
+        verbose_name_plural = _("Sitzungen")
+
+    def as_dict(self) -> dict:
+        return {
+            "id": self.uid,
+            "time_start": self.time_start.timestamp(),
+            "time_end": None if self.time_end is None else self.time_end.timestamp(),
+            "is_created_via_tracking": self.is_created_via_tracking,
+            "is_ended": self.is_ended,
+            "duration": self.duration,
+            "note": self.note,
+        }
+
+    def end(self) -> None:
+        "End the work session"
+
+        self.time_end = timezone.now()
+        self.is_ended = True
         self.save()
 
 # class TeamLog(models.Model):
