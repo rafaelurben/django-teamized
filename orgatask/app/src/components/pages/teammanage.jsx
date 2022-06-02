@@ -148,22 +148,12 @@ class TeamInvitesTableRow extends React.Component {
 
   copyToken() {
     navigator.clipboard.writeText(this.props.invite.token);
-    successAlert({
-      alert: {
-        title: "Token kopiert",
-        text: "Der Token wurde in die Zwischenablage kopiert.",
-      },
-    });
+    successAlert("Der Token wurde in die Zwischenablage kopiert.", "Token kopiert");
   }
 
   copyURL() {
     navigator.clipboard.writeText(this.inviteurl);
-    successAlert({
-      alert: {
-        title: "Link kopiert",
-        text: "Der Link wurde in die Zwischenablage kopiert.",
-      },
-    });
+    successAlert("Der Link wurde in die Zwischenablage kopiert.", "Link kopiert");
   }
 
   render() {

@@ -1,3 +1,5 @@
+// Request reactions
+
 export function requestErrorAlert(request) {
     console.debug("Error: " + request.status + " " + request.statusText, request);
     let jsondata;
@@ -24,6 +26,20 @@ export function requestErrorAlert(request) {
         })
     }
 }
+
+export function requestSuccessAlert(data) {
+    Swal.fire({
+        toast: true,
+        icon: "success",
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        ...data.alert
+    })
+}
+
+// Informational alerts
 
 export function errorAlert(title, message, options) {
     Swal.fire({
@@ -55,7 +71,7 @@ export function waitingAlert(text, options) {
     })
 }
 
-export function successAlert(data) {
+export function successAlert(text, title, options) {
     Swal.fire({
         toast: true,
         icon: "success",
@@ -63,9 +79,13 @@ export function successAlert(data) {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
-        ...data.alert
+        title: title || "Aktion erfolgreich!",
+        text: text,
+        ...options
     })
 }
+
+// Interactive alerts
 
 export async function confirmAlert(html, callback, title, options) {
     return await Swal.fire({
