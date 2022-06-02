@@ -11,7 +11,7 @@ def orgatask_prep():
         def wrap(request, *args, **kwargs):
             # Ensure that the user is authenticated.
 
-            if (not request.user.is_authenticated) and (not hasattr(request, 'api_key')):
+            if (not request.user.is_authenticated):
                 return render(request, 'orgatask/404.html', status=404)
 
             # Create a new OrgaTask.User if the current Auth.User doesn't have one.
