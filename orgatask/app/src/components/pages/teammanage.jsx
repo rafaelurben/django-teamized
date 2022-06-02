@@ -273,19 +273,19 @@ export default class Page_TeamManage extends React.Component {
     }
 
     let inforows = [
-      (
-        <tr key="name">
-          <th>Name:</th>
-          <td>{this.props.team.name}</td>
-        </tr>
-      ),
-      (
-        <tr key="description" style={{whiteSpace: "pre"}}>
-          <th>Beschreibung:</th>
-          <td>{this.props.team.description}</td>
-        </tr>
-      )
-    ]
+      <tr key="name">
+        <th>Name:</th>
+        <td>{this.props.team.name}</td>
+      </tr>,
+      <tr key="description" style={{ whiteSpace: "pre" }}>
+        <th>Beschreibung:</th>
+        <td>{this.props.team.description}</td>
+      </tr>,
+      <tr key="id">
+        <th>ID:</th>
+        <td>{this.props.team.id}</td>
+      </tr>,
+    ];
 
     if (this.props.team.member.role === "owner") {
       inforows.push(
