@@ -4,6 +4,7 @@ import * as Cache from "./utils/cache.js";
 import * as Navigation from "./utils/navigation.js";
 import * as Teams from "./utils/teams.js";
 import * as Utils from "./utils/utils.js";
+import * as WorkingTime from "./utils/workingtime.js";
 
 // Make namespaces available in the console (for debugging)
 
@@ -14,6 +15,7 @@ import * as Utils from "./utils/utils.js";
     Navigation,
     Teams,
     Utils,
+    WorkingTime,
   };
 
 // Initialize empty data object
