@@ -51,11 +51,11 @@ class User(models.Model):
         }
 
     @property
-    def avatar_url(self):
+    def avatar_url(self) -> str:
         mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
         return "https://www.gravatar.com/avatar/"+mailhash
 
-    def create_team(self, name, description):
+    def create_team(self, name, description) -> "Team":
         """
         Create a new team and add this user as an owner.
         """
@@ -151,7 +151,7 @@ class Team(models.Model):
 
         return self.members.filter(user=user, role=enums.Roles.OWNER).exists()
 
-    def join(self, user: User, role: str = enums.Roles.MEMBER):
+    def join(self, user: User, role: str = enums.Roles.MEMBER) -> "Member":
         """
         Add a user to the team if they are not already a member
         """
@@ -164,14 +164,14 @@ class Team(models.Model):
             )
         return self.get_member(user)
 
-    def get_member(self, user: User):
+    def get_member(self, user: User) -> "Member":
         """
-        Get the member instance of a user. 
+        Get the member instance of a user.
         """
 
         return self.members.get(user=user)
 
-    def create_invite(self, uses_left: int = 1, note: str = "", days_valid: float = 0.0):
+    def create_invite(self, uses_left: int = 1, note: str = "", days_valid: float = 0.0) -> "Invite":
         """
         Create a new invite. See Invite.update() for more information about the parameters.
         """
@@ -230,13 +230,13 @@ class Member(models.Model):
             "user": self.user.as_dict(),
         }
 
-    def is_admin(self):
+    def is_admin(self) -> bool:
         """
         Checks if the member is an admin
         """
         return self.role in [enums.Roles.ADMIN, enums.Roles.OWNER]
 
-    def is_owner(self):
+    def is_owner(self) -> bool:
         """
         Checks if the member is the owner
         """
@@ -325,7 +325,7 @@ class Invite(models.Model):
                 errorname="invite-invalid")
         return True
 
-    def accept(self, user: User) -> None:
+    def accept(self, user: User) -> "Member":
         "Use the invitation (IMPORTANT: Check validity first via check_validity_for_user()!)"
 
         self.uses_left -= 1
@@ -334,7 +334,7 @@ class Invite(models.Model):
 
         return self.team.join(user)
 
-    def update(self, uses_left: int = None, note: str = None, days_valid: float = None):
+    def update(self, uses_left: int = None, note: str = None, days_valid: float = None) -> None:
         """
         Update the invite
 

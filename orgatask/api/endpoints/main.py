@@ -8,7 +8,7 @@ from orgatask import enums, exceptions
 from orgatask.api.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
-from orgatask.models import Member, Team, Invite
+from orgatask.models import User, Member, Team, Invite
 
 @api_view(["get"])
 @orgatask_prep()
@@ -16,7 +16,7 @@ def endpoint_profile(request):
     """
     Get the user's profile.
     """
-    user = request.orgatask_user
+    user: User = request.orgatask_user
     return JsonResponse({
         "user": user.as_dict(),
     })
@@ -29,7 +29,7 @@ def endpoint_teams(request):
     """
     Endpoint for listing and creating teams.
     """
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "GET":
         full = bool(request.GET.get("full", False))
@@ -87,7 +87,7 @@ def endpoint_team(request, team: Team):
     Endpoint for managing or deleting a team.
     """
 
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "GET":
         if not team.user_is_member(user):
@@ -140,7 +140,7 @@ def endpoint_members(request, team: Team):
     Endpoint for listing members
     """
 
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "GET":
         if not team.user_is_member(user):
@@ -175,7 +175,7 @@ def endpoint_member(request, team: Team, member: Member):
         return OBJ_NOT_FOUND
 
     # Check permissions
-    user = request.orgatask_user
+    user: User = request.orgatask_user
     if not team.user_is_admin(user):
         return NO_PERMISSION
 
@@ -232,7 +232,7 @@ def endpoint_invites(request, team: Team):
     """
 
     # Check permissions
-    user = request.orgatask_user
+    user: User = request.orgatask_user
     if not team.user_is_admin(user):
         return NO_PERMISSION
 
@@ -285,7 +285,7 @@ def endpoint_invite(request, team: Team, invite: Invite):
         return OBJ_NOT_FOUND
 
     # Check permissions
-    user = request.orgatask_user
+    user: User = request.orgatask_user
     if not team.user_is_admin(user):
         return NO_PERMISSION
 
@@ -332,7 +332,7 @@ def endpoint_team_leave(request, team: Team):
     Endpoint for leaving a team.
     """
 
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "POST":
         if not team.user_is_member(user):
@@ -369,7 +369,7 @@ def endpoint_invite_info(request, invite: Invite):
     Endpoint for getting information about an invite.
     """
 
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "GET":
         if invite is None:
@@ -395,7 +395,7 @@ def endpoint_invite_accept(request, invite: Invite):
     Endpoint for accepting an invite.
     """
 
-    user = request.orgatask_user
+    user: User = request.orgatask_user
 
     if request.method == "POST":
         invite.check_validity_for_user(user)

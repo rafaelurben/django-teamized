@@ -44,15 +44,15 @@ class ApiKey(models.Model):
         return f"{self.name} ({perms}; {self.user.username})"
 
     @admin.display(description="Key preview")
-    def key_preview(self):
+    def key_preview(self) -> str:
         """Get the first and last letters of the key"""
         return str(self.key)[:3]+"..."+str(self.key)[-3:]
 
-    def has_perm(self, *args, **kwargs):
+    def has_perm(self, *args, **kwargs) -> bool:
         """Shortcut for self.user.has_perm"""
         return self.user.has_perm(*args, **kwargs)
 
-    def has_perms(self, *args, **kwargs):
+    def has_perms(self, *args, **kwargs) -> bool:
         """Shortcut for self.user.has_perms"""
         return self.user.has_perms(*args, **kwargs)
 
