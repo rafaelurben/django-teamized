@@ -14,17 +14,17 @@ export class Dashboard extends React.Component {
 
     if (this.props.hasOwnProperty("title")) {
       header.push(
-        <h4 key="title" className="dashboard-title mt-3 ms-3 text-bold">{this.props.title}</h4>
+        <h4 key="title" className="dashboard-title mt-3 mx-3 text-bold">{this.props.title}</h4>
       );
     }
     if (this.props.hasOwnProperty("subtitle")) {
       header.push(
-        <h5 key="subtitle" className="dashboard-subtitle mt-2 ms-3">{this.props.subtitle}</h5>
+        <h5 key="subtitle" className="dashboard-subtitle mt-2 mx-3">{this.props.subtitle}</h5>
       )
     }
     if (this.props.hasOwnProperty("text")) {
       header.push(
-        <p key="text" className="dashboard-text mt-2 ms-3">
+        <p key="text" className="dashboard-text mt-2 mx-3">
           {this.props.text}
         </p>
       );
