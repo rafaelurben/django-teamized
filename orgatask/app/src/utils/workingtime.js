@@ -18,6 +18,11 @@ export async function getTrackingSession() {
             window.orgatask.current_worksession = data.session;
             return data.session;
         }
+    ).catch(
+        (error) => {
+            window.orgatask.current_worksession = null;
+            return null;
+        }
     );
 }
 
@@ -26,7 +31,7 @@ export async function stopTrackingSession() {
     return await API.POST("me/worksessions/tracking/stop").then(
         (data) => {
             successAlert("Die Zeitmessung wurde gestoppt", "Tracking gestoppt");
-            window.orgatask.current_worksession = undefined;
+            window.orgatask.current_worksession = null;
             return data.session;
         }
     );

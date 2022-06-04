@@ -8,7 +8,7 @@ import * as WorkingTime from "./utils/workingtime.js";
 
 // Make namespaces available in the console (for debugging)
 
-  window._OrgaTask = {
+window._OrgaTask = {
     Alerts,
     API,
     Cache,
@@ -16,42 +16,47 @@ import * as WorkingTime from "./utils/workingtime.js";
     Teams,
     Utils,
     WorkingTime,
-  };
+};
 
-// Initialize empty data object
+// Initialize
 
-function initialize() {
-
-  window.orgatask = {
-    currentPage: "home",
-    defaultTeamId: null,
-    selectedTeamId: null,
-    teamcache: {},
-    user: {
-      id: null,
-      username: "loading...",
-      email: "loading...",
-    },
-  };
+function initialize_data_object() {
+    window.orgatask = {
+        currentPage: "home",
+        defaultTeamId: null,
+        selectedTeamId: null,
+        teamcache: {},
+        user: {
+            id: null,
+            username: "loading...",
+            email: "loading...",
+        },
+    };
 }
 
-initialize();
+initialize_data_object();
 
-// Perform tasks after page load
+async function initialize() {
+    initialize_data_object();
 
-$("document").ready(async function () {
-  Navigation.hideSidebarOnMobile();
-  Navigation.renderMenubar();
-  Navigation.importFromURL();
-  window.orgatask.user = await Teams.getProfile();
-  Navigation.renderSidebar();
-  await Teams.loadTeams(true); // Load teams from API and build cache
-  Navigation.exportToURL();
-  Navigation.renderPage();
-  Teams.checkURLInvite();
-});
+    Navigation.hideSidebarOnMobile();
+    Navigation.renderMenubar();
+    Navigation.importFromURL();
+    window.orgatask.user = await Teams.getProfile();
+    Navigation.renderSidebar();
+    await Teams.loadTeams(true); // Load teams from API and build cache
+    Navigation.exportToURL();
+    Navigation.renderPage();
 
-// Add event listener for page navigation
+    Teams.checkURLInvite();
+    WorkingTime.getTrackingSession();
+}
 
+// Add event listeners
+
+// Listen for page load -> initialize
+$("document").ready(initialize);
+// Listen for navigation in the history (browser back/forward)
 $(window).bind("popstate", Navigation.handleHistoryNavigation);
+// Listen for click on the sidebar toggler
 $("#menubartitle").click(Navigation.toggleSidebar);
