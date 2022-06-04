@@ -8,6 +8,7 @@ const pageList = [
     "home",
     "teamlist",
     "teammanage",
+    "workingtime",
 ]
 
 function ensureExistingPage() {

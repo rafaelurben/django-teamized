@@ -60,6 +60,16 @@ export class DashboardColumn extends React.Component {
   }
 }
 
+export class DashboardRow extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <div className="dashboard-row row">{this.props.children}</div>;
+  }
+}
+
 export class DashboardTile extends React.Component {
   constructor(props) {
     super(props);

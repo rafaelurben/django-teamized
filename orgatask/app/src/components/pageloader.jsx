@@ -3,6 +3,7 @@
 import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
 import Page_TeamManage from "./pages/teammanage.js";
+import Page_WorkingTime from "./pages/workingtime.js";
 
 import * as Teams from "../utils/teams.js";
 
@@ -31,12 +32,17 @@ export default class PageLoader extends React.Component {
           />
         );
       case "teammanage":
-        let teamdata = window.orgatask.teamcache[window.orgatask.selectedTeamId];
+        let teamdata = Teams.getCurentTeamData();
         return (
           <Page_TeamManage
             team={teamdata.team}
             members={teamdata.members}
             invites={teamdata.invites}
+          />
+        );
+      case "workingtime":
+        return (
+          <Page_WorkingTime
           />
         );
     }

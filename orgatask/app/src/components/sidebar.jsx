@@ -81,8 +81,8 @@ export default class AppSidebar extends React.Component {
           <li>
             <a
               href="#"
-              className={this.getLinkClass("worktime")+" text-decoration-line-through"} // TODO: Implement
-              onClick={this.selectPage("worktime")}
+              className={this.getLinkClass("workingtime")}
+              onClick={this.selectPage("workingtime")}
             >
               <i className="fas fa-fw fa-business-time" />
               Arbeitszeit
