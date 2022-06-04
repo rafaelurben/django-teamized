@@ -10,30 +10,32 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    let content = [];
+    let header = [];
 
     if (this.props.hasOwnProperty("title")) {
-      content.push(
+      header.push(
         <h4 key="title" className="dashboard-title mt-3 ms-3 text-bold">{this.props.title}</h4>
       );
     }
     if (this.props.hasOwnProperty("subtitle")) {
-      content.push(
+      header.push(
         <h5 key="subtitle" className="dashboard-subtitle mt-2 ms-3">{this.props.subtitle}</h5>
       )
     }
     if (this.props.hasOwnProperty("text")) {
-      content.push(
+      header.push(
         <p key="text" className="dashboard-text mt-2 ms-3">
           {this.props.text}
         </p>
       );
     }
-    content.push(this.props.children)
 
     return (
       <div className="dashboard container-fluid p-0">
-        {content}
+        {header}
+        <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">
+            {this.props.children}
+        </div>
       </div>
     );
   }
@@ -60,16 +62,6 @@ export class DashboardColumn extends React.Component {
   }
 }
 
-export class DashboardRow extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <div className="dashboard-row row">{this.props.children}</div>;
-  }
-}
-
 export class DashboardTile extends React.Component {
   constructor(props) {
     super(props);
@@ -92,7 +84,7 @@ export class DashboardTile extends React.Component {
     }
 
     return (
-      <div className="dashboard-tile row border border-dark rounded rounded-5 m-3">
+      <div className="dashboard-tile row border border-dark rounded rounded-5 mx-2 mb-3 mt-0">
         {header}
         <div className="p-2 w-100 overflow-scroll">
           {this.props.children}

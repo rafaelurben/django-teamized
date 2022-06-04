@@ -18,14 +18,12 @@ export default class Page_WorkingTime extends React.Component {
         title="Deine Arbeitszeit"
         subtitle="Erfasse und verwalte deine Arbeitszeit"
       >
-        <Dashboard.DashboardRow>
-          <Dashboard.DashboardColumn size="3">
-            <Dashboard.DashboardTile title="Erfassen"></Dashboard.DashboardTile>
-          </Dashboard.DashboardColumn>
-          <Dashboard.DashboardColumn size="9">
-            <Dashboard.DashboardTile title="Erfasste Zeiten"></Dashboard.DashboardTile>
-          </Dashboard.DashboardColumn>
-        </Dashboard.DashboardRow>
+        <Dashboard.DashboardColumn size="3">
+        <Dashboard.DashboardTile title="Erfassen"></Dashboard.DashboardTile>
+        </Dashboard.DashboardColumn>
+        <Dashboard.DashboardColumn size="9">
+        <Dashboard.DashboardTile title="Erfasste Zeiten"></Dashboard.DashboardTile>
+        </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
     );
   }
