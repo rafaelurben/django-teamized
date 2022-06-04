@@ -9,47 +9,95 @@ import * as WorkingTime from "./utils/workingtime.js";
 // Make namespaces available in the console (for debugging)
 
 window._OrgaTask = {
-    Alerts,
-    API,
-    Cache,
-    Navigation,
-    Teams,
-    Utils,
-    WorkingTime,
+  Alerts,
+  API,
+  Cache,
+  Navigation,
+  Teams,
+  Utils,
+  WorkingTime,
 };
 
 // Initialize
 
-function initialize_data_object() {
-    window.orgatask = {
-        currentPage: "home",
-        defaultTeamId: null,
-        selectedTeamId: null,
-        teamcache: {},
-        user: {
-            id: null,
-            username: "loading...",
-            email: "loading...",
-        },
-    };
+let loadinprogress = true;
+
+window.orgatask = {
+  currentPage: "home",
+  defaultTeamId: null,
+  selectedTeamId: null,
+  teamcache: {},
+  user: {
+    id: null,
+    username: "loading...",
+    email: "loading...",
+  },
+};
+
+function startLoading() {
+  loadinprogress = true;
+  $("#refreshbutton>a>i").addClass("fa-spin");
 }
 
-initialize_data_object();
+function endLoading() {
+  loadinprogress = false;
+  $("#refreshbutton>a>i").removeClass("fa-spin");
+}
 
 async function initialize() {
-    initialize_data_object();
+  startLoading();
 
-    Navigation.hideSidebarOnMobile();
-    Navigation.renderMenubar();
-    Navigation.importFromURL();
-    window.orgatask.user = await Teams.getProfile();
-    Navigation.renderSidebar();
-    await Teams.loadTeams(true); // Load teams from API and build cache
-    Navigation.exportToURL();
-    Navigation.renderPage();
+  Navigation.hideSidebarOnMobile();
+  Navigation.importFromURL();
+  Navigation.renderMenubar();
+  window.orgatask.user = await Teams.getProfile();
+  Navigation.renderSidebar();
+  await Teams.loadTeams(true); // Load teams from API and build cache
+  Navigation.exportToURL();
+  Navigation.renderPage();
+  
+  Teams.checkURLInvite();
+  WorkingTime.getTrackingSession();
 
-    Teams.checkURLInvite();
-    WorkingTime.getTrackingSession();
+  endLoading();
+}
+
+async function reinitialize() {
+  startLoading();
+
+  window.orgatask = {
+    ...window.orgatask,
+    defaultTeamId: null,
+    selectedTeamId: null,
+    teamcache: {},
+  };
+  Navigation.renderMenubar();
+  await Teams.loadTeams(true); // Load teams from API and build cache
+  Navigation.exportToURL();
+  Navigation.renderPage();
+  WorkingTime.getTrackingSession();
+
+  endLoading();
+}
+
+// Reload
+
+async function refresh() {
+  if (!loadinprogress) {
+    await reinitialize();
+  }
+}
+
+function f5pressed(e) {
+  if (e.keyCode == 116) {
+    if (e.shiftKey) {
+      e.preventDefault();
+      window.location.reload(true);
+    } else if (!e.ctrlKey) {
+      e.preventDefault();
+      refresh();
+    }
+  }
 }
 
 // Add event listeners
@@ -60,3 +108,7 @@ $("document").ready(initialize);
 $(window).bind("popstate", Navigation.handleHistoryNavigation);
 // Listen for click on the sidebar toggler
 $("#menubartitle").click(Navigation.toggleSidebar);
+// Listen for click on the refresh button
+$("#refreshbutton").click(refresh);
+// Listen for F5 keypress
+$(document).keydown(f5pressed);
