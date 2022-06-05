@@ -1,5 +1,7 @@
 import { successAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
+import * as Navigation from "./navigation.js";
+
 
 export async function startTrackingSession(teamId) {
     waitingAlert("Wird gestartet...");
@@ -16,6 +18,7 @@ export async function getTrackingSession() {
     return await API.GET("me/worksessions/tracking/live", {}, "no-error-handling").then(
         (data) => {
             window.orgatask.current_worksession = data.session;
+            Navigation.renderPage();
             return data.session;
         }
     ).catch(

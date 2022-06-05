@@ -43,6 +43,8 @@ export default class PageLoader extends React.Component {
       case "workingtime":
         return (
           <Page_WorkingTime
+            current_worksession={window.orgatask.current_worksession}
+            selectedTeamId={window.orgatask.selectedTeamId}
           />
         );
     }
