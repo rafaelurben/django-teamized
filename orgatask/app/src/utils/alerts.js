@@ -3,6 +3,7 @@
 export function requestErrorAlert(request) {
     console.debug("Error: " + request.status + " " + request.statusText, request);
     let jsondata;
+    let alertdata;
 
     if (request.hasOwnProperty("responseJSON")) {
         jsondata = request.responseJSON;
@@ -14,17 +15,19 @@ export function requestErrorAlert(request) {
     }
 
     if (jsondata.alert) {
-        Swal.fire({
+        alertdata = {
             icon: 'error',
             ...jsondata.alert
-        })
+        }
     } else {
-        Swal.fire({
+        alertdata = {
             title: `Uupsie!`,
             html: `Es ist ein Fehler aufgetreten:<br><br>${jsondata.message}<br>(error ${jsondata.error})`,
             icon: 'error',
-        })
+        }
     }
+    Swal.fire(alertdata);
+    // TODO: [BUG] This can show [object Object] instead of the error message - why though?
 }
 
 export function requestSuccessAlert(data) {
