@@ -49,12 +49,18 @@ export default class Page_WorkingTime extends React.Component {
 
     this.state = { timeDisplay: this.getTimeDisplay() };
     this.clockRefreshIntervalID = 0;
+
+    this.fetch_in_progress = false;
   }
 
   fetchSessions() {
-    WorkingTime.getWorkSessionsInTeam(this.props.selectedTeamId).then(() => {
-      Navigation.renderPage();
-    })
+    if (!this.fetch_in_progress) {
+      this.fetch_in_progress = true;
+      WorkingTime.getWorkSessionsInTeam(this.props.selectedTeamId).then(() => {
+        Navigation.renderPage();
+        this.fetch_in_progress = false;
+      })
+    }
   }
 
   startSession() {
@@ -82,9 +88,6 @@ export default class Page_WorkingTime extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.worksessions === undefined) {
-      this.fetchSessions();
-    }
     this.clockRefreshIntervalID = setInterval(() => this.tick(), 1000);
   }
 
@@ -100,6 +103,7 @@ export default class Page_WorkingTime extends React.Component {
     let rows;
     if (this.props.worksessions === undefined) {
       rows = <tr><td colSpan="3">Wird geladen...</td></tr>;
+      this.fetchSessions();
     } else if (this.props.worksessions.length === 0) {
       rows = <tr><td colSpan="3">Noch keine Zeiten erfasst.</td></tr>;
     } else {

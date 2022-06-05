@@ -26,7 +26,7 @@ def endpoint_list_in_team(request, team: Team):
     member = team.get_member(user)
 
     # Get all sessions of the user in the team
-    sessions = member.work_sessions.order_by('-time_start').all()
+    sessions = member.work_sessions.filter(is_ended=True).order_by('-time_start').all()
     return JsonResponse({
         "sessions": [session.as_dict() for session in sessions],
     })
