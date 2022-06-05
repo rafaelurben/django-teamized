@@ -51,6 +51,8 @@ export default class Page_WorkingTime extends React.Component {
     this.clockRefreshIntervalID = 0;
 
     this.fetch_in_progress = false;
+    this.start_in_progress = false;
+    this.stop_in_progress = false;
   }
 
   fetchSessions() {
@@ -63,16 +65,24 @@ export default class Page_WorkingTime extends React.Component {
     }
   }
 
-  startSession() {
-    WorkingTime.startTrackingSession(this.props.selectedTeamId).then(() => {
-      Navigation.renderPage();
-    }).catch(errorAlert);
+  async startSession() {
+    if (!this.start_in_progress) {
+      this.start_in_progress = true;
+      await WorkingTime.startTrackingSession(this.props.selectedTeamId).then(() => {
+        Navigation.renderPage();
+      }).catch(errorAlert);
+      this.start_in_progress = false;
+    }
   }
 
-  stopSession() {
-    WorkingTime.stopTrackingSession().then(() => {
-      Navigation.renderPage();
-    }).catch(errorAlert);
+  async stopSession() {
+    if (!this.stop_in_progress) {
+      this.stop_in_progress = true;
+      await WorkingTime.stopTrackingSession().then(() => {
+        Navigation.renderPage();
+      }).catch(errorAlert);
+      this.stop_in_progress = false;
+    }
   }
 
   getTimeDisplay() {
