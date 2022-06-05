@@ -12,6 +12,18 @@ export function getTeamsList() {
     return teams;
 }
 
+export function getMeInTeam(teamId) {
+    return window.orgatask.teamcache[teamId].team.member;
+}
+
+export function getMeInCurrentTeam() {
+    return getMeInTeam(window.orgatask.selectedTeamId);
+}
+
+export function getMemberInTeam(teamId, memberId) {
+    return window.orgatask.teamcache[teamId].members[memberId];
+}
+
 // Add and remove teams from cache
 
 function updateTeam(team) {

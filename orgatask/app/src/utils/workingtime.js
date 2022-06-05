@@ -1,11 +1,22 @@
 import { successAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
+import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
 
 
+export async function getWorkSessionsInTeam(teamId) {
+    return await API.GET(`me/worksessions/t=${teamId}`).then(
+        (data) => {
+            let me = Cache.getMeInTeam(teamId);
+            me.worksessions = data.sessions;
+            return data.sessions;
+        }
+    );
+}
+
 export async function startTrackingSession(teamId) {
     waitingAlert("Wird gestartet...");
-    return await API.POST(`teams/${teamId}/worksessions/tracking/start`).then(
+    return await API.POST(`me/worksessions/tracking/start/t=${teamId}`).then(
         (data) => {
             successAlert("Die Zeitmessung wurde gestartet", "Tracking gestartet");
             window.orgatask.current_worksession = data.session;
@@ -35,6 +46,9 @@ export async function stopTrackingSession() {
         (data) => {
             successAlert("Die Zeitmessung wurde gestoppt", "Tracking gestoppt");
             window.orgatask.current_worksession = null;
+            let me = Cache.getMeInCurrentTeam();
+            me.worksessions = me.worksessions || [];
+            me.worksessions.push(data.session);
             return data.session;
         }
     );

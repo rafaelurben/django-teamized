@@ -2,7 +2,6 @@
 
 import { padZero } from "../../utils/utils.js";
 import { errorAlert } from "../../utils/alerts.js";
-import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Dashboard from "../dashboard.js";
@@ -13,10 +12,17 @@ export default class Page_WorkingTime extends React.Component {
     this.getTimeDisplay = this.getTimeDisplay.bind(this);
     this.startSession = this.startSession.bind(this);
     this.stopSession = this.stopSession.bind(this);
+    this.fetchSessions = this.fetchSessions.bind(this);
     this.tick = this.tick.bind(this);
 
     this.state = { timeDisplay: this.getTimeDisplay() };
     this.clockRefreshIntervalID = 0;
+  }
+
+  fetchSessions() {
+    WorkingTime.getWorkSessionsInTeam(this.props.selectedTeamId).then(() => {
+      Navigation.renderPage();
+    })
   }
 
   startSession() {
@@ -48,6 +54,9 @@ export default class Page_WorkingTime extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.worksessions === undefined) {
+      this.fetchSessions();
+    }
     this.clockRefreshIntervalID = setInterval(() => this.tick(), 1000);
   }
 

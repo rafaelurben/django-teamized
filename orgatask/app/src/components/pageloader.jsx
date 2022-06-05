@@ -6,6 +6,7 @@ import Page_TeamManage from "./pages/teammanage.js";
 import Page_WorkingTime from "./pages/workingtime.js";
 
 import * as Teams from "../utils/teams.js";
+import * as Cache from "../utils/cache.js";
 
 /*
     This component is used to render the pages.
@@ -44,6 +45,7 @@ export default class PageLoader extends React.Component {
         return (
           <Page_WorkingTime
             current_worksession={window.orgatask.current_worksession}
+            worksessions={Cache.getMeInCurrentTeam().worksessions}
             selectedTeamId={window.orgatask.selectedTeamId}
           />
         );
