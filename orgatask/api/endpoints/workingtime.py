@@ -10,6 +10,27 @@ from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
 from orgatask.models import User, Member, Team, WorkSession
 
+@api_view(["get"])
+@orgatask_prep()
+@require_objects([("team", Team, "team")])
+def endpoint_list_in_team(request, team: Team):
+    """
+    Endpoint for listing all sessions of the current user in a team.
+    """
+
+    # Check if the user is a member of the team
+    user: User = request.orgatask_user
+    if not team.user_is_member(user):
+        return NO_PERMISSION
+
+    member = team.get_member(user)
+
+    # Get all sessions of the user in the team
+    sessions = member.work_sessions.order_by('-time_start').all()
+    return JsonResponse({
+        "sessions": [session.as_dict() for session in sessions],
+    })
+
 @api_view(["post"])
 @csrf_exempt
 @orgatask_prep()
@@ -42,27 +63,6 @@ def endpoint_tracking_start(request, team: Team):
     return JsonResponse({
         "success": True,
         "session": new_session.as_dict(),
-    })
-
-@api_view(["get"])
-@orgatask_prep()
-@require_objects([("team", Team, "team")])
-def endpoint_list_in_team(request, team: Team):
-    """
-    Endpoint for listing all sessions of the current user in a team.
-    """
-
-    # Check if the user is a member of the team
-    user: User = request.orgatask_user
-    if not team.user_is_member(user):
-        return NO_PERMISSION
-
-    member = team.get_member(user)
-
-    # Get all sessions of the user in the team
-    sessions = member.work_sessions.all()
-    return JsonResponse({
-        "sessions": [session.as_dict() for session in sessions],
     })
 
 @api_view(["get"])

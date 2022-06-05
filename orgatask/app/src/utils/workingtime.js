@@ -48,7 +48,7 @@ export async function stopTrackingSession() {
             window.orgatask.current_worksession = null;
             let me = Cache.getMeInCurrentTeam();
             me.worksessions = me.worksessions || [];
-            me.worksessions.push(data.session);
+            me.worksessions.unshift(data.session);
             return data.session;
         }
     );
