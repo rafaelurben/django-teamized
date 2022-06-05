@@ -13,7 +13,7 @@ export default class Page_Home extends React.Component {
         title={`Hallo ${this.props.user.first_name}`}
         subtitle="Verwende die Menu- und Seitenleiste, um zu navigieren."
       >
-        <Dashboard.DashboardColumn size="12">
+        <Dashboard.DashboardColumn>
           
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>

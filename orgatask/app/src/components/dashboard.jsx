@@ -45,9 +45,10 @@ export class DashboardColumn extends React.Component {
   constructor(props) {
     super(props);
 
+    let size = props.size || 12;
     let sizes = props.sizes || {};
 
-    this.colClass = `dashboard-column col-${props.size}`;
+    this.colClass = `dashboard-column col-${size}`;
     for (let breakpoint of Object.keys(sizes)) {
       this.colClass += ` col-${breakpoint}-${sizes[breakpoint]}`;
     }

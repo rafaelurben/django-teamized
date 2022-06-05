@@ -304,7 +304,7 @@ export default class Page_TeamManage extends React.Component {
         title="Dein Team"
         subtitle="Infos über dein ausgewähltes Team."
       >
-        <Dashboard.DashboardColumn size="12">
+        <Dashboard.DashboardColumn>
           <Dashboard.DashboardTile title="Teaminfos">
             <table className="table table-borderless mb-0">
               <tbody>{inforows}</tbody>

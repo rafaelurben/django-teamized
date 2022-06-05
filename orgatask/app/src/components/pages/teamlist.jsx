@@ -136,7 +136,7 @@ export default class Page_TeamList extends React.Component {
 
     return (
       <Dashboard.Dashboard title="Deine Teams" subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei.">
-        <Dashboard.DashboardColumn size="12">
+        <Dashboard.DashboardColumn>
           <Dashboard.DashboardTile title="Teamübersicht">
             <table className="table table-borderless align-middle mb-0">
               <thead>
