@@ -1,10 +1,42 @@
 "use strict";
 
-import { padZero } from "../../utils/utils.js";
+import { ms2HoursMinutesSeconds, seconds2HoursMinutesSeconds } from "../../utils/utils.js";
 import { errorAlert } from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Dashboard from "../dashboard.js";
+
+class WorkSessionTableRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.getDurationDisplay = this.getDurationDisplay.bind(this);
+  }
+
+  getDurationDisplay() {
+    let data = seconds2HoursMinutesSeconds(this.props.session.duration);
+    return `${data.hours}h ${data.minutes}min ${data.seconds}s`;
+  }
+
+  render() {
+    return (
+      <tr>
+        <td>
+          <span>
+            {new Date(this.props.session.time_start*1000).toLocaleString()}
+          </span>
+        </td>
+        <td>
+          <span>
+            {new Date(this.props.session.time_end*1000).toLocaleString()}
+          </span>
+        </td>
+        <td>
+          <span>{this.getDurationDisplay()}</span>
+        </td>
+      </tr>
+    );
+  }
+}
 
 export default class Page_WorkingTime extends React.Component {
   constructor(props) {
@@ -42,11 +74,7 @@ export default class Page_WorkingTime extends React.Component {
       const now = new Date();
       const start = new Date(this.props.current_worksession.time_start * 1000);
       const timediff = now - start;
-      const diff = {
-        hours: padZero(Math.floor(timediff / 1000 / 60 / 60), 2),
-        minutes: padZero(Math.floor(timediff / 1000 / 60) % 60, 2),
-        seconds: padZero(Math.floor(timediff / 1000) % 60, 2),
-      };
+      const diff = ms2HoursMinutesSeconds(timediff);
       return `${diff.hours}:${diff.minutes}:${diff.seconds}`;
     } else {
       return "00:00:00";
@@ -69,6 +97,19 @@ export default class Page_WorkingTime extends React.Component {
   }
 
   render() {
+    let rows;
+    if (this.props.worksessions === undefined) {
+      rows = <tr><td colSpan="3">Wird geladen...</td></tr>;
+    } else if (this.props.worksessions.length === 0) {
+      rows = <tr><td colSpan="3">Noch keine Zeiten erfasst.</td></tr>;
+    } else {
+      rows = this.props.worksessions.map((session) => {
+        return (
+          <WorkSessionTableRow session={session} key={session.id} />
+        );
+      });
+    }
+
     return (
       <Dashboard.Dashboard
         title="Deine Arbeitszeit"
@@ -94,7 +135,18 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{lg: 9}}>
-          <Dashboard.DashboardTile title="Erfasste Zeiten"></Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Erfasste Zeiten">
+            <table className="table table-borderless align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Start</th>
+                  <th>Ende</th>
+                  <th>Dauer</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </table>
+          </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
     );

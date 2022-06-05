@@ -7,3 +7,15 @@ export function validateUUID(uuid) {
 export function padZero(num, len) {
     return String(num).padStart(len, "0");
 }
+
+export function ms2HoursMinutesSeconds(ms) {
+    return {
+        hours: padZero(Math.floor(ms / 1000 / 60 / 60), 2),
+        minutes: padZero(Math.floor(ms / 1000 / 60) % 60, 2),
+        seconds: padZero(Math.floor(ms / 1000) % 60, 2),
+    }
+}
+
+export function seconds2HoursMinutesSeconds(seconds) {
+    return ms2HoursMinutesSeconds(seconds * 1000);
+}
