@@ -99,3 +99,28 @@ class WorkSessionAdmin(admin.ModelAdmin):
         ('Notizen', {'fields': ('note',)}),
         ('Status', {'fields': ('is_ended', 'is_created_via_tracking')})
     ]
+
+# Calendar
+
+class CalendarAdminEventInline(admin.TabularInline):
+    model = models.CalendarEvent
+    extra = 0
+    verbose_name = _("Ereignis")
+    verbose_name_plural = _("Ereignisse")
+
+@admin.register(models.Calendar)
+class CalendarAdmin(admin.ModelAdmin):
+    list_display = ['uid', 'name', 'description', 'is_public', 'ics_uid']
+
+    readonly_fields = ['uid']
+
+    autocomplete_fields = ['team',]
+
+    inlines = [CalendarAdminEventInline]
+
+    fieldsets = [
+        (None, {'fields': ('uid',)}),
+        ('Verbindungen', {'fields': ('team',)}),
+        ('Infos', {'fields': ('name', 'description',)}),
+        ('Veröffentlichung', {'fields': ('is_public', 'ics_uid',), 'classes': ('collapse',)}),
+    ]

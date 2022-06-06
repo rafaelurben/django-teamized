@@ -7,10 +7,11 @@ import typing
 from django.db import models
 from django.conf import settings
 from django.contrib import admin
+from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
-from orgatask import enums, options, exceptions
+from orgatask import enums, options, exceptions, utils
 
 # Create your models here.
 
@@ -484,3 +485,149 @@ class WorkSession(models.Model):
 #     class Meta:
 #         verbose_name = _("Log")
 #         verbose_name_plural = _("Logs")
+
+class Calendar(models.Model):
+    """
+    Calendar model
+    """
+
+    uid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    team = models.ForeignKey(
+        to="Team",
+        related_name="calendars",
+        on_delete=models.CASCADE,
+    )
+
+    # START calendar properties
+
+    name = models.CharField(
+        max_length=50,
+    )
+
+    description = models.TextField(
+        default="",
+        blank=True,
+    )
+
+    # END calendar properties
+    # START calendar publishing
+
+    ics_uid = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+    )
+    is_public = models.BooleanField(
+        default=True,
+    )
+
+    # END calendar publishing
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _("Kalender")
+        verbose_name_plural = _("Kalender")
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.uid})"
+
+    def as_dict(self) -> dict:
+        ...
+
+    def as_ics_text(self) -> str:
+        eventlines = []
+        for event in self.events.all():
+            eventlines += event.as_ics_lines()
+
+        calendarlines = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//Rafael Urben//OrgaTask Calendar//EN",
+            "CALSCALE:GREGORIAN",
+            "METHOD:PUBLISH",
+            "X-WR-CALNAME:" + utils.ical_text(self.name),
+            "X-WR-CALDESC:" + utils.ical_text(self.description),
+            "X-WR-TIMEZONE:Europe/Zurich",
+            *eventlines,
+            "END:VCALENDAR",
+        ]
+        return '\r\n'.join(calendarlines)
+
+    def as_ics_response(self) -> HttpResponse:
+        """Get the calendar as an ics file response"""
+        response = HttpResponse(self.as_ics_text(), content_type="text/calendar")
+        response["Content-Disposition"] = "attachment; filename=calendar.ics"
+        return response
+
+
+class CalendarEvent(models.Model):
+    uid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    calendar = models.ForeignKey(
+        to="Calendar",
+        related_name="events",
+        on_delete=models.CASCADE,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # START event properties
+
+    name = models.CharField(
+        max_length=50,
+    )
+
+    description = models.TextField(
+        default="",
+        blank=True,
+    )
+
+    dtstart = models.DateTimeField(null=True, blank=True, default=None)
+    dtend = models.DateTimeField(null=True, blank=True, default=None)
+    dstart = models.DateField(null=True, blank=True, default=None)
+    dend = models.DateField(null=True, blank=True, default=None)
+    fullday = models.BooleanField(default=False)
+
+    # END event properties
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _("Ereignis")
+        verbose_name_plural = _("Ereignisse")
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.uid})"
+
+    def as_dict(self) -> dict:
+        ...
+
+    def as_ics_lines(self) -> list:
+        if self.fullday:
+            start = "DTSTART;VALUE=DATE:" + utils.ical_date(self.dstart)
+            end = "DTEND;VALUE=DATE:" + utils.ical_date(self.dend+utils.timedelta(days=1))
+        else:
+            start = "DTSTART:" + utils.ical_datetime(self.dtstart)
+            end = "DTEND:" + utils.ical_datetime(self.dtend)
+
+        return [
+            "BEGIN:VEVENT",
+            "UID:" + str(self.uid),
+            "DTSTAMP:" + utils.ical_datetime(utils.datetime.now()),
+            "SUMMARY:" + utils.ical_text(self.name),
+            "DESCRIPTION:" + utils.ical_text(self.description),
+            start,
+            end,
+            "UPDATED:" + utils.ical_datetime(self.updated_at),
+            "END:VEVENT",
+        ]

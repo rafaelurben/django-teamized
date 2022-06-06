@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from orgatask.decorators import orgatask_prep
+from orgatask.models import Calendar
 
 # General views
 
@@ -28,6 +29,18 @@ def manifest(request):
     response['Content-Type'] = 'text/json'
     response["Service-Worker-Allowed"] = reverse('orgatask:home')
     return response
+
+# Public URLs
+
+def calendar_ics(request, uuid):
+    "Get the .ics file for a public calendar"
+
+    try:
+        calendar: Calendar = Calendar.objects.get(ics_uid=uuid, is_public=True)
+    except Calendar.DoesNotExist:
+        return render(request, 'orgatask/404.html', status=404)
+
+    return calendar.as_ics_response()
 
 # Error views
 

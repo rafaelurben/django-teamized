@@ -10,8 +10,8 @@ app_name = 'orgatask'
 
 urlpatterns = [
     # generic views
-    path('', 
-         views.home, 
+    path('',
+         views.home,
          name="home"),
     path('app/',
          views.app,
@@ -22,6 +22,12 @@ urlpatterns = [
 
     path('api/',
          include('orgatask.api.urls')),
+
+    # public URLs
+
+    path('calendar/<uuid:uuid>.ics',
+         views.calendar_ics,
+         name="calendar_ics"),
 
     # 404 error page
     path('*', views.notfound),
