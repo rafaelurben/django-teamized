@@ -10,6 +10,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from django.urls import reverse
 
 from orgatask import enums, options, exceptions, utils
 
@@ -514,6 +515,8 @@ class Calendar(models.Model):
         blank=True,
     )
 
+    color = models.CharField(max_length=20, blank=True, default="#000000")
+
     # END calendar properties
     # START calendar publishing
 
@@ -539,7 +542,12 @@ class Calendar(models.Model):
     def as_dict(self) -> dict:
         ...
 
-    def as_ics_text(self) -> str:
+    def as_ics_text(self, request=None) -> str:
+        morelines = []
+        if request is not None:
+            morelines.append("URL:"+self.get_online_url(request)+f"?p=calendar&t={self.team_id}")
+            morelines.append("SOURCE;VALUE=URI:"+self.get_ics_url(request))
+
         eventlines = []
         for event in self.events.all():
             eventlines += event.as_ics_lines()
@@ -550,19 +558,33 @@ class Calendar(models.Model):
             "PRODID:-//Rafael Urben//OrgaTask Calendar//EN",
             "CALSCALE:GREGORIAN",
             "METHOD:PUBLISH",
+            "UID:" + str(self.ics_uid),
+            "NAME:" + utils.ical_text(self.name),
             "X-WR-CALNAME:" + utils.ical_text(self.name),
+            "DESCRIPTION:" + utils.ical_text(self.description),
             "X-WR-CALDESC:" + utils.ical_text(self.description),
+            "COLOR:" + utils.ical_text(self.color),
+            "X-APPLE-CALENDAR-COLOR:" + utils.ical_text(self.color),
             "X-WR-TIMEZONE:Europe/Zurich",
+            *morelines,
             *eventlines,
             "END:VCALENDAR",
         ]
         return '\r\n'.join(calendarlines)
 
-    def as_ics_response(self) -> HttpResponse:
+    def as_ics_response(self, request=None) -> HttpResponse:
         """Get the calendar as an ics file response"""
-        response = HttpResponse(self.as_ics_text(), content_type="text/calendar")
+        response = HttpResponse(self.as_ics_text(request), content_type="text/calendar")
         response["Content-Disposition"] = "attachment; filename=calendar.ics"
         return response
+
+    def get_online_url(self, request):
+        _appurl_r = reverse("orgatask:app")
+        return request.build_absolute_uri(_appurl_r)
+
+    def get_ics_url(self, request):
+        _icsurl_r = reverse("orgatask:calendar_ics", args=[self.ics_uid])
+        return request.build_absolute_uri(_icsurl_r)
 
 
 class CalendarEvent(models.Model):
@@ -598,6 +620,8 @@ class CalendarEvent(models.Model):
     dend = models.DateField(null=True, blank=True, default=None)
     fullday = models.BooleanField(default=False)
 
+    location = models.CharField(max_length=250, blank=True, default="")
+
     # END event properties
 
     objects = models.Manager()
@@ -626,6 +650,7 @@ class CalendarEvent(models.Model):
             "DTSTAMP:" + utils.ical_datetime(utils.datetime.now()),
             "SUMMARY:" + utils.ical_text(self.name),
             "DESCRIPTION:" + utils.ical_text(self.description),
+            "LOCATION:" + utils.ical_text(self.location),
             start,
             end,
             "UPDATED:" + utils.ical_datetime(self.updated_at),

@@ -121,6 +121,6 @@ class CalendarAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ('uid',)}),
         ('Verbindungen', {'fields': ('team',)}),
-        ('Infos', {'fields': ('name', 'description',)}),
+        ('Infos', {'fields': ('name', 'description', 'color',)}),
         ('Veröffentlichung', {'fields': ('is_public', 'ics_uid',), 'classes': ('collapse',)}),
     ]

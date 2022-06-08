@@ -40,7 +40,7 @@ def calendar_ics(request, uuid):
     except Calendar.DoesNotExist:
         return render(request, 'orgatask/404.html', status=404)
 
-    return calendar.as_ics_response()
+    return calendar.as_ics_response(request)
 
 # Error views
 
