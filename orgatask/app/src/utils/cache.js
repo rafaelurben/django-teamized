@@ -1,6 +1,9 @@
 // Caching
 
+import * as API from "./api.js";
+import * as Navigation from "./navigation.js";
 import * as Teams from "./teams.js";
+
 
 // Lookups
 
@@ -53,7 +56,7 @@ export function addTeam(team) {
         "team": {},
         "members": {},
         "invites": {},
-        "calendars": {},
+        "calendars": {_initial: true},
     };
     updateTeam(team);
 }
@@ -74,7 +77,7 @@ export async function deleteTeam(teamId) {
     }
 }
 
-// Bulk update cache
+// Bulk update teams cache
 
 export function updateTeamsCache(teams, defaultTeamId) {
     window.orgatask.defaultTeamId = defaultTeamId;
@@ -101,12 +104,34 @@ export function updateTeamsCache(teams, defaultTeamId) {
     }
 }
 
+// Team cache categories (members, invites, ...)
+
 export function replaceTeamCacheCategory(teamId, category, objects) {
     let teamdata = getTeamData(teamId);
     teamdata[category] = {};
     for (let obj of objects) {
         teamdata[category][obj.id] = obj;
     }
+}
+
+export async function refreshTeamCacheCategory(teamId, category) {
+    return new Promise(async (resolve, reject) => {
+        let teamdata = getTeamData(teamId);
+        if (teamdata[category].hasOwnProperty("_refreshing")) {
+            reject("Already refreshing");
+        } else {
+            teamdata[category]._refreshing = true;
+            await API.GET(`teams/${teamId}/${category}`).then(
+                (data) => {
+                    let objects = data[category];
+                    replaceTeamCacheCategory(teamId, category, objects);
+                    Navigation.renderPage();
+                    resolve(objects);
+                    delete teamdata[category]["_refreshing"];
+                }
+            );
+        }
+    });
 }
 
 export function replaceMembersCache(teamId, members) {

@@ -5,12 +5,7 @@ import * as Cache from "./cache.js";
 // Calendar list
 
 export async function getCalendars(teamId) {
-    return await API.GET(`teams/${teamId}/calendars`).then(
-        (data) => {
-            Cache.replaceCalendarsCache(teamId, data.calendars)
-            return data.calendars;
-        }
-    );
+    return await Cache.refreshTeamCacheCategory(teamId, "calendars");
 }
 
 // Calendar creation
