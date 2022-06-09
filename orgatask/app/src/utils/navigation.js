@@ -6,6 +6,7 @@ import * as Teams from './teams.js';
 
 const pageList = [
     "home",
+    "calendars",
     "teamlist",
     "teammanage",
     "workingtime",
@@ -115,7 +116,6 @@ export function renderMenubar() {
 
 export function selectPage(page) {
     if (pageList.includes(page)) {
-        console.debug("Select page: " + page);
         window.orgatask.currentPage = page;
         exportToURL();
         renderPage();

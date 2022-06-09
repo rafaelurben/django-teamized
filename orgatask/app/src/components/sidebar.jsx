@@ -67,7 +67,7 @@ export default class AppSidebar extends React.Component {
               Teams
             </a>
           </li>
-          <hr className="my-1"/>
+          <hr className="my-1" />
           <li>
             <a
               href="#"
@@ -86,6 +86,16 @@ export default class AppSidebar extends React.Component {
             >
               <i className="fas fa-fw fa-business-time" />
               Arbeitszeit
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              className={this.getLinkClass("calendars")}
+              onClick={this.selectPage("calendars")}
+            >
+              <i className="fas fa-fw fa-calendar-days" />
+              Kalender
             </a>
           </li>
           {adminPages}

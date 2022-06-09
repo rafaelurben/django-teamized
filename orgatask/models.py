@@ -553,7 +553,7 @@ class Calendar(models.Model):
     def as_ics_text(self, request=None) -> str:
         morelines = []
         if request is not None:
-            morelines.append("URL:"+self.get_online_url(request)+f"?p=calendar&t={self.team_id}")
+            morelines.append("URL:"+self.get_online_url(request)+f"?p=calendars&t={self.team_id}")
             morelines.append("SOURCE;VALUE=URI:"+self.get_ics_url(request))
 
         eventlines = []

@@ -127,7 +127,7 @@ export default class Page_WorkingTime extends React.Component {
     return (
       <Dashboard.Dashboard
         title="Deine Arbeitszeit"
-        subtitle="Erfasse und verwalte deine Arbeitszeit"
+        subtitle="(w.i.p.) Erfasse und verwalte deine Arbeitszeit"
       >
         <Dashboard.DashboardColumn sizes={{lg: 3}}>
           <Dashboard.DashboardTile title="Zeit erfassen">
@@ -149,7 +149,7 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{lg: 9}}>
-          <Dashboard.DashboardTile title="Erfasste Zeiten">
+          <Dashboard.DashboardTile title="Erfasste Zeiten (ausgewähltes Team)">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>

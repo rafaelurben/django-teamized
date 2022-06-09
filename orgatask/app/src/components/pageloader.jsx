@@ -1,5 +1,6 @@
 "use strict";
 
+import Page_Calendars from "./pages/calendars.js";
 import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
 import Page_TeamManage from "./pages/teammanage.js";
@@ -49,6 +50,13 @@ export default class PageLoader extends React.Component {
             selectedTeamId={window.orgatask.selectedTeamId}
           />
         );
+      case "calendars":
+        return (
+          <Page_Calendars
+            calendars={Cache.getCurrentTeamData().calendars}
+            selectedTeamId={window.orgatask.selectedTeamId}
+          />
+        )
     }
   }
 }
