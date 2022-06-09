@@ -103,7 +103,7 @@ export async function createTeamPopup() {
       '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
       '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">' +
       '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung">',
+      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>',
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",
@@ -309,7 +309,7 @@ export async function createInvitePopup(team) {
       '<label class="swal2-input-label" for="swal-input-days">Gültigkeit in Tagen:</label>' +
       '<input type="number" id="swal-input-days" class="swal2-input" value="7">' +
       '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
-      '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger">',
+      '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>',
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",

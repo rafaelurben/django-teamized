@@ -56,7 +56,8 @@ export function addTeam(team) {
         "team": {},
         "members": {},
         "invites": {},
-        "calendars": {_initial: true},
+        "calendars": {},
+        "_state": {calendars: {_initial: true, _refreshing: false}},
     };
     updateTeam(team);
 }
@@ -117,17 +118,21 @@ export function replaceTeamCacheCategory(teamId, category, objects) {
 export async function refreshTeamCacheCategory(teamId, category) {
     return new Promise(async (resolve, reject) => {
         let teamdata = getTeamData(teamId);
-        if (teamdata[category].hasOwnProperty("_refreshing")) {
+        if (teamdata._state[category]._refreshing) {
             reject("Already refreshing");
         } else {
-            teamdata[category]._refreshing = true;
+            teamdata._state[category]._refreshing = true;
             await API.GET(`teams/${teamId}/${category}`).then(
                 (data) => {
                     let objects = data[category];
                     replaceTeamCacheCategory(teamId, category, objects);
-                    Navigation.renderPage();
-                    resolve(objects);
                     delete teamdata[category]["_refreshing"];
+
+                    teamdata._state[category]._initial = false;
+                    teamdata._state[category]._refreshing = false;
+                    Navigation.renderPage();
+
+                    resolve(objects);
                 }
             );
         }

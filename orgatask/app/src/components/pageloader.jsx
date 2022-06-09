@@ -53,10 +53,11 @@ export default class PageLoader extends React.Component {
       case "calendars":
         return (
           <Page_Calendars
+            team={Cache.getCurrentTeamData().team}
             calendars={Cache.getCurrentTeamData().calendars}
-            selectedTeamId={window.orgatask.selectedTeamId}
+            isAdmin={Teams.isCurrentTeamAdmin()}
           />
-        )
+        );
     }
   }
 }
