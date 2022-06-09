@@ -27,6 +27,11 @@ urlpatterns = [
     path('me/worksessions/tracking/live', ep.workingtime.endpoint_tracking_live, name='api-workingtime-tracking-live'),
     path('me/worksessions/tracking/stop', ep.workingtime.endpoint_tracking_stop, name='api-workingtime-tracking-stop'),
 
+    # Calendar API views
+
+    path('teams/<team>/calendars', ep.calendar.endpoint_calendars, name='api-calendars'),
+    path('teams/<team>/calendars/<calendar>', ep.calendar.endpoint_calendar, name='api-calendar'),
+
     # Catch-all error view for 404 JSON responses
     re_path('.*', ep.endpoint_not_found, name="api-not-found")
 ]

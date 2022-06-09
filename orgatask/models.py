@@ -539,8 +539,16 @@ class Calendar(models.Model):
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
 
-    def as_dict(self) -> dict:
-        ...
+    def as_dict(self, request=None) -> dict:
+        return {
+            "id": str(self.uid),
+            "name": self.name,
+            "description": self.description,
+            "color": self.color,
+            "is_public": bool(self.is_public),
+            "ics_url": self.get_ics_url(request),
+            "events": [e.as_dict() for e in self.events.all()],
+        }
 
     def as_ics_text(self, request=None) -> str:
         morelines = []
@@ -579,12 +587,14 @@ class Calendar(models.Model):
         return response
 
     def get_online_url(self, request):
-        _appurl_r = reverse("orgatask:app")
-        return request.build_absolute_uri(_appurl_r)
+        path = reverse("orgatask:app")
+        return request.build_absolute_uri(path)
 
-    def get_ics_url(self, request):
-        _icsurl_r = reverse("orgatask:calendar_ics", args=[self.ics_uid])
-        return request.build_absolute_uri(_icsurl_r)
+    def get_ics_url(self, request=None):
+        path = reverse("orgatask:calendar_ics", args=[self.ics_uid])
+        if request is None:
+            return path
+        return request.build_absolute_uri(path)
 
 
 class CalendarEvent(models.Model):
@@ -634,7 +644,17 @@ class CalendarEvent(models.Model):
         return f"{self.name} ({self.uid})"
 
     def as_dict(self) -> dict:
-        ...
+        return {
+            "id": str(self.uid),
+            "name": self.name,
+            "description": self.description,
+            "dtstart": None if self.dtstart is None else self.dtstart.strftime("%Y-%m-%dT%H:%M"),
+            "dtend": None if self.dtend is None else self.dtend.strftime("%Y-%m-%dT%H:%M"),
+            "dstart": None if self.dstart is None else self.dstart.strftime("%Y-%m-%d"),
+            "dend": None if self.dend is None else self.dend.strftime("%Y-%m-%d"),
+            "fullday": bool(self.fullday),
+            "location": self.location,
+        }
 
     def as_ics_lines(self) -> list:
         if self.fullday:
@@ -656,3 +676,21 @@ class CalendarEvent(models.Model):
             "UPDATED:" + utils.ical_datetime(self.updated_at),
             "END:VEVENT",
         ]
+
+    def clean(self) -> None:
+        "Verify that the event is valid"
+
+        if self.fullday:
+            if self.dstart is None or self.dend is None:
+                raise exceptions.ValidationError(_("Ganztägige Ereignisse brauchen ein Start- und Enddatum."))
+            if self.dstart > self.dend:
+                raise exceptions.ValidationError(_("Das Enddatum darf nicht vor dem Startdatum liegen."))
+            self.dtstart = None
+            self.dtend = None
+        else:
+            if self.dtstart is None or self.dtend is None:
+                raise exceptions.ValidationError(_("Ereignisse brauchen einen Start- und Endzeitpunkt"))
+            if self.dtstart > self.dtend:
+                raise exceptions.ValidationError(_("Der Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen."))
+            self.dstart = None
+            self.dend = None

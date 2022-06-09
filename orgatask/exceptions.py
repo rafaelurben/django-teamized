@@ -20,3 +20,9 @@ class AlertException(Exception):
                 "text": str(self.orgatask_text),
             },
         }, status=400)
+
+class ValidationError(AlertException):
+    "Exception class for validation errors"
+
+    def __init__(self, text, *args, title="Ungültige Daten", errorname="data_invalid", **kwargs) -> None:
+        super().__init__(text, *args, title=title, errorname=errorname, **kwargs)
