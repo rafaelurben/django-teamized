@@ -4,14 +4,10 @@ import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
 import * as Utils from "./utils.js";
 
-export { getTeamsList } from "./cache.js";
-
-export function getCurentTeamData() {
-    return window.orgatask.teamcache[window.orgatask.selectedTeamId];
-}
+export { getTeamsList, getCurrentTeamData as getCurrentTeam } from "./cache.js";
 
 export function isCurrentTeamAdmin() {
-    const teamdata = getCurentTeamData();
+    const teamdata = Cache.getCurrentTeamData();
     if (teamdata) {
         return ['owner', 'admin'].includes(teamdata.team.member.role);
     }
@@ -141,7 +137,7 @@ export async function editTeam(teamId, name, description) {
   }).then(
     async (data) => {
       requestSuccessAlert(data);
-      window.orgatask.teamcache[teamId].team = data.team;
+      Cache.getTeamData(teamId).team = data.team;
       return data.team;
     }
   )
@@ -226,7 +222,7 @@ export async function leaveTeamPopup(team) {
 export async function getMembers(teamId) {
   return await API.GET(`teams/${teamId}/members`).then(
     (data) => {
-      Cache.updateMembersCache(teamId, data.members);
+      Cache.replaceMembersCache(teamId, data.members);
       return data.members;
     }
   )
@@ -240,7 +236,7 @@ export async function editMember(teamId, memberId, role) {
   }).then(
     (data) => {
       requestSuccessAlert(data);
-      window.orgatask.teamcache[teamId].members[memberId] = data.member;
+      Cache.getTeamData(teamId).members[memberId] = data.member;
       return data.id;
     }
   )
@@ -266,7 +262,7 @@ export async function deleteMember(teamId, memberId) {
   return await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
     async (data) => {
       requestSuccessAlert(data);
-      delete window.orgatask.teamcache[teamId].members[memberId];
+      delete Cache.getTeamData(teamId).members[memberId];
     }
   )
 }
@@ -283,7 +279,7 @@ export async function deleteMemberPopup(team, member) {
 export async function getInvites(teamId) {
   return await API.GET(`teams/${teamId}/invites`).then(
     (data) => {
-      Cache.updateInvitesCache(teamId, data.invites);
+      Cache.replaceInvitesCache(teamId, data.invites);
       return data.invites;
     }
   )
@@ -297,7 +293,7 @@ export async function createInvite(teamId, note, uses, days) {
   }).then(
     (data) => {
       requestSuccessAlert(data);
-      window.orgatask.teamcache[teamId].invites[data.invite.id] = data.invite;
+      Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
       return data.invite;
     }
   )
@@ -344,7 +340,7 @@ export async function editInvite(teamId, inviteId, note, uses, days) {
   }).then(
     (data) => {
       requestSuccessAlert(data);
-      window.orgatask.teamcache[teamId].invites[data.invite.id] = data.invite;
+      Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
       return data.invite;
     }
   )
@@ -390,7 +386,7 @@ export async function deleteInvite(teamId, inviteId) {
   await API.DELETE(`teams/${teamId}/invites/${inviteId}`).then(
     async (data) => {
       requestSuccessAlert(data);
-      delete window.orgatask.teamcache[teamId].invites[inviteId];
+      delete Cache.getTeamData(teamId).invites[inviteId];
     }
   )
 }

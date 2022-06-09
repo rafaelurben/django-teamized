@@ -12,8 +12,16 @@ export function getTeamsList() {
     return teams;
 }
 
+export function getTeamData(teamId) {
+    return window.orgatask.teamcache[teamId];
+}
+
+export function getCurrentTeamData() {
+    return getTeamData(window.orgatask.selectedTeamId);
+}
+
 export function getMeInTeam(teamId) {
-    return window.orgatask.teamcache[teamId].team.member;
+    return getTeamData(teamId).team.member;
 }
 
 export function getMeInCurrentTeam() {
@@ -21,7 +29,7 @@ export function getMeInCurrentTeam() {
 }
 
 export function getMemberInTeam(teamId, memberId) {
-    return window.orgatask.teamcache[teamId].members[memberId];
+    return getTeamData(teamId).members[memberId];
 }
 
 // Add and remove teams from cache
@@ -29,12 +37,12 @@ export function getMemberInTeam(teamId, memberId) {
 function updateTeam(team) {
     if (team.hasOwnProperty("members")) {
         window.orgatask.teamcache[team.id].members = {}
-        updateMembersCache(team.id, team.members);
+        replaceMembersCache(team.id, team.members);
         delete team.members;
     }
     if (team.hasOwnProperty("invites")) {
         window.orgatask.teamcache[team.id].invites = {}
-        updateInvitesCache(team.id, team.invites);
+        replaceInvitesCache(team.id, team.invites);
         delete team.invites;
     }
     window.orgatask.teamcache[team.id].team = team;
@@ -45,6 +53,7 @@ export function addTeam(team) {
         "team": {},
         "members": {},
         "invites": {},
+        "calendars": {},
     };
     updateTeam(team);
 }
@@ -92,16 +101,22 @@ export function updateTeamsCache(teams, defaultTeamId) {
     }
 }
 
-export function updateMembersCache(teamId, members) {
-    window.orgatask.teamcache[teamId].members = {};
-    for (let member of members) {
-        window.orgatask.teamcache[teamId].members[member.id] = member;
+export function replaceTeamCacheCategory(teamId, category, objects) {
+    let teamdata = getTeamData(teamId);
+    teamdata[category] = {};
+    for (let obj of objects) {
+        teamdata[category][obj.id] = obj;
     }
 }
 
-export function updateInvitesCache(teamId, invites) {
-    window.orgatask.teamcache[teamId].invites = {};
-    for (let invite of invites) {
-        window.orgatask.teamcache[teamId].invites[invite.id] = invite;
-    }
+export function replaceMembersCache(teamId, members) {
+    replaceTeamCacheCategory(teamId, "members", members);
+}
+
+export function replaceInvitesCache(teamId, invites) {
+    replaceTeamCacheCategory(teamId, "invites", invites);
+}
+
+export function replaceCalendarsCache(teamId, calendars) {
+    replaceTeamCacheCategory(teamId, "calendars", calendars);
 }

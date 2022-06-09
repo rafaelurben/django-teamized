@@ -33,7 +33,7 @@ export default class PageLoader extends React.Component {
           />
         );
       case "teammanage":
-        let teamdata = Teams.getCurentTeamData();
+        let teamdata = Cache.getCurrentTeamData();
         return (
           <Page_TeamManage
             team={teamdata.team}

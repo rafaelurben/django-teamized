@@ -5,6 +5,7 @@ import * as Navigation from "./utils/navigation.js";
 import * as Teams from "./utils/teams.js";
 import * as Utils from "./utils/utils.js";
 import * as WorkingTime from "./utils/workingtime.js";
+import * as Calendars from "./utils/calendars.js";
 
 // Make namespaces available in the console (for debugging)
 
@@ -12,6 +13,7 @@ window._OrgaTask = {
   Alerts,
   API,
   Cache,
+  Calendars,
   Navigation,
   Teams,
   Utils,
