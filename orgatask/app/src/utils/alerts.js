@@ -90,23 +90,38 @@ export function successAlert(text, title, options) {
 
 // Interactive alerts
 
-export async function confirmAlert(html, callback, title, options) {
-    return await Swal.fire({
-        title: title || "Sicher?",
-        html: html,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        confirmButtonText: "Ja",
-        cancelButtonText: "Nein, abbrechen",
-        showLoaderOnConfirm: true,
-        preConfirm: callback,
-        ...options
-    })
+export function confirmAlert(html, preConfirm, title, options) {
+    return new Promise((resolve, reject) => {  
+        let data = {
+            title: title || "Sicher?",
+            html: html,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Ja",
+            cancelButtonText: "Nein, abbrechen",
+            ...options
+        }
+
+        if (preConfirm !== undefined) {
+            data.preConfirm = preConfirm;
+            data.showLoaderOnConfirm = true;
+        }
+
+        Swal.fire(data).then((result) => {
+            if (result.isConfirmed) {
+                resolve(result.value);
+            } else {
+                reject(result.dismiss);
+            }
+        });
+    });
 }
 
-export async function doubleConfirmAlert(html, callback) {
-    return await confirmAlert(html, async () => {
-        return await confirmAlert(html+"<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>", callback, "Absolut sicher?")
+export function doubleConfirmAlert(html, preConfirm) {
+    return new Promise((resolve, reject) => {
+        confirmAlert(html, undefined, "Sicher?").then(() => {
+            confirmAlert(html + "<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>", preConfirm, "Absolut sicher?").then(resolve, reject)
+        }, reject)
     });
 }
