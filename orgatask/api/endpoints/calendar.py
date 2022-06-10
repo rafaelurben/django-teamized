@@ -58,6 +58,10 @@ def endpoint_calendars(request, team: Team):
         return JsonResponse({
             "success": True,
             "calendar": calendar.as_dict(request),
+            "alert": {
+                "title": _("Kalender erstellt"),
+                "text": _("Der Kalender wurde erfolgreich erstellt."),
+            }
         })
 
 

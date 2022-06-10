@@ -27,8 +27,16 @@ class CalendarManager extends Dashboard.DashboardTile {
   }
 
   ensureValidCalendarId() {
-    if (!this.props.calendars.hasOwnProperty(this.state.selectedCalendarId)) {
-      this.setState({selectedCalendarId: Object.keys(this.props.calendars)[0] || null});
+    const isValid = this.props.calendars.hasOwnProperty(this.state.selectedCalendarId);
+    const calendarIds = Object.keys(this.props.calendars);
+    const hasCalendar = calendarIds.length > 0;
+
+    if (!isValid && hasCalendar) {
+      // If the current calendar is invalid and there are calendars, select the first one.
+      this.setState({selectedCalendarId: calendarIds[0]});
+    } else if (!isValid && this.state.selectedCalendarId !== null) {
+      // If the current calendar is set but there are no calendars, select null.
+      this.setState({selectedCalendarId: null});
     }
   }
   
@@ -54,7 +62,9 @@ class CalendarManager extends Dashboard.DashboardTile {
 
   deleteCalendar() {
     const calendar = this.getCalendar();
-    Calendars.deleteCalendarPopup(this.props.team, calendar);
+    Calendars.deleteCalendarPopup(this.props.team, calendar).then(() => {
+      this.setState({ selectedCalendarId: null });
+    });
   }
 
   componentDidMount() {
@@ -62,12 +72,7 @@ class CalendarManager extends Dashboard.DashboardTile {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.team !== this.props.team ||
-      prevProps.calendars !== this.props.calendars
-    ) {
-      this.ensureValidCalendarId();
-    }
+    this.ensureValidCalendarId();
   }
 
   render() {
