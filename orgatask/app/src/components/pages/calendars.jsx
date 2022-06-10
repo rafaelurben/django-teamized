@@ -7,7 +7,7 @@ import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
 import {HoverInfo} from "../utils.js";
 
-class CalendarManager extends Dashboard.DashboardTile {
+class CalendarManager extends React.Component {
   constructor(props) {
     super(props);
 
@@ -188,9 +188,76 @@ class CalendarManager extends Dashboard.DashboardTile {
   }
 }
 
-export default class Page_WorkingTime extends React.Component {
+class CalendarOverview extends React.Component {
   constructor(props) {
     super(props);
+    this.go2prevMonth = this.go2prevMonth.bind(this);
+    this.go2today = this.go2today.bind(this);
+    this.go2nextMonth = this.go2nextMonth.bind(this);
+
+    const date = new Date();
+    this.state = {
+      selectedMonth: new Date(date.getFullYear(), date.getMonth(), 1),
+    };
+  }
+
+  go2prevMonth() {
+    this.setState({
+      selectedMonth: Calendars.roundMonths(this.state.selectedMonth, -1),
+    });
+  }
+
+  go2today() {
+    const date = new Date();
+    this.setState({
+      selectedMonth: Calendars.roundMonths(date, 0),
+    });
+    this.props.handleDateSelect(date);
+  }
+
+  go2nextMonth() {
+    this.setState({
+      selectedMonth: Calendars.roundMonths(this.state.selectedMonth, 1),
+    });
+  }
+
+  render() {
+    const isToday = this.props.selectedDate.getTime() === Calendars.roundDays(new Date()).getTime() && this.state.selectedMonth.getTime() === Calendars.roundMonths(new Date()).getTime();
+
+    let monthDisplay = this.state.selectedMonth.toLocaleString(undefined, {
+      month: "long",
+      year: "numeric",
+    });
+
+    return (
+      <div className="d-flex justify-content-between align-items-center">
+        <h4 className="mb-0 ms-1">{monthDisplay}</h4>
+        <div className="btn-group">
+          <button type="button" className="btn btn-outline-dark" onClick={this.go2prevMonth}>
+            <i className="fas fa-arrow-left" />
+          </button>
+          <button type="button" className={isToday ? "btn btn-dark disabled" : "btn btn-outline-dark"} onClick={this.go2today}>
+            Heute
+          </button>
+          <button type="button" className="btn btn-outline-dark" onClick={this.go2nextMonth}>
+            <i className="fas fa-arrow-right" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default class Page_Calendars extends React.Component {
+  constructor(props) {
+    super(props);
+    this.selectDate = this.selectDate.bind(this);
+
+    this.state = { selectedDate: Calendars.roundDays(new Date()) };
+  }
+
+  selectDate(date) {
+    this.setState({ selectedDate: Calendars.roundDays(date) });
   }
 
   render() {
@@ -204,7 +271,13 @@ export default class Page_WorkingTime extends React.Component {
         subtitle="(w.i.p.) Kalender für dich und dein Team."
       >
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title="Übersicht"></Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Übersicht">
+            {/* Calendar overview */}
+            <CalendarOverview
+              handleDateSelect={this.selectDate}
+              selectedDate={this.state.selectedDate}
+            />
+          </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
           <Dashboard.DashboardTile title="Ereignisse">

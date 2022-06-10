@@ -3,6 +3,17 @@ import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
 
+// Date utils
+
+export function roundDays(olddate, offset) {
+    offset = offset || 0;
+    return new Date(olddate.getFullYear(), olddate.getMonth(), olddate.getDate() + offset);
+}
+
+export function roundMonths(olddate, offset) {
+    offset = offset || 0;
+    return new Date(olddate.getFullYear(), olddate.getMonth() + offset, 1);
+}
 
 // Calendar list
 
@@ -77,7 +88,7 @@ export async function editCalendarPopup(team, calendar) {
         html:
             `<p>Team: ${team.name}</p>` +
             '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}"` +
+            `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">` +
             '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
             `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>`+
             '<label class="swal2-input-label" for="swal-input-color">Farbe:</label>' +
