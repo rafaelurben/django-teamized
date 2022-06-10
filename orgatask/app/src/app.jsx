@@ -70,7 +70,6 @@ async function reinitialize() {
   window.orgatask = {
     ...window.orgatask,
     defaultTeamId: null,
-    selectedTeamId: null,
     teamcache: {},
   };
   Navigation.renderMenubar();

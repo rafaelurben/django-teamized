@@ -12,22 +12,24 @@ class CalendarManager extends Dashboard.DashboardTile {
     super(props);
 
     this.getCalendar = this.getCalendar.bind(this);
-    this.getValidCalendarIdOrNull = this.getValidCalendarIdOrNull.bind(this);
+    this.ensureValidCalendarId = this.ensureValidCalendarId.bind(this);
     this.handleCalendarSelect = this.handleCalendarSelect.bind(this);
 
     this.createCalendar = this.createCalendar.bind(this);
     this.editCalendar = this.editCalendar.bind(this);
     this.deleteCalendar = this.deleteCalendar.bind(this);
 
-    this.state = { selectedCalendarId: this.getValidCalendarIdOrNull() };
+    this.state = { selectedCalendarId: null };
   }
 
   getCalendar() {
     return Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
   }
 
-  getValidCalendarIdOrNull() {
-    return Object.keys(this.props.calendars)[0] || null;
+  ensureValidCalendarId() {
+    if (!this.props.calendars.hasOwnProperty(this.state.selectedCalendarId)) {
+      this.setState({selectedCalendarId: Object.keys(this.props.calendars)[0] || null});
+    }
   }
   
   handleCalendarSelect(event) {
@@ -35,23 +37,28 @@ class CalendarManager extends Dashboard.DashboardTile {
     this.setState({ selectedCalendarId: calId });
   }
 
-  async createCalendar() {
-    const calendar = await Calendars.createCalendarPopup(this.props.team).then(
-      Navigation.renderPage
-    );
-    this.setState({ selectedCalendarId: calendar.id });
-  }
-
-  async editCalendar() {
-    const calendar = this.getCalendar();
-    await Calendars.editCalendarPopup(this.props.team, calendar).then(
-      Navigation.renderPage
+  createCalendar() {
+    Calendars.createCalendarPopup(this.props.team).then(
+      (calendar) => {
+        this.setState({ selectedCalendarId: calendar.id });
+      }
     );
   }
 
-  async deleteCalendar() {
+  editCalendar() {
     const calendar = this.getCalendar();
-    await Calendars.deleteCalendarPopup(this.props.team, calendar);
+    Calendars.editCalendarPopup(this.props.team, calendar).then(
+      Navigation.renderPage
+    );
+  }
+
+  deleteCalendar() {
+    const calendar = this.getCalendar();
+    Calendars.deleteCalendarPopup(this.props.team, calendar);
+  }
+
+  componentDidMount() {
+    this.ensureValidCalendarId();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -59,7 +66,7 @@ class CalendarManager extends Dashboard.DashboardTile {
       prevProps.team !== this.props.team ||
       prevProps.calendars !== this.props.calendars
     ) {
-      this.setState({ selectedCalendarId: this.getValidCalendarIdOrNull() });
+      this.ensureValidCalendarId();
     }
   }
 
@@ -128,6 +135,8 @@ class CalendarManager extends Dashboard.DashboardTile {
         className="form-select mb-2"
         onInput={this.handleCalendarSelect}
         disabled={calendar === undefined}
+        value={this.state.selectedCalendarId || "0"}
+        abc={this.state.selectedCalendarId || "0"}
       >
         {calendarSelectOptions}
       </select>,
@@ -143,14 +152,18 @@ class CalendarManager extends Dashboard.DashboardTile {
               <td style={{ whiteSpace: "pre" }}>{calendar.description}</td>
             </tr>
             <tr>
-              <th>
-                Abonnieren:
-              </th>
+              <th>Abonnieren:</th>
               <td>
-                <a href={"webcal://" + calendar.ics_url.split("//")[1]} className="me-1">
+                <a
+                  href={"webcal://" + calendar.ics_url.split("//")[1]}
+                  className="me-1"
+                >
                   Webcal
                 </a>
-                <HoverInfo title="Auf unterstützen Geräten sollte sich dieser Link direkt in der Kalenderapp öffnen. Falls nicht, kann in den meisten Apps ein Kalender via URL abonniert werden. Dazu einfach diesen Link kopieren und dort einfügen." />
+                <HoverInfo title="Auf unterstützen Geräten sollte sich der Webcal-Link direkt in der Kalenderapp öffnen. Falls nicht, kann in den meisten Apps ein Kalender via URL abonniert werden. Dazu einfach einen der beiden Links kopieren und dort einfügen, NICHT die Datei herunterladen." />
+                <a href={calendar.ics_url} className="ms-1">
+                  HTTP(S)
+                </a>
               </td>
             </tr>
             <tr>
