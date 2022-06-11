@@ -188,6 +188,108 @@ class CalendarManager extends React.Component {
   }
 }
 
+class CalendarEventPickerRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  handleSelect() {
+    this.props.onSelect(this.props.event);
+  }
+
+  getStyle() {
+    return {
+      borderLeftWidth: "5px",
+      borderLeftStyle: this.props.event.fullday ? "solid" : "dotted",
+      borderLeftColor: this.props.event.calendar.color,
+      cursor: "pointer",
+    };
+  }
+
+  getDateDisplay() {
+    const daystart = Calendars.roundDays(this.props.selectedDate);
+    const dayend = Calendars.roundDays(this.props.selectedDate, 1);
+
+    if (this.props.event.fullday) {
+      const evtstart = new Date(this.props.event.dstart);
+      const evtend = new Date(this.props.event.dend);
+      const samedaystart = Calendars.isSameDate(daystart, evtstart);
+      const samedayend = Calendars.isSameDate(daystart, evtend);
+
+      if (samedaystart && samedayend) {
+        return "Ganztägig";
+      } else {
+        return "Vom " + Calendars.getDateString(evtstart) + " bis am " + Calendars.getDateString(evtend);
+      }
+    } else {
+      const evtstart = new Date(this.props.event.dtstart);
+      const evtend = new Date(this.props.event.dtend);
+      const samedaystart = evtstart.getTime() >= daystart.getTime();
+      const samedayend = evtend.getTime() < dayend.getTime();
+
+      if (samedaystart && samedayend) {
+        return "Von " + Calendars.getTimeString(evtstart) + " bis " + Calendars.getTimeString(evtend) + " Uhr";
+      } else if (samedaystart) {
+        return "Ab " + Calendars.getTimeString(evtstart) + " Uhr";
+      } else if (samedayend) {
+        return "Bis " + Calendars.getTimeString(evtend) + " Uhr";
+      } else {
+        return "Ganztägig";
+      }
+    }
+  }
+
+  render() {
+    return (
+      <div className="ps-2 mb-1" style={this.getStyle()} onClick={this.handleSelect}>
+        <b className="d-inline-block w-100">{this.props.event.name}</b>
+        <span className="d-inline-block w-100">{this.getDateDisplay()}</span>
+        {this.props.event.location !== "" ? (
+          <i className="d-inline-block w-100">{this.props.event.location}</i>
+        ) : null}
+      </div>
+    );
+  }
+}
+
+class CalendarEventPicker extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let events = [...this.props.events];
+    events.sort((a, b) => {
+      if (a.fullday && b.fullday) {
+        return new Date(a.dstart).getTime() - new Date(b.dstart).getTime();
+      } else if (!a.fullday && !b.fullday) {
+        return new Date(a.dtstart).getTime() - new Date(b.dtstart).getTime();
+      } else if (a.fullday) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    let rows;
+    if (events.length > 0) {
+      rows = events.map((event) => {
+        return <CalendarEventPickerRow
+          key={event.id}
+          event={event}
+          selectedDate={this.props.selectedDate}
+          onSelect={this.props.onEventSelect}
+        />;
+      });
+    } else {
+      rows = <span className="ms-1">Keine Ereignisse an diesem Datum</span>;
+    }
+
+    return rows;
+  }
+}
+
 class CalendarOverviewDay extends React.Component {
   constructor(props) {
     super(props);
@@ -365,12 +467,17 @@ export default class Page_Calendars extends React.Component {
   constructor(props) {
     super(props);
     this.handleDateSelect = this.handleDateSelect.bind(this);
+    this.handleEventSelect = this.handleEventSelect.bind(this);
 
     this.state = { selectedDate: Calendars.roundDays(new Date()) };
   }
 
   handleDateSelect(date) {
     this.setState({ selectedDate: Calendars.roundDays(date) });
+  }
+
+  handleEventSelect(data) {
+    console.log(data);
   }
 
   render() {
@@ -380,11 +487,7 @@ export default class Page_Calendars extends React.Component {
 
     let events = Calendars.flattenCalendarEvents(this.props.calendars);
 
-    let dayDisplay = this.state.selectedDate.toLocaleString(undefined, {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    let dayDisplay = Calendars.getDateString(this.state.selectedDate);
 
     return (
       <Dashboard.Dashboard
@@ -404,10 +507,15 @@ export default class Page_Calendars extends React.Component {
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
           <Dashboard.DashboardTile title={"Ereignisse am "+dayDisplay}>
             {/* Events from the selected day & Create new event button */}
+            <CalendarEventPicker
+              onEventSelect={this.handleEventSelect}
+              selectedDate={this.state.selectedDate}
+              events={Calendars.filterCalendarEventsByDate(events, this.state.selectedDate)}
+            />
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile title="Ausgewähltes Ereignis">
             {/* Selected event */}
-            <p>Kein Ereignis ausgewählt</p>
+            <p className="ms-1">(noch nicht implementiert)</p>
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile title="Kalenderinfos">
             {/* Selecting, creating and managing calendars */}

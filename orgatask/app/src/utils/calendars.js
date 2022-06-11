@@ -24,6 +24,31 @@ export function getMondayOfWeek(date) {
     return roundDays(date, -dayOfWeek);
 }
 
+export function getDateString(date) {
+    return date.toLocaleString(undefined, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+}
+
+export function getDateTimeString(datetime) {
+    return datetime.toLocaleString(undefined, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+    });
+}
+
+export function getTimeString(datetime) {
+    return datetime.toLocaleString(undefined, {
+        hour: "numeric",
+        minute: "numeric",
+    });
+}
+
 // Calendar utils
 
 export function flattenCalendarEvents(calendars) {

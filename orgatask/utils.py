@@ -21,7 +21,6 @@ def ical_datetime(dt: datetime):
     """
     Returns a timestamp in icalendar datetime format.
     """
-    dt = dt.astimezone(utc)
     return dt.strftime("%Y%m%dT%H%M%SZ")
 
 def ical_text(text: str):
