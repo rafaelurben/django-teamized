@@ -188,6 +188,82 @@ class CalendarManager extends React.Component {
   }
 }
 
+class CalendarOverviewDay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSelect = this.handleSelect.bind(this);
+
+    this.getDateClassName = this.getDateClassName.bind(this);
+  }
+
+  handleSelect() {
+    this.props.onSelect(this.props.date);
+  }
+
+  getDateClassName() {
+    let className = "d-flex justify-content-center align-items-center rounded-circle";
+    if (this.props.isSelected && this.props.isToday) {
+      className += " bg-danger fw-bold text-white";
+    } else if (this.props.isSelected) {
+      className += " bg-primary text-white";
+    } else if (this.props.isToday) {
+      className += " text-danger fw-bold";
+    } else {
+      className += " text-dark";
+    }
+
+    if (!this.props.isInSelectedMonth) {
+      className += " opacity-50";
+    }
+    return className;
+  }
+
+  render() {
+    return (
+      <div onClick={this.handleSelect}>
+        <div className={this.getDateClassName()} style={{ width: "3em", height: "3em", cursor: "pointer" }}>
+          <span>
+            {this.props.date.getDate()}
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
+class CalendarOverviewWeek extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let days = [];
+    for (let i = 0; i < 7; i++) {
+      days.push(Calendars.roundDays(this.props.firstDay, i));
+    }
+
+    let dayElems = days.map((date, i) => {
+      return (
+        <CalendarOverviewDay
+          key={i}
+          date={date}
+          events={Calendars.filterCalendarEventsByDate(this.props.events, date)}
+          isToday={Calendars.isSameDate(date, new Date())}
+          isSelected={Calendars.isSameDate(this.props.selectedDate, date)}
+          isInSelectedMonth={Calendars.isSameDate(this.props.selectedMonth, Calendars.roundMonths(date))}
+          onSelect={this.props.onDateSelect}
+        />
+      )
+    });
+
+    return (
+      <div className="d-flex justify-content-around my-3">
+        {dayElems}
+      </div>
+    );
+  }
+}
+
 class CalendarOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -195,9 +271,8 @@ class CalendarOverview extends React.Component {
     this.go2today = this.go2today.bind(this);
     this.go2nextMonth = this.go2nextMonth.bind(this);
 
-    const date = new Date();
     this.state = {
-      selectedMonth: new Date(date.getFullYear(), date.getMonth(), 1),
+      selectedMonth: Calendars.roundMonths(new Date()),
     };
   }
 
@@ -212,7 +287,7 @@ class CalendarOverview extends React.Component {
     this.setState({
       selectedMonth: Calendars.roundMonths(date, 0),
     });
-    this.props.handleDateSelect(date);
+    this.props.onDateSelect(date);
   }
 
   go2nextMonth() {
@@ -222,27 +297,59 @@ class CalendarOverview extends React.Component {
   }
 
   render() {
-    const isToday = this.props.selectedDate.getTime() === Calendars.roundDays(new Date()).getTime() && this.state.selectedMonth.getTime() === Calendars.roundMonths(new Date()).getTime();
+    const isToday = Calendars.isSameDate(this.props.selectedDate, new Date);
+    const firstDayShown = Calendars.getMondayOfWeek(this.state.selectedMonth);
 
     let monthDisplay = this.state.selectedMonth.toLocaleString(undefined, {
       month: "long",
       year: "numeric",
     });
 
+    let weekElems = [];
+    for (let i = 0; i < 6; i++) {
+      weekElems.push(
+        <CalendarOverviewWeek
+          key={i}
+          firstDay={Calendars.roundDays(firstDayShown, i * 7)}
+          selectedMonth={this.state.selectedMonth}
+          selectedDate={this.props.selectedDate}
+          onDateSelect={this.props.onDateSelect}
+          events={this.props.events}
+        />
+      );
+    }
+
     return (
-      <div className="d-flex justify-content-between align-items-center">
-        <h4 className="mb-0 ms-1">{monthDisplay}</h4>
-        <div className="btn-group">
-          <button type="button" className="btn btn-outline-dark" onClick={this.go2prevMonth}>
-            <i className="fas fa-arrow-left" />
-          </button>
-          <button type="button" className={isToday ? "btn btn-dark disabled" : "btn btn-outline-dark"} onClick={this.go2today}>
-            Heute
-          </button>
-          <button type="button" className="btn btn-outline-dark" onClick={this.go2nextMonth}>
-            <i className="fas fa-arrow-right" />
-          </button>
+      <div>
+        <div className="d-flex justify-content-between align-items-center">
+          <h4 className="mb-0 ms-1">{monthDisplay}</h4>
+          <div className="btn-group">
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+              onClick={this.go2prevMonth}
+            >
+              <i className="fas fa-arrow-left" />
+            </button>
+            <button
+              type="button"
+              className={
+                isToday ? "btn btn-dark disabled" : "btn btn-outline-dark"
+              }
+              onClick={this.go2today}
+            >
+              Heute
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+              onClick={this.go2nextMonth}
+            >
+              <i className="fas fa-arrow-right" />
+            </button>
+          </div>
         </div>
+        <div className="mt-3">{weekElems}</div>
       </div>
     );
   }
@@ -251,12 +358,12 @@ class CalendarOverview extends React.Component {
 export default class Page_Calendars extends React.Component {
   constructor(props) {
     super(props);
-    this.selectDate = this.selectDate.bind(this);
+    this.handleDateSelect = this.handleDateSelect.bind(this);
 
     this.state = { selectedDate: Calendars.roundDays(new Date()) };
   }
 
-  selectDate(date) {
+  handleDateSelect(date) {
     this.setState({ selectedDate: Calendars.roundDays(date) });
   }
 
@@ -264,6 +371,14 @@ export default class Page_Calendars extends React.Component {
     if (Cache.getCurrentTeamData()._state.calendars._initial) {
       Cache.refreshTeamCacheCategory(this.props.team.id, "calendars");
     }
+
+    let events = Calendars.flattenCalendarEvents(this.props.calendars);
+
+    let dayDisplay = this.state.selectedDate.toLocaleString(undefined, {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
 
     return (
       <Dashboard.Dashboard
@@ -274,15 +389,15 @@ export default class Page_Calendars extends React.Component {
           <Dashboard.DashboardTile title="Übersicht">
             {/* Calendar overview */}
             <CalendarOverview
-              handleDateSelect={this.selectDate}
+              onDateSelect={this.handleDateSelect}
               selectedDate={this.state.selectedDate}
+              events={events}
             />
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title="Ereignisse">
+          <Dashboard.DashboardTile title={"Ereignisse am "+dayDisplay}>
             {/* Events from the selected day & Create new event button */}
-            <p>Kein Tag ausgewählt</p>
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile title="Ausgewähltes Ereignis">
             {/* Selected event */}

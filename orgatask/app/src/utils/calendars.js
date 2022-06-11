@@ -15,6 +15,50 @@ export function roundMonths(olddate, offset) {
     return new Date(olddate.getFullYear(), olddate.getMonth() + offset, 1);
 }
 
+export function isSameDate(date1, date2) {
+    return roundDays(date1).getTime() === roundDays(date2).getTime();
+}
+
+export function getMondayOfWeek(date) {
+    const dayOfWeek = (date.getDay() || 7) -1; // make 0 = monday instead of sunday
+    return roundDays(date, -dayOfWeek);
+}
+
+// Calendar utils
+
+export function flattenCalendarEvents(calendars) {
+    let events = [];
+    Object.values(calendars).forEach(calendar => {
+        calendar.events.forEach(event => {
+            events.push({
+                ...event,
+                calendar,
+            });
+        });
+    });
+    return events;
+}
+
+export function filterCalendarEventsByTimeRange(events, start, end) {
+    return events.filter(event => {
+        if (event.fullday) {
+            return (
+                new Date(event.dstart).getTime() <= end.getTime() && 
+                new Date(event.dend).getTime() >= start.getTime()
+            );
+        } else {
+            return (
+                new Date(event.dtstart).getTime() <= end.getTime() &&
+                new Date(event.dtend).getTime() >= start.getTime()
+            );
+        }
+    });
+}
+
+export function filterCalendarEventsByDate(events, date) {
+    return filterCalendarEventsByTimeRange(events, roundDays(date), roundDays(date, 1));
+}
+
 // Calendar list
 
 export async function getCalendars(teamId) {
