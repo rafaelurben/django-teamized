@@ -297,7 +297,11 @@ class CalendarOverview extends React.Component {
   }
 
   render() {
-    const isToday = Calendars.isSameDate(this.props.selectedDate, new Date);
+    const today = new Date();
+    const todaySelectedInCurrentMonth = (
+      Calendars.isSameDate(this.props.selectedDate, today) &&
+      Calendars.isSameDate(this.state.selectedMonth, Calendars.roundMonths(today))
+    );
     const firstDayShown = Calendars.getMondayOfWeek(this.state.selectedMonth);
 
     let monthDisplay = this.state.selectedMonth.toLocaleString(undefined, {
@@ -334,7 +338,9 @@ class CalendarOverview extends React.Component {
             <button
               type="button"
               className={
-                isToday ? "btn btn-dark disabled" : "btn btn-outline-dark"
+                todaySelectedInCurrentMonth
+                  ? "btn btn-outline-dark disabled"
+                  : "btn btn-outline-dark"
               }
               onClick={this.go2today}
             >
