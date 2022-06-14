@@ -485,6 +485,62 @@ class CalendarOverview extends React.Component {
   }
 }
 
+class CalendarEventDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    if (this.props.event === undefined) {
+      return <p className="ms-2 mb-1">Kein Ereignis ausgewählt</p>
+    }
+
+    const event = this.props.event;
+
+    let evtstartdsp;
+    let evtenddsp;
+
+    if (this.props.event.fullday) {
+      evtstartdsp = Calendars.getDateString(new Date(this.props.event.dstart));
+      evtenddsp = Calendars.getDateString(new Date(this.props.event.dend));
+    } else {
+      evtstartdsp = Calendars.getDateTimeString(new Date(this.props.event.dtstart));
+      evtenddsp = Calendars.getDateTimeString(new Date(this.props.event.dtend));
+    }
+
+    return (
+      <table className="table table-borderless mb-2">
+        <tbody>
+          <tr>
+            <th>Name:</th>
+            <td>{event.name}</td>
+          </tr>
+          {event.description ? 
+          <tr>
+            <th>Beschreibung:</th>
+            <td style={{ whiteSpace: "pre" }}>{event.description}</td>
+          </tr>
+          : null}
+          {event.location ?
+          <tr>
+            <th>Ort:</th>
+            <td>{event.location}</td>
+          </tr>
+          : null}
+          <tr>
+            <th>Start:</th>
+            <td>{evtstartdsp}</td>
+          </tr>
+          <tr>
+            <th>Ende:</th>
+            <td>{evtenddsp}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+}
+
 export default class Page_Calendars extends React.Component {
   constructor(props) {
     super(props);
@@ -502,15 +558,41 @@ export default class Page_Calendars extends React.Component {
   }
 
   handleEventSelect(data) {
-    console.log(data);
+    this.setState({ selectedEventId: data ? data.id : null });
+  }
+
+  ensureValidEventId() {
+    this.storeEvents();
+
+    if (this.state.selectedEventId === null) {
+      return;
+    }
+
+    const isValid = this.events.hasOwnProperty(this.state.selectedEventId);
+
+    if (!isValid) {
+      this.setState({ selectedEventId: null });
+    }
+  }
+
+  storeEvents() {
+    this.events = Calendars.flattenCalendarEvents(this.props.calendars);
+  }
+
+  componentDidMount() {
+    this.ensureValidEventId();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.ensureValidEventId();
   }
 
   render() {
+    this.storeEvents();
+
     if (Cache.getCurrentTeamData()._state.calendars._initial) {
       Cache.refreshTeamCacheCategory(this.props.team.id, "calendars");
     }
-
-    let events = Calendars.flattenCalendarEvents(this.props.calendars);
 
     let dayDisplay = Calendars.getDateString(this.state.selectedDate);
 
@@ -520,31 +602,41 @@ export default class Page_Calendars extends React.Component {
         subtitle="(w.i.p.) Kalender für dich und dein Team."
       >
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title="Übersicht">
+          <Dashboard.DashboardTile title="Ereignisübersicht" help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt">
             {/* Calendar overview */}
             <CalendarOverview
               onDateSelect={this.handleDateSelect}
               selectedDate={this.state.selectedDate}
-              events={events}
-            />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title={"Ereignisse am "+dayDisplay}>
-            {/* Events from the selected day & Create new event button */}
-            <CalendarEventPicker
-              onEventSelect={this.handleEventSelect}
-              selectedDate={this.state.selectedDate}
-              events={Calendars.filterCalendarEventsByDate(events, this.state.selectedDate)}
+              events={Object.values(this.events)}
             />
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile title="Ausgewähltes Ereignis">
             {/* Selected event */}
-            <p className="ms-1">(noch nicht implementiert)</p>
+            <CalendarEventDisplay
+              event={this.events[this.state.selectedEventId]}
+            />
           </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Kalenderinfos">
+        </Dashboard.DashboardColumn>
+        <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
+          <Dashboard.DashboardTile title={"Ereignisse am " + dayDisplay}>
+            {/* Events from the selected day & Create new event button */}
+            <CalendarEventPicker
+              onEventSelect={this.handleEventSelect}
+              selectedDate={this.state.selectedDate}
+              selectedEventId={this.state.selectedEventId}
+              events={Calendars.filterCalendarEventsByDate(
+                Object.values(this.events),
+                this.state.selectedDate
+              )}
+            />
+          </Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Kalenderinfos" help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse.">
             {/* Selecting, creating and managing calendars */}
-            <CalendarManager team={this.props.team} calendars={this.props.calendars} isAdmin={this.props.isAdmin} />
+            <CalendarManager
+              team={this.props.team}
+              calendars={this.props.calendars}
+              isAdmin={this.props.isAdmin}
+            />
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>

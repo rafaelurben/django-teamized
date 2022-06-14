@@ -52,13 +52,15 @@ export function getTimeString(datetime) {
 // Calendar utils
 
 export function flattenCalendarEvents(calendars) {
-    let events = [];
+    // Merge events from calendars into a single object
+
+    let events = {};
     Object.values(calendars).forEach(calendar => {
         calendar.events.forEach(event => {
-            events.push({
+            events[event.id] = {
                 ...event,
                 calendar,
-            });
+            };
         });
     });
     return events;
