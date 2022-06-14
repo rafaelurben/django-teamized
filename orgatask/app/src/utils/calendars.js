@@ -208,3 +208,42 @@ export async function deleteCalendarPopup(team, calendar) {
         async () => await deleteCalendar(team.id, calendar.id)
     );
 }
+
+// Event creation
+
+export async function createEvent(teamId, calendarId, name, description, location, fullday, dstart, dend, dtstart, dtend) {
+    return await API.POST(`teams/${teamId}/calendars/${calendarId}/events`, {
+        name, description, location, fullday, dstart, dend, dtstart: isoFormat(dtstart), dtend: isoFormat(dtend)
+    }).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).calendars[calendarId].events[data.id] = data.event;
+            return data.event;
+        }
+    )
+}
+
+// Event edit
+
+export async function editEvent(teamId, calendarId, eventId, name, description, location, fullday, dstart, dend, dtstart, dtend) {
+    return await API.POST(`teams/${teamId}/calendars/${calendarId}/events/${eventId}`, {
+        name, description, location, fullday, dstart, dend, dtstart: isoFormat(dtstart), dtend: isoFormat(dtend)
+    }).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).calendars[calendarId].events[eventId] = data.event;
+            return data.event;
+        }
+    )
+}
+
+// Event deletion
+
+export async function deleteEvent(teamId, calendarId, eventId) {
+    return await API.DELETE(`teams/${teamId}/calendars/${calendarId}/events/${eventId}`).then(
+        (data) => {
+            requestSuccessAlert(data);
+            delete Cache.getTeamData(teamId).calendars[calendarId].events[eventId];
+        }
+    )
+}
