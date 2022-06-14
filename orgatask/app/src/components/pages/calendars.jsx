@@ -165,7 +165,7 @@ class CalendarManager extends React.Component {
                 >
                   Webcal
                 </a>
-                <HoverInfo title="Auf unterstützen Geräten sollte sich der Webcal-Link direkt in der Kalenderapp öffnen. Falls nicht, kann in den meisten Apps ein Kalender via URL abonniert werden. Dazu einfach einen der beiden Links kopieren und dort einfügen, NICHT die Datei herunterladen." />
+                <HoverInfo title="Auf unterstützen Geräten sollte sich der Webcal-Link beim anklicken direkt in der Kalenderapp öffnen. Falls nicht, kann in den meisten Kalenderapps ein Kalender via URL abonniert werden. Dazu einfach der linke Link in das dafür vorgesehene Feld kopieren. Falls dieser nicht funktioniert, bitte den rechten verwenden. Die Datei sollte jedoch NICHT heruntergeladen werden. Sonst werden nur die aktuell vorhandenen Ereignisse gespeichert." />
                 <a href={calendar.ics_url} className="ms-1">
                   HTTP(S)
                 </a>
