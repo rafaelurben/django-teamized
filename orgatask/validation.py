@@ -43,7 +43,7 @@ def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datet
     data = _basic(datadict, attr, required, default)
 
     try:
-        return dt.datetime.strptime(data, fmt)
+        return dt.datetime.strptime(data, fmt).replace(tzinfo=dt.timezone.utc)
     except ValueError as exc:
         raise ValidationError(_("{} ist kein gültiger Zeitpunkt.").format(attr)) from exc
 

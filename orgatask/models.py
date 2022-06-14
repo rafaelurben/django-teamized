@@ -598,7 +598,7 @@ class Calendar(models.Model):
 
     @classmethod
     @decorators.validation_func()
-    def from_post_data(cls, data: dict, team: Team):
+    def from_post_data(cls, data: dict, team: Team) -> "Calendar":
         """Create a new calendar from post data"""
         return cls.objects.create(
             team=team,

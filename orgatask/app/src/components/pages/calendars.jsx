@@ -180,6 +180,10 @@ class CalendarManager extends React.Component {
                 ></i>
               </td>
             </tr>
+            <tr>
+              <th>ID:</th>
+              <td>{calendar.id}</td>
+            </tr>
           </tbody>
         </table>
       ) : null,

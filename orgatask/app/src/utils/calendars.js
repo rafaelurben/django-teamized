@@ -1,7 +1,6 @@
 import { requestSuccessAlert, successAlert, waitingAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
-import * as Navigation from "./navigation.js";
 
 // Date utils
 
@@ -193,7 +192,6 @@ export async function deleteCalendar(teamId, calendarId) {
         (data) => {
             requestSuccessAlert(data);
             delete Cache.getTeamData(teamId).calendars[calendarId];
-            Navigation.renderPage();
         }
     )
 }
