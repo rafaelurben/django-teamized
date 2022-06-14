@@ -303,7 +303,7 @@ class CalendarOverviewDay extends React.Component {
   }
 
   getDateClassName() {
-    let className = "d-flex justify-content-center align-items-center rounded-circle";
+    let className = "d-flex justify-content-center align-items-center flex-column rounded-circle";
     if (this.props.isSelected && this.props.isToday) {
       className += " bg-danger fw-bold text-white";
     } else if (this.props.isSelected) {
@@ -321,12 +321,28 @@ class CalendarOverviewDay extends React.Component {
   }
 
   render() {
+    let colors = [];
+    for (let event of this.props.events) {
+      if (!colors.includes(event.calendar.color)) {
+        colors.push(event.calendar.color);
+      }
+    }
+
     return (
       <div onClick={this.handleSelect}>
         <div className={this.getDateClassName()} style={{ width: "3em", height: "3em", cursor: "pointer" }}>
           <span>
             {this.props.date.getDate()}
           </span>
+          { this.props.isSelected ? null : (
+            <span style={{fontSize: "0.4rem", height: "0.4rem"}}>
+              {
+                colors.map((color) => {
+                  return <span key={color} style={{ color: color }}><i className="fas fa-circle"></i></span>;
+                })
+              }
+            </span>
+          )}
         </div>
       </div>
     );
