@@ -195,7 +195,11 @@ class CalendarEventPickerRow extends React.Component {
   }
 
   handleSelect() {
-    this.props.onSelect(this.props.event);
+    if (this.props.isSelected) {
+      this.props.onSelect(null);
+    } else {
+      this.props.onSelect(this.props.event);
+    }
   }
 
   getStyle() {
@@ -204,6 +208,7 @@ class CalendarEventPickerRow extends React.Component {
       borderLeftStyle: this.props.event.fullday ? "solid" : "dotted",
       borderLeftColor: this.props.event.calendar.color,
       cursor: "pointer",
+      opacity: this.props.isSelected ? 0.75 : 1,
     };
   }
 
@@ -280,6 +285,7 @@ class CalendarEventPicker extends React.Component {
           event={event}
           selectedDate={this.props.selectedDate}
           onSelect={this.props.onEventSelect}
+          isSelected={this.props.selectedEventId === event.id}
         />;
       });
     } else {
@@ -485,7 +491,10 @@ export default class Page_Calendars extends React.Component {
     this.handleDateSelect = this.handleDateSelect.bind(this);
     this.handleEventSelect = this.handleEventSelect.bind(this);
 
-    this.state = { selectedDate: Calendars.roundDays(new Date()) };
+    this.state = {
+      selectedDate: Calendars.roundDays(new Date()),
+      selectedEventId: null,
+    };
   }
 
   handleDateSelect(date) {
