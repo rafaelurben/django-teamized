@@ -39,9 +39,11 @@ def validation_func():
                 return function(request, *args, **kwargs)
             except exceptions.AlertException as exc:
                 raise exc
-            except (ValueError) as exc:
+            except Exception as exc:
+                # This should never be needed, but just in case...
                 raise exceptions.ValidationError(
                     _("Beim Validieren der Daten ist ein Fehler aufgetreten. Sind die Daten korrekt?"),
+                    status=500, # Indicate that this is an Internal Server Error
                 ) from exc
         return wrap
     return decorator
