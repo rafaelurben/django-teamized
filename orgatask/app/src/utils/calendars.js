@@ -247,3 +247,11 @@ export async function deleteEvent(teamId, calendarId, eventId) {
         }
     )
 }
+
+export async function deleteEventPopup(team, calendar, event) {
+    await confirmAlert(
+        "Willst du folgendes Ereignis wirklich löschen?<br /><br />" +
+        `<b>Name:</b> ${event.name} <br /><b>Beschreibung: </b>${event.description}`,
+        async () => await deleteEvent(team.id, calendar.id, event.id)
+    );
+}

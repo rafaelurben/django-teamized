@@ -492,11 +492,21 @@ class CalendarOverview extends React.Component {
 class CalendarEventDisplay extends React.Component {
   constructor(props) {
     super(props);
+    this.editEvent = this.editEvent.bind(this);
+    this.deleteEvent = this.deleteEvent.bind(this);
+  }
+
+  editEvent() {
+
+  }
+
+  deleteEvent() {
+    Calendars.deleteEventPopup(this.props.team, this.props.event.calendar, this.props.event).then(Navigation.renderPage)
   }
 
   render() {
     if (this.props.event === undefined) {
-      return <p className="ms-2 mb-1">Kein Ereignis ausgewählt</p>
+      return <p className="ms-1 mb-1">Kein Ereignis ausgewählt</p>
     }
 
     const event = this.props.event;
@@ -512,8 +522,8 @@ class CalendarEventDisplay extends React.Component {
       evtenddsp = Calendars.getDateTimeString(new Date(this.props.event.dtend));
     }
 
-    return (
-      <table className="table table-borderless mb-2">
+    return [
+      <table key="table" className="table table-borderless mb-2">
         <tbody>
           <tr>
             <th>Name:</th>
@@ -544,8 +554,22 @@ class CalendarEventDisplay extends React.Component {
             <td>{event.id}</td>
           </tr>
         </tbody>
-      </table>
-    );
+      </table>,
+      <button
+        key="edit"
+        className="btn btn-outline-dark disabled"
+        onClick={this.editEvent}
+      >
+        Bearbeiten
+      </button>,
+      <button
+        key="delete"
+        className="btn btn-outline-danger ms-2"
+        onClick={this.deleteEvent}
+      >
+        Löschen
+      </button>
+    ]
   };
 }
 
@@ -622,6 +646,7 @@ export default class Page_Calendars extends React.Component {
             {/* Selected event */}
             <CalendarEventDisplay
               event={this.events[this.state.selectedEventId]}
+              team={this.props.team}
             />
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
