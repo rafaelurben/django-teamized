@@ -39,7 +39,7 @@ def text(datadict: dict, attr: str, required: bool=True, default: str="", max_le
     return str(data)
 
 
-def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datetime = None, fmt="%Y-%m-%dT%H:%MZ") -> dt.datetime:
+def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datetime = None, fmt="%Y-%m-%dT%H:%M:%S.%f%z") -> dt.datetime:
     data = _basic(datadict, attr, required, default)
 
     try:

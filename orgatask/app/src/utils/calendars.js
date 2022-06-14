@@ -48,6 +48,11 @@ export function getTimeString(datetime) {
     });
 }
 
+export function isoFormat(value) {
+    if (value === undefined || value === null || value === "") return null;
+    return (new Date(value)).toISOString();
+}
+
 // Calendar utils
 
 export function flattenCalendarEvents(calendars) {
