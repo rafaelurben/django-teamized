@@ -88,12 +88,19 @@ async function refresh() {
   }
 }
 
-function f5pressed(e) {
+function onkeypress(e) {
   if (e.keyCode == 116) {
+    // F5
     if (e.shiftKey) {
+      // Shift+F5 normal reload
       e.preventDefault();
       window.location.reload(true);
+    } else if (e.altKey) {
+      // Alt+F5 secret debug mode
+      e.preventDefault();
+      $("body").toggleClass("debug");
     } else if (!e.ctrlKey) {
+      // F5 soft reload
       e.preventDefault();
       refresh();
     }
@@ -111,4 +118,4 @@ $("#menubartitle").click(Navigation.toggleSidebar);
 // Listen for click on the refresh button
 $("#refreshbutton").click(refresh);
 // Listen for F5 keypress
-$(document).keydown(f5pressed);
+$(document).keydown(onkeypress);

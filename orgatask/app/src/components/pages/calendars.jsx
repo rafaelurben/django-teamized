@@ -180,7 +180,7 @@ class CalendarManager extends React.Component {
                 ></i>
               </td>
             </tr>
-            <tr>
+            <tr className="debug-only">
               <th>ID:</th>
               <td>{calendar.id}</td>
             </tr>
@@ -519,18 +519,18 @@ class CalendarEventDisplay extends React.Component {
             <th>Name:</th>
             <td>{event.name}</td>
           </tr>
-          {event.description ? 
-          <tr>
-            <th>Beschreibung:</th>
-            <td style={{ whiteSpace: "pre" }}>{event.description}</td>
-          </tr>
-          : null}
-          {event.location ?
-          <tr>
-            <th>Ort:</th>
-            <td>{event.location}</td>
-          </tr>
-          : null}
+          {event.description ? (
+            <tr>
+              <th>Beschreibung:</th>
+              <td style={{ whiteSpace: "pre" }}>{event.description}</td>
+            </tr>
+          ) : null}
+          {event.location ? (
+            <tr>
+              <th>Ort:</th>
+              <td>{event.location}</td>
+            </tr>
+          ) : null}
           <tr>
             <th>Start:</th>
             <td>{evtstartdsp}</td>
@@ -538,6 +538,10 @@ class CalendarEventDisplay extends React.Component {
           <tr>
             <th>Ende:</th>
             <td>{evtenddsp}</td>
+          </tr>
+          <tr className="debug-only">
+            <th>ID:</th>
+            <td>{event.id}</td>
           </tr>
         </tbody>
       </table>

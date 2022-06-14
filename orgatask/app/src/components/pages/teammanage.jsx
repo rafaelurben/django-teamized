@@ -271,7 +271,7 @@ export default class Page_TeamManage extends React.Component {
         <th>Beschreibung:</th>
         <td>{this.props.team.description}</td>
       </tr>,
-      <tr key="id">
+      <tr key="id" className="debug-only">
         <th>ID:</th>
         <td>{this.props.team.id}</td>
       </tr>,
