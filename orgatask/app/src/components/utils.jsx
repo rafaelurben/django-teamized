@@ -15,7 +15,7 @@ export class HoverInfo extends React.Component {
 
   render() {
     return (
-      <abbr title={this.props.title} data-toggle="tooltip">
+      <abbr className={this.props.className} title={this.props.title} data-toggle="tooltip">
         <i className="fas fa-fw fa-info-circle"></i>
       </abbr>
     );

@@ -1,5 +1,7 @@
 "use strict";
 
+import {HoverInfo} from "./utils.js";
+
 /*
     This component is made to be reused. It represents a part of the dashboard.
 */
@@ -75,6 +77,7 @@ export class DashboardTile extends React.Component {
       header.push(
         <h5 key="title" className="dashboard-tile-title pt-2 text-bold">
           {this.props.title}
+          {this.props.help ? <HoverInfo className="ms-2 small" title={this.props.help} /> : null}
         </h5>
       );
     }
