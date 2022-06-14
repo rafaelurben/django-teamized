@@ -35,26 +35,7 @@ def endpoint_calendars(request, team: Team):
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
-        name = request.POST.get("name", "")[:49]
-        description = request.POST.get("description", "")
-        color = request.POST.get("color", "#FF0000")[:20]
-
-        if not name or not description:
-            return JsonResponse({
-                "error": "data_invalid",
-                "alert": {
-                    "title": _("Daten ungültig"),
-                    "text": _("Bitte fülle alle Felder aus."),
-                }
-            }, status=400)
-
-        # Create a new calendar
-        calendar = Calendar.objects.create(
-            team=team,
-            name=name,
-            description=description,
-            color=color,
-        )
+        calendar = Calendar.from_post_data(request.POST, team)
         return JsonResponse({
             "success": True,
             "calendar": calendar.as_dict(request),
@@ -92,17 +73,7 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
-        name = request.POST.get("name", "")[:49]
-        description = request.POST.get("description", "")
-        color = request.POST.get("color", "")[:20]
-
-        if name:
-            calendar.name = name
-        if description:
-            calendar.description = description
-        if color:
-            calendar.color = color
-        calendar.save()
+        calendar.update_from_post_data(request.POST)
         return JsonResponse({
             "success": True,
             "id": team.uid,

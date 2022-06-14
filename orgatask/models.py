@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.urls import reverse
 
-from orgatask import enums, options, exceptions, utils
+from orgatask import enums, options, exceptions, utils, decorators, validation
 
 # Create your models here.
 
@@ -596,6 +596,23 @@ class Calendar(models.Model):
             return path
         return request.build_absolute_uri(path)
 
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, team: Team):
+        """Create a new calendar from post data"""
+        return cls.objects.create(
+            team=team,
+            name=validation.text(data, "name", True, max_length=50),
+            description=validation.text(data, "description", True),
+            color=validation.text(data, "color", True, default="#FF0000", max_length=20),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.name = validation.text(data, "name", False, self.name, max_length=50)
+        self.description = validation.text(data, "description", False, self.description)
+        self.color = validation.text(data, "color", False, self.color, max_length=20)
+        self.save()
 
 class CalendarEvent(models.Model):
     uid = models.UUIDField(
