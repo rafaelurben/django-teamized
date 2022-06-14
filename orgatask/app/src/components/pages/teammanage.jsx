@@ -341,7 +341,7 @@ export default class Page_TeamManage extends React.Component {
                 <tbody>
                   {inviterows}
                   <tr>
-                    <td colspan="6">
+                    <td colSpan="6">
                       <button
                         type="button"
                         className="btn btn-outline-primary border-1"
