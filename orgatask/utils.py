@@ -34,3 +34,9 @@ def ical_text(text: str):
     text = text.replace(";", "\\;")
     text = text.replace(",", "\\,")
     return text
+
+def iddict(lst: list):
+    """
+    Returns a dictionary from a list objects with an id attribute
+    """
+    return {x['id']: x for x in lst}

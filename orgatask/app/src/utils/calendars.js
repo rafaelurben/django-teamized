@@ -60,9 +60,9 @@ export function flattenCalendarEvents(calendars) {
 
     let events = {};
     Object.values(calendars).forEach(calendar => {
-        calendar.events.forEach(event => {
-            events[event.id] = {
-                ...event,
+        Object.values(calendar.events).forEach(evt => {
+            events[evt.id] = {
+                ...evt,
                 calendar,
             };
         });

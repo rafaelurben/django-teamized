@@ -547,7 +547,7 @@ class Calendar(models.Model):
             "color": self.color,
             "is_public": bool(self.is_public),
             "ics_url": self.get_ics_url(request),
-            "events": [e.as_dict() for e in self.events.all()],
+            "events": utils.iddict(map(lambda e: e.as_dict(), self.events.all())),
         }
 
     def as_ics_text(self, request=None) -> str:
