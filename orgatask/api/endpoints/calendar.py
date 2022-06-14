@@ -96,3 +96,88 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
                 "text": _("Der Kalender wurde erfolgreich gelöscht."),
             }
         })
+
+@api_view(["get", "post"])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("team", Team, "team"), ("calendar", Calendar, "calendar")])
+def endpoint_events(request, team: Team, calendar: Calendar):
+    """
+    Endpoint for creating a new event in the calendar.
+    """
+
+    # Check if calendar is in team
+    if calendar.team != team:
+        return OBJ_NOT_FOUND
+
+    user: User = request.orgatask_user
+
+    # Check if user is member of team
+    if not team.user_is_member(user):
+        return NO_PERMISSION
+
+    if request.method == "GET":
+        events = calendar.events.all()
+        return JsonResponse({
+            "events": [event.as_dict() for event in events],
+        })
+    if request.method == "POST":
+        event = CalendarEvent.from_post_data(request.POST, calendar)
+        return JsonResponse({
+            "success": True,
+            "id": event.uid,
+            "event": event.as_dict(),
+            "alert": {
+                "title": _("Ereignis erstellt"),
+                "text": _("Das Ereignis wurde erfolgreich erstellt."),
+            }
+        })
+
+
+@api_view(["get", "post", "delete"])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("team", Team, "team"), ("calendar", Calendar, "calendar"), ("event", CalendarEvent, "event")])
+def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent):
+    """
+    Endpoint for managing or deleting an event.
+    """
+
+    # Check if calendar is in team
+    if calendar.team != team:
+        return OBJ_NOT_FOUND
+    # Check if event is in calendar
+    if event.calendar != calendar:
+        return OBJ_NOT_FOUND
+
+    user: User = request.orgatask_user
+
+    if not team.user_is_member(user):
+        return NO_PERMISSION
+
+    if request.method == "GET":
+        return JsonResponse({
+            "id": team.uid,
+            "event": event.as_dict(),
+        })
+    if request.method == "POST":
+        event.update_from_post_data(request.POST)
+        return JsonResponse({
+            "success": True,
+            "id": team.uid,
+            "event": event.as_dict(),
+            "alert": {
+                "title": _("Ereignis geändert"),
+                "text": _("Das Ereignis wurde erfolgreich geändert."),
+            }
+        })
+    if request.method == "DELETE":
+        event.delete()
+        return JsonResponse({
+            "success": True,
+            "id": event.uid,
+            "alert": {
+                "title": _("Ereignis gelöscht"),
+                "text": _("Das Ereignis wurde erfolgreich gelöscht."),
+            }
+        })

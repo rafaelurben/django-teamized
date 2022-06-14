@@ -711,3 +711,57 @@ class CalendarEvent(models.Model):
                 raise exceptions.ValidationError(_("Der Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen."))
             self.dstart = None
             self.dend = None
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, calendar: Calendar) -> "CalendarEvent":
+        "Creates an event from POST data"
+
+        fullday = validation.boolean(data, "fullday", False, default=True)
+        name = validation.text(data, "name", True, max_length=50)
+        description = validation.text(data, "description", False)
+        location = validation.text(data, "location", False)
+
+        if fullday:
+            event = cls(
+                calendar=calendar,
+                name=name,
+                description=description,
+                location=location,
+                fullday=True,
+                dstart=validation.date(data, "dstart", True),
+                dend=validation.date(data, "dend", True),
+            )
+        else:
+            event = cls(
+                calendar=calendar,
+                name=name,
+                description=description,
+                location=location,
+                fullday=False,
+                dtstart=validation.datetime(data, "dtstart", True),
+                dtend=validation.datetime(data, "dtend", True),
+            )
+
+        event.clean()
+        event.save()
+        return event
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        "Creates an event from POST data"
+
+        self.fullday = validation.boolean(data, "fullday", False, default=self.fullday)
+        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
+        self.description = validation.text(data, "description", False, default=self.fullday)
+        self.location = validation.text(data, "location", False, default=self.location)
+
+        if self.fullday:
+            self.dstart = validation.date(data, "dstart", False, default=self.dstart)
+            self.dend = validation.date(data, "dend", True, default=self.dend)
+        else:
+            self.dtstart = validation.datetime(data, "dtstart", True, default=self.dtstart)
+            self.dtend = validation.datetime(data, "dtend", True, default=self.dtend)
+
+        self.clean()
+        self.save()

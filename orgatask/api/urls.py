@@ -31,6 +31,8 @@ urlpatterns = [
 
     path('teams/<team>/calendars', ep.calendar.endpoint_calendars, name='api-calendars'),
     path('teams/<team>/calendars/<calendar>', ep.calendar.endpoint_calendar, name='api-calendar'),
+    path('teams/<team>/calendars/<calendar>/events', ep.calendar.endpoint_events, name='api-events'),
+    path('teams/<team>/calendars/<calendar>/events/<event>', ep.calendar.endpoint_event, name='api-event'),
 
     # Catch-all error view for 404 JSON responses
     re_path('.*', ep.endpoint_not_found, name="api-not-found")
