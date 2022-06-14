@@ -1,0 +1,20 @@
+{% extends 'orgatask/base.html' %}
+{% load i18n %}
+
+{% block title %}DEBUG{% endblock title %}
+
+{% block content %}
+    <div id="debugcontent" style="white-space: pre;"></div>
+    
+    <script>
+        window.addEventListener('load', () => {
+            if (window.opener !== null) {
+                var debugcontent = document.getElementById('debugcontent');
+                debugcontent.innerHTML = JSON.stringify(window.opener.orgatask, null, 2)
+            } else {
+                alert('This page must be opened from the debug menu!');
+                location.href = "about:blank";
+            }
+        });
+    </script>
+{% endblock content %}

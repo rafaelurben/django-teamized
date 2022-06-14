@@ -96,9 +96,9 @@ function onkeypress(e) {
       e.preventDefault();
       window.location.reload(true);
     } else if (e.altKey) {
-      // Alt+F5 secret debug mode
+      // Alt+F5 toggle debug mode
       e.preventDefault();
-      $("body").toggleClass("debug");
+      Utils.toggleDebug();
     } else if (!e.ctrlKey) {
       // F5 soft reload
       e.preventDefault();

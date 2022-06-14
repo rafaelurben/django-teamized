@@ -19,3 +19,13 @@ export function ms2HoursMinutesSeconds(ms) {
 export function seconds2HoursMinutesSeconds(seconds) {
     return ms2HoursMinutesSeconds(seconds * 1000);
 }
+
+export function toggleDebug() {
+    if ($("body").hasClass("debug")) {
+        $("body").removeClass("debug")
+    } else {
+        if (confirm("Möchtest du den DEBUG-Modus aktivieren?")) {
+            $("body").addClass("debug");
+        }
+    };
+}

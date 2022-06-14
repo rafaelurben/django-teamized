@@ -114,6 +114,13 @@ export function renderMenubar() {
     renderSidebar();
 }
 
+export function resetPage() {
+    ReactDOM.unmountComponentAtNode(
+        document.getElementById("orgatask_maincontent")
+    )
+    renderPage();
+}
+
 export function selectPage(page) {
     if (pageList.includes(page)) {
         window.orgatask.currentPage = page;

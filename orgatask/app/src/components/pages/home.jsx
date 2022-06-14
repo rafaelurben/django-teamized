@@ -1,6 +1,7 @@
 "use strict";
 
 import * as Dashboard from "../dashboard.js";
+import * as Utils from "../../utils/utils.js";
 
 export default class Page_Home extends React.Component {
   constructor(props) {
@@ -16,6 +17,9 @@ export default class Page_Home extends React.Component {
         <Dashboard.DashboardColumn>
           
         </Dashboard.DashboardColumn>
+        <div className="w-50 position-fixed bottom-0 end-0 text-end">
+          <a onClick={Utils.toggleDebug} className="btn text-white">Toggle DEBUG mode</a>
+        </div>
       </Dashboard.Dashboard>
     );
   }

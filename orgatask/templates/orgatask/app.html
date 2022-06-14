@@ -26,6 +26,20 @@
             <span class="d-lg-none ms-2">{% translate "Neu laden" %}</span>
         </a>
     </li>
+    <li class="nav-item dropdown border-lg rounded border-secondary ms-2 debug-only">
+        <a class="nav-link dropdown-toggle ms-1 me-1" href="#" title="DEBUG MENU" role="button" data-bs-toggle="dropdown">
+            <i class="fas fa-fw fa-bug"></i>
+            <span class="d-lg-none ms-2">DEBUG MENU</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="#" onclick="_OrgaTask.Navigation.resetPage(); alert('Done!')">Navigation.resetPage()</a></li>
+            <li class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" onclick="navigator.clipboard.writeText(JSON.stringify(orgatask)); alert('Daten wurden in die Zwischenablage kopiert!')">Daten kopieren</a></li>
+            <li><a class="dropdown-item" href="#" onclick="window.open('{% url "orgatask:app-debug" %}', '_blank');">Daten anzeigen</a></li>
+            <li class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" onclick="_OrgaTask.Utils.toggleDebug()">DEBUG-Modus verlassen</a></li>
+        </ul>
+    </li>
 {% endblock additional_menubar_items %}
 
 {% block scripts %}

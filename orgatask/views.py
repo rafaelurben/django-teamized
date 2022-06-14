@@ -23,6 +23,11 @@ def app(request):
     "Show the app page"
     return render(request, 'orgatask/app.html')
 
+@login_required(login_url=reverse_lazy('account:login'))
+def app_debug(request):
+    "Show the debug page"
+    return render(request, 'orgatask/debug.html', {"indexable": False})
+
 def manifest(request):
     "Render the manifest.json file"
     response = render(request, "orgatask/manifest.json", {})
