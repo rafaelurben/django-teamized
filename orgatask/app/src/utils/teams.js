@@ -25,8 +25,7 @@ export function ensureExistingTeam() {
   
   // No team selected or team doesn't exist; select default
   console.log("No team selected or team doesn't exist; falling back to default");
-  window.orgatask.selectedTeamId = window.orgatask.defaultTeamId;
-  switchTeam(window.orgatask.selectedTeamId);
+  switchTeam(window.orgatask.defaultTeamId);
 }
 
 export function switchTeam(teamId) {

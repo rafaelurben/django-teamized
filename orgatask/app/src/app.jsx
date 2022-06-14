@@ -74,7 +74,6 @@ async function reinitialize() {
   };
   Navigation.renderMenubar();
   await Teams.loadTeams(true); // Load teams from API and build cache
-  Navigation.exportToURL();
   Navigation.renderPage();
   WorkingTime.getTrackingSession();
 
