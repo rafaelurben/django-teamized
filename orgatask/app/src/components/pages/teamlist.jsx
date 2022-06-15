@@ -164,11 +164,11 @@ export default class Page_TeamList extends React.Component {
           </Dashboard.DashboardTile>
 
           <Dashboard.DashboardTile title="Team erstellen oder beitreten">
-            <p className="mx-1">Klicke auf "Team erstellen" um ein neues Team zu erstellen oder gib einen Einladungstoken ein und klicke auf "Team beitreten" um einem Team beizutreten.</p>
+            <p className="mx-1">Klicke auf "Team erstellen", um ein neues Team zu erstellen oder gib einen Einladungstoken ein und klicke auf "Team beitreten", um einem Team beizutreten.</p>
             <div className="input-group my-2 px-1">
               <button
                 type="button"
-                className="btn btn-outline-primary border-1"
+                className="btn btn-outline-success border-1"
                 onClick={Teams.createTeamPopup}
               >
                 Team erstellen
