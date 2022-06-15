@@ -48,6 +48,7 @@ function endLoading() {
 
 async function initialize() {
   if (new URL(location).searchParams.has('debug')) Utils.toggleDebug(true);
+  if (new URL(location).searchParams.has("beta_dark")) Utils.toggleDarkmode();
 
   startLoading();
 

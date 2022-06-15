@@ -30,3 +30,7 @@ export function toggleDebug(noask) {
         }
     };
 }
+
+export function toggleDarkmode() {
+    $('#orgatask_maincontent').toggleClass('darkmode');
+}
