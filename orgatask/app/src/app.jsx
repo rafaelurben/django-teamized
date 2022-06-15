@@ -47,6 +47,8 @@ function endLoading() {
 }
 
 async function initialize() {
+  if (new URL(location).searchParams.has('debug')) Utils.toggleDebug(true);
+
   startLoading();
 
   Navigation.hideSidebarOnMobile();

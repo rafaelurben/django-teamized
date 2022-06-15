@@ -20,11 +20,11 @@ export function seconds2HoursMinutesSeconds(seconds) {
     return ms2HoursMinutesSeconds(seconds * 1000);
 }
 
-export function toggleDebug() {
+export function toggleDebug(noask) {
     if ($("body").hasClass("debug")) {
         $("body").removeClass("debug")
     } else {
-        if (confirm("Möchtest du den DEBUG-Modus aktivieren?")) {
+        if (noask || confirm("Möchtest du den DEBUG-Modus aktivieren?")) {
             $("body").addClass("debug");
         }
     };
