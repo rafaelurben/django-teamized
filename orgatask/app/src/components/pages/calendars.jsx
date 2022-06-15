@@ -141,7 +141,7 @@ class CalendarManager extends React.Component {
               <td>
                 <i
                   style={{ color: calendar.color }}
-                  className="fas fa-circle small"
+                  className="fas fa-circle small dm-invert"
                 ></i>
               </td>
             </tr>
@@ -216,7 +216,7 @@ class CalendarEventPickerRow extends React.Component {
 
   render() {
     return (
-      <div className="ps-2 mb-1" style={this.getStyle()} onClick={this.handleSelect}>
+      <div className="ps-2 mb-1 dm-invert dm-invert-children" style={this.getStyle()} onClick={this.handleSelect}>
         <b className="d-inline-block w-100">{this.props.event.name}</b>
         <span className="d-inline-block w-100">{this.getDateDisplay()}</span>
         {this.props.event.location !== "" ? (
@@ -292,7 +292,7 @@ class CalendarOverviewDay extends React.Component {
   }
 
   getDateClassName() {
-    let className = "d-flex justify-content-center align-items-center flex-column rounded-circle";
+    let className = "d-flex justify-content-center align-items-center flex-column rounded-circle dm-noinvert";
     if (this.props.isSelected && this.props.isToday) {
       className += " bg-danger fw-bold text-white";
     } else if (this.props.isSelected) {
@@ -327,7 +327,7 @@ class CalendarOverviewDay extends React.Component {
             <span style={{fontSize: "0.4rem", height: "0.4rem"}}>
               {
                 colors.map((color) => {
-                  return <span key={color} style={{ color: color }}><i className="fas fa-circle"></i></span>;
+                  return <span key={color} style={{ color: color }}><i className="fas fa-circle dm-invert"></i></span>;
                 })
               }
             </span>

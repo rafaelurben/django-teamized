@@ -1,0 +1,21 @@
+/* Dark mode (via inversion) */
+
+@media (prefers-color-scheme: dark) {
+    .darkmode {
+        background-color: white !important;
+        filter: invert(1);
+    }
+    
+    .darkmode img:not(.dm-noinvert),
+    .darkmode *[class*="-success"]:not(.dm-noinvert),
+    .darkmode *[class*="-danger"]:not(.dm-noinvert),
+    .darkmode *[class*="-primary"]:not(.dm-noinvert),
+    .darkmode *[class*="-warning"]:not(.dm-noinvert),
+    .darkmode .dm-invert {
+        filter: invert(1);
+    }
+
+    .darkmode .dm-invert-children>* {
+        filter: invert(1);
+    }
+}

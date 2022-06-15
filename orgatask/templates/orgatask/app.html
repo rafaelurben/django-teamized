@@ -7,6 +7,7 @@
     <!-- Sweetalert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
     <link rel="stylesheet" href="{% static 'orgatask/css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'orgatask/css/darkinvert.css' %}">
 {% endblock extrahead %}
 
 {% block menubartitle %}
@@ -35,6 +36,7 @@
             <li><a class="dropdown-item" href="#" onclick="_OrgaTask.Navigation.resetPage(); alert('Done!')">Navigation.resetPage()</a></li>
             <li><a class="dropdown-item" href="#" onclick="window.location.reload(true)">location.reload(true)</a></li>
             <li class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" onclick="$('#orgatask_maincontent').toggleClass('darkmode');">(Beta) Dark mode erlauben</a></li>
             <li><a class="dropdown-item" href="#" onclick="navigator.clipboard.writeText(JSON.stringify(orgatask)); alert('Cache wurde in die Zwischenablage kopiert!')">Cache kopieren</a></li>
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item text-info" href="#" onclick="window.open('{% url "orgatask:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
