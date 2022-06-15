@@ -33,6 +33,9 @@ class WorkSessionTableRow extends React.Component {
         <td>
           <span>{this.getDurationDisplay()}</span>
         </td>
+        <td className="debug-only">
+          {this.props.session.id}
+        </td>
       </tr>
     );
   }
@@ -156,6 +159,7 @@ export default class Page_WorkingTime extends React.Component {
                   <th>Start</th>
                   <th>Ende</th>
                   <th>Dauer</th>
+                  <th className="debug-only">ID</th>
                 </tr>
               </thead>
               <tbody>{rows}</tbody>

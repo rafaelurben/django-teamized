@@ -102,6 +102,10 @@ class TeamTableRow extends React.Component {
             </a>
           </td>
         )}
+        {/* ID */}
+        <td className="debug-only">
+          {this.props.team.id}
+        </td>
       </tr>
     );
   }
@@ -143,6 +147,8 @@ export default class Page_TeamList extends React.Component {
                 <tr>
                   <th>Name &amp; Beschreibung</th>
                   <th>Deine Rolle</th>
+                  <th colSpan="3"></th>
+                  <th className="debug-only">ID</th>
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
