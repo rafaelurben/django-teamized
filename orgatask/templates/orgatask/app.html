@@ -33,11 +33,12 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-dark">
             <li><a class="dropdown-item" href="#" onclick="_OrgaTask.Navigation.resetPage(); alert('Done!')">Navigation.resetPage()</a></li>
+            <li><a class="dropdown-item" href="#" onclick="window.location.reload(true)">location.reload(true)</a></li>
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" onclick="navigator.clipboard.writeText(JSON.stringify(orgatask)); alert('Daten wurden in die Zwischenablage kopiert!')">Daten kopieren</a></li>
-            <li><a class="dropdown-item" href="#" onclick="window.open('{% url "orgatask:app-debug" %}', '_blank');">Daten anzeigen</a></li>
+            <li><a class="dropdown-item" href="#" onclick="navigator.clipboard.writeText(JSON.stringify(orgatask)); alert('Cache wurde in die Zwischenablage kopiert!')">Cache kopieren</a></li>
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" onclick="_OrgaTask.Utils.toggleDebug()">DEBUG-Modus verlassen</a></li>
+            <li><a class="dropdown-item text-info" href="#" onclick="window.open('{% url "orgatask:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="_OrgaTask.Utils.toggleDebug()">DEBUG-Modus verlassen</a></li>
         </ul>
     </li>
 {% endblock additional_menubar_items %}

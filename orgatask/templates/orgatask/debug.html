@@ -4,17 +4,47 @@
 {% block title %}DEBUG{% endblock title %}
 
 {% block content %}
-    <div id="debugcontent" style="white-space: pre;"></div>
+    <h1>DEBUG</h1>
+    <button onclick="debug_reload()" class="btn btn-outline-primary mb-2">Aktualisieren</button>
+
+    <h3>Cache (Achtung: Personenbezogene Daten!)</h3>
+    <textarea id="cache" style="resize: both;" class="w-100 form-control mb-2" rows="10" disabled></textarea>
+    <button onclick="navigator.clipboard.writeText($('#cache').html())" class="btn btn-outline-primary mb-2">Kopieren</button>
+    <button onclick="remove_teamcache()" class="btn btn-outline-danger mb-2">Teamcache leeren</button>
+
+{% endblock content %}
     
+{% block scripts %}
+{{ block.super }}
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
+        function debug(wd) {
+            $('#cache').html(JSON.stringify(wd.orgatask, null, 2))
+        }
+
+        function remove_teamcache() {
+            let data = JSON.parse($('#cache').html());
+            data.teamcache = "Cache wurde aus Datenschutzgründen entfernt.";
+            $('#cache').html(JSON.stringify(data, null, 2))
+        }
+
+        function debug_reload() {
+            if (window.opener !== null) {
+                debug(window.opener);
+            } else {
+                alert('Die ursprüngliche Seite wurde geschlossen!');
+            }
+        }
+
         window.addEventListener('load', () => {
             if (window.opener !== null) {
-                var debugcontent = document.getElementById('debugcontent');
-                debugcontent.innerHTML = JSON.stringify(window.opener.orgatask, null, 2)
+                debug(window.opener);
             } else {
-                alert('This page must be opened from the debug menu!');
+                alert('Diese Seite muss aus dem DEBUG-Menu geöffnet werden!');
                 location.href = "about:blank";
             }
         });
     </script>
-{% endblock content %}
+{% endblock scripts %}
