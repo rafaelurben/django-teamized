@@ -251,7 +251,7 @@ class CalendarEventPicker extends React.Component {
       }
     });
 
-    const calendarExists = this.props.selectedCalendar !== null;
+    const calendarExists = this.props.selectedCalendar !== undefined && this.props.selectedCalendar !== null;
     const eventExists = this.props.events.length > 0;
 
     let rows;

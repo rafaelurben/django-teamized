@@ -235,7 +235,6 @@ export function createEventPopup(team, calendar, date) {
         let name; let description; let location; let fullday;
         const _dt = localInputFormat(date);
         const _d = _dt.split('T')[0];
-        console.log(_d, _dt);
         Swal.fire({
             title: `Ereignis erstellen (1/2)`,
             html:
