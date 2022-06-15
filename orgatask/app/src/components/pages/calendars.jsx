@@ -10,69 +10,35 @@ import {HoverInfo} from "../utils.js";
 class CalendarManager extends React.Component {
   constructor(props) {
     super(props);
-
-    this.getCalendar = this.getCalendar.bind(this);
-    this.ensureValidCalendarId = this.ensureValidCalendarId.bind(this);
     this.handleCalendarSelect = this.handleCalendarSelect.bind(this);
 
     this.createCalendar = this.createCalendar.bind(this);
     this.editCalendar = this.editCalendar.bind(this);
     this.deleteCalendar = this.deleteCalendar.bind(this);
-
-    this.state = { selectedCalendarId: null };
-  }
-
-  getCalendar() {
-    return Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
-  }
-
-  ensureValidCalendarId() {
-    const isValid = this.props.calendars.hasOwnProperty(this.state.selectedCalendarId);
-    const calendarIds = Object.keys(this.props.calendars);
-    const hasCalendar = calendarIds.length > 0;
-
-    if (!isValid && hasCalendar) {
-      // If the current calendar is invalid and there are calendars, select the first one.
-      this.setState({selectedCalendarId: calendarIds[0]});
-    } else if (!isValid && this.state.selectedCalendarId !== null) {
-      // If the current calendar is set but there are no calendars, select null.
-      this.setState({selectedCalendarId: null});
-    }
   }
   
   handleCalendarSelect(event) {
-    let calId = event.target.value;
-    this.setState({ selectedCalendarId: calId });
+    this.props.onCalendarSelect(event.target.value);
   }
 
   createCalendar() {
     Calendars.createCalendarPopup(this.props.team).then(
       (calendar) => {
-        this.setState({ selectedCalendarId: calendar.id });
+        this.props.onCalendarSelect(calendar.id);
       }
     );
   }
 
   editCalendar() {
-    const calendar = this.getCalendar();
-    Calendars.editCalendarPopup(this.props.team, calendar).then(
+    Calendars.editCalendarPopup(this.props.team, this.props.selectedCalendar).then(
       Navigation.renderPage
     );
   }
 
   deleteCalendar() {
-    const calendar = this.getCalendar();
-    Calendars.deleteCalendarPopup(this.props.team, calendar).then(() => {
-      this.setState({ selectedCalendarId: null });
+    Calendars.deleteCalendarPopup(this.props.team, this.props.selectedCalendar).then(() => {
+      this.props.onCalendarSelect(null);
     });
-  }
-
-  componentDidMount() {
-    this.ensureValidCalendarId();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    this.ensureValidCalendarId();
   }
 
   render() {
@@ -99,7 +65,7 @@ class CalendarManager extends React.Component {
       );
     }
 
-    let calendar = this.getCalendar();
+    let calendar = this.props.selectedCalendar;
 
     let calendarPanelButtons = [];
     if (this.props.isAdmin) {
@@ -140,8 +106,7 @@ class CalendarManager extends React.Component {
         className="form-select mb-2"
         onInput={this.handleCalendarSelect}
         disabled={calendar === undefined}
-        value={this.state.selectedCalendarId || "0"}
-        abc={this.state.selectedCalendarId || "0"}
+        value={this.props.selectedCalendarId || "0"}
       >
         {calendarSelectOptions}
       </select>,
@@ -265,6 +230,11 @@ class CalendarEventPickerRow extends React.Component {
 class CalendarEventPicker extends React.Component {
   constructor(props) {
     super(props);
+    this.createEvent = this.createEvent.bind(this);
+  }
+
+  createEvent() {
+
   }
 
   render() {
@@ -293,9 +263,18 @@ class CalendarEventPicker extends React.Component {
         />;
       });
     } else {
-      rows = <span className="ms-1">Keine Ereignisse an diesem Datum</span>;
+      rows = [<p className="ms-1 mb-1" key="emptymessage">Keine Ereignisse an diesem Datum.</p>];
     }
 
+    rows.push(
+      <button
+        key="create"
+        className="btn btn-outline-success disabled mt-2"
+        onClick={this.createEvent}
+      >
+        Ereignis erstellen
+      </button>
+    );
     return rows;
   }
 }
@@ -576,13 +555,19 @@ class CalendarEventDisplay extends React.Component {
 export default class Page_Calendars extends React.Component {
   constructor(props) {
     super(props);
+    this.handleCalendarSelect = this.handleCalendarSelect.bind(this);
     this.handleDateSelect = this.handleDateSelect.bind(this);
     this.handleEventSelect = this.handleEventSelect.bind(this);
 
     this.state = {
       selectedDate: Calendars.roundDays(new Date()),
+      selectedCalendarId: null,
       selectedEventId: null,
     };
+  }
+
+  handleCalendarSelect(calendarId) {
+    this.setState({ selectedCalendarId: calendarId });
   }
 
   handleDateSelect(date) {
@@ -591,6 +576,22 @@ export default class Page_Calendars extends React.Component {
 
   handleEventSelect(data) {
     this.setState({ selectedEventId: data ? data.id : null });
+  }
+
+  ensureValidCalendarId() {
+    const isValid = this.props.calendars.hasOwnProperty(
+      this.state.selectedCalendarId
+    );
+    const calendarIds = Object.keys(this.props.calendars);
+    const hasCalendar = calendarIds.length > 0;
+
+    if (!isValid && hasCalendar) {
+      // If the current calendar is invalid and there are calendars, select the first one.
+      this.setState({ selectedCalendarId: calendarIds[0] });
+    } else if (!isValid && this.state.selectedCalendarId !== null) {
+      // If the current calendar is set but there are no calendars, select null.
+      this.setState({ selectedCalendarId: null });
+    }
   }
 
   ensureValidEventId() {
@@ -612,10 +613,12 @@ export default class Page_Calendars extends React.Component {
   }
 
   componentDidMount() {
+    this.ensureValidCalendarId();
     this.ensureValidEventId();
   }
 
   componentDidUpdate(prevProps, prevState) {
+    this.ensureValidCalendarId();
     this.ensureValidEventId();
   }
 
@@ -634,7 +637,10 @@ export default class Page_Calendars extends React.Component {
         subtitle="(w.i.p.) Kalender für dich und dein Team."
       >
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title="Ereignisübersicht" help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt">
+          <Dashboard.DashboardTile
+            title="Ereignisübersicht"
+            help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
+          >
             {/* Calendar overview */}
             <CalendarOverview
               onDateSelect={this.handleDateSelect}
@@ -663,11 +669,17 @@ export default class Page_Calendars extends React.Component {
               )}
             />
           </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Kalenderinfos" help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse.">
+          <Dashboard.DashboardTile
+            title="Kalenderinfos"
+            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
+          >
             {/* Selecting, creating and managing calendars */}
             <CalendarManager
+              onCalendarSelect={this.handleCalendarSelect}
               team={this.props.team}
               calendars={this.props.calendars}
+              selectedCalendarId={this.state.selectedCalendarId}
+              selectedCalendar={Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId]}
               isAdmin={this.props.isAdmin}
             />
           </Dashboard.DashboardTile>
