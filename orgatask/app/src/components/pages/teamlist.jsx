@@ -51,14 +51,18 @@ class TeamTableRow extends React.Component {
             <a
               className="btn btn-outline-success border-1"
               onClick={this.handleSwitchToButtonClick}
+              title="Zu Team wechseln"
             >
-              Auswählen
+              <i className="far fa-fw fa-circle-check"></i>
             </a>
           </td>
         ) : (
           <td>
-            <a className="btn btn-outline-success border-1 disabled">
-              Ausgewählt
+            <a
+              className="btn btn-success disabled"
+              title="Ausgewählt"
+            >
+              <i className="fas fa-fw fa-circle-check"></i>
             </a>
           </td>
         )}
@@ -68,8 +72,9 @@ class TeamTableRow extends React.Component {
             <a
               className="btn btn-outline-dark border-1"
               onClick={this.handleManageButtonClick}
+              title="Verwalten"
             >
-              Verwalten
+              <i className="fas fa-fw fa-pen-to-square"></i>
             </a>
           </td>
         ) : (
@@ -77,8 +82,9 @@ class TeamTableRow extends React.Component {
             <a
               className="btn btn-outline-dark border-1"
               onClick={this.handleManageButtonClick}
+              title="Ansehen"
             >
-              Ansehen
+              <i className="fas fa-fw fa-eye"></i>
             </a>
           </td>
         )}
@@ -88,8 +94,9 @@ class TeamTableRow extends React.Component {
             <a
               className="btn btn-outline-danger border-1"
               onClick={this.handleLeaveButtonClick}
+              title="Team verlassen"
             >
-              Verlassen
+              <i className="fas fa-fw fa-right-from-bracket"></i>
             </a>
           </td>
         ) : (
@@ -97,8 +104,9 @@ class TeamTableRow extends React.Component {
             <a
               className="btn btn-outline-danger border-1"
               onClick={this.handleDeleteButtonClick}
+              title="Team löschen"
             >
-              Löschen
+              <i className="fas fa-fw fa-trash"></i>
             </a>
           </td>
         )}

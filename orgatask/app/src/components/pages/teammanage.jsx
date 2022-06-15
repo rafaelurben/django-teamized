@@ -101,8 +101,9 @@ class TeamMembersTableRow extends React.Component {
               <a
                 className="btn btn-outline-danger border-1"
                 onClick={this.handleLeaveButtonClick}
+                title="Team verlassen"
               >
-                Verlassen
+                <i className="fas fa-fw fa-right-from-bracket"></i>
               </a>
             </td>
           ) : (
@@ -114,8 +115,9 @@ class TeamMembersTableRow extends React.Component {
             <a
               className="btn btn-outline-danger border-1"
               onClick={this.handleRemoveButtonClick}
+              title="Mitglied entfernen"
             >
-              Entfernen
+              <i className="fas fa-fw fa-trash"></i>
             </a>
           </td>
         ) : (
@@ -194,7 +196,7 @@ class TeamInvitesTableRow extends React.Component {
             className="btn btn-outline-dark border-1"
             onClick={this.handleEditButtonClick}
           >
-            Bearbeiten
+            <i className="fas fa-fw fa-pen-to-square"></i>
           </a>
         </td>
         {/* Action: Delete */}
@@ -202,14 +204,13 @@ class TeamInvitesTableRow extends React.Component {
           <a
             className="btn btn-outline-danger border-1"
             onClick={this.handleDeleteButtonClick}
+            title="Einladung löschen"
           >
-            Einladung löschen
+            <i className="fas fa-fw fa-trash"></i>
           </a>
         </td>
         {/* ID */}
-        <td className="debug-only">
-          {invite.id}
-        </td>
+        <td className="debug-only">{invite.id}</td>
       </tr>
     );
   }
