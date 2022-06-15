@@ -247,16 +247,7 @@ def endpoint_invites(request, team: Team):
             ]
         })
     if request.method == "POST":
-        note = request.POST.get("note", "")
-        try:
-            uses = int(request.POST.get("uses", 1))
-        except ValueError:
-            uses = None
-        try:
-            days = float(request.POST.get("days", 0.0))
-        except ValueError:
-            days = None
-        inv = team.create_invite(uses, note, days)
+        inv = Invite.from_post_data(request.POST, team)
         return JsonResponse({
             "success": True,
             "invite": inv.as_dict(),
@@ -291,17 +282,7 @@ def endpoint_invite(request, team: Team, invite: Invite):
 
     # Methods
     if request.method == "POST":
-        note = request.POST.get("note", "")
-        try:
-            uses = int(request.POST.get("uses", 1))
-        except ValueError:
-            uses = None
-        try:
-            days = float(request.POST.get("days", 0.0))
-        except ValueError:
-            days = None
-
-        invite.update(uses, note, days)
+        invite.update_from_post_data(request.POST)
         return JsonResponse({
             "success": True,
             "id": invite.uid,

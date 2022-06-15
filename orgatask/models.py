@@ -302,7 +302,7 @@ class Invite(models.Model):
             "is_valid": self.is_valid(),
             "uses_left": self.uses_left,
             "uses_used": self.uses_used,
-            "valid_until": None if self.valid_until is None else self.valid_until.timestamp(),
+            "valid_until": None if self.valid_until is None else self.valid_until.strftime("%Y-%m-%dT%H:%MZ"),
         }
 
     def get_time_left_days(self) -> float:
@@ -346,30 +346,22 @@ class Invite(models.Model):
 
         return self.team.join(user)
 
-    def update(self, uses_left: int = None, note: str = None, days_valid: float = None) -> None:
-        """
-        Update the invite
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, team: Team) -> "Calendar":
+        """Create a new calendar from post data"""
+        return cls.objects.create(
+            team=team,
+            note=validation.text(data, "note", True),
+            uses_left=validation.integer(data, "uses_left", False, default=options.DEFAULT_INVITE_USES),
+            valid_until=validation.datetime(data, "valid_until", False, default=None, null=True),
+        )
 
-        Set days_valid to -1 to make it a permanent invite.
-        Set days_valid to 0 to use the default.
-        """
-
-        if uses_left is not None:
-            if uses_left < 0:
-                self.uses_left = options.DEFAULT_INVITE_USES
-            else:
-                self.uses_left = uses_left
-
-        if days_valid is not None:
-            if days_valid < 0:
-                self.valid_until = None
-            elif days_valid == 0.0:
-                self.valid_until = timezone.now() + \
-                    timezone.timedelta(days=options.DEFAULT_INVITE_EXPIRATION_DAYS)
-            else:
-                self.valid_until = timezone.now() + timezone.timedelta(days=days_valid)
-
-        self.note = note
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.note = validation.text(data, "note", False, default=self.note)
+        self.uses_left = validation.integer(data, "uses_left", False, default=self.uses_left)
+        self.valid_until = validation.datetime(data, "valid_until", False, default=self.valid_until, null=True)
         self.save()
 
 class WorkSession(models.Model):

@@ -4,6 +4,7 @@ import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
 import * as Utils from "./utils.js";
 
+import { isoFormat, localInputFormat } from "./calendars.js";
 export { getTeamsList, getCurrentTeamData as getCurrentTeam } from "./cache.js";
 
 export function isCurrentTeamAdmin() {
@@ -286,9 +287,9 @@ export async function getInvites(teamId) {
 
 // Invite creation
 
-export async function createInvite(teamId, note, uses, days) {
+export async function createInvite(teamId, note, uses_left, valid_until) {
   return await API.POST(`teams/${teamId}/invites`, {
-    note, uses, days
+    note, uses_left, valid_until: isoFormat(valid_until)
   }).then(
     (data) => {
       requestSuccessAlert(data);
@@ -303,39 +304,37 @@ export async function createInvitePopup(team) {
     title: `Einladung erstellen`,
     html:
       `<p>Team: ${team.name}</p>` +	
-      '<label class="swal2-input-label" for="swal-input-uses">Anzahl Benutzungen:</label>' +
-      '<input type="number" id="swal-input-uses" class="swal2-input" value="1">' +
-      '<label class="swal2-input-label" for="swal-input-days">Gültigkeit in Tagen:</label>' +
-      '<input type="number" id="swal-input-days" class="swal2-input" value="7">' +
       '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
-      '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>',
+      '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>' +
+      '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
+      '<input type="number" id="swal-input-uses_left" class="swal2-input" value="1">' +
+      '<label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>' +
+      '<input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">',
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",
     cancelButtonText: "Abbrechen",
     preConfirm: async () => {
-      const uses = document.getElementById("swal-input-uses").value;
-      const days = document.getElementById("swal-input-days").value;
-      const note = document.getElementById(
-        "swal-input-note"
-      ).value;
+      const note = document.getElementById("swal-input-note").value;
+      const uses_left = document.getElementById("swal-input-uses_left").value;
+      const valid_until = document.getElementById("swal-input-valid_until").value;
 
-      if (!uses || !days || !note) {
+      if (!uses_left || !note) {
         Swal.showValidationMessage("Bitte fülle alle Felder aus");
         return false;
       }
 
       Swal.showLoading();
-      return await createInvite(team.id, note, uses, days);
+      return await createInvite(team.id, note, uses_left, valid_until);
     },
   })).value;
 }
 
 // Invite edit
 
-export async function editInvite(teamId, inviteId, note, uses, days) {
+export async function editInvite(teamId, inviteId, note, uses_left, valid_until) {
   return await API.POST(`teams/${teamId}/invites/${inviteId}`, {
-    note, uses, days
+    note, uses_left, valid_until: isoFormat(valid_until)
   }).then(
     (data) => {
       requestSuccessAlert(data);
@@ -346,35 +345,32 @@ export async function editInvite(teamId, inviteId, note, uses, days) {
 }
 
 export async function editInvitePopup(team, invite) {
-  let days = (new Date(invite.valid_until * 1000) - new Date()) / 86400000;
   return (await Swal.fire({
     title: "Einladung bearbeiten",
     html:
       `<p>Team: ${team.name}</p>` +
-      '<label class="swal2-input-label" for="swal-input-uses">Anzahl Benutzungen:</label>' +
-      `<input type="number" id="swal-input-uses" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">` +
-      '<label class="swal2-input-label" for="swal-input-days">Gültigkeit in Tagen:</label>' +
-      `<input type="number" id="swal-input-days" class= "swal2-input" value="${days}" placeholder="${days}">` +
       '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
-      `<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>`,
+      `<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>` +
+      '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
+      `<input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">` +
+      '<label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>' +
+      `<input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">`,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Aktualisieren",
     cancelButtonText: "Abbrechen",
     preConfirm: async () => {
-      const uses = document.getElementById("swal-input-uses").value;
-      const days = document.getElementById("swal-input-days").value;
-      const note = document.getElementById(
-        "swal-input-note"
-      ).value;
+      const note = document.getElementById("swal-input-note").value;
+      const uses_left = document.getElementById("swal-input-uses_left").value;
+      const valid_until = document.getElementById("swal-input-valid_until").value;
 
-      if (!uses || !days || !note) {
+      if (!uses_left || !note) {
         Swal.showValidationMessage("Bitte fülle alle Felder aus");
         return false;
       }
 
       Swal.showLoading();
-      return await editInvite(team.id, invite.id, note, uses, days);
+      return await editInvite(team.id, invite.id, note, uses_left, valid_until);
     },
   })).value;
 }

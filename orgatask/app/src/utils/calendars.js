@@ -53,6 +53,13 @@ export function isoFormat(value) {
     return (new Date(value)).toISOString();
 }
 
+export function localInputFormat(value) {
+    if (value === undefined || value === null || value === "") return null;
+    let datetime = new Date(value);
+    datetime.setMinutes(datetime.getMinutes() - datetime.getTimezoneOffset());
+    return datetime.toISOString().substring(0, 16);
+}
+
 // Calendar utils
 
 export function flattenCalendarEvents(calendars) {

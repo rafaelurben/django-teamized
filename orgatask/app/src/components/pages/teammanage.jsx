@@ -182,7 +182,7 @@ class TeamInvitesTableRow extends React.Component {
         </td>
         {/* Valid until */}
         <td>
-          <span>{new Date(invite.valid_until * 1000).toLocaleString()}</span>
+          <span>{invite.valid_until ? new Date(invite.valid_until).toLocaleString() : "\u221e"}</span>
         </td>
         {/* Uses */}
         <td className="text-align-end">
