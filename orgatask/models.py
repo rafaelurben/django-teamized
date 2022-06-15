@@ -302,7 +302,7 @@ class Invite(models.Model):
             "is_valid": self.is_valid(),
             "uses_left": self.uses_left,
             "uses_used": self.uses_used,
-            "valid_until": None if self.valid_until is None else self.valid_until.strftime("%Y-%m-%dT%H:%MZ"),
+            "valid_until": None if self.valid_until is None else self.valid_until.isoformat(),
         }
 
     def get_time_left_days(self) -> float:
@@ -657,10 +657,10 @@ class CalendarEvent(models.Model):
             "id": str(self.uid),
             "name": self.name,
             "description": self.description,
-            "dtstart": None if self.dtstart is None else self.dtstart.strftime("%Y-%m-%dT%H:%MZ"),
-            "dtend": None if self.dtend is None else self.dtend.strftime("%Y-%m-%dT%H:%MZ"),
-            "dstart": None if self.dstart is None else self.dstart.strftime("%Y-%m-%d"),
-            "dend": None if self.dend is None else self.dend.strftime("%Y-%m-%d"),
+            "dtstart": None if self.dtstart is None else self.dtstart.isoformat(),
+            "dtend": None if self.dtend is None else self.dtend.isoformat(),
+            "dstart": None if self.dstart is None else self.dstart.isoformat(),
+            "dend": None if self.dend is None else self.dend.isoformat(),
             "fullday": bool(self.fullday),
             "location": self.location,
         }
