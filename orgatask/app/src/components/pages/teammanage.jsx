@@ -195,6 +195,7 @@ class TeamInvitesTableRow extends React.Component {
           <a
             className="btn btn-outline-dark border-1"
             onClick={this.handleEditButtonClick}
+            title="Einladung bearbeiten"
           >
             <i className="fas fa-fw fa-pen-to-square"></i>
           </a>
@@ -355,7 +356,7 @@ export default class Page_TeamManage extends React.Component {
                     <td colSpan="6">
                       <button
                         type="button"
-                        className="btn btn-outline-primary border-1"
+                        className="btn btn-outline-success border-1"
                         onClick={this.handleInviteCreateButtonClick}
                       >
                         Einladung erstellen
