@@ -234,7 +234,7 @@ class CalendarEventPicker extends React.Component {
   }
 
   createEvent() {
-
+    Calendars.createEventPopup(this.props.team, this.props.selectedCalendar, this.props.selectedDate).then(Navigation.renderPage)
   }
 
   render() {
@@ -251,32 +251,39 @@ class CalendarEventPicker extends React.Component {
       }
     });
 
+    const calendarExists = this.props.selectedCalendar !== null;
+    const eventExists = this.props.events.length > 0;
+
     let rows;
-    if (events.length > 0) {
-      rows = events.map((event) => {
-        return <CalendarEventPickerRow
-          key={event.id}
-          event={event}
-          selectedDate={this.props.selectedDate}
-          onSelect={this.props.onEventSelect}
-          isSelected={this.props.selectedEventId === event.id}
-        />;
-      });
-    } else if (Object.keys(this.props.calendars).length > 0) {
-      rows = [
-        <p className="ms-1 mb-1" key="emptymessage">
-          Keine Ereignisse an diesem Datum.
-        </p>,
+    if (calendarExists) {
+      if (eventExists) {
+        rows = events.map((event) => {
+          return <CalendarEventPickerRow
+            key={event.id}
+            event={event}
+            selectedDate={this.props.selectedDate}
+            onSelect={this.props.onEventSelect}
+            isSelected={this.props.selectedEventId === event.id}
+          />;
+        });
+      } else {
+        rows = [
+          <p className="ms-1 mb-1" key="emptymessage">
+            Keine Ereignisse an diesem Datum.
+          </p>,
+        ];
+      }
+      rows.push(
         <button
           key="create"
           className="btn btn-outline-success mt-2"
           onClick={this.createEvent}
         >
           Ereignis erstellen
-        </button>,
-      ];
+        </button>
+      );
     } else {
-      rows = <p className="ms-1 mb-0" key="nocalmessage">Im ausgewählten Team ist noch kein Kalender vorhanden.</p>;
+      rows = <p className="ms-1 mb-0">Im ausgewählten Team ist noch kein Kalender vorhanden.</p>;
     }
     return rows;
   }
@@ -634,6 +641,8 @@ export default class Page_Calendars extends React.Component {
 
     let dayDisplay = Calendars.getDateString(this.state.selectedDate);
 
+    let selectedCalendar = Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
+
     return (
       <Dashboard.Dashboard
         title="Kalender"
@@ -666,15 +675,17 @@ export default class Page_Calendars extends React.Component {
               onEventSelect={this.handleEventSelect}
               selectedDate={this.state.selectedDate}
               selectedEventId={this.state.selectedEventId}
+              selectedCalendar={selectedCalendar}
               events={Calendars.filterCalendarEventsByDate(
                 Object.values(this.events),
                 this.state.selectedDate
               )}
+              team={this.props.team}
             />
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile
             title="Kalenderinfos"
-            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
+            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse, jedoch wird sie für die erstellung neuer Ereignisse beachtet."
           >
             {/* Selecting, creating and managing calendars */}
             <CalendarManager
@@ -682,7 +693,7 @@ export default class Page_Calendars extends React.Component {
               team={this.props.team}
               calendars={this.props.calendars}
               selectedCalendarId={this.state.selectedCalendarId}
-              selectedCalendar={Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId]}
+              selectedCalendar={selectedCalendar}
               isAdmin={this.props.isAdmin}
             />
           </Dashboard.DashboardTile>

@@ -230,6 +230,111 @@ export async function createEvent(teamId, calendarId, name, description, locatio
     )
 }
 
+export function createEventPopup(team, calendar, date) {
+    return new Promise((resolve, reject) => {
+        let name; let description; let location; let fullday;
+        const _dt = localInputFormat(date);
+        const _d = _dt.split('T')[0];
+        console.log(_d, _dt);
+        Swal.fire({
+            title: `Ereignis erstellen (1/2)`,
+            html:
+                `<p>Team: ${team.name}</p>` +
+                `<p>Kalender: ${calendar.name}</p>` +
+                '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
+                '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">' +
+                '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
+                '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>' +
+                '<label class="swal2-input-label" for="swal-input-location">Ort:</label>' +
+                '<input type="text" id="swal-input-location" class="swal2-input" placeholder="Ort">' + 
+                `<label for="swal-input-fullday" class="swal2-checkbox d-flex">` + 
+                    `<input type="checkbox" value="0" id="swal-input-fullday">` +
+                    `<span class="swal2-label">Ganztägig</span>` + 
+                `</label>`,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Weiter",
+            cancelButtonText: "Abbrechen",
+            preConfirm: async () => {
+                name = document.getElementById("swal-input-name").value;
+                description = document.getElementById("swal-input-description").value;
+                location = document.getElementById("swal-input-location").value;
+                fullday = document.getElementById("swal-input-fullday").checked;
+
+                if (!name) {
+                    Swal.showValidationMessage("Es wird ein Name benötigt!");
+                    return false;
+                }
+
+                Swal.showLoading();
+                return true;
+            },
+        }).then(
+            (value) => {
+                if (value.isConfirmed) {
+                    if (fullday) {
+                        Swal.fire({
+                            title: `Ereignis erstellen (2/2)`,
+                            html:
+                                '<label class="swal2-input-label" for="swal-input-dstart">Von:</label>' +
+                                `<input type="date" id="swal-input-dstart" class="swal2-input" value="${_d}">` +
+                                '<label class="swal2-input-label" for="swal-input-dend">Bis:</label>' +
+                                `<input type="date" id="swal-input-dend" class="swal2-input" value="${_d}">`,
+                            focusConfirm: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Erstellen",
+                            cancelButtonText: "Abbrechen",
+                            preConfirm: async () => {
+                                const dstart = document.getElementById("swal-input-dstart").value;
+                                const dend = document.getElementById("swal-input-dend").value;
+
+                                if (!dstart || !dend) {
+                                    Swal.showValidationMessage("Start- und Enddatum sind Pflichtfelder!");
+                                    return false;
+                                }
+
+                                Swal.showLoading();
+                                await createEvent(team.id, calendar.id, name, description, location, true, dstart, dend, null, null).then(
+                                    resolve, reject
+                                );
+                            },
+                        })
+                    } else {
+                        Swal.fire({
+                            title: `Ereignis erstellen (2/2)`,
+                            html:
+                                '<label class="swal2-input-label" for="swal-input-dtstart">Von:</label>' +
+                                `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${_dt}">` +
+                                '<label class="swal2-input-label" for="swal-input-dtend">Bis:</label>' +
+                                `<input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${_dt}">`,
+                            focusConfirm: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Erstellen",
+                            cancelButtonText: "Abbrechen",
+                            preConfirm: async () => {
+                                const dtstart = document.getElementById("swal-input-dtstart").value;
+                                const dtend = document.getElementById("swal-input-dtend").value;
+
+                                if (!dtstart || !dtend) {
+                                    Swal.showValidationMessage("Start- und Endzeit sind Pflichtfelder!");
+                                    return false;
+                                }
+
+                                Swal.showLoading();
+                                await createEvent(team.id, calendar.id, name, description, location, false, null, null, dtstart, dtend).then(
+                                    resolve, reject
+                                );
+                            },
+                        })
+                    }
+                } else {
+                    reject();
+                }
+            }
+        );
+    });
+}
+
 // Event edit
 
 export async function editEvent(teamId, calendarId, eventId, name, description, location, fullday, dstart, dend, dtstart, dtend) {
