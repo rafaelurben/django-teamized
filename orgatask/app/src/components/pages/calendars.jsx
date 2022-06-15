@@ -262,19 +262,22 @@ class CalendarEventPicker extends React.Component {
           isSelected={this.props.selectedEventId === event.id}
         />;
       });
+    } else if (Object.keys(this.props.calendars).length > 0) {
+      rows = [
+        <p className="ms-1 mb-1" key="emptymessage">
+          Keine Ereignisse an diesem Datum.
+        </p>,
+        <button
+          key="create"
+          className="btn btn-outline-success mt-2"
+          onClick={this.createEvent}
+        >
+          Ereignis erstellen
+        </button>,
+      ];
     } else {
-      rows = [<p className="ms-1 mb-1" key="emptymessage">Keine Ereignisse an diesem Datum.</p>];
+      rows = <p className="ms-1 mb-0" key="nocalmessage">Im ausgewählten Team ist noch kein Kalender vorhanden.</p>;
     }
-
-    rows.push(
-      <button
-        key="create"
-        className="btn btn-outline-success disabled mt-2"
-        onClick={this.createEvent}
-      >
-        Ereignis erstellen
-      </button>
-    );
     return rows;
   }
 }
