@@ -120,8 +120,10 @@ export function replaceTeamCacheCategory(teamId, category, objects) {
 export async function refreshTeamCacheCategory(teamId, category) {
     return new Promise((resolve, reject) => {
         let teamdata = getTeamData(teamId);
-        if (teamdata._state[category]._refreshing) {
-            reject("Already refreshing");
+        if (teamdata._state[category]._refreshing === true) {
+            // If the category is already being refreshed, we don't need to do anything
+            // This will not resolve nor reject the promise
+            console.info("[Cache] Team category " + category + " is already being refreshed for team " + teamId + "!");
         } else {
             teamdata._state[category]._refreshing = true;
             API.GET(`teams/${teamId}/${category}`).then(
