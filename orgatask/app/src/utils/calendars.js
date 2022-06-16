@@ -326,9 +326,8 @@ export function createEventPopup(team, calendar, date) {
                             },
                         })
                     }
-                } else {
-                    reject();
                 }
+                // Do not resolve nor reject if dismissed/cancelled
             }
         );
     });

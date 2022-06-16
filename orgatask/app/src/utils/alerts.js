@@ -111,10 +111,9 @@ export function confirmAlert(html, preConfirm, title, options) {
         Swal.fire(data).then((result) => {
             if (result.isConfirmed) {
                 resolve(result.value);
-            } else {
-                reject(result.dismiss);
             }
-        });
+            // Do not resolve nor reject if dismissed/cancelled
+        }).catch(reject);
     });
 }
 
