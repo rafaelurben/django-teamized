@@ -111,14 +111,25 @@ export function renderMenubar() {
         />,
         document.getElementById("orgatask_appmenubar")
     );
-    renderSidebar();
 }
 
-export function resetPage() {
+export function render() {
+    renderMenubar();
+    renderSidebar();
+    renderPage();
+}
+
+export function reRender() {
+    ReactDOM.unmountComponentAtNode(
+        document.getElementById("orgatask_appmenubar")
+    )
     ReactDOM.unmountComponentAtNode(
         document.getElementById("orgatask_maincontent")
     )
-    renderPage();
+    ReactDOM.unmountComponentAtNode(
+        document.getElementById("orgatask_appsidebar")
+    )
+    render();
 }
 
 export function selectPage(page) {
