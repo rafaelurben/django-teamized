@@ -16,7 +16,7 @@ export function getTeamsList() {
 }
 
 export function getTeamData(teamId) {
-    return window.orgatask.teamcache[teamId];
+    return window.orgatask.teamcache[teamId] || null;
 }
 
 export function getCurrentTeamData() {
@@ -38,15 +38,13 @@ export function getMemberInTeam(teamId, memberId) {
 // Add and remove teams from cache
 
 function updateTeam(team) {
-    if (team.hasOwnProperty("members")) {
-        window.orgatask.teamcache[team.id].members = {}
-        replaceMembersCache(team.id, team.members);
-        delete team.members;
-    }
-    if (team.hasOwnProperty("invites")) {
-        window.orgatask.teamcache[team.id].invites = {}
-        replaceInvitesCache(team.id, team.invites);
-        delete team.invites;
+    for (let category of ["members", "invites", "calendars"]) {
+        if (team.hasOwnProperty(category)) {
+            window.orgatask.teamcache[team.id][category] = {}
+            replaceTeamCacheCategory(team.id, category, team[category]);
+            delete team[category];
+            // Delete the category from the team object itself to avoid data redundancy
+        }
     }
     window.orgatask.teamcache[team.id].team = team;
 }
@@ -109,24 +107,27 @@ export function updateTeamsCache(teams, defaultTeamId) {
 
 export function replaceTeamCacheCategory(teamId, category, objects) {
     let teamdata = getTeamData(teamId);
-    teamdata[category] = {};
-    for (let obj of objects) {
-        teamdata[category][obj.id] = obj;
+    if (teamdata === null) {
+        console.warn("[Cache] Team " + teamId + " not found in cache. This usually happens when the page is soft reloaded twice in short succession and should not be a problem.");
+    } else {
+        teamdata[category] = {};
+        for (let obj of objects) {
+            teamdata[category][obj.id] = obj;
+        }
     }
 }
 
 export async function refreshTeamCacheCategory(teamId, category) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         let teamdata = getTeamData(teamId);
         if (teamdata._state[category]._refreshing) {
             reject("Already refreshing");
         } else {
             teamdata._state[category]._refreshing = true;
-            await API.GET(`teams/${teamId}/${category}`).then(
+            API.GET(`teams/${teamId}/${category}`).then(
                 (data) => {
                     let objects = data[category];
                     replaceTeamCacheCategory(teamId, category, objects);
-                    delete teamdata[category]["_refreshing"];
 
                     teamdata._state[category]._initial = false;
                     teamdata._state[category]._refreshing = false;
@@ -134,19 +135,12 @@ export async function refreshTeamCacheCategory(teamId, category) {
 
                     resolve(objects);
                 }
+            ).catch(
+                (error) => {
+                    teamdata._state[category]._refreshing = false;
+                    reject(error);
+                }
             );
         }
     });
-}
-
-export function replaceMembersCache(teamId, members) {
-    replaceTeamCacheCategory(teamId, "members", members);
-}
-
-export function replaceInvitesCache(teamId, invites) {
-    replaceTeamCacheCategory(teamId, "invites", invites);
-}
-
-export function replaceCalendarsCache(teamId, calendars) {
-    replaceTeamCacheCategory(teamId, "calendars", calendars);
 }

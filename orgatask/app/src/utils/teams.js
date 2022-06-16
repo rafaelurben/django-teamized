@@ -222,7 +222,7 @@ export async function leaveTeamPopup(team) {
 export async function getMembers(teamId) {
   return await API.GET(`teams/${teamId}/members`).then(
     (data) => {
-      Cache.replaceMembersCache(teamId, data.members);
+      Cache.replaceTeamCacheCategory(teamId, 'members', data.members);
       return data.members;
     }
   )
@@ -279,7 +279,7 @@ export async function deleteMemberPopup(team, member) {
 export async function getInvites(teamId) {
   return await API.GET(`teams/${teamId}/invites`).then(
     (data) => {
-      Cache.replaceInvitesCache(teamId, data.invites);
+      Cache.replaceTeamCacheCategory(teamId, 'invites', data.invites);
       return data.invites;
     }
   )
