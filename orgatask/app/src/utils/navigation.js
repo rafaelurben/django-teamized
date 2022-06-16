@@ -98,7 +98,6 @@ export function renderPage() {
         />,
         document.getElementById("orgatask_maincontent")
     );
-    renderSidebar();
 }
 
 export function renderMenubar() {
@@ -136,7 +135,7 @@ export function selectPage(page) {
     if (pageList.includes(page)) {
         window.orgatask.currentPage = page;
         exportToURL();
-        renderPage();
+        render();
         hideSidebarOnMobile();
     } else {
         console.error("Invalid page: " + page);
@@ -148,6 +147,5 @@ export function handleHistoryNavigation() {
     importFromURL();
     ensureExistingPage();
     Teams.ensureExistingTeam();
-    renderMenubar();
-    renderPage();
+    render();
 }

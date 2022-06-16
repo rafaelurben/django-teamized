@@ -38,8 +38,7 @@ export function switchTeam(teamId) {
 
   window.orgatask.selectedTeamId = teamId;
   Navigation.exportToURL();
-  Navigation.renderMenubar();
-  Navigation.renderPage();
+  Navigation.render();
 }
 
 // Team loading
@@ -49,7 +48,7 @@ export async function loadTeams(full=false) {
     (teams) => {
       ensureExistingTeam();
 
-      Navigation.renderMenubar();
+      Navigation.render();
       return teams;
     }
   )
@@ -181,8 +180,7 @@ export async function deleteTeam(teamId) {
       requestSuccessAlert(data);
       await Cache.deleteTeam(teamId);
       ensureExistingTeam();
-      Navigation.renderMenubar();
-      Navigation.renderPage();
+      Navigation.render();
     }
   )
 }
@@ -203,8 +201,7 @@ export async function leaveTeam(teamId) {
       requestSuccessAlert(data);
       await Cache.deleteTeam(teamId);
       ensureExistingTeam();
-      Navigation.renderMenubar();
-      Navigation.renderPage();
+      Navigation.render();
     }
   )
 }

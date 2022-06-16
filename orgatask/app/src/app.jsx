@@ -54,12 +54,11 @@ async function initialize() {
 
   Navigation.hideSidebarOnMobile();
   Navigation.importFromURL();
-  Navigation.renderMenubar();
+  Navigation.render();
   window.orgatask.user = await Teams.getProfile();
   Navigation.renderSidebar();
-  await Teams.loadTeams(true); // Load teams from API and build cache
+  await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
   Navigation.exportToURL();
-  Navigation.renderPage();
   
   Teams.checkURLInvite();
   WorkingTime.getTrackingSession();
@@ -75,9 +74,8 @@ async function reinitialize() {
     defaultTeamId: null,
     teamcache: {},
   };
-  Navigation.renderMenubar();
-  await Teams.loadTeams(true); // Load teams from API and build cache
-  Navigation.renderPage();
+  Navigation.render();
+  await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
   WorkingTime.getTrackingSession();
 
   endLoading();

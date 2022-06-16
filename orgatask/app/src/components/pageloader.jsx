@@ -19,6 +19,10 @@ export default class PageLoader extends React.Component {
   }
 
   render() {
+    const teamdata = Cache.getCurrentTeamData();
+
+    if (teamdata === null) return null;
+
     switch (this.props.page) {
       case "home":
         return (
@@ -34,7 +38,6 @@ export default class PageLoader extends React.Component {
           />
         );
       case "teammanage":
-        let teamdata = Cache.getCurrentTeamData();
         return (
           <Page_TeamManage
             team={teamdata.team}
@@ -53,8 +56,8 @@ export default class PageLoader extends React.Component {
       case "calendars":
         return (
           <Page_Calendars
-            team={Cache.getCurrentTeamData().team}
-            calendars={Cache.getCurrentTeamData().calendars}
+            team={teamdata.team}
+            calendars={teamdata.calendars}
             isAdmin={Teams.isCurrentTeamAdmin()}
           />
         );
