@@ -69,6 +69,8 @@ async function initialize() {
 async function reinitialize() {
   startLoading();
 
+  const oldTeamId = window.orgatask.selectedTeamId;
+
   window.orgatask = {
     ...window.orgatask,
     defaultTeamId: null,
@@ -77,6 +79,8 @@ async function reinitialize() {
   Navigation.render();
   await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
   WorkingTime.getTrackingSession();
+
+  Teams.switchTeam(oldTeamId);
 
   endLoading();
 }
