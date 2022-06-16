@@ -21,7 +21,16 @@ export default class PageLoader extends React.Component {
   render() {
     const teamdata = Cache.getCurrentTeamData();
 
-    if (teamdata === null) return null;
+    if (teamdata === null) {
+      return (
+        <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+          <div className="spinner-border mb-3" role="status">
+            <span className="visually-hidden">Laden...</span>
+          </div>
+          <p>Teams werden geladen...</p>
+        </div>
+      );
+    };
 
     switch (this.props.page) {
       case "home":
