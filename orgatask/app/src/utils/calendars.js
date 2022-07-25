@@ -121,7 +121,7 @@ export async function createCalendarPopup(team) {
     return (await Swal.fire({
         title: `Kalender erstellen`,
         html:
-            `<p>Team: ${team.name}</p>` +
+            `<p>Team: ${team.name}</p><hr />` +
             '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
             '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Kalendername">' +
             '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
@@ -168,7 +168,7 @@ export async function editCalendarPopup(team, calendar) {
     return (await Swal.fire({
         title: `Kalender bearbeiten`,
         html:
-            `<p>Team: ${team.name}</p>` +
+            `<p>Team: ${team.name}</p><hr />` +
             '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
             `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">` +
             '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
@@ -239,7 +239,7 @@ export function createEventPopup(team, calendar, date) {
             title: `Ereignis erstellen (1/2)`,
             html:
                 `<p>Team: ${team.name}</p>` +
-                `<p>Kalender: ${calendar.name}</p>` +
+                `<p>Kalender: ${calendar.name}</p><hr />` +
                 '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
                 '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">' +
                 '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +

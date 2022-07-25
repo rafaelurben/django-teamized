@@ -146,7 +146,7 @@ export async function editTeamPopup(team) {
   return (await Swal.fire({
     title: "Team bearbeiten",
     html:
-      `<p>Team: ${team.name}</p>` +
+      `<p>Team: ${team.name}</p><hr />` +
       '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
       `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">` +
       '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
@@ -300,7 +300,7 @@ export async function createInvitePopup(team) {
   return (await Swal.fire({
     title: `Einladung erstellen`,
     html:
-      `<p>Team: ${team.name}</p>` +	
+      `<p>Team: ${team.name}</p><hr />` +	
       '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
       '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>' +
       '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
@@ -345,7 +345,7 @@ export async function editInvitePopup(team, invite) {
   return (await Swal.fire({
     title: "Einladung bearbeiten",
     html:
-      `<p>Team: ${team.name}</p>` +
+      `<p>Team: ${team.name}</p><hr />` +
       '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
       `<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>` +
       '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
