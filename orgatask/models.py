@@ -56,7 +56,7 @@ class User(models.Model):
     @property
     def avatar_url(self) -> str:
         mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
-        return "https://www.gravatar.com/avatar/"+mailhash
+        return "https://www.gravatar.com/avatar/"+mailhash+"?s=80&d=retro"
 
     def create_team(self, name, description) -> "Team":
         """
