@@ -124,7 +124,18 @@ export default class AppSidebar extends React.Component {
           >
             <li>
               <a className="dropdown-item" href="/account/?next=/orgatask/app/">
+                <i className="me-2 fas fa-fw fa-user"></i>
                 Account
+              </a>
+            </li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="https://de.gravatar.com/"
+                target="_blank"
+              >
+                <i className="me-2 fas fa-fw fa-arrow-up-right-from-square"></i>
+                Avatar
               </a>
             </li>
             <li>
@@ -135,6 +146,7 @@ export default class AppSidebar extends React.Component {
                 className="dropdown-item"
                 href="/account/logout?next=/orgatask/"
               >
+                <i className="me-2 fas fa-fw fa-arrow-right-from-bracket"></i>
                 Ausloggen
               </a>
             </li>
