@@ -90,7 +90,7 @@ export class DashboardTile extends React.Component {
     return (
       <div className="dashboard-tile row border border-dark rounded rounded-5 mx-2 mb-3 mt-0">
         {header}
-        <div className="p-2 w-100 overflow-scroll">
+        <div className="p-2 w-100 overflow-auto">
           {this.props.children}
         </div>
       </div>
