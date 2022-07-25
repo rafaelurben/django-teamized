@@ -248,7 +248,7 @@ export async function promoteMemberPopup(team, member) {
 
 export async function demoteMemberPopup(team, member) {
   return await confirmAlert(
-    `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Mitglied des Teams ${team.name} degradieren?`,
+    `Willst du '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) von einem Administrator zu einem Mitglied des Teams ${team.name} degradieren?`,
     async () => await editMember(team.id, member.id, "member")
   )
 }
