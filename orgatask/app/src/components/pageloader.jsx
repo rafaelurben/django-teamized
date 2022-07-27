@@ -60,6 +60,7 @@ export default class PageLoader extends React.Component {
             current_worksession={window.orgatask.current_worksession}
             worksessions={Cache.getMeInCurrentTeam().worksessions}
             selectedTeamId={window.orgatask.selectedTeamId}
+            selectedTeam={teamdata.team}
           />
         );
       case "calendars":

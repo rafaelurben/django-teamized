@@ -10,6 +10,18 @@ class WorkSessionTableRow extends React.Component {
   constructor(props) {
     super(props);
     this.getDurationDisplay = this.getDurationDisplay.bind(this);
+    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+  }
+
+  async handleDeleteButtonClick() {
+    await WorkingTime.deleteWorkSessionPopup(this.props.team, this.props.session);
+    Navigation.renderPage();
+  }
+
+  async handleEditButtonClick() {
+    await WorkingTime.editWorkSessionPopup(this.props.team, this.props.session);
+    Navigation.renderPage();
   }
 
   getDurationDisplay() {
@@ -22,20 +34,39 @@ class WorkSessionTableRow extends React.Component {
       <tr>
         <td>
           <span>
-            {new Date(this.props.session.time_start).toLocaleString()}
-          </span>
-        </td>
-        <td>
-          <span>
+            {new Date(this.props.session.time_start).toLocaleString()} bis
+            <br />
             {new Date(this.props.session.time_end).toLocaleString()}
           </span>
         </td>
         <td>
           <span>{this.getDurationDisplay()}</span>
         </td>
-        <td className="debug-only">
-          {this.props.session.id}
+        <td>
+          <span>{this.props.session.note}</span>
         </td>
+        {/* Action: Edit */}
+        <td>
+          <a
+            className="btn btn-outline-dark border-1"
+            onClick={this.handleEditButtonClick}
+            title="Sitzung bearbeiten"
+          >
+            <i className="fas fa-fw fa-pen-to-square"></i>
+          </a>
+        </td>
+        {/* Action: Delete */}
+        <td>
+          <a
+            className="btn btn-outline-danger border-1"
+            onClick={this.handleDeleteButtonClick}
+            title="Sitzung löschen"
+          >
+            <i className="fas fa-fw fa-trash"></i>
+          </a>
+        </td>
+        {/* ID */}
+        <td className="debug-only">{this.props.session.id}</td>
       </tr>
     );
   }
@@ -45,6 +76,7 @@ export default class Page_WorkingTime extends React.Component {
   constructor(props) {
     super(props);
     this.getTimeDisplay = this.getTimeDisplay.bind(this);
+    this.createSession = this.createSession.bind(this);
     this.startSession = this.startSession.bind(this);
     this.stopSession = this.stopSession.bind(this);
     this.fetchSessions = this.fetchSessions.bind(this);
@@ -66,6 +98,11 @@ export default class Page_WorkingTime extends React.Component {
         this.fetch_in_progress = false;
       })
     }
+  }
+
+  async createSession() {
+    await WorkingTime.createWorkSessionPopup(this.props.selectedTeam);
+    Navigation.renderPage();
   }
 
   async startSession() {
@@ -122,7 +159,7 @@ export default class Page_WorkingTime extends React.Component {
     } else {
       rows = this.props.worksessions.map((session) => {
         return (
-          <WorkSessionTableRow session={session} key={session.id} />
+          <WorkSessionTableRow session={session} key={session.id} team={this.props.selectedTeam} />
         );
       });
     }
@@ -132,33 +169,39 @@ export default class Page_WorkingTime extends React.Component {
         title="Deine Arbeitszeit"
         subtitle="(w.i.p.) Erfasse und verwalte deine Arbeitszeit"
       >
-        <Dashboard.DashboardColumn sizes={{lg: 3}}>
-          <Dashboard.DashboardTile title="Zeit erfassen">
-              <h1 className="text-center">{this.state.timeDisplay}</h1>
+        <Dashboard.DashboardColumn sizes={{ lg: 3 }}>
+          <Dashboard.DashboardTile title="Sitzung aufzeichnen">
+            <h1 className="text-center">{this.state.timeDisplay}</h1>
 
-              <div className="text-center">
-                {
-                  this.props.current_worksession ? (
-                    <button className="btn btn-danger" onClick={this.stopSession}>
-                      Zeitmessung beenden
-                    </button>
-                  ) : (
-                    <button className="btn btn-success" onClick={this.startSession}>
-                      Zeitmessung starten
-                    </button>
-                  )
-                }
-              </div>
+            <div className="text-center">
+              {this.props.current_worksession ? (
+                <button className="btn btn-danger" onClick={this.stopSession}>
+                  Zeitmessung beenden
+                </button>
+              ) : (
+                <button className="btn btn-success" onClick={this.startSession}>
+                  Zeitmessung starten
+                </button>
+              )}
+            </div>
+          </Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Sitzung erfassen">
+            <div className="text-center">
+              <button className="btn btn-outline-success" onClick={this.createSession}>
+                Sitzung hinzufügen
+              </button>
+            </div>
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{lg: 9}}>
+        <Dashboard.DashboardColumn sizes={{ lg: 9 }}>
           <Dashboard.DashboardTile title="Erfasste Zeiten (ausgewähltes Team)">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th>Start</th>
-                  <th>Ende</th>
+                  <th>Start &amp; Ende</th>
                   <th>Dauer</th>
+                  <th>Notiz</th>
+                  <th colSpan="2"></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>
