@@ -38,6 +38,7 @@ def endpoint_calendars(request, team: Team):
         calendar = Calendar.from_post_data(request.POST, team)
         return JsonResponse({
             "success": True,
+            "id": calendar.uid,
             "calendar": calendar.as_dict(request),
             "alert": {
                 "title": _("Kalender erstellt"),
@@ -66,7 +67,7 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
             return NO_PERMISSION
 
         return JsonResponse({
-            "id": team.uid,
+            "id": calendar.uid,
             "calendar": calendar.as_dict(request),
         })
     if request.method == "POST":
@@ -76,7 +77,7 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
         calendar.update_from_post_data(request.POST)
         return JsonResponse({
             "success": True,
-            "id": team.uid,
+            "id": calendar.uid,
             "calendar": calendar.as_dict(request),
             "alert": {
                 "title": _("Kalender geändert"),
@@ -157,14 +158,14 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
 
     if request.method == "GET":
         return JsonResponse({
-            "id": team.uid,
+            "id": event.uid,
             "event": event.as_dict(),
         })
     if request.method == "POST":
         event.update_from_post_data(request.POST)
         return JsonResponse({
             "success": True,
-            "id": team.uid,
+            "id": event.uid,
             "event": event.as_dict(),
             "alert": {
                 "title": _("Ereignis geändert"),
