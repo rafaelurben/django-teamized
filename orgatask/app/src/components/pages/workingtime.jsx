@@ -85,6 +85,7 @@ export default class Page_WorkingTime extends React.Component {
     this.state = { timeDisplay: this.getTimeDisplay() };
     this.clockRefreshIntervalID = 0;
 
+    this.currentSessionRefreshIntervalId = 0;
     this.fetch_in_progress = false;
     this.start_in_progress = false;
     this.stop_in_progress = false;
@@ -125,6 +126,15 @@ export default class Page_WorkingTime extends React.Component {
     }
   }
 
+  async updateSession() {
+    const current = this.props.current_worksession;
+    const updated = WorkingTime.getTrackingSession();
+    if (current !== updated) {
+      Navigation.renderPage();
+      this.fetchSessions();
+    }
+  }
+
   getTimeDisplay() {
     if (this.props.current_worksession) {
       const now = new Date();
@@ -139,10 +149,13 @@ export default class Page_WorkingTime extends React.Component {
 
   componentDidMount() {
     this.clockRefreshIntervalID = setInterval(() => this.tick(), 1000);
+    this.updateSession();
+    this.currentSessionRefreshIntervalId = setInterval(() => this.updateSession(), 15000);
   }
 
   componentWillUnmount() {
     clearInterval(this.clockRefreshIntervalID);
+    clearInterval(this.currentSessionRefreshIntervalId);
   }
 
   tick() {
