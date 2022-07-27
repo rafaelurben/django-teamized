@@ -329,7 +329,8 @@ export default class Page_TeamManage extends React.Component {
                   <th>Name</th>
                   <th>Benutzername &amp; E-Mail</th>
                   <th>Rolle</th>
-                  <th colSpan="2"></th>
+                  <th style={{width: "1px"}}></th>
+                  <th style={{width: "1px"}}></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>
@@ -346,7 +347,8 @@ export default class Page_TeamManage extends React.Component {
                     <th>Teilen <HoverInfo title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
                     <th>Gültig bis</th>
                     <th>Verwendungen <HoverInfo title="Bereits verwendet / noch verfügbar" /></th>
-                    <th colSpan="2"></th>
+                    <th style={{width: "1px"}}></th>
+                    <th style={{width: "1px"}}></th>
                     <th className="debug-only">ID</th>
                   </tr>
                 </thead>

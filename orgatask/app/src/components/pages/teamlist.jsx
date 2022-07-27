@@ -155,7 +155,9 @@ export default class Page_TeamList extends React.Component {
                 <tr>
                   <th>Name &amp; Beschreibung</th>
                   <th>Deine Rolle</th>
-                  <th colSpan="3"></th>
+                  <th style={{width: "1px"}}></th>
+                  <th style={{width: "1px"}}></th>
+                  <th style={{width: "1px"}}></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>

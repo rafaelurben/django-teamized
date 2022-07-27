@@ -201,7 +201,8 @@ export default class Page_WorkingTime extends React.Component {
                   <th>Start &amp; Ende</th>
                   <th>Dauer</th>
                   <th>Notiz</th>
-                  <th colSpan="2"></th>
+                  <th style={{width: "1px"}}></th>
+                  <th style={{width: "1px"}}></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>
