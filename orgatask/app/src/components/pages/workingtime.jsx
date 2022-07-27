@@ -22,12 +22,12 @@ class WorkSessionTableRow extends React.Component {
       <tr>
         <td>
           <span>
-            {new Date(this.props.session.time_start*1000).toLocaleString()}
+            {new Date(this.props.session.time_start).toLocaleString()}
           </span>
         </td>
         <td>
           <span>
-            {new Date(this.props.session.time_end*1000).toLocaleString()}
+            {new Date(this.props.session.time_end).toLocaleString()}
           </span>
         </td>
         <td>
@@ -91,7 +91,7 @@ export default class Page_WorkingTime extends React.Component {
   getTimeDisplay() {
     if (this.props.current_worksession) {
       const now = new Date();
-      const start = new Date(this.props.current_worksession.time_start * 1000);
+      const start = new Date(this.props.current_worksession.time_start);
       const timediff = now - start;
       const diff = ms2HoursMinutesSeconds(timediff);
       return `${diff.hours}:${diff.minutes}:${diff.seconds}`;

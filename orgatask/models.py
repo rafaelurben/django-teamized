@@ -413,8 +413,8 @@ class WorkSession(models.Model):
     def as_dict(self) -> dict:
         return {
             "id": self.uid,
-            "time_start": self.time_start.timestamp(),
-            "time_end": None if self.time_end is None else self.time_end.timestamp(),
+            "time_start": self.time_start.isoformat(),
+            "time_end": None if self.time_end is None else self.time_end.isoformat(),
             "is_created_via_tracking": self.is_created_via_tracking,
             "is_ended": self.is_ended,
             "duration": self.duration,
