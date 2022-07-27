@@ -1,8 +1,8 @@
-import { successAlert, waitingAlert } from "./alerts.js";
+import { successAlert, waitingAlert, requestSuccessAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
-
+import { isoFormat, localInputFormat } from "./calendars.js";
 
 export async function getWorkSessionsInTeam(teamId) {
     return await API.GET(`me/worksessions/t=${teamId}`).then(
@@ -13,6 +13,126 @@ export async function getWorkSessionsInTeam(teamId) {
         }
     );
 }
+
+// WorkSession creation
+
+export async function createWorkSession(teamId, note, dtstart, dtend) {
+    return await API.POST(`me/worksessions/t=${teamId}`, {
+        note, time_start: isoFormat(dtstart), time_end: isoFormat(dtend)
+    }).then(
+        (data) => {
+            requestSuccessAlert(data);
+            let me = Cache.getMeInCurrentTeam();
+            me.worksessions = me.worksessions || [];
+            me.worksessions.push(data.session);
+            return data.session;
+        }
+    )
+}
+
+export async function createWorkSessionPopup(team) {
+    const _dt = localInputFormat(new Date());
+    return (await Swal.fire({
+        title: `Session erstellen`,
+        html:
+            `<p>Team: ${team.name}</p><hr />` +
+            '<label class="swal2-input-label" for="swal-input-note">Notiz:</label>' +
+            '<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz"></textarea>' +
+            '<label class="swal2-input-label" for="swal-input-dtstart">Von:</label>' +
+            `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${_dt}">` +
+            '<label class="swal2-input-label" for="swal-input-dtend">Bis:</label>' +
+            `<input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${_dt}">`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Erstellen",
+        cancelButtonText: "Abbrechen",
+        preConfirm: async () => {
+            const note = document.getElementById("swal-input-note").value;
+            const dtstart = document.getElementById("swal-input-dtstart").value;
+            const dtend = document.getElementById("swal-input-dtend").value;
+
+            if (!dtstart || !dtend) {
+                Swal.showValidationMessage("Start- und Endzeit sind Pflichtfelder!");
+                return false;
+            }
+
+            Swal.showLoading();
+            return await createWorkSession(team.id, note, dtstart, dtend);
+        },
+    })).value;
+}
+
+// WorkSession edit
+
+export async function editWorkSession(teamId, sessionId, note, dtstart, dtend) {
+    return await API.POST(`me/worksessions/${sessionId}`, {
+        note, time_start: isoFormat(dtstart), time_end: isoFormat(dtend)
+    }).then(
+        async (data) => {
+            requestSuccessAlert(data);
+            await getWorkSessionsInTeam(teamId);
+            return data.session;
+        }
+    )
+}
+
+export async function editWorkSessionPopup(team, session) {
+    let dtstart = localInputFormat(session.time_start);
+    let dtend = localInputFormat(session.time_end);
+    return (await Swal.fire({
+        title: `Session bearbeiten`,
+        html:
+            '<label class="swal2-input-label" for="swal-input-note">Notiz:</label>' +
+            `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>` +
+            (session.is_created_via_tracking ? '' :
+                '<label class="swal2-input-label" for="swal-input-dtstart">Von:</label>' +
+                `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${dtstart}">` +
+                '<label class="swal2-input-label" for="swal-input-dtend">Bis:</label>' +
+                `<input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${dtend}">`
+            ),
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Bearbeiten",
+        cancelButtonText: "Abbrechen",
+        preConfirm: async () => {
+            const note = document.getElementById("swal-input-note").value;
+
+            if (!session.is_created_via_tracking) {
+                dtstart = document.getElementById("swal-input-dtstart").value;
+                dtend = document.getElementById("swal-input-dtend").value;
+                if (!dtstart || !dtend) {
+                    Swal.showValidationMessage("Start- und Endzeit sind Pflichtfelder!");
+                    return false;
+                }
+            }
+
+            Swal.showLoading();
+            return await editWorkSession(team.id, session.id, note, dtstart, dtend);
+        },
+    })).value;
+}
+
+// WorkSession deletion
+
+export async function deleteWorkSession(teamId, sessionId) {
+    return await API.DELETE(`me/worksessions/${sessionId}`).then(
+        async (data) => {
+            requestSuccessAlert(data);
+            await getWorkSessionsInTeam(teamId);
+        }
+    )
+}
+
+export async function deleteWorkSessionPopup(team, session) {
+    await confirmAlert(
+        "Willst du folgende Session wirklich löschen?<br /><br />" +
+        `<b>Notiz:</b> ${session.name}`,
+        async () => await deleteWorkSession(team.id, session.id)
+    );
+}
+
+
+// Tracking
 
 export async function startTrackingSession(teamId) {
     waitingAlert("Wird gestartet...");
