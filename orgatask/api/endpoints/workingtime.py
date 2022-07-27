@@ -11,6 +11,7 @@ from orgatask.decorators import orgatask_prep
 from orgatask.models import User, Member, Team, WorkSession
 
 @api_view(["get", "post"])
+@csrf_exempt
 @orgatask_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_worksessions(request, team: Team):
