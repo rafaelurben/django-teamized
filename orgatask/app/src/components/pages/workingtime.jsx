@@ -80,6 +80,7 @@ export default class Page_WorkingTime extends React.Component {
     this.startSession = this.startSession.bind(this);
     this.stopSession = this.stopSession.bind(this);
     this.fetchSessions = this.fetchSessions.bind(this);
+    this.updateSession = this.updateSession.bind(this);
     this.tick = this.tick.bind(this);
 
     this.state = { timeDisplay: this.getTimeDisplay() };
@@ -128,8 +129,8 @@ export default class Page_WorkingTime extends React.Component {
 
   async updateSession() {
     const current = this.props.current_worksession;
-    const updated = WorkingTime.getTrackingSession();
-    if (current !== updated) {
+    const updated = await WorkingTime.getTrackingSession();
+    if (current !== undefined && current !== updated && (current === null || updated === null || current.id !== updated.id)) {
       Navigation.renderPage();
       this.fetchSessions();
     }
