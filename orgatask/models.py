@@ -428,6 +428,44 @@ class WorkSession(models.Model):
         self.is_ended = True
         self.save()
 
+    def validate(self):
+        if self.time_start and self.time_end and self.time_start > self.time_end:
+            raise validation.ValidationError(
+                text=_("Das Startdatum liegt nach dem Enddatum."),
+                title=_("Startdatum nach Enddatum"),
+                errorname="start-after-end")
+        if self.time_end and self.time_end > timezone.now():
+            raise validation.ValidationError(
+                text=_("Das Enddatum liegt in der Zukunft."),
+                title=_("Enddatum in der Zukunft"),
+                errorname="end-in-future")
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, team: Team, member: Member, user: User) -> "WorkSession":
+        """Create a new WorkSession from post data"""
+        session = cls(
+            team=team,
+            member=member,
+            user=user,
+            note=validation.text(data, "note", False),
+            time_start=validation.datetime(data, "time_start", True),
+            time_end=validation.datetime(data, "time_end", True),
+            is_ended=True,
+        )
+        session.validate()
+        session.save()
+        return session
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.note = validation.text(data, "note", False, default=self.note)
+        if not self.is_created_via_tracking:
+            self.time_start = validation.datetime(data, "time_start", False, default=self.time_start)
+            self.time_end = validation.datetime(data, "time_end", False, default=self.time_end)
+            self.validate()
+        self.save()
+
 # class TeamLog(models.Model):
 #     "Used for logging changes in a team"
 

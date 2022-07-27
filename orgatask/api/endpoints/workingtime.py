@@ -10,12 +10,12 @@ from orgatask.api.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
 from orgatask.models import User, Member, Team, WorkSession
 
-@api_view(["get"])
+@api_view(["get", "post"])
 @orgatask_prep()
 @require_objects([("team", Team, "team")])
-def endpoint_list_in_team(request, team: Team):
+def endpoint_worksessions(request, team: Team):
     """
-    Endpoint for listing all sessions of the current user in a team.
+    Endpoint for listing all sessions of the current user in a team and manually creating a new one.
     """
 
     # Check if the user is a member of the team
@@ -25,11 +25,68 @@ def endpoint_list_in_team(request, team: Team):
 
     member = team.get_member(user)
 
-    # Get all sessions of the user in the team
-    sessions = member.work_sessions.filter(is_ended=True).order_by('-time_start').all()
-    return JsonResponse({
-        "sessions": [session.as_dict() for session in sessions],
-    })
+    if request.method == "GET":
+        # Get all sessions of the user in the team
+        sessions = member.work_sessions.filter(is_ended=True).order_by('-time_start').all()
+        return JsonResponse({
+            "sessions": [session.as_dict() for session in sessions],
+        })
+    if request.method == "POST":
+        session = WorkSession.from_post_data(request.POST, team, member, user)
+        return JsonResponse({
+            "success": True,
+            "id": session.uid,
+            "session": session.as_dict(),
+            "alert": {
+                "title": _("Session erstellt"),
+                "text": _("Die Session wurde erfolgreich erstellt."),
+            }
+        })
+
+
+@api_view(["get", "post", "delete"])
+@csrf_exempt
+@orgatask_prep()
+@require_objects([("session", WorkSession, "session")])
+def endpoint_worksession(request, session: WorkSession):
+    """
+    Endpoint for managing or deleting a WorkSession.
+    """
+
+    user: User = request.orgatask_user
+
+    # Check if it's the user's session
+    if session.user != user:
+        return OBJ_NOT_FOUND
+
+
+    if request.method == "GET":
+        return JsonResponse({
+            "id": session.uid,
+            "session": session.as_dict(),
+        })
+    if request.method == "POST":
+        session.update_from_post_data(request.POST)
+        return JsonResponse({
+            "success": True,
+            "id": session.uid,
+            "event": session.as_dict(),
+            "alert": {
+                "title": _("Session geändert"),
+                "text": _("Die Session wurde erfolgreich geändert."),
+            }
+        })
+    if request.method == "DELETE":
+        session.delete()
+        return JsonResponse({
+            "success": True,
+            "id": session.uid,
+            "alert": {
+                "title": _("Session gelöscht"),
+                "text": _("Die Session wurde erfolgreich gelöscht."),
+            }
+        })
+
 
 @api_view(["post"])
 @csrf_exempt

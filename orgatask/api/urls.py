@@ -20,9 +20,10 @@ urlpatterns = [
     path('invites/<invite>/info', ep.main.endpoint_invite_info, name='api-invite-info'),
     path('invites/<invite>/accept', ep.main.endpoint_invite_accept, name='api-invite-accept'),
 
-    # WorkTime API views
+    # Workingtime API views
 
-    path('me/worksessions/t=<team>', ep.workingtime.endpoint_list_in_team, name='api-workingtime-list-in-team'),
+    path('me/worksessions/t=<team>', ep.workingtime.endpoint_worksessions, name='api-workingtime-worksessions'),
+    path('me/worksessions/<session>', ep.workingtime.endpoint_worksession, name='api-workingtime-worksession'),
     path('me/worksessions/tracking/start/t=<team>', ep.workingtime.endpoint_tracking_start, name='api-workingtime-tracking-start'),
     path('me/worksessions/tracking/live', ep.workingtime.endpoint_tracking_live, name='api-workingtime-tracking-live'),
     path('me/worksessions/tracking/stop', ep.workingtime.endpoint_tracking_stop, name='api-workingtime-tracking-stop'),
