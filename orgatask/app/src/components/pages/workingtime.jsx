@@ -184,28 +184,34 @@ export default class Page_WorkingTime extends React.Component {
         subtitle="(w.i.p.) Erfasse und verwalte deine Arbeitszeit"
       >
         <Dashboard.DashboardColumn sizes={{ lg: 3 }}>
-          <Dashboard.DashboardTile title="Sitzung aufzeichnen">
-            <h1 className="text-center">{this.state.timeDisplay}</h1>
+          <Dashboard.DashboardRow>
+            <Dashboard.DashboardColumn size="12" sizes={{ lg: 12, sm: 6, md: 6 }}>
+              <Dashboard.DashboardTile title="Sitzung aufzeichnen">
+                <h1 className="text-center">{this.state.timeDisplay}</h1>
 
-            <div className="text-center">
-              {this.props.current_worksession ? (
-                <button className="btn btn-danger" onClick={this.stopSession}>
-                  Zeitmessung beenden
-                </button>
-              ) : (
-                <button className="btn btn-success" onClick={this.startSession}>
-                  Zeitmessung starten
-                </button>
-              )}
-            </div>
-          </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Sitzung erfassen">
-            <div className="text-center">
-              <button className="btn btn-outline-success" onClick={this.createSession}>
-                Sitzung hinzufügen
-              </button>
-            </div>
-          </Dashboard.DashboardTile>
+                <div className="text-center">
+                  {this.props.current_worksession ? (
+                    <button className="btn btn-danger" onClick={this.stopSession}>
+                      Zeitmessung beenden
+                    </button>
+                  ) : (
+                    <button className="btn btn-success" onClick={this.startSession}>
+                      Zeitmessung starten
+                    </button>
+                  )}
+                </div>
+              </Dashboard.DashboardTile>
+            </Dashboard.DashboardColumn>
+            <Dashboard.DashboardColumn size="12" sizes={{ lg: 12, sm: 6, md: 6 }}>
+              <Dashboard.DashboardTile title="Sitzung erfassen">
+                <div className="text-center">
+                  <button className="btn btn-outline-success" onClick={this.createSession}>
+                    Sitzung hinzufügen
+                  </button>
+                </div>
+              </Dashboard.DashboardTile>
+            </Dashboard.DashboardColumn>
+          </Dashboard.DashboardRow>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 9 }}>
           <Dashboard.DashboardTile title="Erfasste Zeiten (ausgewähltes Team)">
