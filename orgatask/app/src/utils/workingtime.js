@@ -1,4 +1,4 @@
-import { successAlert, waitingAlert, requestSuccessAlert } from "./alerts.js";
+import { successAlert, waitingAlert, requestSuccessAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
@@ -126,7 +126,7 @@ export async function deleteWorkSession(teamId, sessionId) {
 export async function deleteWorkSessionPopup(team, session) {
     await confirmAlert(
         "Willst du folgende Sitzung wirklich löschen?<br /><br />" +
-        `<b>Notiz:</b> ${session.name}`,
+        `<b>Notiz:</b> ${session.note}`,
         async () => await deleteWorkSession(team.id, session.id)
     );
 }
