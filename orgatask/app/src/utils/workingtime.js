@@ -33,7 +33,7 @@ export async function createWorkSession(teamId, note, dtstart, dtend) {
 export async function createWorkSessionPopup(team) {
     const _dt = localInputFormat(new Date());
     return (await Swal.fire({
-        title: `Session erstellen`,
+        title: `Sitzung erstellen`,
         html:
             `<p>Team: ${team.name}</p><hr />` +
             '<label class="swal2-input-label" for="swal-input-note">Notiz:</label>' +
@@ -80,7 +80,7 @@ export async function editWorkSessionPopup(team, session) {
     let dtstart = localInputFormat(session.time_start);
     let dtend = localInputFormat(session.time_end);
     return (await Swal.fire({
-        title: `Session bearbeiten`,
+        title: `Sitzung bearbeiten`,
         html:
             '<label class="swal2-input-label" for="swal-input-note">Notiz:</label>' +
             `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>` +
@@ -125,7 +125,7 @@ export async function deleteWorkSession(teamId, sessionId) {
 
 export async function deleteWorkSessionPopup(team, session) {
     await confirmAlert(
-        "Willst du folgende Session wirklich löschen?<br /><br />" +
+        "Willst du folgende Sitzung wirklich löschen?<br /><br />" +
         `<b>Notiz:</b> ${session.name}`,
         async () => await deleteWorkSession(team.id, session.id)
     );

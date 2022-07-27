@@ -39,8 +39,8 @@ def endpoint_worksessions(request, team: Team):
             "id": session.uid,
             "session": session.as_dict(),
             "alert": {
-                "title": _("Session erstellt"),
-                "text": _("Die Session wurde erfolgreich erstellt."),
+                "title": _("Sitzung erstellt"),
+                "text": _("Die Sitzung wurde erfolgreich erstellt."),
             }
         })
 
@@ -73,8 +73,8 @@ def endpoint_worksession(request, session: WorkSession):
             "id": session.uid,
             "event": session.as_dict(),
             "alert": {
-                "title": _("Session geändert"),
-                "text": _("Die Session wurde erfolgreich geändert."),
+                "title": _("Sitzung geändert"),
+                "text": _("Die Sitzung wurde erfolgreich geändert."),
             }
         })
     if request.method == "DELETE":
@@ -83,8 +83,8 @@ def endpoint_worksession(request, session: WorkSession):
             "success": True,
             "id": session.uid,
             "alert": {
-                "title": _("Session gelöscht"),
-                "text": _("Die Session wurde erfolgreich gelöscht."),
+                "title": _("Sitzung gelöscht"),
+                "text": _("Die Sitzung wurde erfolgreich gelöscht."),
             }
         })
 
