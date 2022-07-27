@@ -183,15 +183,6 @@ class Team(models.Model):
 
         return self.members.get(user=user)
 
-    def create_invite(self, uses_left: int = 1, note: str = "", days_valid: float = 0.0) -> "Invite":
-        """
-        Create a new invite. See Invite.update() for more information about the parameters.
-        """
-
-        invite = self.invites.create()
-        invite.update(uses_left=uses_left, note=note, days_valid=days_valid)
-        return invite
-
 class Member(models.Model):
     "Connection between User and Team"
 
