@@ -28,6 +28,11 @@ export async function startTrackingSession(teamId) {
 export async function getTrackingSession() {
     return await API.GET("me/worksessions/tracking/live", {}, "no-error-handling").then(
         (data) => {
+            if (data.error === "no_active_tracking_session_exists") {
+                window.orgatask.current_worksession = null;
+                return null;
+            }
+
             window.orgatask.current_worksession = data.session;
             Navigation.renderPage();
             return data.session;

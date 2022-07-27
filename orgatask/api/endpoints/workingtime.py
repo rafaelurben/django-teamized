@@ -80,7 +80,8 @@ def endpoint_tracking_live(request):
     if active_session is None:
         raise exceptions.AlertException(
             _("Es ist keine Sitzung im Gange."),
-            errorname="no_active_tracking_session_exists"
+            errorname="no_active_tracking_session_exists",
+            status=200
         )
 
     # Return the session data
