@@ -9,7 +9,7 @@ import * as Calendars from "./utils/calendars.js";
 
 // Make namespaces available in the console (for debugging)
 
-window._OrgaTask = {
+window._App = {
   Alerts,
   API,
   Cache,
