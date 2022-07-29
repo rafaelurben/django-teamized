@@ -72,6 +72,9 @@ class WorkSessionTableRow extends React.Component {
   }
 }
 
+const DEFAULT_SESSION_TABLE_ROW_COUNT = 5;
+const SESSION_TABLE_SHOW_MORE_INTERVAL = 3;
+
 export default class Page_WorkingTime extends React.Component {
   constructor(props) {
     super(props);
@@ -82,14 +85,23 @@ export default class Page_WorkingTime extends React.Component {
     this.fetchSessions = this.fetchSessions.bind(this);
     this.updateSession = this.updateSession.bind(this);
     this.tick = this.tick.bind(this);
+    this.showMoreRows = this.showMoreRows.bind(this);
 
-    this.state = { timeDisplay: this.getTimeDisplay() };
+    this.state = {
+      timeDisplay: this.getTimeDisplay(),
+      listCount: DEFAULT_SESSION_TABLE_ROW_COUNT,
+    };
+
     this.clockRefreshIntervalID = 0;
-
     this.currentSessionRefreshIntervalId = 0;
+
     this.fetch_in_progress = false;
     this.start_in_progress = false;
     this.stop_in_progress = false;
+  }
+
+  showMoreRows(amount) {
+    this.setState({ listCount: this.state.listCount + amount });
   }
 
   fetchSessions() {
@@ -171,11 +183,55 @@ export default class Page_WorkingTime extends React.Component {
     } else if (this.props.worksessions.length === 0) {
       rows = <tr><td colSpan="3">Noch keine Zeiten erfasst.</td></tr>;
     } else {
-      rows = this.props.worksessions.map((session) => {
+      let mapper = (session) => {
         return (
-          <WorkSessionTableRow session={session} key={session.id} team={this.props.selectedTeam} />
+          <WorkSessionTableRow
+            session={session}
+            key={session.id}
+            team={this.props.selectedTeam}
+          />
         );
-      });
+      };
+
+      if (this.props.worksessions.length > this.state.listCount) {
+        rows = this.props.worksessions.slice(0, this.state.listCount).map(mapper);
+      } else {
+        rows = this.props.worksessions.map(mapper);
+      }
+
+      rows.push(
+        <tr key="more-less">
+          <td colSpan="5">
+            {this.props.worksessions.length > this.state.listCount ? (
+              <a
+                id="worksessions-show-more"
+                href="#worksessions-show-more"
+                onClick={() =>
+                  this.showMoreRows(SESSION_TABLE_SHOW_MORE_INTERVAL)
+                }
+                className="me-2"
+              >
+                Mehr anzeigen
+              </a>
+            ) : (
+              ""
+            )}
+            {this.state.listCount > DEFAULT_SESSION_TABLE_ROW_COUNT ? (
+              <a
+                id="worksessions-show-less"
+                href="#worksessions-show-less"
+                onClick={() =>
+                  this.showMoreRows(-SESSION_TABLE_SHOW_MORE_INTERVAL)
+                }
+              >
+                Weniger anzeigen
+              </a>
+            ) : (
+              ""
+            )}
+          </td>
+        </tr>
+      );
     }
 
     return (
