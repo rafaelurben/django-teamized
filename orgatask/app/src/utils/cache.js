@@ -9,18 +9,18 @@ import * as Teams from "./teams.js";
 
 export function getTeamsList() {
     let teams = [];
-    for (let teamdata of Object.values(window.orgatask.teamcache)) {
+    for (let teamdata of Object.values(window.appdata.teamcache)) {
         teams.push(teamdata.team);
     }
     return teams;
 }
 
 export function getTeamData(teamId) {
-    return window.orgatask.teamcache[teamId] || null;
+    return window.appdata.teamcache[teamId] || null;
 }
 
 export function getCurrentTeamData() {
-    return getTeamData(window.orgatask.selectedTeamId);
+    return getTeamData(window.appdata.selectedTeamId);
 }
 
 export function getMeInTeam(teamId) {
@@ -28,7 +28,7 @@ export function getMeInTeam(teamId) {
 }
 
 export function getMeInCurrentTeam() {
-    return getMeInTeam(window.orgatask.selectedTeamId);
+    return getMeInTeam(window.appdata.selectedTeamId);
 }
 
 export function getMemberInTeam(teamId, memberId) {
@@ -40,17 +40,17 @@ export function getMemberInTeam(teamId, memberId) {
 function updateTeam(team) {
     for (let category of ["members", "invites", "calendars"]) {
         if (team.hasOwnProperty(category)) {
-            window.orgatask.teamcache[team.id][category] = {}
+            window.appdata.teamcache[team.id][category] = {}
             replaceTeamCacheCategory(team.id, category, team[category]);
             delete team[category];
             // Delete the category from the team object itself to avoid data redundancy
         }
     }
-    window.orgatask.teamcache[team.id].team = team;
+    window.appdata.teamcache[team.id].team = team;
 }
 
 export function addTeam(team) {
-    window.orgatask.teamcache[team.id] = {
+    window.appdata.teamcache[team.id] = {
         "team": {},
         "members": {},
         "invites": {},
@@ -62,26 +62,26 @@ export function addTeam(team) {
 
 export async function deleteTeam(teamId) {
     // Delete the team from the teamcache
-    delete window.orgatask.teamcache[teamId];
+    delete window.appdata.teamcache[teamId];
     // Update the defaultTeamId
-    let teamIds = Object.keys(window.orgatask.teamcache);
+    let teamIds = Object.keys(window.appdata.teamcache);
     if (teamIds.length === 0) {
         // When no team is left, the backend automatically creates a new one
         // We need to refetch all teams in order to get the new one
         // This also sets the defaultTeamId
         await Teams.loadTeams(true);
-    } else if (window.orgatask.defaultTeamId === teamId) {
+    } else if (window.appdata.defaultTeamId === teamId) {
         // When the default team is deleted, we need to switch to another team
-        window.orgatask.defaultTeamId = teamIds[0];
+        window.appdata.defaultTeamId = teamIds[0];
     }
 }
 
 // Bulk update teams cache
 
 export function updateTeamsCache(teams, defaultTeamId) {
-    window.orgatask.defaultTeamId = defaultTeamId;
+    window.appdata.defaultTeamId = defaultTeamId;
 
-    let oldids = Object.keys(window.orgatask.teamcache);
+    let oldids = Object.keys(window.appdata.teamcache);
 
     for (let team of teams) {
         // Remove from oldidlist if it is still there
@@ -90,7 +90,7 @@ export function updateTeamsCache(teams, defaultTeamId) {
         }
 
         // Update in cache if already there, else add
-        if (team.id in window.orgatask.teamcache) {
+        if (team.id in window.appdata.teamcache) {
             updateTeam(team);
         } else {
             addTeam(team)
@@ -99,7 +99,7 @@ export function updateTeamsCache(teams, defaultTeamId) {
 
     // Remove teams that are no longer in the list
     for (let teamId of oldids) {
-        delete window.orgatask.teamcache[teamId];
+        delete window.appdata.teamcache[teamId];
     }
 }
 

@@ -13,8 +13,8 @@ const pageList = [
 ]
 
 function ensureExistingPage() {
-    if (!pageList.includes(window.orgatask.currentPage)) {
-        window.orgatask.currentPage = pageList[0];
+    if (!pageList.includes(window.appdata.currentPage)) {
+        window.appdata.currentPage = pageList[0];
     }
 }
 
@@ -26,8 +26,8 @@ export function exportToURL(options) {
     var newurl = new URL(window.location);
     
     // Export the pagename and teamid to the URL
-    newurl.searchParams.set('p', window.orgatask.currentPage);
-    newurl.searchParams.set('t', window.orgatask.selectedTeamId);
+    newurl.searchParams.set('p', window.appdata.currentPage);
+    newurl.searchParams.set('t', window.appdata.selectedTeamId);
 
     if (options) {
         let additionalParams;
@@ -52,8 +52,8 @@ export function exportToURL(options) {
         // (i.e. update the page url if there's something to change)
         window.history.pushState(
             {
-                page: window.orgatask.currentPage,
-                selectedTeamId: window.orgatask.selectedTeamId,
+                page: window.appdata.currentPage,
+                selectedTeamId: window.appdata.selectedTeamId,
             },
             "OrgaTask",
             newurl.href,
@@ -65,8 +65,8 @@ export function importFromURL() {
     // Import the pagename and teamid from the URL
 
     const url = new URL(window.location);
-    window.orgatask.currentPage = url.searchParams.get('p');
-    window.orgatask.selectedTeamId = url.searchParams.get('t');
+    window.appdata.currentPage = url.searchParams.get('p');
+    window.appdata.selectedTeamId = url.searchParams.get('t');
 }
 
 export function toggleSidebar() {
@@ -82,8 +82,8 @@ export function hideSidebarOnMobile() {
 export function renderSidebar() {
     ReactDOM.render(
         <AppSidebar
-            page={window.orgatask.currentPage}
-            user={window.orgatask.user}
+            page={window.appdata.currentPage}
+            user={window.appdata.user}
             isAdmin={Teams.isCurrentTeamAdmin()}
             onPageSelect={selectPage}
         />,
@@ -94,7 +94,7 @@ export function renderSidebar() {
 export function renderPage() {
     ReactDOM.render(
         <PageLoader
-            page={window.orgatask.currentPage}
+            page={window.appdata.currentPage}
         />,
         document.getElementById("orgatask_maincontent")
     );
@@ -104,7 +104,7 @@ export function renderMenubar() {
     ReactDOM.render(
         <AppMenubar
             teams={Teams.getTeamsList()}
-            selectedTeamId={window.orgatask.selectedTeamId}
+            selectedTeamId={window.appdata.selectedTeamId}
             onTeamSelect={Teams.switchTeam}
             onPageSelect={selectPage}
         />,
@@ -133,7 +133,7 @@ export function reRender() {
 
 export function selectPage(page) {
     if (pageList.includes(page)) {
-        window.orgatask.currentPage = page;
+        window.appdata.currentPage = page;
         exportToURL();
         render();
         hideSidebarOnMobile();

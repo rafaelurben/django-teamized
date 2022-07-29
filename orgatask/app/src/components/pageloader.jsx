@@ -36,14 +36,14 @@ export default class PageLoader extends React.Component {
       case "home":
         return (
           <Page_Home 
-            user={window.orgatask.user} 
+            user={window.appdata.user} 
           />
         );
       case "teamlist":
         return (
           <Page_TeamList
             teams={Teams.getTeamsList()}
-            selectedTeamId={window.orgatask.selectedTeamId}
+            selectedTeamId={window.appdata.selectedTeamId}
           />
         );
       case "teammanage":
@@ -57,9 +57,9 @@ export default class PageLoader extends React.Component {
       case "workingtime":
         return (
           <Page_WorkingTime
-            current_worksession={window.orgatask.current_worksession}
+            current_worksession={window.appdata.current_worksession}
             worksessions={Cache.getMeInCurrentTeam().worksessions}
-            selectedTeamId={window.orgatask.selectedTeamId}
+            selectedTeamId={window.appdata.selectedTeamId}
             selectedTeam={teamdata.team}
           />
         );

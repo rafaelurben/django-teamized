@@ -141,7 +141,7 @@ export async function startTrackingSession(teamId) {
     return await API.POST(`me/worksessions/tracking/start/t=${teamId}`).then(
         (data) => {
             successAlert("Die Zeitmessung wurde gestartet", "Tracking gestartet");
-            window.orgatask.current_worksession = data.session;
+            window.appdata.current_worksession = data.session;
             return data.session;
         }
     );
@@ -151,17 +151,17 @@ export async function getTrackingSession() {
     return await API.GET("me/worksessions/tracking/live", {}, "no-error-handling").then(
         (data) => {
             if (data.error === "no_active_tracking_session_exists") {
-                window.orgatask.current_worksession = null;
+                window.appdata.current_worksession = null;
                 return null;
             }
 
-            window.orgatask.current_worksession = data.session;
+            window.appdata.current_worksession = data.session;
             Navigation.renderPage();
             return data.session;
         }
     ).catch(
         (error) => {
-            window.orgatask.current_worksession = null;
+            window.appdata.current_worksession = null;
             return null;
         }
     );
@@ -172,7 +172,7 @@ export async function stopTrackingSession() {
     return await API.POST("me/worksessions/tracking/stop").then(
         (data) => {
             successAlert("Die Zeitmessung wurde gestoppt", "Tracking gestoppt");
-            window.orgatask.current_worksession = null;
+            window.appdata.current_worksession = null;
             let me = Cache.getMeInCurrentTeam();
             me.worksessions = me.worksessions || [];
             me.worksessions.unshift(data.session);

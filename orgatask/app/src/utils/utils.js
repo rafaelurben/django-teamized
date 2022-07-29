@@ -24,8 +24,8 @@ export function toggleDebug(noask) {
     if ($("body").hasClass("debug")) {
         $("body").removeClass("debug")
     } else {
-        if (noask === true || window.orgatask.debug_prompt_accepted === true || confirm("Möchtest du den DEBUG-Modus aktivieren?")) {
-            window.orgatask.debug_prompt_accepted = true;
+        if (noask === true || window.appdata.debug_prompt_accepted === true || confirm("Möchtest du den DEBUG-Modus aktivieren?")) {
+            window.appdata.debug_prompt_accepted = true;
             $("body").addClass("debug");
         }
     };

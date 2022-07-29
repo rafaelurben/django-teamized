@@ -16,9 +16,9 @@ export function isCurrentTeamAdmin() {
 }
 
 export function ensureExistingTeam() {
-  if (window.orgatask.selectedTeamId) {
+  if (window.appdata.selectedTeamId) {
     // Team selected; check if it is valid
-    if (window.orgatask.selectedTeamId in window.orgatask.teamcache) {
+    if (window.appdata.selectedTeamId in window.appdata.teamcache) {
       // Team is in cache, so it must be a valid team id
       return;
     }
@@ -26,17 +26,17 @@ export function ensureExistingTeam() {
   
   // No team selected or team doesn't exist; select default
   console.log("No team selected or team doesn't exist; falling back to default");
-  switchTeam(window.orgatask.defaultTeamId);
+  switchTeam(window.appdata.defaultTeamId);
 }
 
 export function switchTeam(teamId) {
-  if (window.orgatask.selectedTeamId === teamId) {
+  if (window.appdata.selectedTeamId === teamId) {
     // Already selected; no action needed
     return;
   }
   console.debug("Switching team to: " + teamId);
 
-  window.orgatask.selectedTeamId = teamId;
+  window.appdata.selectedTeamId = teamId;
   Navigation.exportToURL();
   Navigation.render();
 }
@@ -61,7 +61,7 @@ export async function loadTeams(full=false) {
 export async function getProfile() {
   return await API.GET('profile').then(
     (data) => {
-      window.orgatask.user = data.user;
+      window.appdata.user = data.user;
       return data.user;
     }
   );

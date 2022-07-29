@@ -20,11 +20,11 @@ window._App = {
   WorkingTime,
 };
 
-// Initialize
+// Initialize appdata
 
 let loadinprogress = true;
 
-window.orgatask = {
+window.appdata = {
   currentPage: "home",
   defaultTeamId: null,
   selectedTeamId: null,
@@ -55,7 +55,7 @@ async function initialize() {
   Navigation.hideSidebarOnMobile();
   Navigation.importFromURL();
   Navigation.render();
-  window.orgatask.user = await Teams.getProfile();
+  window.appdata.user = await Teams.getProfile();
   Navigation.renderSidebar();
   await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
   Navigation.exportToURL();
@@ -69,10 +69,10 @@ async function initialize() {
 async function reinitialize() {
   startLoading();
 
-  const oldTeamId = window.orgatask.selectedTeamId;
+  const oldTeamId = window.appdata.selectedTeamId;
 
-  window.orgatask = {
-    ...window.orgatask,
+  window.appdata = {
+    ...window.appdata,
     defaultTeamId: null,
     teamcache: {},
   };
