@@ -7,6 +7,8 @@ import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
 import {HoverInfo} from "../utils.js";
 
+const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+
 class CalendarManager extends React.Component {
   constructor(props) {
     super(props);
@@ -473,7 +475,25 @@ class CalendarOverview extends React.Component {
             </button>
           </div>
         </div>
-        <div className="mt-3">{weekElems}</div>
+        <div className="mt-3">
+          <div className="d-flex justify-content-around my-3">
+            {
+              WEEKDAYS.map((day) => {
+                return (
+                  <div key={day}>
+                    <div
+                      className="d-flex justify-content-center align-items-center flex-column text-dark"
+                      style={{width: "3em", height: "2em"}}
+                    >
+                      <b>{day}</b>
+                    </div>
+                  </div>
+                );
+              })
+            }
+          </div>
+          {weekElems}
+        </div>
       </div>
     );
   }
