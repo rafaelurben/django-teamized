@@ -487,7 +487,7 @@ class CalendarEventDisplay extends React.Component {
   }
 
   editEvent() {
-
+    Calendars.editEventPopup(this.props.team, this.props.event.calendar, this.props.event).then(Navigation.renderPage);
   }
 
   deleteEvent() {
@@ -547,7 +547,7 @@ class CalendarEventDisplay extends React.Component {
       </table>,
       <button
         key="edit"
-        className="btn btn-outline-dark disabled"
+        className="btn btn-outline-dark"
         onClick={this.editEvent}
       >
         Bearbeiten

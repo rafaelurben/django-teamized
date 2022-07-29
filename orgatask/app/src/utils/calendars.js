@@ -358,6 +358,101 @@ export async function editEvent(teamId, calendarId, eventId, name, description, 
     )
 }
 
+export function editEventPopup(team, calendar, event) {
+    return new Promise((resolve, reject) => {
+        var dstart; var dend; var dtstart; var dtend;
+
+        if (event.fullday) {
+            dstart = localInputFormat(event.dstart, true);
+            dend = localInputFormat(event.dend, true);
+        } else {
+            dtstart = localInputFormat(event.dtstart);
+            dtend = localInputFormat(event.dtend);
+        }
+
+        Swal.fire({
+            title: `Ereignis bearbeiten`,
+            html:
+                `<p>Team: ${team.name}</p>` +
+                `<p>Kalendar: ${calendar.name}</p><hr />` +
+                '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
+                `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${event.name}" value="${event.name}">` +
+                '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
+                `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${event.description}">${event.description}</textarea>` +
+                '<label class="swal2-input-label" for="swal-input-location">Ort:</label>' +
+                `<input type="text" id="swal-input-location" class="swal2-input" placeholder="${event.location}" value="${event.location}">` +
+                `<label for="swal-input-fullday" class="swal2-checkbox d-flex">` +
+                `<input type="checkbox" ${event.fullday ? "checked" : ""} id="swal-input-fullday">` +
+                `<span class="swal2-label">Ganztägig</span>` +
+                `</label><hr />` +
+                '<label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>' +
+                `<input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${dstart}">` +
+                '<label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>' +
+                `<input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${dend}">` +
+                '<label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>' +
+                `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${dtstart}">` +
+                '<label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>' +
+                `<input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">`,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Speichern",
+            cancelButtonText: "Abbrechen",
+            didOpen: () => {
+                _updateFullDayToggle(true);
+                $('#swal-input-fullday').on('change', () => _updateFullDayToggle());
+
+            },
+            preConfirm: async () => {
+                let name = $("#swal-input-name").val();
+                let description = $("#swal-input-description").val();
+                let location = $("#swal-input-location").val();
+                let fullday = $("#swal-input-fullday").prop("checked");
+
+                if (!name) {
+                    Swal.showValidationMessage("Es wird ein Name benötigt!");
+                    return false;
+                }
+
+                if (fullday) {
+                    let dstart = $("#swal-input-dstart").val();
+                    let dend = $("#swal-input-dend").val();
+
+                    if (!dstart || !dend) {
+                        Swal.showValidationMessage("Start- und Enddatum sind Pflichtfelder!");
+                        return false;
+                    }
+                    if (new Date(dstart) > new Date(dend)) {
+                        Swal.showValidationMessage("Startdatum muss vor dem Enddatum liegen!");
+                        return false;
+                    }
+
+                    Swal.showLoading();
+                    await editEvent(team.id, calendar.id, event.id, name, description, location, true, dstart, dend, null, null).then(
+                        resolve, reject
+                    );
+                } else {
+                    let dtstart = $("#swal-input-dtstart").val();
+                    let dtend = $("#swal-input-dtend").val();
+
+                    if (!dtstart || !dtend) {
+                        Swal.showValidationMessage("Start- und Endzeit sind Pflichtfelder!");
+                        return false;
+                    }
+                    if (new Date(dtstart) > new Date(dtend)) {
+                        Swal.showValidationMessage("Startdatum muss vor dem Enddatum liegen!");
+                        return false;
+                    }
+
+                    Swal.showLoading();
+                    await editEvent(team.id, calendar.id, event.id, name, description, location, false, null, null, dtstart, dtend).then(
+                        resolve, reject
+                    );
+                }
+            },
+        });
+    });
+}
+
 // Event deletion
 
 export async function deleteEvent(teamId, calendarId, eventId) {
