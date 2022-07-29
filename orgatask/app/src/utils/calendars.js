@@ -284,7 +284,7 @@ export function createEventPopup(team, date) {
                 `<input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${_dt}">`,
             focusConfirm: false,
             showCancelButton: true,
-            confirmButtonText: "Weiter",
+            confirmButtonText: "Erstellen",
             cancelButtonText: "Abbrechen",
             didOpen: () => {
                 _updateFullDayToggle(true);
