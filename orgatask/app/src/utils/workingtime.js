@@ -94,7 +94,7 @@ export async function editWorkSessionPopup(team, session) {
             ),
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: "Bearbeiten",
+        confirmButtonText: "Speichern",
         cancelButtonText: "Abbrechen",
         preConfirm: async () => {
             const note = document.getElementById("swal-input-note").value;
