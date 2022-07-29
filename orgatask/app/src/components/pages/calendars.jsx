@@ -103,6 +103,7 @@ class CalendarManager extends React.Component {
     return [
       <select
         key="select"
+        id="calendar-manager-calendar-select"
         className="form-select mb-2"
         onInput={this.handleCalendarSelect}
         disabled={calendar === undefined}
@@ -234,7 +235,7 @@ class CalendarEventPicker extends React.Component {
   }
 
   createEvent() {
-    Calendars.createEventPopup(this.props.team, this.props.selectedCalendar, this.props.selectedDate).then(Navigation.renderPage)
+    Calendars.createEventPopup(this.props.team, this.props.selectedDate).then(Navigation.renderPage)
   }
 
   render() {
@@ -685,7 +686,7 @@ export default class Page_Calendars extends React.Component {
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile
             title="Kalenderinfos"
-            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse, jedoch wird sie für die erstellung neuer Ereignisse beachtet."
+            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
           >
             {/* Selecting, creating and managing calendars */}
             <CalendarManager

@@ -254,15 +254,16 @@ export async function createEvent(teamId, calendarId, name, description, locatio
     )
 }
 
-export function createEventPopup(team, calendar, date) {
+export function createEventPopup(team, date) {
     return new Promise((resolve, reject) => {
         let _dt = localInputFormat(date);
         let _d = localInputFormat(date, true);
         Swal.fire({
             title: `Ereignis erstellen`,
             html:
-                `<p>Team: ${team.name}</p>` +
-                `<p>Kalender: ${calendar.name}</p><hr />` +
+                `<p>Team: ${team.name}</p><hr />` +
+                '<label class="swal2-input-label" for="swal-input-calendar">Kalender:</label>' +
+                '<select id="swal-input-calendar" class="swal2-input swal2-select"></select><hr />' +
                 '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
                 '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">' +
                 '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
@@ -288,12 +289,15 @@ export function createEventPopup(team, calendar, date) {
             didOpen: () => {
                 _updateFullDayToggle(true);
                 $('#swal-input-fullday').on('change', () => _updateFullDayToggle());
+                $('#swal-input-calendar').html($('#calendar-manager-calendar-select').html());
+                $('#swal-input-calendar').val($('#calendar-manager-calendar-select').val());
             },
             preConfirm: async () => {
-                let name = document.getElementById("swal-input-name").value;
-                let description = document.getElementById("swal-input-description").value;
-                let location = document.getElementById("swal-input-location").value;
-                let fullday = document.getElementById("swal-input-fullday").checked;
+                let calendarId = $('#swal-input-calendar').val();
+                let name = $("#swal-input-name").val();
+                let description = $("#swal-input-description").val();
+                let location = $("#swal-input-location").val();
+                let fullday = $("#swal-input-fullday").prop("checked");
 
                 if (!name) {
                     Swal.showValidationMessage("Es wird ein Name benötigt!");
@@ -301,8 +305,8 @@ export function createEventPopup(team, calendar, date) {
                 }
 
                 if (fullday) {
-                    let dstart = document.getElementById("swal-input-dstart").value;
-                    let dend = document.getElementById("swal-input-dend").value;
+                    let dstart = $("#swal-input-dstart").val();
+                    let dend = $("#swal-input-dend").val();
 
                     if (!dstart || !dend) {
                         Swal.showValidationMessage("Start- und Enddatum sind Pflichtfelder!");
@@ -314,12 +318,12 @@ export function createEventPopup(team, calendar, date) {
                     }
 
                     Swal.showLoading();
-                    await createEvent(team.id, calendar.id, name, description, location, true, dstart, dend, null, null).then(
+                    await createEvent(team.id, calendarId, name, description, location, true, dstart, dend, null, null).then(
                         resolve, reject
                     );
                 } else {
-                    let dtstart = document.getElementById("swal-input-dtstart").value;
-                    let dtend = document.getElementById("swal-input-dtend").value;
+                    let dtstart = $("#swal-input-dtstart").val();
+                    let dtend = $("#swal-input-dtend").val();
 
                     if (!dtstart || !dtend) {
                         Swal.showValidationMessage("Start- und Endzeit sind Pflichtfelder!");
@@ -331,7 +335,7 @@ export function createEventPopup(team, calendar, date) {
                     }
 
                     Swal.showLoading();
-                    await createEvent(team.id, calendar.id, name, description, location, false, null, null, dtstart, dtend).then(
+                    await createEvent(team.id, calendarId, name, description, location, false, null, null, dtstart, dtend).then(
                         resolve, reject
                     );
                 }
