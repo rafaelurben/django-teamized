@@ -5,12 +5,14 @@
 
 {% block content %}
     <h1>DEBUG</h1>
-    <button onclick="debug_reload()" class="btn btn-outline-primary mb-2">Aktualisieren</button>
+    <button onclick="debug_reload()" class="btn btn-outline-primary mb-2">Aktualisieren / Neu laden</button>
 
-    <h3>Cache (Achtung: Personenbezogene Daten!)</h3>
-    <textarea id="cache" style="resize: both;" class="w-100 form-control mb-2" rows="10" disabled></textarea>
-    <button onclick="navigator.clipboard.writeText($('#cache').html())" class="btn btn-outline-primary mb-2">Kopieren</button>
-    <button onclick="remove_teamcache()" class="btn btn-outline-danger mb-2">Teamcache leeren</button>
+    <h3>App-Daten</h3>
+    <textarea id="appdata" style="resize: both;" class="w-100 form-control mb-2" rows="10" disabled></textarea>
+    <button onclick="debug_copy()" class="btn btn-outline-primary mb-2">Kopieren</button>
+    <button onclick="debug_remove_user()" class="btn btn-outline-danger mb-2">Benutzer entfernen</button>
+    <button onclick="debug_remove_members()" class="btn btn-outline-danger mb-2">Teammitglieder entfernen</button>
+    <button onclick="debug_remove_teamcache()" class="btn btn-outline-danger mb-2">Kompletter Teamcache entfernen</button>
 
 {% endblock content %}
     
@@ -20,27 +22,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        function debug(wd) {
-            $('#cache').html(JSON.stringify(wd.orgatask, null, 2))
+        var data = {};
+
+        function _debug_display() {
+            $('#appdata').html(JSON.stringify(data, null, 2));
         }
 
-        function remove_teamcache() {
-            let data = JSON.parse($('#cache').html());
-            data.teamcache = "Cache wurde aus Datenschutzgründen entfernt.";
-            $('#cache').html(JSON.stringify(data, null, 2))
+        function _debug_load(wd) {
+            data = JSON.parse(JSON.stringify(wd.orgatask));
+            _debug_display();
+        }
+
+        function debug_copy() {
+            navigator.clipboard.writeText($('#appdata').html())
+        }
+
+        function debug_remove_teamcache() {
+            data.teamcache = "Aus Datenschutzgründen entfernt.";
+            _debug_display();
+        }
+
+        function debug_remove_user() {
+            data.user = "Aus Datenschutzgründen entfernt.";
+            for (teamId in data.teamcache) {
+                data.teamcache[teamId].team.member.user = "Aus Datenschutzgründen entfernt.";
+            }
+            _debug_display();
+        }
+
+        function debug_remove_members() {
+            for (teamId in data.teamcache) {
+                data.teamcache[teamId].members = "Aus Datenschutzgründen entfernt.";
+            }
+            _debug_display();
         }
 
         function debug_reload() {
             if (window.opener !== null) {
-                debug(window.opener);
+                _debug_load(window.opener);
             } else {
-                alert('Die ursprüngliche Seite wurde geschlossen!');
+                alert('Die ursprüngliche App-Seite wurde geschlossen!');
             }
         }
 
         window.addEventListener('load', () => {
             if (window.opener !== null) {
-                debug(window.opener);
+                _debug_load(window.opener);
             } else {
                 alert('Diese Seite muss aus dem DEBUG-Menu geöffnet werden!');
                 location.href = "about:blank";
