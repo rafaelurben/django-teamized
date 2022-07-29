@@ -180,7 +180,7 @@ export async function editCalendarPopup(team, calendar) {
             `<input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${calendar.color}">`,
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: "Aktualisieren",
+        confirmButtonText: "Speichern",
         cancelButtonText: "Abbrechen",
         preConfirm: async () => {
             const name = document.getElementById("swal-input-name").value;
