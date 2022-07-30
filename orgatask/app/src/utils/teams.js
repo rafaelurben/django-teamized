@@ -56,17 +56,6 @@ export async function loadTeams(full=false) {
 
 //// API calls ////
 
-// User profile
-
-export async function getProfile() {
-  return await API.GET('profile').then(
-    (data) => {
-      window.appdata.user = data.user;
-      return data.user;
-    }
-  );
-}
-
 // Team list
 
 export async function getTeams(full=false) {

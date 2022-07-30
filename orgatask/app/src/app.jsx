@@ -4,6 +4,7 @@ import * as Cache from "./utils/cache.js";
 import * as Navigation from "./utils/navigation.js";
 import * as Teams from "./utils/teams.js";
 import * as Utils from "./utils/utils.js";
+import * as Settings from "./utils/settings.js";
 import * as WorkingTime from "./utils/workingtime.js";
 import * as Calendars from "./utils/calendars.js";
 
@@ -15,6 +16,7 @@ window._App = {
   Cache,
   Calendars,
   Navigation,
+  Settings,
   Teams,
   Utils,
   WorkingTime,
@@ -48,14 +50,14 @@ function endLoading() {
 
 async function initialize() {
   if (new URL(location).searchParams.has('debug')) Utils.toggleDebug(true);
-  if (new URL(location).searchParams.has("beta_dark")) Utils.toggleDarkmode();
 
   startLoading();
 
   Navigation.hideSidebarOnMobile();
   Navigation.importFromURL();
   Navigation.render();
-  window.appdata.user = await Teams.getProfile();
+  await Settings.getSettings();
+  await Settings.getProfile();
   Navigation.renderSidebar();
   await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
   Navigation.exportToURL();

@@ -30,7 +30,3 @@ export function toggleDebug(noask) {
         }
     };
 }
-
-export function toggleDarkmode() {
-    $('#app-maincontent').toggleClass('darkmode');
-}
