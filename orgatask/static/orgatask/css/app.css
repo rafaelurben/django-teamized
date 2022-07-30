@@ -6,12 +6,12 @@ body {
     flex-direction: column;
 }
 
-#orgatask_app {
+#app-root {
     flex: 1;
     min-height: 0; /* Prevent app from exceeding parent height; no clue why it works tho */
 }
 
-#orgatask_appsidebar .nav-link>i {
+#app-sidebar .nav-link>i {
     /* Sidebar icons */
     margin-right: 0.5rem;
     font-size: 0.8rem;
@@ -19,23 +19,23 @@ body {
     position: relative
 }
 
-#orgatask_app:not(.sidebar-visible) #orgatask_appsidebar {
+#app-root:not(.sidebar-visible) #app-sidebar {
     display: none;
 }
 
 @media (max-width: 991px) {
     /* CSS overrides on smaller screens where the menu is collapsible */
 
-    #orgatask_appmenubar {
+    #app-menubar {
         padding-top: 0.6rem;
         padding-bottom: 0.3rem;
     }
 
-    #orgatask_app.sidebar-visible #orgatask_maincontent {
+    #app-root.sidebar-visible #app-maincontent {
         display: none;
     }
 
-    #orgatask_app.sidebar-visible #orgatask_appsidebar {
+    #app-root.sidebar-visible #app-sidebar {
         width: 100vw;
     }
 }

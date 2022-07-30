@@ -70,12 +70,12 @@ export function importFromURL() {
 }
 
 export function toggleSidebar() {
-    document.getElementById('orgatask_app').classList.toggle('sidebar-visible');
+    document.getElementById('app-root').classList.toggle('sidebar-visible');
 }
 
 export function hideSidebarOnMobile() {
     if (window.innerWidth < 992) {
-        document.getElementById('orgatask_app').classList.remove('sidebar-visible');
+        document.getElementById('app-root').classList.remove('sidebar-visible');
     }
 }
 
@@ -87,7 +87,7 @@ export function renderSidebar() {
             isAdmin={Teams.isCurrentTeamAdmin()}
             onPageSelect={selectPage}
         />,
-        document.getElementById("orgatask_appsidebar")
+        document.getElementById("app-sidebar")
     );
 }
 
@@ -96,7 +96,7 @@ export function renderPage() {
         <PageLoader
             page={window.appdata.currentPage}
         />,
-        document.getElementById("orgatask_maincontent")
+        document.getElementById("app-maincontent")
     );
 }
 
@@ -108,7 +108,7 @@ export function renderMenubar() {
             onTeamSelect={Teams.switchTeam}
             onPageSelect={selectPage}
         />,
-        document.getElementById("orgatask_appmenubar")
+        document.getElementById("app-menubar")
     );
 }
 
@@ -120,13 +120,13 @@ export function render() {
 
 export function reRender() {
     ReactDOM.unmountComponentAtNode(
-        document.getElementById("orgatask_appmenubar")
+        document.getElementById("app-menubar")
     )
     ReactDOM.unmountComponentAtNode(
-        document.getElementById("orgatask_maincontent")
+        document.getElementById("app-maincontent")
     )
     ReactDOM.unmountComponentAtNode(
-        document.getElementById("orgatask_appsidebar")
+        document.getElementById("app-sidebar")
     )
     render();
 }
