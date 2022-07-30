@@ -204,12 +204,7 @@ export async function leaveTeamPopup(team) {
 // Member list
 
 export async function getMembers(teamId) {
-  return await API.GET(`teams/${teamId}/members`).then(
-    (data) => {
-      Cache.replaceTeamCacheCategory(teamId, 'members', data.members);
-      return data.members;
-    }
-  )
+  return await Cache.refreshTeamCacheCategory(teamId, "members");
 }
 
 // Member edit
@@ -261,12 +256,7 @@ export async function deleteMemberPopup(team, member) {
 // Invite list
 
 export async function getInvites(teamId) {
-  return await API.GET(`teams/${teamId}/invites`).then(
-    (data) => {
-      Cache.replaceTeamCacheCategory(teamId, 'invites', data.invites);
-      return data.invites;
-    }
-  )
+  return await Cache.refreshTeamCacheCategory(teamId, "invites");
 }
 
 // Invite creation

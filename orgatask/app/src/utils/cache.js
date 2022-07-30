@@ -52,11 +52,14 @@ function updateTeam(team) {
 export function addTeam(team) {
     window.appdata.teamcache[team.id] = {
         "team": {},
-        "members": {},
-        "invites": {},
         "calendars": {},
+        "invites": {},
+        "members": {},
+        "me_worksessions": {},
         "_state": {
             calendars: {_initial: true, _refreshing: false},
+            invites: {_initial: true, _refreshing: false},
+            members: {_initial: true, _refreshing: false},
             me_worksessions: {_initial: true, _refreshing: false}
         },
     };
