@@ -11,6 +11,11 @@ body {
     min-height: 0; /* Prevent app from exceeding parent height; no clue why it works tho */
 }
 
+#app-sidebar .nav-link {
+    /* Sidebar links */
+    white-space: nowrap;
+}
+
 #app-sidebar .nav-link>i {
     /* Sidebar icons */
     margin-right: 0.5rem;
