@@ -25,6 +25,27 @@ def endpoint_profile(request):
 @api_view(["get", "post"])
 @csrf_exempt
 @orgatask_prep()
+def endpoint_settings(request):
+    """
+    Get or modify the user's settings.
+    """
+    user: User = request.orgatask_user
+
+    if request.method == "GET":
+        return JsonResponse({
+            "settings": user.settings_as_dict()
+        })
+    if request.method == "POST":
+        user.update_settings_from_post_data(request.POST)
+        return JsonResponse({
+            "success": True,
+            "settings": user.settings_as_dict()
+        })
+
+
+@api_view(["get", "post"])
+@csrf_exempt
+@orgatask_prep()
 def endpoint_teams(request):
     """
     Endpoint for listing and creating teams.

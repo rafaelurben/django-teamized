@@ -34,6 +34,8 @@ class User(models.Model):
         on_delete=models.CASCADE,
     )
 
+    settings_darkmode = models.BooleanField(default=None, null=True, blank=True)
+
     def __str__(self):
         return str(self.auth_user)
 
@@ -52,6 +54,20 @@ class User(models.Model):
             "last_name": self.auth_user.last_name,
             "avatar_url": self.avatar_url,
         }
+
+    def settings_as_dict(self) -> dict:
+        """
+        Get the user settings as a dict.
+        """
+
+        return {
+            "darkmode": self.settings_darkmode,
+        }
+
+    @decorators.validation_func()
+    def update_settings_from_post_data(self, data: dict):
+        self.settings_darkmode = validation.boolean(data, "darkmode", required=True, null=True)
+        self.save()
 
     @property
     def avatar_url(self) -> str:
