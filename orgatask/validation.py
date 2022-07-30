@@ -22,7 +22,7 @@ def _basic(datadict: dict, attr: str, required: bool=True, default=None, null=Fa
 
     data = datadict[attr]
 
-    if data is None:
+    if data in [None, ""]:
         if null:
             return None
         raise ValidationError(_("{} darf nicht null sein.").format(attr))
@@ -54,10 +54,10 @@ def integer(datadict: dict, attr: str, required: bool=True, default: int="", nul
 
 
 def text(datadict: dict, attr: str, required: bool=True, default: str="", null=False, max_length: int=None) -> str:
-    data = _basic(datadict, attr, required, default, null)
+    if not required and datadict[attr] == "":
+        return ""
 
-    if required and data == "":
-        raise ValidationError(_("{} darf nicht leer sein.").format(attr))
+    data = _basic(datadict, attr, required, default, null)
 
     if null and data is None:
         return None
