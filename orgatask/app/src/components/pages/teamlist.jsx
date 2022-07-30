@@ -1,7 +1,7 @@
 "use strict";
 
 import { validateUUID } from "../../utils/utils.js";
-import { errorAlert } from "../../utils/alerts.js";
+import { errorAlert, waitingAlert } from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
@@ -128,15 +128,8 @@ export default class Page_TeamList extends React.Component {
     let tokeninput = document.getElementById("invite-token");
     let token = tokeninput.value;
     
-    if (!validateUUID(token)) {
-      errorAlert(
-        "Ungültiges Format",
-        "Der Token muss dem UUID-Format entsprechen."
-      );
-    } else {
-      Teams.acceptInvite(token);
-      tokeninput.value = "";
-    }
+    waitingAlert("Einladung wird geprüft...")
+    Teams.checkInvitePopup(token);
   }
 
   render() {
