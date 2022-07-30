@@ -200,12 +200,11 @@ export default class Page_WorkingTime extends React.Component {
       }
 
       rows.push(
-        <tr key="more-less">
+        <tr key="more-less" id="worksessions-show-moreless">
           <td colSpan="5">
             {this.props.worksessions.length > this.state.listCount ? (
               <a
-                id="worksessions-show-more"
-                href="#worksessions-show-more"
+                href="#worksessions-show-moreless"
                 onClick={() =>
                   this.showMoreRows(SESSION_TABLE_SHOW_MORE_INTERVAL)
                 }
@@ -218,8 +217,7 @@ export default class Page_WorkingTime extends React.Component {
             )}
             {this.state.listCount > DEFAULT_SESSION_TABLE_ROW_COUNT ? (
               <a
-                id="worksessions-show-less"
-                href="#worksessions-show-less"
+                href="#worksessions-show-moreless"
                 onClick={() =>
                   this.showMoreRows(-SESSION_TABLE_SHOW_MORE_INTERVAL)
                 }
