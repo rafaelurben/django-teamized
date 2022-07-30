@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from orgatask.exceptions import ValidationError
 
 
-def _basic(datadict: dict, attr: str, required: bool=True, default: str="") -> str:
+def _basic(datadict: dict, attr: str, required: bool=True, default=None, null=False) -> str:
     if not attr in datadict:
         if required:
             raise ValidationError(
@@ -22,22 +22,30 @@ def _basic(datadict: dict, attr: str, required: bool=True, default: str="") -> s
 
     data = datadict[attr]
 
-    if required and not data:
-        raise ValidationError(_("{} darf nicht leer sein.").format(attr))
+    if data is None:
+        if null:
+            return None
+        raise ValidationError(_("{} darf nicht null sein.").format(attr))
 
     return data
 
 
-def boolean(datadict: dict, attr: str, required: bool=False, default: bool=True) -> bool:
-    data = _basic(datadict, attr, required, default)
+def boolean(datadict: dict, attr: str, required: bool=False, default: bool=True, null=False) -> bool:
+    data = _basic(datadict, attr, required, default, null)
+
+    if null and data is None:
+        return None
 
     if isinstance(data, str) and data.lower() == "false":
         data = False
     return bool(data)
 
 
-def integer(datadict: dict, attr: str, required: bool=True, default: int="") -> int:
-    data = _basic(datadict, attr, required, default)
+def integer(datadict: dict, attr: str, required: bool=True, default: int="", null=False) -> int:
+    data = _basic(datadict, attr, required, default, null)
+
+    if null and data is None:
+        return None
 
     try:
         return int(data)
@@ -45,8 +53,14 @@ def integer(datadict: dict, attr: str, required: bool=True, default: int="") -> 
         raise ValidationError(_("'{}' ist keine gültige Zahl.").format(data)) from exc
 
 
-def text(datadict: dict, attr: str, required: bool=True, default: str="", max_length: int=None) -> str:
-    data = _basic(datadict, attr, required, default)
+def text(datadict: dict, attr: str, required: bool=True, default: str="", null=False, max_length: int=None) -> str:
+    data = _basic(datadict, attr, required, default, null)
+
+    if required and data == "":
+        raise ValidationError(_("{} darf nicht leer sein.").format(attr))
+
+    if null and data is None:
+        return None
 
     if max_length and len(data) > max_length:
         data = data[:max_length]
@@ -54,9 +68,9 @@ def text(datadict: dict, attr: str, required: bool=True, default: str="", max_le
 
 
 def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datetime = None, null=False, fmt="%Y-%m-%dT%H:%M:%S.%f%z") -> dt.datetime:
-    data = _basic(datadict, attr, required, default)
+    data = _basic(datadict, attr, required, default, null)
 
-    if null and not data:
+    if null and data is None:
         return None
 
     try:
@@ -66,9 +80,9 @@ def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datet
 
 
 def date(datadict: dict, attr: str, required: bool = True, default: dt.date = None, null=False, fmt="%Y-%m-%d") -> dt.date:
-    data = _basic(datadict, attr, required, default)
+    data = _basic(datadict, attr, required, default, null)
 
-    if null and not data:
+    if null and data is None:
         return None
 
     try:
