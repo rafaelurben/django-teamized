@@ -49,19 +49,22 @@ function endLoading() {
 }
 
 async function initialize() {
-  if (new URL(location).searchParams.has('debug')) Utils.toggleDebug(true);
+  if (new URL(location).searchParams.has("debug")) Utils.toggleDebug(true);
 
   startLoading();
 
   Navigation.hideSidebarOnMobile();
   Navigation.importFromURL();
   Navigation.render();
-  await Settings.getSettings();
-  await Settings.getProfile();
-  Navigation.renderSidebar();
-  await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
+
+  await Promise.all([
+    Settings.getSettings(),
+    Settings.getProfile().then(Navigation.renderSidebar),
+    Teams.loadTeams(true), // -> also calls render()
+  ]);
+
   Navigation.exportToURL();
-  
+
   Teams.checkURLInvite();
   WorkingTime.getTrackingSession();
 
@@ -79,7 +82,7 @@ async function reinitialize() {
     teamcache: {},
   };
   Navigation.render();
-  await Teams.loadTeams(true); // Load teams from API and build cache -> also calls render()
+  await Teams.loadTeams(true); // -> also calls render()
   WorkingTime.getTrackingSession();
 
   Teams.switchTeam(oldTeamId);
