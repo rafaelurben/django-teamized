@@ -10,9 +10,9 @@
     <h3>App-Daten</h3>
     <textarea id="appdata" style="resize: both;" class="w-100 form-control mb-2" rows="10" disabled></textarea>
     <button onclick="debug_copy()" class="btn btn-outline-primary mb-2">Kopieren</button>
-    <button onclick="debug_remove_user()" class="btn btn-outline-danger mb-2">Benutzer entfernen</button>
+    <button onclick="debug_remove_me()" class="btn btn-outline-danger mb-2">Mich entfernen</button>
     <button onclick="debug_remove_members()" class="btn btn-outline-danger mb-2">Teammitglieder entfernen</button>
-    <button onclick="debug_remove_teamcache()" class="btn btn-outline-danger mb-2">Kompletter Teamcache entfernen</button>
+    <button onclick="debug_remove_teamcache()" class="btn btn-outline-danger mb-2">Kompletten Teamcache entfernen</button>
 
 {% endblock content %}
     
@@ -42,7 +42,7 @@
             _debug_display();
         }
 
-        function debug_remove_user() {
+        function debug_remove_me() {
             data.user = "Aus Datenschutzgründen entfernt.";
             for (teamId in data.teamcache) {
                 data.teamcache[teamId].team.member.user = "Aus Datenschutzgründen entfernt.";

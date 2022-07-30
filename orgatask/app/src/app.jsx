@@ -33,8 +33,8 @@ window.appdata = {
   teamcache: {},
   user: {
     id: null,
-    username: "loading...",
-    email: "loading...",
+    username: "Laden...",
+    avatar_url: "https://www.gravatar.com/avatar/",
   },
 };
 
