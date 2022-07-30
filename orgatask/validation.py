@@ -33,7 +33,7 @@ def _basic(datadict: dict, attr: str, required: bool=True, default=None, null=Fa
 def boolean(datadict: dict, attr: str, required: bool=False, default: bool=True, null=False) -> bool:
     data = _basic(datadict, attr, required, default, null)
 
-    if null and data is None:
+    if null and (data is None or data == ""):
         return None
 
     if isinstance(data, str) and data.lower() == "false":
