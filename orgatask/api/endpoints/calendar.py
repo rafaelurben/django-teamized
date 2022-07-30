@@ -91,7 +91,6 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
         calendar.delete()
         return JsonResponse({
             "success": True,
-            "id": calendar.uid,
             "alert": {
                 "title": _("Kalender gelöscht"),
                 "text": _("Der Kalender wurde erfolgreich gelöscht."),
@@ -176,7 +175,6 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
         event.delete()
         return JsonResponse({
             "success": True,
-            "id": event.uid,
             "alert": {
                 "title": _("Ereignis gelöscht"),
                 "text": _("Das Ereignis wurde erfolgreich gelöscht."),

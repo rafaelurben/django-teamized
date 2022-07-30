@@ -81,7 +81,6 @@ def endpoint_worksession(request, team: Team, session: WorkSession):
         session.delete()
         return JsonResponse({
             "success": True,
-            "id": session.uid,
             "alert": {
                 "title": _("Sitzung gelöscht"),
                 "text": _("Die Sitzung wurde erfolgreich gelöscht."),

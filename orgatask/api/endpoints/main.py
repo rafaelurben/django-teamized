@@ -123,7 +123,6 @@ def endpoint_team(request, team: Team):
         team.delete()
         return JsonResponse({
             "success": True,
-            "id": team.uid,
             "alert": {
                 "title": _("Team gelöscht"),
                 "text": _("Das Team wurde erfolgreich gelöscht."),
@@ -214,7 +213,6 @@ def endpoint_member(request, team: Team, member: Member):
         member.delete()
         return JsonResponse({
             "success": True,
-            "id": member.uid,
             "alert": {
                 "title": _("Mitglied entfernt"),
                 "text": _("Das Mitglied wurde erfolgreich entfernt."),
@@ -296,7 +294,6 @@ def endpoint_invite(request, team: Team, invite: Invite):
         invite.delete()
         return JsonResponse({
             "success": True,
-            "id": invite.uid,
             "alert": {
                 "title": _("Einladung gelöscht"),
                 "text": _("Die Einladung wurde erfolgreich gelöscht."),
