@@ -41,25 +41,15 @@ export function switchTeam(teamId) {
   Navigation.render();
 }
 
-// Team loading
-
-export async function loadTeams(full=false) {
-  return await getTeams(full).then(
-    (teams) => {
-      ensureExistingTeam();
-      return teams;
-    }
-  )
-}
-
 //// API calls ////
 
 // Team list
 
-export async function getTeams(full=false) {
-  return await API.GET(full ? "teams?full=true" : "teams").then(
+export async function getTeams() {
+  return await API.GET("teams").then(
     (data) => {
       Cache.updateTeamsCache(data.teams, data.defaultTeamId);
+      ensureExistingTeam();
       return data.teams;
     }
   )

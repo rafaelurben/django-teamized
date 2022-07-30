@@ -60,7 +60,7 @@ async function initialize() {
   await Promise.all([
     Settings.getSettings(),
     Settings.getProfile().then(Navigation.renderSidebar),
-    Teams.loadTeams(true),
+    Teams.getTeams(),
   ]);
 
   Navigation.exportToURL();
@@ -86,7 +86,7 @@ async function reinitialize() {
 
   await Promise.all([
     Settings.getSettings(),
-    Teams.loadTeams(true),
+    Teams.getTeams(),
   ]);
 
   Navigation.render();

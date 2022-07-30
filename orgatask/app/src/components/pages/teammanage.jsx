@@ -1,6 +1,7 @@
 "use strict";
 
 import { successAlert } from "../../utils/alerts.js";
+import * as Cache from "../../utils/cache.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
@@ -243,33 +244,53 @@ export default class Page_TeamManage extends React.Component {
   }
 
   render() {
-    let memberrows = Object.values(this.props.members).map((member) => {
-      return (
-        <TeamMembersTableRow
-          key={member.id}
-          member={member}
-          team={this.props.team}
-          loggedinmember={this.props.team.member}
-        />
-      );
-    });
-
-    let inviterows = Object.values(this.props.invites).map((invite) => {
-      return (
-        <TeamInvitesTableRow 
-          key={invite.id}
-          invite={invite}
-          team={this.props.team}
-        />
-      );
-    });
-
-    if (inviterows.length == 0) {
-      inviterows = (
+    var memberrows;
+    if (Cache.getCurrentTeamData()._state.members._initial) {
+      memberrows = (
         <tr>
-          <td colSpan="4">Keine Einladungen vorhanden</td>
+          <td colSpan="4">Laden...</td>
         </tr>
       );
+      Teams.getMembers(this.props.team.id);
+    } else {
+      memberrows = Object.values(this.props.members).map((member) => {
+        return (
+          <TeamMembersTableRow
+            key={member.id}
+            member={member}
+            team={this.props.team}
+            loggedinmember={this.props.team.member}
+          />
+        );
+      });
+    }
+
+    var inviterows;
+    if (this.props.team.member.role === "owner") {
+      if (Cache.getCurrentTeamData()._state.invites._initial) {
+        inviterows = (
+          <tr>
+            <td colSpan="4">Laden...</td>
+          </tr>
+        );
+        Teams.getInvites(this.props.team.id);
+      } else if (Object.keys(this.props.invites).length == 0) {
+        inviterows = (
+          <tr>
+            <td colSpan="4">Keine Einladungen vorhanden</td>
+          </tr>
+        );
+      } else {
+        inviterows = Object.values(this.props.invites).map((invite) => {
+          return (
+            <TeamInvitesTableRow
+              key={invite.id}
+              invite={invite}
+              team={this.props.team}
+            />
+          );
+        });
+      }
     }
 
     let inforows = [

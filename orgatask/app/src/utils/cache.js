@@ -75,7 +75,7 @@ export async function deleteTeam(teamId) {
         // When no team is left, the backend automatically creates a new one
         // We need to refetch all teams in order to get the new one
         // This also sets the defaultTeamId
-        await Teams.loadTeams(true);
+        await Teams.getTeams();
     } else if (window.appdata.defaultTeamId === teamId) {
         // When the default team is deleted, we need to switch to another team
         window.appdata.defaultTeamId = teamIds[0];

@@ -657,7 +657,7 @@ export default class Page_Calendars extends React.Component {
     this.storeEvents();
 
     if (Cache.getCurrentTeamData()._state.calendars._initial) {
-      Calendars.getCalendars();
+      Calendars.getCalendars(this.props.team.id);
     }
 
     let dayDisplay = Calendars.getDateString(this.state.selectedDate);
