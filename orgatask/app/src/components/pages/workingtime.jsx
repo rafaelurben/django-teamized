@@ -4,6 +4,7 @@ import { ms2HoursMinutesSeconds, seconds2HoursMinutesSeconds } from "../../utils
 import { errorAlert } from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
+import * as Cache from "../../utils/cache.js";
 import * as Dashboard from "../dashboard.js";
 
 class WorkSessionTableRow extends React.Component {
@@ -82,8 +83,7 @@ export default class Page_WorkingTime extends React.Component {
     this.createSession = this.createSession.bind(this);
     this.startSession = this.startSession.bind(this);
     this.stopSession = this.stopSession.bind(this);
-    this.fetchSessions = this.fetchSessions.bind(this);
-    this.updateSession = this.updateSession.bind(this);
+    this.updateCurrentSession = this.updateCurrentSession.bind(this);
     this.tick = this.tick.bind(this);
     this.showMoreRows = this.showMoreRows.bind(this);
 
@@ -95,23 +95,12 @@ export default class Page_WorkingTime extends React.Component {
     this.clockRefreshIntervalID = 0;
     this.currentSessionRefreshIntervalId = 0;
 
-    this.fetch_in_progress = false;
     this.start_in_progress = false;
     this.stop_in_progress = false;
   }
 
   showMoreRows(amount) {
     this.setState({ listCount: this.state.listCount + amount });
-  }
-
-  fetchSessions() {
-    if (!this.fetch_in_progress) {
-      this.fetch_in_progress = true;
-      WorkingTime.getWorkSessionsInTeam(this.props.selectedTeamId).then(() => {
-        Navigation.renderPage();
-        this.fetch_in_progress = false;
-      })
-    }
   }
 
   async createSession() {
@@ -139,12 +128,12 @@ export default class Page_WorkingTime extends React.Component {
     }
   }
 
-  async updateSession() {
+  async updateCurrentSession() {
     const current = this.props.current_worksession;
     const updated = await WorkingTime.getTrackingSession();
     if (current !== undefined && current !== updated && (current === null || updated === null || current.id !== updated.id)) {
       Navigation.renderPage();
-      this.fetchSessions();
+      WorkingTime.getMyWorkSessionsInTeam(this.props.selectedTeamId);
     }
   }
 
@@ -162,8 +151,8 @@ export default class Page_WorkingTime extends React.Component {
 
   componentDidMount() {
     this.clockRefreshIntervalID = setInterval(() => this.tick(), 1000);
-    this.updateSession();
-    this.currentSessionRefreshIntervalId = setInterval(() => this.updateSession(), 15000);
+    this.updateCurrentSession();
+    this.currentSessionRefreshIntervalId = setInterval(() => this.updateCurrentSession(), 15000);
   }
 
   componentWillUnmount() {
@@ -181,9 +170,13 @@ export default class Page_WorkingTime extends React.Component {
   render() {
     let rows;
 
-    if (this.props.worksessions === undefined) {
-      rows = <tr><td colSpan="3">Wird geladen...</td></tr>;
-      this.fetchSessions();
+    if (Cache.getCurrentTeamData()._state.me_worksessions._initial) {
+      rows = (
+        <tr>
+          <td colSpan="3">Laden...</td>
+        </tr>
+      );
+      WorkingTime.getMyWorkSessionsInTeam(this.props.selectedTeamId);
     } else {
       var worksessions = Object.values(this.props.worksessions);
       worksessions.sort((a, b) => {

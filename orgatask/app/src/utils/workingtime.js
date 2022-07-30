@@ -4,7 +4,7 @@ import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
 import { isoFormat, localInputFormat } from "./calendars.js";
 
-export async function getWorkSessionsInTeam(teamId) {
+export async function getMyWorkSessionsInTeam(teamId) {
     return await Cache.refreshTeamCacheCategory(teamId, "me_worksessions");
 }
 
