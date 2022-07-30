@@ -58,7 +58,7 @@ export default class PageLoader extends React.Component {
         return (
           <Page_WorkingTime
             current_worksession={window.appdata.current_worksession}
-            worksessions={Cache.getMeInCurrentTeam().worksessions}
+            worksessions={teamdata.me_worksessions}
             selectedTeamId={window.appdata.selectedTeamId}
             selectedTeam={teamdata.team}
           />

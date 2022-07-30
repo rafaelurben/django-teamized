@@ -5,26 +5,18 @@ import * as Navigation from "./navigation.js";
 import { isoFormat, localInputFormat } from "./calendars.js";
 
 export async function getWorkSessionsInTeam(teamId) {
-    return await API.GET(`me/worksessions/t=${teamId}`).then(
-        (data) => {
-            let me = Cache.getMeInTeam(teamId);
-            me.worksessions = data.sessions;
-            return data.sessions;
-        }
-    );
+    return await Cache.refreshTeamCacheCategory(teamId, "me_worksessions");
 }
 
 // WorkSession creation
 
 export async function createWorkSession(teamId, note, dtstart, dtend) {
-    return await API.POST(`me/worksessions/t=${teamId}`, {
+    return await API.POST(`teams/${teamId}/me/worksessions`, {
         note, time_start: isoFormat(dtstart), time_end: isoFormat(dtend)
     }).then(
         (data) => {
             requestSuccessAlert(data);
-            let me = Cache.getMeInCurrentTeam();
-            me.worksessions = me.worksessions || [];
-            me.worksessions.push(data.session);
+            Cache.getCurrentTeamData().me_worksessions[data.session.id] = data.session;
             return data.session;
         }
     )
@@ -65,12 +57,12 @@ export async function createWorkSessionPopup(team) {
 // WorkSession edit
 
 export async function editWorkSession(teamId, sessionId, note, dtstart, dtend) {
-    return await API.POST(`me/worksessions/${sessionId}`, {
+    return await API.POST(`teams/${teamId}/me/worksessions/${sessionId}`, {
         note, time_start: isoFormat(dtstart), time_end: isoFormat(dtend)
     }).then(
         async (data) => {
             requestSuccessAlert(data);
-            await getWorkSessionsInTeam(teamId);
+            Cache.getCurrentTeamData().me_worksessions[data.session.id] = data.session;
             return data.session;
         }
     )
@@ -117,10 +109,11 @@ export async function editWorkSessionPopup(team, session) {
 // WorkSession deletion
 
 export async function deleteWorkSession(teamId, sessionId) {
-    return await API.DELETE(`me/worksessions/${sessionId}`).then(
+    return await API.DELETE(`teams/${teamId}/me/worksessions/${sessionId}`).then(
         async (data) => {
             requestSuccessAlert(data);
-            await getWorkSessionsInTeam(teamId);
+            console.log('delete', data)
+            delete Cache.getCurrentTeamData().me_worksessions[sessionId];
         }
     )
 }
@@ -173,9 +166,7 @@ export async function stopTrackingSession() {
         (data) => {
             successAlert("Die Zeitmessung wurde gestoppt", "Tracking gestoppt");
             window.appdata.current_worksession = null;
-            let me = Cache.getMeInCurrentTeam();
-            me.worksessions = me.worksessions || [];
-            me.worksessions.unshift(data.session);
+            Cache.getCurrentTeamData().me_worksessions[data.session.id] = data.session;
             return data.session;
         }
     );

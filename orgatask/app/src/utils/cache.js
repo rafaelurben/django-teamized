@@ -55,7 +55,10 @@ export function addTeam(team) {
         "members": {},
         "invites": {},
         "calendars": {},
-        "_state": {calendars: {_initial: true, _refreshing: false}},
+        "_state": {
+            calendars: {_initial: true, _refreshing: false},
+            me_worksessions: {_initial: true, _refreshing: false}
+        },
     };
     updateTeam(team);
 }
@@ -126,9 +129,9 @@ export async function refreshTeamCacheCategory(teamId, category) {
             console.info("[Cache] Team category " + category + " is already being refreshed for team " + teamId + "!");
         } else {
             teamdata._state[category]._refreshing = true;
-            API.GET(`teams/${teamId}/${category}`).then(
+            API.GET(`teams/${teamId}/${category.replaceAll('_','/')}`).then(
                 (data) => {
-                    let objects = data[category];
+                    let objects = data[category.split('_')[category.split('_').length - 1]];
                     replaceTeamCacheCategory(teamId, category, objects);
 
                     teamdata._state[category]._initial = false;

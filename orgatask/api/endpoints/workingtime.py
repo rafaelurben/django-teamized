@@ -30,7 +30,7 @@ def endpoint_worksessions(request, team: Team):
         # Get all sessions of the user in the team
         sessions = member.work_sessions.filter(is_ended=True).order_by('-time_start').all()
         return JsonResponse({
-            "sessions": [session.as_dict() for session in sessions],
+            "worksessions": [session.as_dict() for session in sessions],
         })
     if request.method == "POST":
         session = WorkSession.from_post_data(request.POST, team, member, user)
@@ -48,8 +48,8 @@ def endpoint_worksessions(request, team: Team):
 @api_view(["get", "post", "delete"])
 @csrf_exempt
 @orgatask_prep()
-@require_objects([("session", WorkSession, "session")])
-def endpoint_worksession(request, session: WorkSession):
+@require_objects([("team", Team, "team"), ("session", WorkSession, "session")])
+def endpoint_worksession(request, team: Team, session: WorkSession):
     """
     Endpoint for managing or deleting a WorkSession.
     """
@@ -71,7 +71,7 @@ def endpoint_worksession(request, session: WorkSession):
         return JsonResponse({
             "success": True,
             "id": session.uid,
-            "event": session.as_dict(),
+            "session": session.as_dict(),
             "alert": {
                 "title": _("Sitzung geändert"),
                 "text": _("Die Sitzung wurde erfolgreich geändert."),

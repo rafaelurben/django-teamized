@@ -22,8 +22,8 @@ urlpatterns = [
 
     # Workingtime API views
 
-    path('me/worksessions/t=<team>', ep.workingtime.endpoint_worksessions, name='api-workingtime-worksessions'),
-    path('me/worksessions/<session>', ep.workingtime.endpoint_worksession, name='api-workingtime-worksession'),
+    path('teams/<team>/me/worksessions', ep.workingtime.endpoint_worksessions, name='api-workingtime-worksessions'),
+    path('teams/<team>/me/worksessions/<session>', ep.workingtime.endpoint_worksession, name='api-workingtime-worksession'),
     path('me/worksessions/tracking/start/t=<team>', ep.workingtime.endpoint_tracking_start, name='api-workingtime-tracking-start'),
     path('me/worksessions/tracking/live', ep.workingtime.endpoint_tracking_live, name='api-workingtime-tracking-live'),
     path('me/worksessions/tracking/stop', ep.workingtime.endpoint_tracking_stop, name='api-workingtime-tracking-stop'),
