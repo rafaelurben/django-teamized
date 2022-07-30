@@ -47,8 +47,6 @@ export async function loadTeams(full=false) {
   return await getTeams(full).then(
     (teams) => {
       ensureExistingTeam();
-
-      Navigation.render();
       return teams;
     }
   )

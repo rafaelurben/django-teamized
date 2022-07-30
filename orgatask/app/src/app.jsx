@@ -60,10 +60,11 @@ async function initialize() {
   await Promise.all([
     Settings.getSettings(),
     Settings.getProfile().then(Navigation.renderSidebar),
-    Teams.loadTeams(true), // -> also calls render()
+    Teams.loadTeams(true),
   ]);
 
   Navigation.exportToURL();
+  Navigation.render();
 
   Teams.checkURLInvite();
   WorkingTime.getTrackingSession();
@@ -82,7 +83,14 @@ async function reinitialize() {
     teamcache: {},
   };
   Navigation.render();
-  await Teams.loadTeams(true); // -> also calls render()
+
+  await Promise.all([
+    Settings.getSettings(),
+    Teams.loadTeams(true),
+  ]);
+
+  Navigation.render();
+
   WorkingTime.getTrackingSession();
 
   Teams.switchTeam(oldTeamId);
