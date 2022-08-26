@@ -87,7 +87,7 @@ def endpoint_teams(request):
 
         return JsonResponse({
             "success": True,
-            "team": team.as_dict(member=team.get_member(user), full=True),
+            "team": team.as_dict(member=team.get_member(user)),
             "alert": {
                 "title": _("Team erstellt"),
                 "text": _("Das Team wurde erfolgreich erstellt."),
