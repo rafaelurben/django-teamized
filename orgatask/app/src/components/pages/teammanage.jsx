@@ -312,18 +312,18 @@ export default class Page_TeamManage extends React.Component {
       inforows.push(
         <tr key="settings">
           <th>Einstellungen:</th>
-          <td>
+          <td className="d-flex">
             <a
               className="btn btn-outline-dark border-1"
               onClick={this.handleTeamEditButtonClick}
             >
-              Team bearbeiten
+              Team&nbsp;bearbeiten
             </a>
             <a
               className="btn btn-outline-danger border-1 ms-1"
               onClick={this.handleTeamDeleteButtonClick}
             >
-              Team löschen
+              Team&nbsp;löschen
             </a>
           </td>
         </tr>
