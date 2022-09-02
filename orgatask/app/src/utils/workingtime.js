@@ -77,7 +77,7 @@ export async function editWorkSessionPopup(team, session) {
             '<label class="swal2-input-label" for="swal-input-note">Notiz:</label>' +
             `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>` +
             (session.is_created_via_tracking ?
-                '<p class="swal2-text mt-3 mb-0">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
+                '<hr><p class="swal2-text mt-3 mb-0 small opacity-50 px-3">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
                 :
                 '<label class="swal2-input-label" for="swal-input-dtstart">Von:</label>' +
                 `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${dtstart}">` +
