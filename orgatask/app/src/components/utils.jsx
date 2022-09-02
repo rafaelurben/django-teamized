@@ -7,6 +7,7 @@
 export class HoverInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.icon = this.props.icon || "fas fa-info-circle";
   }
 
   componentDidMount() {
@@ -16,7 +17,7 @@ export class HoverInfo extends React.Component {
   render() {
     return (
       <abbr className={this.props.className} title={this.props.title} data-toggle="tooltip">
-        <i className="fas fa-fw fa-info-circle"></i>
+        <i className={"fa-fw "+this.props.icon}></i>
       </abbr>
     );
   }
