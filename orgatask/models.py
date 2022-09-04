@@ -799,3 +799,139 @@ class CalendarEvent(models.Model):
 
         self.clean()
         self.save()
+
+
+class ToDoList(models.Model):
+    uid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    team = models.ForeignKey(
+        to="Team",
+        related_name="todolists",
+        on_delete=models.CASCADE,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True, default="")
+
+    color = models.CharField(max_length=20, blank=True, default="#FFFFFF")
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _("ToDo-Liste")
+        verbose_name_plural = _("ToDo-Listen")
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.uid})"
+
+    def as_dict(self) -> dict:
+        return {
+            "id": str(self.uid),
+            "name": self.name,
+            "description": self.description,
+            "color": self.color,
+            "items": utils.iddict(map(lambda i: i.as_dict(), self.items.all())),
+        }
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, team: Team) -> "ToDoList":
+        "Creates a ToDoList from POST data"
+
+        return cls.objects.create(
+            team=team,
+            name = validation.text(data, "name", True, max_length=50),
+            description = validation.text(data, "description", True),
+            color = validation.text(data, "color", False, default="#FFFFFF"),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        "Updates the ToDoList from POST data"
+
+        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
+        self.description = validation.text(data, "description", False, default=self.description)
+        self.color = validation.text(data, "color", False, default=self.color)
+        self.save()
+
+class ToDoListItem(models.Model):
+    uid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    todolist = models.ForeignKey(
+        to="ToDoList",
+        related_name="items",
+        on_delete=models.CASCADE,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name="+")
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True, default="")
+
+    done = models.BooleanField(default=False)
+    done_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name="+")
+    done_at = models.DateTimeField(null=True)
+
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _("ToDo-Listeneintrag")
+        verbose_name_plural = _("ToDo-Listeneinträge")
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.uid})"
+
+    def as_dict(self) -> dict:
+        return {
+            "id": str(self.uid),
+            "name": self.name,
+            "description": self.description,
+            "done": self.done,
+            "done_by_id": str(self.done_by.uid) if self.done_by else None,
+            "done_at": self.done_at.isoformat() if self.done_at else None,
+        }
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, user: User, todolist: ToDoList) -> "ToDoListItem":
+        "Creates a ToDoListItem from POST data"
+
+        return cls.objects.create(
+            todolist=todolist,
+            created_by=user,
+            name = validation.text(data, "name", True, max_length=50),
+            description = validation.text(data, "description", False),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict, user: User):
+        "Update a ToDoListItem from POST data"
+
+        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
+        self.description = validation.text(data, "description", False, default=self.description)
+
+        done = validation.boolean(data, "done", False, null=True)
+        if done is True and self.done is False: # Mark as done
+            self.done = True
+            self.done_by = user
+            self.done_at = timezone.now()
+        elif done is False and self.done is True: # Mark as undone
+            self.done = False
+            self.done_by = None
+            self.done_at = None
+
+        self.save()
