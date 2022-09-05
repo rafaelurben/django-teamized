@@ -100,6 +100,14 @@ class CalendarManager extends React.Component {
           </button>
         );
       }
+    } else {
+      calendarPanelButtons.push(
+        <Tooltip key="noadmin" title="Diese Aktionen stehen nur Admins zur Verfügung">
+          <button className="btn btn-outline-dark disabled">
+            Erstellen/Bearbeiten/Löschen
+          </button>
+        </Tooltip>
+      );
     }
 
     return [
@@ -286,7 +294,16 @@ class CalendarEventPicker extends React.Component {
         </button>
       );
     } else {
-      rows = <p className="ms-1 mb-0">Im ausgewählten Team ist noch kein Kalender vorhanden.</p>;
+      rows = (
+        <p className="ms-1 mb-0" key="empty">
+          Im ausgewählten Team ist noch kein Kalender vorhanden.{" "}
+          {this.props.isAdmin ? (
+            <TooltipIcon title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></TooltipIcon>
+          ) : (
+            <TooltipIcon title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></TooltipIcon>
+          )}
+        </p>
+      );
     }
     return rows;
   }
@@ -702,6 +719,7 @@ export default class Page_Calendars extends React.Component {
                 this.state.selectedDate
               )}
               team={this.props.team}
+              isAdmin={this.props.isAdmin}
             />
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile
