@@ -1,6 +1,6 @@
 "use strict";
 
-import {TooltipIcon} from "./utils.js";
+import { TooltipIcon } from "./tooltips.js";
 
 /*
     This component is made to be reused. It represents a part of the dashboard.

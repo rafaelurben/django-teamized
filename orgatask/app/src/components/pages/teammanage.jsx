@@ -5,7 +5,7 @@ import * as Cache from "../../utils/cache.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
-import { TooltipIcon } from "../utils.js";
+import { TooltipIcon } from "../tooltips.js";
 
 
 class TeamMembersTableRow extends React.Component {

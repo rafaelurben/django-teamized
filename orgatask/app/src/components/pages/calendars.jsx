@@ -5,7 +5,7 @@ import * as Cache from "../../utils/cache.js";
 import * as Navigation from "../../utils/navigation.js";
 
 import * as Dashboard from "../dashboard.js";
-import {TooltipIcon, Tooltip} from "../utils.js";
+import { TooltipIcon, Tooltip } from "../tooltips.js";
 
 const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 

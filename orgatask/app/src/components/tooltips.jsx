@@ -1,7 +1,7 @@
 "use strict";
 
 /*
-    Utility components
+    Tooltip components
 */
 
 export class Tooltip extends React.Component {

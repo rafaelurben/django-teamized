@@ -6,7 +6,7 @@ import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
 import * as Dashboard from "../dashboard.js";
-import {TooltipIcon} from "../utils.js";
+import { TooltipIcon } from "../tooltips.js";
 
 class WorkSessionTableRow extends React.Component {
   constructor(props) {
