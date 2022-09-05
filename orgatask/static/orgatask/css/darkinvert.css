@@ -10,6 +10,7 @@
 #app-maincontent.darkmode *[class*="-danger"]:not(.dm-noinvert),
 #app-maincontent.darkmode *[class*="-primary"]:not(.dm-noinvert),
 #app-maincontent.darkmode *[class*="-warning"]:not(.dm-noinvert),
+#app-maincontent.darkmode *[class*="-info"]:not(.dm-noinvert):not(.fa-info-circle),
 #app-maincontent.darkmode .dm-invert {
     filter: invert(1);
 }
