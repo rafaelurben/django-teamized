@@ -702,7 +702,7 @@ export default class Page_Calendars extends React.Component {
     return (
       <Dashboard.Dashboard
         title="Kalender"
-        subtitle="(w.i.p.) Kalender für dich und dein Team."
+        subtitle="Kalender für dich und dein Team."
       >
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
           <Dashboard.DashboardTile
