@@ -17,6 +17,8 @@ class CalendarManager extends React.Component {
     this.createCalendar = this.createCalendar.bind(this);
     this.editCalendar = this.editCalendar.bind(this);
     this.deleteCalendar = this.deleteCalendar.bind(this);
+  
+    this.subscriptionPopup = this.subscriptionPopup.bind(this);
   }
   
   handleCalendarSelect(event) {
@@ -40,6 +42,29 @@ class CalendarManager extends React.Component {
   deleteCalendar() {
     Calendars.deleteCalendarPopup(this.props.team, this.props.selectedCalendar).then(() => {
       this.props.onCalendarSelect(null);
+    });
+  }
+
+  subscriptionPopup() {
+    const httpurl = this.props.selectedCalendar.ics_url;
+    const webcalurl = "webcal://" + httpurl.split("//")[1];
+
+    Swal.fire({
+      title: "Kalender abonnieren",
+      html:
+        "Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:" +
+        "<hr><h5>1) Webcal-Link</h5>" +
+        "Auf allen Apple-Geräten sowie weiteren unterstützten Geräten kannst du Webcal-Links direkt in deiner Kalender-App öffnen. " +
+        "Bei manchen anderen Apps (z. B. Google Calendar) musst du den Link kopieren und manuell einfügen.<br>" +
+        `<br><a href="${webcalurl}" target="_blank" class="btn btn-outline-info">Webcal-URL</a><br>` +
+        "<hr><h5>2) HTTP-Link</h5>" +
+        "Falls dein Gerät oder deine App Webcal-Links nicht unterstützt, kannst du den Kalender auch über HTTP(S) abonnieren. " +
+        "Hierbei musst du aber aufpassen, dass du den Link nicht öffnest, sondern ihn kopierst und in deiner Kalender-App einfügst. " +
+        "Sonst wird nur der aktuelle Stand des Kalenders heruntergeladen, aber keine Änderungen mehr übertragen.<br>" +
+        `<br><a href="${httpurl}" target="_blank" class="btn btn-outline-info">HTTP(S)-URL</a><br>`,
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonText: "Schliessen",
     });
   }
 
@@ -133,27 +158,20 @@ class CalendarManager extends React.Component {
               <td style={{ whiteSpace: "pre" }}>{calendar.description}</td>
             </tr>
             <tr>
-              <th>Abonnieren:</th>
-              <td>
-                <a
-                  href={"webcal://" + calendar.ics_url.split("//")[1]}
-                  className="me-1"
-                >
-                  Webcal
-                </a>
-                <TooltipIcon title="Auf unterstützen Geräten sollte sich der Webcal-Link beim anklicken direkt in der Kalenderapp öffnen. Falls nicht, kann in den meisten Kalenderapps ein Kalender via URL abonniert werden. Dazu einfach der linke Link in das dafür vorgesehene Feld kopieren. Falls dieser nicht funktioniert, bitte den rechten verwenden. Die Datei sollte jedoch NICHT heruntergeladen werden. Sonst werden nur die aktuell vorhandenen Ereignisse gespeichert." />
-                <a href={calendar.ics_url} className="ms-1">
-                  HTTP(S)
-                </a>
-              </td>
-            </tr>
-            <tr>
               <th>Farbe:</th>
               <td>
                 <i
                   style={{ color: calendar.color }}
                   className="fas fa-circle small dm-invert"
                 ></i>
+              </td>
+            </tr>
+            <tr>
+              <th>Abonnieren:</th>
+              <td>
+                <button className="btn btn-outline-info" onClick={this.subscriptionPopup}>
+                  Abonnieren
+                </button>
               </td>
             </tr>
             <tr className="debug-only">
