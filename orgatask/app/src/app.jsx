@@ -7,6 +7,7 @@ import * as Utils from "./utils/utils.js";
 import * as Settings from "./utils/settings.js";
 import * as WorkingTime from "./utils/workingtime.js";
 import * as Calendars from "./utils/calendars.js";
+import * as ToDo from "./utils/todo.js";
 
 // Make namespaces available in the console (for debugging)
 
@@ -18,6 +19,7 @@ window._App = {
   Navigation,
   Settings,
   Teams,
+  ToDo,
   Utils,
   WorkingTime,
 };

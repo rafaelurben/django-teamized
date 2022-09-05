@@ -55,11 +55,13 @@ export function addTeam(team) {
         "calendars": {},
         "invites": {},
         "members": {},
+        "todolists": {},
         "me_worksessions": {},
         "_state": {
             calendars: {_initial: true, _refreshing: false},
             invites: {_initial: true, _refreshing: false},
             members: {_initial: true, _refreshing: false},
+            todolists: {_initial: true, _refreshing: false},
             me_worksessions: {_initial: true, _refreshing: false}
         },
     };
