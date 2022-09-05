@@ -698,7 +698,7 @@ export default class Page_Calendars extends React.Component {
               events={Object.values(this.events)}
             />
           </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Ausgewähltes Ereignis">
+          <Dashboard.DashboardTile title="Ausgewähltes Ereignis" help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen.">
             {/* Selected event */}
             <CalendarEventDisplay
               event={this.events[this.state.selectedEventId]}
@@ -707,7 +707,7 @@ export default class Page_Calendars extends React.Component {
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title={"Ereignisse am " + dayDisplay}>
+          <Dashboard.DashboardTile title={"Ereignisse am " + dayDisplay} help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">
             {/* Events from the selected day & Create new event button */}
             <CalendarEventPicker
               onEventSelect={this.handleEventSelect}
