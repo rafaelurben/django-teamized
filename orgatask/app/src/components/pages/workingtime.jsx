@@ -6,7 +6,7 @@ import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
 import * as Dashboard from "../dashboard.js";
-import {HoverInfo} from "../utils.js";
+import {TooltipIcon} from "../utils.js";
 
 class WorkSessionTableRow extends React.Component {
   constructor(props) {
@@ -40,9 +40,9 @@ class WorkSessionTableRow extends React.Component {
             <br />
             {new Date(this.props.session.time_end).toLocaleString()}
             {this.props.session.is_created_via_tracking ? (
-              <HoverInfo icon="fas fa-stopwatch" title="Diese Sitzung wurde via Aufzeichnung erstellt." className="ms-1"></HoverInfo>
+              <TooltipIcon icon="fas fa-stopwatch" title="Diese Sitzung wurde via Aufzeichnung erstellt." className="ms-1"></TooltipIcon>
             ) : (
-              <HoverInfo icon="fas fa-pencil" title="Diese Sitzung wurde manuell erfasst." className="ms-1"></HoverInfo>
+              <TooltipIcon icon="fas fa-pencil" title="Diese Sitzung wurde manuell erfasst." className="ms-1"></TooltipIcon>
             )}
           </span>
         </td>

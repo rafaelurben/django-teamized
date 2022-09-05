@@ -4,10 +4,9 @@
     Utility components
 */
 
-export class HoverInfo extends React.Component {
+export class Tooltip extends React.Component {
   constructor(props) {
     super(props);
-    this.icon = this.props.icon || "fas fa-info-circle";
   }
 
   componentDidMount() {
@@ -17,8 +16,23 @@ export class HoverInfo extends React.Component {
   render() {
     return (
       <abbr className={this.props.className} title={this.props.title} data-toggle="tooltip">
-        <i className={"fa-fw "+this.props.icon}></i>
+        {this.props.children}
       </abbr>
+    );
+  }
+}
+
+export class TooltipIcon extends React.Component {
+  constructor(props) {
+    super(props);
+    this.icon = this.props.icon || "fas fa-info-circle";
+  }
+
+  render() {
+    return (
+      <Tooltip className={this.props.className} title={this.props.title}>
+        <i className={"fa-fw " + this.icon}></i>
+      </Tooltip>
     );
   }
 }
