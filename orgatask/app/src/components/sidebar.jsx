@@ -98,6 +98,16 @@ export default class AppSidebar extends React.Component {
               Kalender
             </a>
           </li>
+          <li>
+            <a
+              href="#"
+              className={this.getLinkClass("todo")}
+              onClick={this.selectPage("todo")}
+            >
+              <i className="fas fa-fw fa-tasks" />
+              ToDo
+            </a>
+          </li>
           {adminPages}
         </ul>
         <hr />

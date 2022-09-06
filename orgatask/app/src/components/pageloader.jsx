@@ -4,6 +4,7 @@ import Page_Calendars from "./pages/calendars.js";
 import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
 import Page_TeamManage from "./pages/teammanage.js";
+import Page_ToDo from "./pages/todo.js";
 import Page_WorkingTime from "./pages/workingtime.js";
 
 import * as Teams from "../utils/teams.js";
@@ -68,6 +69,14 @@ export default class PageLoader extends React.Component {
           <Page_Calendars
             team={teamdata.team}
             calendars={teamdata.calendars}
+            isAdmin={Teams.isCurrentTeamAdmin()}
+          />
+        );
+      case "todo":
+        return (
+          <Page_ToDo
+            team={teamdata.team}
+            todolists={teamdata.todolists}
             isAdmin={Teams.isCurrentTeamAdmin()}
           />
         );

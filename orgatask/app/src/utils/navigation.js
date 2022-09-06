@@ -10,6 +10,7 @@ const pageList = [
     "teamlist",
     "teammanage",
     "workingtime",
+    "todo",
 ]
 
 function ensureExistingPage() {
