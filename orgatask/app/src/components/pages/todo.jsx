@@ -6,16 +6,48 @@ import * as Navigation from "../../utils/navigation.js";
 import * as Cache from "../../utils/cache.js";
 import { TooltipIcon, Tooltip } from "../tooltips.js";
 
+
+class ListSelectorRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  handleSelect() {
+    if (!this.props.isSelected) {
+      this.props.onSelect(this.props.todolist.id);
+    }
+  }
+  
+  getStyle() {
+    console.log(this.props.todolist.color)
+    return {
+      borderLeftWidth: "5px",
+      borderLeftColor: this.props.todolist.color,
+      borderLeftStyle: "solid",
+      cursor: "pointer",
+      opacity: this.props.isSelected ? 0.75 : 1,
+    };
+  }
+
+  render() {
+    return (
+      <div
+        className="ps-2 py-1 mb-1 dm-invert dm-invert-children"
+        style={this.getStyle()}
+        onClick={this.handleSelect}
+      >
+        <b className="d-inline-block w-100">{this.props.todolist.name}</b>
+      </div>
+    );
+  }
+}
+
 class ListSelector extends React.Component {
   constructor(props) {
     super(props);
-    this.handleListSelect = this.handleListSelect.bind(this);
 
     this.createList = this.createList.bind(this);
-  }
-
-  handleListSelect(event) {
-    this.props.onListSelect(event.target.value);
   }
 
   createList() {
@@ -25,27 +57,24 @@ class ListSelector extends React.Component {
   }
 
   render() {
-    let listSelectOptions = [];
+    let listview = [];
     if (Cache.getCurrentTeamData()._state.todolists._initial) {
-      listSelectOptions.push(
-        <option key="0" value="0">
-          Laden...
-        </option>
-      );
+      listview = [
+        <p key="loading">Laden...</p>
+      ];
     } else if (Object.keys(this.props.todolists).length === 0) {
-      listSelectOptions.push(
-        <option key="0" value="0">
-          Keine Listen vorhanden
-        </option>
-      );
+      // Don't show a message if there are no lists, because the ListDetails component will show a message
     } else {
-      listSelectOptions = Object.entries(this.props.todolists).map(
-        ([lsId, lst]) => (
-          <option key={lsId} value={lsId}>
-            {lst.name}
-          </option>
-        )
-      );
+      listview = Object.values(this.props.todolists).map(lst => {
+        return (
+          <ListSelectorRow
+            key={lst.id}
+            todolist={lst}
+            onSelect={this.props.onListSelect}
+            isSelected={this.props.selectedListId === lst.id}
+          />
+        );
+      });
     }
 
     let buttons = [];
@@ -72,19 +101,10 @@ class ListSelector extends React.Component {
       );
     }
 
-    let todolist = this.props.selectedList;
-
     return [
-      <select
-        key="select"
-        id="list-selector-list-select"
-        className="form-select mb-2"
-        onInput={this.handleListSelect}
-        disabled={todolist === undefined}
-        value={this.props.selectedListId || "0"}
-      >
-        {listSelectOptions}
-      </select>,
+      <div key="todolistselect" id="todolistselect" className="mb-2">
+        {listview}
+      </div>,
       buttons,
     ];
   }
@@ -109,6 +129,7 @@ class ListInfo extends React.Component {
       this.props.team,
       this.props.selectedList
     ).then(() => {
+      console.log("List deleted");
       this.props.onListSelect(null);
     });
   }
@@ -232,9 +253,9 @@ export default class Page_ToDo extends React.Component {
     if (Cache.getCurrentTeamData()._state.todolists._initial) {
       Cache.refreshTeamCacheCategory(this.props.team.id, "todolists");
     }
-    if (Cache.getCurrentTeamData()._state.todolists._initial) {
-      Cache.refreshTeamCacheCategory(this.props.team.id, "members");
-    }
+    // if (Cache.getCurrentTeamData()._state.todolists._initial) {
+    //   Cache.refreshTeamCacheCategory(this.props.team.id, "members");
+    // }
 
     let selectedList = Cache.getCurrentTeamData().todolists[this.state.selectedListId];
 
@@ -262,6 +283,7 @@ export default class Page_ToDo extends React.Component {
               team={this.props.team}
               selectedListId={this.state.selectedListId}
               selectedList={selectedList}
+              onListSelect={this.handleListSelect.bind(this)}
               isAdmin={this.props.isAdmin}
             />
           </Dashboard.DashboardTile>
