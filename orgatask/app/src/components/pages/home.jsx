@@ -28,6 +28,7 @@ export default class Page_Home extends React.Component {
                 <b>10. September 2022</b>
               </h6>
               <ul className="small">
+                <li>Duplizieren-Knopf zu Kalenderereignissen hinzugefügt</li>
                 <li>Startseite &amp; In-App-Startseite hinzugefügt</li>
               </ul>
               <h6>

@@ -358,7 +358,7 @@ export async function editEvent(teamId, calendarId, eventId, name, description, 
     )
 }
 
-export function editEventPopup(team, calendar, event) {
+export function editEventPopup(team, calendar, event, makeCopy = false) {
     return new Promise((resolve, reject) => {
         var dstart; var dend; var dtstart; var dtend;
 
@@ -371,7 +371,7 @@ export function editEventPopup(team, calendar, event) {
         }
 
         Swal.fire({
-            title: `Ereignis bearbeiten`,
+            title: makeCopy ? "Ereignis kopieren" : "Ereignis bearbeiten",
             html:
                 `<p>Team: ${team.name}</p>` +
                 `<p>Kalendar: ${calendar.name}</p><hr />` +
@@ -395,7 +395,7 @@ export function editEventPopup(team, calendar, event) {
                 `<input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">`,
             focusConfirm: false,
             showCancelButton: true,
-            confirmButtonText: "Speichern",
+            confirmButtonText: makeCopy ? "Kopie erstellen" : "Speichern",
             cancelButtonText: "Abbrechen",
             didOpen: () => {
                 _updateFullDayToggle(true);
@@ -427,9 +427,15 @@ export function editEventPopup(team, calendar, event) {
                     }
 
                     Swal.showLoading();
-                    await editEvent(team.id, calendar.id, event.id, name, description, location, true, dstart, dend, null, null).then(
-                        resolve, reject
-                    );
+                    if (makeCopy) {
+                        await createEvent(team.id, calendar.id, name, description, location, true, dstart, dend, null, null).then(
+                            resolve, reject
+                        );
+                    } else {
+                        await editEvent(team.id, calendar.id, event.id, name, description, location, true, dstart, dend, null, null).then(
+                            resolve, reject
+                        );
+                    }
                 } else {
                     let dtstart = $("#swal-input-dtstart").val();
                     let dtend = $("#swal-input-dtend").val();
@@ -444,9 +450,15 @@ export function editEventPopup(team, calendar, event) {
                     }
 
                     Swal.showLoading();
-                    await editEvent(team.id, calendar.id, event.id, name, description, location, false, null, null, dtstart, dtend).then(
-                        resolve, reject
-                    );
+                    if (makeCopy) {
+                        await createEvent(team.id, calendar.id, name, description, location, false, null, null, dtstart, dtend).then(
+                            resolve, reject
+                        );
+                    } else {
+                        await editEvent(team.id, calendar.id, event.id, name, description, location, false, null, null, dtstart, dtend).then(
+                            resolve, reject
+                        );
+                    }
                 }
             },
         });

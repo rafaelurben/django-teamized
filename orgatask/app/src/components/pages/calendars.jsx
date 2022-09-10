@@ -538,11 +538,16 @@ class CalendarEventDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.editEvent = this.editEvent.bind(this);
+    this.cloneEvent = this.cloneEvent.bind(this);
     this.deleteEvent = this.deleteEvent.bind(this);
   }
 
   editEvent() {
     Calendars.editEventPopup(this.props.team, this.props.event.calendar, this.props.event).then(Navigation.renderPage);
+  }
+
+  cloneEvent() {
+    Calendars.editEventPopup(this.props.team, this.props.event.calendar, this.props.event, true).then(Navigation.renderPage);
   }
 
   deleteEvent() {
@@ -608,13 +613,20 @@ class CalendarEventDisplay extends React.Component {
         Bearbeiten
       </button>,
       <button
+        key="clone"
+        className="btn btn-outline-dark ms-2"
+        onClick={this.cloneEvent}
+      >
+        Duplizieren
+      </button>,
+      <button
         key="delete"
         className="btn btn-outline-danger ms-2"
         onClick={this.deleteEvent}
       >
         Löschen
-      </button>
-    ]
+      </button>,
+    ];
   };
 }
 
