@@ -21,7 +21,7 @@ class TeamTableRow extends React.Component {
 
   handleManageButtonClick() {
     Teams.switchTeam(this.props.team.id);
-    Navigation.selectPage("teammanage");
+    Navigation.selectPage("team");
   }
 
   handleLeaveButtonClick() {

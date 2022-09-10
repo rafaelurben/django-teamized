@@ -71,8 +71,8 @@ export default class AppSidebar extends React.Component {
           <li>
             <a
               href="#"
-              className={this.getLinkClass("teammanage")}
-              onClick={this.selectPage("teammanage")}
+              className={this.getLinkClass("team")}
+              onClick={this.selectPage("team")}
             >
               <i className="fas fa-fw fa-users-viewfinder" />
               Team

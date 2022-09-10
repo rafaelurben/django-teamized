@@ -3,7 +3,7 @@
 import Page_Calendars from "./pages/calendars.js";
 import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
-import Page_TeamManage from "./pages/teammanage.js";
+import Page_Team from "./pages/team.js";
 import Page_ToDo from "./pages/todo.js";
 import Page_WorkingTime from "./pages/workingtime.js";
 
@@ -47,9 +47,9 @@ export default class PageLoader extends React.Component {
             selectedTeamId={window.appdata.selectedTeamId}
           />
         );
-      case "teammanage":
+      case "team":
         return (
-          <Page_TeamManage
+          <Page_Team
             team={teamdata.team}
             members={teamdata.members}
             invites={teamdata.invites}

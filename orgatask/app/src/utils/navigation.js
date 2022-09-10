@@ -7,8 +7,8 @@ import * as Teams from './teams.js';
 const pageList = [
     "home",
     "calendars",
+    "team",
     "teamlist",
-    "teammanage",
     "workingtime",
     "todo",
 ]

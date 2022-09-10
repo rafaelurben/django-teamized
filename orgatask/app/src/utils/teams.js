@@ -98,7 +98,7 @@ export async function createTeamPopup() {
       Swal.showLoading();
       return await createTeam(name, description).then(
         () => {
-          Navigation.selectPage('teammanage');
+          Navigation.selectPage('team');
         }
       );
     },
@@ -392,7 +392,7 @@ export async function checkInvitePopup(token) {
       async () => {
         Swal.showLoading();
         await acceptInvite(token);
-        Navigation.selectPage('teammanage');
+        Navigation.selectPage('team');
       },
       "Du wurdest eingeladen",
       { icon: "info", confirmButtonColor: "green", confirmButtonText: "Einladung akzeptieren", cancelButtonText: "Nein, später" }

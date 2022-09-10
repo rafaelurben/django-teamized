@@ -218,7 +218,7 @@ class TeamInvitesTableRow extends React.Component {
   }
 }
 
-export default class Page_TeamManage extends React.Component {
+export default class Page_Team extends React.Component {
   constructor(props) {
     super(props);
     this.handleInviteCreateButtonClick = this.handleInviteCreateButtonClick.bind(this);
