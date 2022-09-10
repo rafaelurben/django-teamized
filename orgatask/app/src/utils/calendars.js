@@ -19,7 +19,7 @@ export function isSameDate(date1, date2) {
 }
 
 export function isInRange(date, start, end) {
-    return date >= start && date < end;
+    return date >= start && date <= end;
 }
 
 export function getMondayOfWeek(date) {
@@ -69,6 +69,21 @@ export function localInputFormat(value, dateOnly) {
 
 // Calendar utils
 
+export function isDateInEvent(date, evt) {
+    // Check whether a part of the event is during the date
+
+    var evtStart; var evtEnd;
+    if (evt.fullday) {
+        // roundDays() for fullday events is used to avoid issues with timezones
+        evtStart = roundDays(new Date(evt.dstart));
+        evtEnd = roundDays(new Date(evt.dend));
+    } else {
+        evtStart = roundDays(new Date(evt.dtstart));
+        evtEnd = new Date(evt.dtend);
+    }
+    return isInRange(date, evtStart, evtEnd);
+}
+
 export function flattenCalendarEvents(calendars) {
     // Merge events from calendars into a single object
 
@@ -84,24 +99,10 @@ export function flattenCalendarEvents(calendars) {
     return events;
 }
 
-export function filterCalendarEventsByTimeRange(events, start, end) {
-    return events.filter(event => {
-        if (event.fullday) {
-            return (
-                new Date(event.dstart).getTime() <= end.getTime() && 
-                new Date(event.dend).getTime() >= start.getTime()
-            );
-        } else {
-            return (
-                new Date(event.dtstart).getTime() <= end.getTime() &&
-                new Date(event.dtend).getTime() >= start.getTime()
-            );
-        }
-    });
-}
-
 export function filterCalendarEventsByDate(events, date) {
-    return filterCalendarEventsByTimeRange(events, roundDays(date), roundDays(date, 1));
+    return events.filter(event => {
+        return isDateInEvent(date, event);
+    });
 }
 
 // Calendar list
