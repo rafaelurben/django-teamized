@@ -38,6 +38,7 @@ window.appdata = {
     username: "Laden...",
     avatar_url: "https://www.gravatar.com/avatar/",
   },
+  initialLoadComplete: false,
 };
 
 function startLoading() {
@@ -72,6 +73,7 @@ async function initialize() {
   WorkingTime.getTrackingSession();
 
   endLoading();
+  window.appdata.initialLoadComplete = true;
 }
 
 async function reinitialize() {

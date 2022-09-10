@@ -49,16 +49,23 @@ export function exportToURL(options) {
 
     // If the URL has changed, update the URL
     if (oldurl.href !== newurl.href) {
-        // Add page to history if the URL has changed 
-        // (i.e. update the page url if there's something to change)
-        window.history.pushState(
+        let args = [
             {
                 page: window.appdata.currentPage,
                 selectedTeamId: window.appdata.selectedTeamId,
             },
-            "OrgaTask",
+            "",
             newurl.href,
-        );
+        ]
+
+        if (!window.appdata.initialLoadComplete) {
+            // Replace the current history entry with the new options (keeps the last page in the history for the back button)
+            // This is done to prevent the back button from looping back to the same page on the initial load
+            window.history.replaceState(...args);
+        } else {
+            // Add a new history entry (allows the user to use the back button to go back to the current state)
+            window.history.pushState(...args);
+        }
     }
 }
 
