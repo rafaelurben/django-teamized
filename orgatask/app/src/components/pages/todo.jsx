@@ -1,11 +1,171 @@
 "use strict";
 
+import { errorAlert } from "../../utils/alerts.js";
 import * as Dashboard from "../dashboard.js";
 import * as ToDo from "../../utils/todo.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Cache from "../../utils/cache.js";
 import { TooltipIcon, Tooltip } from "../tooltips.js";
 
+class ListViewItem extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.markDone = this.markDone.bind(this);
+    this.editItem = this.editItem.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
+  }
+
+  markDone() {
+    ToDo.editToDoListItem(this.props.team.id, this.props.list.id, this.props.item.id, this.props.item.name, this.props.item.description, true).then(Navigation.renderPage);
+  }
+
+  editItem() {
+    ToDo.editToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
+  }
+
+  deleteItem() {
+    ToDo.deleteToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
+  }
+
+  render() {
+    return (
+      <tr>
+        <td>
+          {this.props.item.done ? (
+            <a className="btn btn-success disabled" title="Erledigt">
+              <i className="fas fa-fw fa-circle-check"></i>
+            </a>
+          ) : (
+            <a
+              className="btn btn-outline-success border-1"
+              onClick={this.markDone}
+              title="Als erledigt markieren"
+            >
+              <i className="far fa-fw fa-circle-check"></i>
+            </a>
+          )}
+        </td>
+        <td>
+          <span>{this.props.item.name}</span>
+        </td>
+        <td>
+          <a
+            className="btn btn-outline-dark border-1"
+            onClick={this.editItem}
+            title="Bearbeiten"
+          >
+            <i className="fas fa-fw fa-pen-to-square"></i>
+          </a>
+        </td>
+        <td>
+          <a
+            className="btn btn-outline-danger border-1"
+            onClick={this.deleteItem}
+            title="Löschen"
+          >
+            <i className="fas fa-fw fa-trash"></i>
+          </a>
+        </td>
+        <td className="debug-only">{this.props.item.id}</td>
+      </tr>
+    );
+  }
+}
+
+class ListView extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.createItem = this.createItem.bind(this);
+  }
+
+  createItem(e) {
+    e.preventDefault();
+    let name = document.getElementById("newItemName").value;
+
+    if (name === "") {
+      errorAlert("Leeres Feld", "Bitte gib einen Namen ein");
+    } else {
+      ToDo.createToDoListItem(this.props.team.id, this.props.selectedList.id, name).then(() => {
+        Navigation.renderPage();
+        document.getElementById("newItemName").value = "";
+      });
+    }
+  }
+
+  render() {
+    if (!this.props.selectedList) {
+      return (
+        <p className="ms-1 mb-0">
+          Im ausgewählten Team ist noch keine ToDo-Liste vorhanden.{" "}
+          {this.props.isAdmin ? (
+            <TooltipIcon
+              key="admin"
+              title='Du kannst mit den "Liste erstellen"-Knopf eine neue Liste erstellen.'
+            ></TooltipIcon>
+          ) : (
+            <TooltipIcon
+              key="noadmin"
+              title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."
+            ></TooltipIcon>
+          )}
+        </p>
+      );
+    }
+
+    let items = Object.values(this.props.selectedList.items).map(item => {
+      return (
+        <ListViewItem
+          key={item.id}
+          item={item}
+          list={this.props.selectedList}
+          team={this.props.team}
+        />
+      );
+    });
+
+    return (
+      <form onSubmit={this.createItem}>
+        <table className="table table-borderless align-middle mb-0">
+          <thead>
+            <tr>
+              <th className="p-0" style={{ width: "1px" }}></th>
+              <th className="p-0"></th>
+              <th className="p-0" style={{ width: "1px" }}></th>
+              <th className="p-0" style={{ width: "1px" }}></th>
+              <th className="p-0 debug-only"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items}
+            <tr>
+              {/* Create item */}
+              <td>
+                <a className="btn btn-outline-success border-1 disabled">
+                  <i className="far fa-fw fa-circle-check"></i>
+                </a>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="newItemName"
+                  placeholder="Neues Element hinzufügen"
+                />
+              </td>
+              <td colSpan="2">
+                <button type="submit" className="btn btn-success" title="Erstellen">
+                  <i className="fas fa-fw fa-plus"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    );
+  }
+}
 
 class ListSelectorRow extends React.Component {
   constructor(props) {
@@ -20,7 +180,6 @@ class ListSelectorRow extends React.Component {
   }
   
   getStyle() {
-    console.log(this.props.todolist.color)
     return {
       borderLeftWidth: "5px",
       borderLeftColor: this.props.todolist.color,
@@ -129,7 +288,6 @@ class ListInfo extends React.Component {
       this.props.team,
       this.props.selectedList
     ).then(() => {
-      console.log("List deleted");
       this.props.onListSelect(null);
     });
   }
@@ -141,7 +299,7 @@ class ListInfo extends React.Component {
         <p className="ms-1 mb-0">
           Im ausgewählten Team ist noch keine ToDo-Liste vorhanden.{" "}
           {this.props.isAdmin ? (
-            <TooltipIcon key="admin" title='Du kannst mit den "Neu erstellen"-Knopf weiter oben eine neue Liste erstellen.'></TooltipIcon>
+            <TooltipIcon key="admin" title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></TooltipIcon>
           ) : (
             <TooltipIcon key="noadmin" title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></TooltipIcon>
           )}
@@ -261,7 +419,7 @@ export default class Page_ToDo extends React.Component {
 
     return (
       <Dashboard.Dashboard
-        title="ToDo [In Entwicklung]"
+        title="ToDo [Beta]"
         subtitle="Behalte den Überblick über die Aufgaben deines Teams"
       >
         <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
@@ -289,7 +447,14 @@ export default class Page_ToDo extends React.Component {
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
-          <Dashboard.DashboardTile title="ToDo-Liste"></Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="ToDo-Liste">
+            <ListView
+              team={this.props.team}
+              selectedListId={this.state.selectedListId}
+              selectedList={selectedList}
+              isAdmin={this.props.isAdmin}
+            />
+          </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
     );

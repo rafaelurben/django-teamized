@@ -126,7 +126,7 @@ export async function deleteToDoListPopup(team, todolist) {
 // ToDoListItem creation
 
 export async function createToDoListItem(teamId, todolistId, name, description) {
-    return await API.POST(`teams/${teamId}/todolist/${todolistId}/items`, {
+    return await API.POST(`teams/${teamId}/todolists/${todolistId}/items`, {
         name, description
     }).then(
         (data) => {
@@ -159,7 +159,11 @@ export async function editToDoListItemPopup(team, todolist, item) {
             '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
             `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${item.name}" value="${item.name}">` +
             '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea>`,
+            `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea><hr />` +
+            `<label for="swal-input-done" class="swal2-checkbox d-flex">` +
+                `<input type="checkbox" value="0" id="swal-input-done" ${item.done ? "checked" : ""}>` +
+                `<span class="swal2-label">Erledigt</span>` +
+            `</label>`,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Speichern",
@@ -169,14 +173,15 @@ export async function editToDoListItemPopup(team, todolist, item) {
             const description = document.getElementById(
                 "swal-input-description"
             ).value;
+            const done = document.getElementById("swal-input-done").checked;
 
-            if (!name || !description) {
-                Swal.showValidationMessage("Bitte fülle alle Felder aus");
+            if (!name) {
+                Swal.showValidationMessage("Du musst einen Namen angeben");
                 return false;
             }
 
             Swal.showLoading();
-            return await editToDoListItem(team.id, todolist.id, item.id, name, description);
+            return await editToDoListItem(team.id, todolist.id, item.id, name, description, done);
         },
     })).value;
 }
