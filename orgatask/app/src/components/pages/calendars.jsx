@@ -102,7 +102,7 @@ class CalendarManager extends React.Component {
           className="btn btn-outline-success"
           onClick={this.createCalendar}
         >
-          Neu erstellen
+          Kalender erstellen
         </button>
       );
       if (calendar !== undefined) {
