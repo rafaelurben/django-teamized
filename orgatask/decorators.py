@@ -1,5 +1,6 @@
 """OrgaTask Decorators"""
 
+import traceback
 from functools import wraps
 
 from django.shortcuts import render
@@ -41,7 +42,8 @@ def validation_func():
                 raise exc
             except Exception as exc:
                 # This should never be needed, but just in case...
-                print(exc)
+                traceback.print_exc()
+                traceback.print_stack()
                 raise exceptions.ValidationError(
                     _("Beim Validieren der Daten ist ein Fehler aufgetreten. Sind die Daten korrekt?"),
                     status=500, # Indicate that this is an Internal Server Error

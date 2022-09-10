@@ -54,7 +54,7 @@ def integer(datadict: dict, attr: str, required: bool=True, default: int="", nul
 
 
 def text(datadict: dict, attr: str, required: bool=True, default: str="", null=False, max_length: int=None) -> str:
-    if not required and datadict[attr] == "":
+    if not required and attr in datadict and datadict[attr] == "":
         return ""
 
     data = _basic(datadict, attr, required, default, null)
