@@ -26,7 +26,7 @@ def endpoint_todolists(request, team: Team):
             return NO_PERMISSION
 
         # Get all ToDoLists of the team
-        todolists = team.todolists.all()
+        todolists = team.todolists.all().order_by("name")
         return JsonResponse({
             "todolists": [todolist.as_dict() for todolist in todolists],
         })
