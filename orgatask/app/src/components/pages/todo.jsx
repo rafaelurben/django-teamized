@@ -261,8 +261,8 @@ export default class Page_ToDo extends React.Component {
 
     return (
       <Dashboard.Dashboard
-        title="ToDo"
-        subtitle="(w.i.p) Behalte den Überblick über die Aufgaben deines Teams"
+        title="ToDo [In Entwicklung]"
+        subtitle="Behalte den Überblick über die Aufgaben deines Teams"
       >
         <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
           <Dashboard.DashboardTile

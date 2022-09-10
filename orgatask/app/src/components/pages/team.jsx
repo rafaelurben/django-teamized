@@ -333,7 +333,7 @@ export default class Page_Team extends React.Component {
     return (
       <Dashboard.Dashboard
         title="Dein Team"
-        subtitle="Infos über dein ausgewähltes Team."
+        subtitle="Infos über dein ausgewähltes Team"
       >
         <Dashboard.DashboardColumn>
           <Dashboard.DashboardTile title="Teaminfos">

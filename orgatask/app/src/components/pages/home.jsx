@@ -12,7 +12,7 @@ export default class Page_Home extends React.Component {
     return (
       <Dashboard.Dashboard
         title="Startseite"
-        subtitle={`Hallo ${this.props.user.first_name}!`}
+        subtitle={`Hallo ${this.props.user.first_name}`}
       >
         <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
           <Dashboard.DashboardTile title="Willkommen">
@@ -22,7 +22,7 @@ export default class Page_Home extends React.Component {
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
-          <Dashboard.DashboardTile title="Neuste Features">
+          <Dashboard.DashboardTile title="Neuste Updates" help="Neue Funktionen, Bugfixes und Änderungen">
             <div className="ms-1 mt-1">
               <h6>
                 <b>10. September 2022</b>
