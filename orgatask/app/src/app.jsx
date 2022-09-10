@@ -117,15 +117,15 @@ function onkeypress(e) {
       // Shift+F5 normal reload
       e.preventDefault();
       window.location.reload(true);
-    } else if (e.altKey) {
-      // Alt+F5 toggle debug mode
-      e.preventDefault();
-      Utils.toggleDebug();
-    } else if (!e.ctrlKey) {
+    } else if (!e.ctrlKey && !e.altKey) {
       // F5 soft reload
       e.preventDefault();
       refresh();
     }
+  } else if (e.keyCode == 117 && e.shiftKey) {
+    // Shift+F6 toggle debug mode
+    e.preventDefault();
+    Utils.toggleDebug();
   }
 }
 
