@@ -1,21 +1,12 @@
-import PageLoader from "../components/pageloader.js";
+import { PageLoader, PAGELIST } from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
 import AppSidebar from "../components/sidebar.js";
 import * as Teams from './teams.js';
 
 
-const pageList = [
-    "home",
-    "calendars",
-    "team",
-    "teamlist",
-    "workingtime",
-    "todo",
-]
-
 function ensureExistingPage() {
-    if (!pageList.includes(window.appdata.currentPage)) {
-        window.appdata.currentPage = pageList[0];
+    if (!PAGELIST.includes(window.appdata.currentPage)) {
+        window.appdata.currentPage = PAGELIST[0];
     }
 }
 
@@ -140,7 +131,7 @@ export function reRender() {
 }
 
 export function selectPage(page) {
-    if (pageList.includes(page)) {
+    if (PAGELIST.includes(page)) {
         window.appdata.currentPage = page;
         exportToURL();
         render();

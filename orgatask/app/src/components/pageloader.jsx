@@ -14,7 +14,16 @@ import * as Cache from "../utils/cache.js";
     This component is used to render the pages.
 */
 
-export default class PageLoader extends React.Component {
+export const PAGELIST = [
+    "home",
+    "calendars",
+    "team",
+    "teamlist",
+    "workingtime",
+    "todo",
+]
+
+export class PageLoader extends React.Component {
   constructor(props) {
     super(props);
   }
