@@ -56,8 +56,12 @@ export async function editSettings(darkmode) {
 function setColorScheme(scheme) {
     if (scheme === 'dark') {
         $('#app-maincontent').addClass('darkmode');
+        $("link#swal-dark")[0].disabled = false;
+        $("link#swal-light")[0].disabled = true;
     } else {
         $('#app-maincontent').removeClass('darkmode');
+        $("link#swal-light")[0].disabled = false;
+        $("link#swal-dark")[0].disabled = true;
     }
 }
 
