@@ -650,6 +650,22 @@ export default class Page_Calendars extends React.Component {
 
   handleDateSelect(date) {
     this.setState({ selectedDate: Calendars.roundDays(date) });
+    // If the current selected event is no at in the new selected date, deselect it
+    let evt = this.events[this.state.selectedEventId];
+    if (evt) {
+      var start; var end;
+      if (evt.fullday) {
+        start = Calendars.roundDays(new Date(evt.dstart));
+        end = Calendars.roundDays(new Date(evt.dend), 1);
+      } else {
+        start = Calendars.roundDays(new Date(evt.dtstart));
+        end = new Date(evt.dtend);
+      }
+
+      if (!Calendars.isInRange(date, start, end)) {
+        this.setState({ selectedEventId: null });
+      }
+    }
   }
 
   handleEventSelect(data) {

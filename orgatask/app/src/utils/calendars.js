@@ -18,6 +18,10 @@ export function isSameDate(date1, date2) {
     return roundDays(date1).getTime() === roundDays(date2).getTime();
 }
 
+export function isInRange(date, start, end) {
+    return date >= start && date < end;
+}
+
 export function getMondayOfWeek(date) {
     const dayOfWeek = (date.getDay() || 7) -1; // make 0 = monday instead of sunday
     return roundDays(date, -dayOfWeek);
