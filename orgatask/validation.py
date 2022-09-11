@@ -10,82 +10,134 @@ from django.utils.translation import gettext as _
 
 from orgatask.exceptions import ValidationError
 
+# Base validator class
 
-def _basic(datadict: dict, attr: str, required: bool=True, default=None, null=False) -> str:
-    if not attr in datadict:
-        if required:
+
+class BaseValidator():
+    "Base class for validating POST request data"
+
+    @classmethod
+    def _convert(cls, value, **kwargs):
+        return value
+
+    @classmethod
+    def _try_convert(cls, value, **kwargs):
+        try:
+            return cls._convert(value, **kwargs)
+        except Exception as exc:
+            print(exc)
             raise ValidationError(
-                _("{} darf nicht weggelassen werden.").format(attr))
-        if callable(default):
-            return default()
-        return default
+                _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(value)) from exc
 
-    data = datadict[attr]
+    @classmethod
+    def _is_null(cls, value):
+        return value is None or value == ''
 
-    if data in [None, ""]:
-        if null:
+    @classmethod
+    def _before_convert(cls, value, **kwargs):
+        return value
+
+    @classmethod
+    def _after_convert(cls, value, **kwargs):
+        return value
+
+    @classmethod
+    def validate(cls, datadict: dict, attr: str, required: bool = True, default: any = None, null=False, **kwargs):
+        # If the attribute is not present in the data dict
+        if not attr in datadict:
+            if required:
+                raise ValidationError(
+                    _("Das Attribut '{}' darf nicht weggelassen werden!").format(attr))
+            if callable(default):
+                return default()
+            return default
+
+        value = datadict[attr]
+
+        # If the value is null
+        if cls._is_null(value):
+            if not null:
+                raise ValidationError(
+                    _("Das Attribut '{}' darf nicht null sein!").format(attr))
             return None
-        raise ValidationError(_("{} darf nicht null sein.").format(attr))
 
-    return data
+        # Before convert
+        value = cls._before_convert(value, **kwargs)
 
+        # Try to convert the value
+        value = cls._try_convert(value, **kwargs)
 
-def boolean(datadict: dict, attr: str, required: bool=False, default: bool=True, null=False) -> bool:
-    data = _basic(datadict, attr, required, default, null)
+        # After convert
+        value = cls._after_convert(value, **kwargs)
 
-    if null and (data is None or data == ""):
-        return None
+        return value
 
-    if isinstance(data, str) and data.lower() == "false":
-        data = False
-    return bool(data)
-
-
-def integer(datadict: dict, attr: str, required: bool=True, default: int="", null=False) -> int:
-    data = _basic(datadict, attr, required, default, null)
-
-    if null and data is None:
-        return None
-
-    try:
-        return int(data)
-    except ValueError as exc:
-        raise ValidationError(_("'{}' ist keine gültige Zahl.").format(data)) from exc
+# Custom validators
 
 
-def text(datadict: dict, attr: str, required: bool=True, default: str="", null=False, max_length: int=None) -> str:
-    if not required and attr in datadict and datadict[attr] == "":
-        return ""
+class BooleanValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, **kwargs):
+        return bool(value)
 
-    data = _basic(datadict, attr, required, default, null)
+    @classmethod
+    def _before_convert(self, value, **kwargs):
+        if isinstance(value, str) and value.lower() == "false":
+            return False
+        return value
 
-    if null and data is None:
-        return None
 
-    if max_length and len(data) > max_length:
-        data = data[:max_length]
-    return str(data)
+class IntegerValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, **kwargs):
+        return int(value)
+
+
+class StringValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, **kwargs):
+        return str(value)
+
+    @classmethod
+    def _is_null(cls, value):
+        return value is None
+
+    @classmethod
+    def _after_convert(self, value, max_length: int = None, **kwargs):
+        if max_length and len(value) > max_length:
+            return value[:max_length]
+        return value
+
+
+class DateTimeValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, fmt="%Y-%m-%dT%H:%M:%S.%f%z", **kwargs):
+        return dt.datetime.strptime(value, fmt).replace(tzinfo=dt.timezone.utc)
+
+
+class DateValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, fmt="%Y-%m-%d", **kwargs):
+        return dt.datetime.strptime(value, fmt).date()
+
+# Shortcuts
+
+
+def boolean(datadict: dict, attr: str, required: bool = False, default: bool = True, null=False) -> bool:
+    return BooleanValidator.validate(datadict, attr, required, default, null)
+
+
+def integer(datadict: dict, attr: str, required: bool = True, default: int = "", null=False) -> int:
+    return IntegerValidator.validate(datadict, attr, required, default, null)
+
+
+def text(datadict: dict, attr: str, required: bool = True, default: str = "", null=False, max_length: int = None) -> str:
+    return StringValidator.validate(datadict, attr, required, default, null, max_length=max_length)
 
 
 def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datetime = None, null=False, fmt="%Y-%m-%dT%H:%M:%S.%f%z") -> dt.datetime:
-    data = _basic(datadict, attr, required, default, null)
-
-    if null and data is None:
-        return None
-
-    try:
-        return dt.datetime.strptime(data, fmt).replace(tzinfo=dt.timezone.utc)
-    except ValueError as exc:
-        raise ValidationError(_("'{}' ist kein gültiger Zeitpunkt.").format(data)) from exc
+    return DateTimeValidator.validate(datadict, attr, required, default, null, fmt=fmt)
 
 
 def date(datadict: dict, attr: str, required: bool = True, default: dt.date = None, null=False, fmt="%Y-%m-%d") -> dt.date:
-    data = _basic(datadict, attr, required, default, null)
-
-    if null and data is None:
-        return None
-
-    try:
-        return dt.datetime.strptime(data, fmt).date()
-    except ValueError as exc:
-        raise ValidationError(_("'{}' ist kein gültiges Datum.").format(data)) from exc
+    return DateValidator.validate(datadict, attr, required, default, null, fmt=fmt)
