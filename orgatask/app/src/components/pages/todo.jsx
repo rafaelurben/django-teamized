@@ -236,9 +236,17 @@ class ListSelector extends React.Component {
       });
     }
 
-    let buttons = [];
+    let content = [];
+    if (listview.length > 0) {
+      content.push(
+        <div key="todolistselect" id="todolistselect" className="mb-2">
+          {listview}
+        </div>
+      );
+    }
+
     if (this.props.isAdmin) {
-      buttons.push(
+      content.push(
         <button
           key="create"
           className="btn btn-outline-success"
@@ -248,7 +256,7 @@ class ListSelector extends React.Component {
         </button>
       );
     } else {
-      buttons.push(
+      content.push(
         <Tooltip
           key="noadmin"
           title="Diese Aktion steht nur Admins zur Verfügung"
@@ -260,12 +268,7 @@ class ListSelector extends React.Component {
       );
     }
 
-    return [
-      <div key="todolistselect" id="todolistselect" className="mb-2">
-        {listview}
-      </div>,
-      buttons,
-    ];
+    return content;
   }
 }
 
@@ -312,7 +315,7 @@ class ListInfo extends React.Component {
       listPanelButtons.push(
         <button
           key="edit"
-          className="btn btn-outline-dark mx-2"
+          className="btn btn-outline-dark me-2"
           onClick={this.editList}
         >
           Bearbeiten

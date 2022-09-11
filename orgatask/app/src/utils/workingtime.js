@@ -112,7 +112,6 @@ export async function deleteWorkSession(teamId, sessionId) {
     return await API.DELETE(`teams/${teamId}/me/worksessions/${sessionId}`).then(
         async (data) => {
             requestSuccessAlert(data);
-            console.log('delete', data)
             delete Cache.getCurrentTeamData().me_worksessions[sessionId];
         }
     )

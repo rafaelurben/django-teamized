@@ -25,7 +25,6 @@ class BaseValidator():
         try:
             return cls._convert(value, **kwargs)
         except Exception as exc:
-            print(exc)
             raise ValidationError(
                 _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(value)) from exc
 

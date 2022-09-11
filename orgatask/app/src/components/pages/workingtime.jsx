@@ -206,43 +206,48 @@ export default class Page_WorkingTime extends React.Component {
           );
         };
 
-        if (worksessions.length > this.state.listCount) {
+        let canShowMore = worksessions.length > this.state.listCount;
+        let canShowLess = this.state.listCount > DEFAULT_SESSION_TABLE_ROW_COUNT;
+
+        if (canShowMore) {
           rows = worksessions.slice(0, this.state.listCount).map(mapper);
         } else {
           rows = worksessions.map(mapper);
         }
 
-        rows.push(
-          <tr key="more-less" id="worksessions-show-moreless">
-            <td colSpan="5">
-              {worksessions.length > this.state.listCount ? (
-                <a
-                  href="#worksessions-show-moreless"
-                  onClick={() =>
-                    this.showMoreRows(SESSION_TABLE_SHOW_MORE_INTERVAL)
-                  }
-                  className="me-2"
-                >
-                  Mehr anzeigen
-                </a>
-              ) : (
-                ""
-              )}
-              {this.state.listCount > DEFAULT_SESSION_TABLE_ROW_COUNT ? (
-                <a
-                  href="#worksessions-show-moreless"
-                  onClick={() =>
-                    this.showMoreRows(-SESSION_TABLE_SHOW_MORE_INTERVAL)
-                  }
-                >
-                  Weniger anzeigen
-                </a>
-              ) : (
-                ""
-              )}
-            </td>
-          </tr>
-        );
+        if (canShowMore || canShowLess) {
+          rows.push(
+            <tr key="more-less" id="worksessions-show-moreless">
+              <td colSpan="5">
+                {canShowMore ? (
+                  <a
+                    href="#worksessions-show-moreless"
+                    onClick={() =>
+                      this.showMoreRows(SESSION_TABLE_SHOW_MORE_INTERVAL)
+                    }
+                    className="me-2"
+                  >
+                    Mehr anzeigen
+                  </a>
+                ) : (
+                  null
+                )}
+                {canShowLess ? (
+                  <a
+                    href="#worksessions-show-moreless"
+                    onClick={() =>
+                      this.showMoreRows(-SESSION_TABLE_SHOW_MORE_INTERVAL)
+                    }
+                  >
+                    Weniger anzeigen
+                  </a>
+                ) : (
+                  null
+                )}
+              </td>
+            </tr>
+          );
+        }
       }
     }
 

@@ -16,9 +16,9 @@ export default class Page_Home extends React.Component {
       >
         <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
           <Dashboard.DashboardTile title="Willkommen">
-            <p className="ms-1">
+            <span className="ms-1">
               Verwende die Menuleiste (links) und die Seitenleiste (rechts), um zu navigieren.
-            </p>
+            </span>
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
@@ -29,6 +29,7 @@ export default class Page_Home extends React.Component {
               </h6>
               <ul className="small">
                 <li>ToDo-Listen sind nun in der Beta</li>
+                <li>Diverse Fehlerbehebungen</li>
               </ul>
               <h6>
                 <b>10. September 2022</b>
@@ -40,7 +41,7 @@ export default class Page_Home extends React.Component {
               <h6>
                 <b>5. September 2022</b>
               </h6>
-              <ul className="small">
+              <ul className="small mb-1">
                 <li>Besseres Abonnier-Erlebnis bei Kalendern</li>
                 <li>Kalender-Features sind nun aus der Beta</li>
               </ul>
