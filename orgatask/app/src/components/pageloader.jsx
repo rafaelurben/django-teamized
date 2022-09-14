@@ -46,7 +46,8 @@ export class PageLoader extends React.Component {
       case "home":
         return (
           <Page_Home 
-            user={window.appdata.user} 
+            user={window.appdata.user}
+            settings={window.appdata.settings}
           />
         );
       case "teamlist":

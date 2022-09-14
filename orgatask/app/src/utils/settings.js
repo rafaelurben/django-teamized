@@ -41,8 +41,8 @@ export async function getSettings() {
     );
 }
 
-export async function editSettings(darkmode) {
-    return await API.POST('settings', { darkmode }).then(
+export async function editSettings(data) {
+    return await API.POST('settings', data).then(
         (data) => {
             window.appdata.settings = data.settings;
             applySettings(data.settings);

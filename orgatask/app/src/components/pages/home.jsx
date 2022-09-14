@@ -2,10 +2,18 @@
 
 import * as Dashboard from "../dashboard.js";
 import * as Utils from "../../utils/utils.js";
+import * as Settings from "../../utils/settings.js";
+import * as Navigation from "../../utils/navigation.js";
 
 export default class Page_Home extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  applyAppearance(evt) {
+    let val = evt.target.value;
+    let darkmode = val === "dark" ? true : val === "light" ? false : null;
+    Settings.editSettings({ darkmode }).then(Navigation.renderPage);
   }
 
   render() {
@@ -20,10 +28,33 @@ export default class Page_Home extends React.Component {
               Verwende die Menuleiste (links) und die Seitenleiste (rechts), um zu navigieren.
             </span>
           </Dashboard.DashboardTile>
+          <Dashboard.DashboardTile title="Einstellungen">
+            <div className="mb-3 ms-1">
+                <label htmlFor="appearance" className="form-label">Erscheinungsbild</label>
+                <div className="btn-group form-control px-2" role="group">
+                  <input type="radio" className="btn-check" name="appearance" value="dark" id="appearance_dark" onChange={this.applyAppearance} checked={this.props.settings.darkmode === true} />
+                  <label className="btn btn-outline-primary" htmlFor="appearance_dark">Dunkel</label>
+
+                  <input type="radio" className="btn-check" name="appearance" value="auto" id="appearance_auto" onChange={this.applyAppearance} checked={this.props.settings.darkmode === null}/>
+                  <label className="btn btn-outline-primary" htmlFor="appearance_auto">Automatisch</label>
+
+                  <input type="radio" className="btn-check" name="appearance" value="light" id="appearance_light" onChange={this.applyAppearance} checked={this.props.settings.darkmode === false} />
+                  <label className="btn btn-outline-primary" htmlFor="appearance_light">Hell</label>
+                </div>
+                <div className="form-text">Bei "Automatisch" wird das Erscheinungsbild automatisch dem des Systems oder Browsers angepasst.</div>
+            </div>
+
+          </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
           <Dashboard.DashboardTile title="Neuste Updates" help="Neue Funktionen, Bugfixes und Änderungen">
             <div className="ms-1 mt-1">
+              <h6>
+                <b>15. September 2022</b>
+              </h6>
+              <ul className="small">
+                <li>Einstellung für Erscheinungsbild hinzugefügt</li>
+              </ul>
               <h6>
                 <b>11. September 2022</b>
               </h6>
