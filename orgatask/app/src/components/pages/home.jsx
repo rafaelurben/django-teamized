@@ -24,12 +24,19 @@ export default class Page_Home extends React.Component {
       >
         <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
           <Dashboard.DashboardTile title="Willkommen">
-            <span className="ms-1">
-              Verwende die Menuleiste (links) und die Seitenleiste (rechts), um zu navigieren.
-            </span>
+            <p className="ms-1 mb-1">
+              <span>Verwende die Menuleiste (rechts) und die Seitenleiste (links), um zu navigieren.</span>
+              <span className="d-md-none" aria-hidden="true">
+                <br />
+                <b>Hinweis</b>: Diese Seite wurde zwar auch für mobile Geräte optimiert, funktioniert aber besser auf grösseren Geräten.
+              </span>
+              <a onClick={Utils.toggleDebug} style={{opacity: 0}} className="ms-1" aria-hidden="true">
+                DEBUG
+              </a>
+            </p>
           </Dashboard.DashboardTile>
           <Dashboard.DashboardTile title="Einstellungen">
-            <div className="mb-3 ms-1">
+            <div className="mb-2 ms-1">
                 <label htmlFor="appearance" className="form-label">Erscheinungsbild</label>
                 <div className="btn-group form-control px-2" role="group">
                   <input type="radio" className="btn-check" name="appearance" value="dark" id="appearance_dark" onChange={this.applyAppearance} checked={this.props.settings.darkmode === true} />
@@ -79,12 +86,6 @@ export default class Page_Home extends React.Component {
             </div>
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
-
-        <div className="w-50 position-fixed bottom-0 end-0 text-end">
-          <a onClick={Utils.toggleDebug} className="btn text-white">
-            Toggle DEBUG mode
-          </a>
-        </div>
       </Dashboard.Dashboard>
     );
   }
