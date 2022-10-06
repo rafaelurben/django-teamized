@@ -50,7 +50,6 @@ export async function editSettings(settings) {
     return await API.POST('settings', settings).then(
         (data) => {
             // Reapply settings if the server changed them
-            console.log(settings, newsettings, data.settings);
             if (data.settings !== newsettings) {
                 window.appdata.settings = data.settings;
                 applySettings(data.settings);
@@ -65,12 +64,12 @@ export async function editSettings(settings) {
 function setColorScheme(scheme) {
     if (scheme === 'dark') {
         $('#app-maincontent').addClass('darkmode');
-        // Disabling CSS files might not work in all browsers
+        // Disabling CSS files might not work in all browsers, but this should switch the SweetAlert stylesheet
         $("link#swal-dark")[0].disabled = false;
         $("link#swal-light")[0].disabled = true;
     } else {
         $('#app-maincontent').removeClass('darkmode');
-        // Disabling CSS files might not work in all browsers
+        // Disabling CSS files might not work in all browsers, but this should switch the SweetAlert stylesheet
         $("link#swal-light")[0].disabled = false;
         $("link#swal-dark")[0].disabled = true;
     }
