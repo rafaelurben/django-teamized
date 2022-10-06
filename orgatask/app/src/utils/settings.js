@@ -1,8 +1,6 @@
 import { requestSuccessAlert, confirmAlert, infoAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
-import * as Cache from "./cache.js";
-import * as Utils from "./utils.js";
 
 // User profile
 
@@ -18,6 +16,7 @@ export async function getProfile() {
 // Settings
 
 function applySettings(settings) {
+    // Color scheme ('darkmode')
     if (settings.darkmode === true) {
         setColorScheme('dark');
     } else if (settings.darkmode === false) {
@@ -41,11 +40,21 @@ export async function getSettings() {
     );
 }
 
-export async function editSettings(data) {
-    return await API.POST('settings', data).then(
+export async function editSettings(settings) {
+    // Apply new settings
+    let newsettings = { ...window.appdata.settings, ...settings };
+    applySettings(newsettings);
+    window.appdata.settings = newsettings;
+    Navigation.render();
+    // Save new settings on server
+    return await API.POST('settings', settings).then(
         (data) => {
-            window.appdata.settings = data.settings;
-            applySettings(data.settings);
+            // Reapply settings if the server changed them
+            console.log(settings, newsettings, data.settings);
+            if (data.settings !== newsettings) {
+                window.appdata.settings = data.settings;
+                applySettings(data.settings);
+            }
             return data.settings;
         }
     );
@@ -56,10 +65,12 @@ export async function editSettings(data) {
 function setColorScheme(scheme) {
     if (scheme === 'dark') {
         $('#app-maincontent').addClass('darkmode');
+        // Disabling CSS files might not work in all browsers
         $("link#swal-dark")[0].disabled = false;
         $("link#swal-light")[0].disabled = true;
     } else {
         $('#app-maincontent').removeClass('darkmode');
+        // Disabling CSS files might not work in all browsers
         $("link#swal-light")[0].disabled = false;
         $("link#swal-dark")[0].disabled = true;
     }
