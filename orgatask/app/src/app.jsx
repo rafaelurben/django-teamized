@@ -6,6 +6,7 @@ import * as Teams from "./utils/teams.js";
 import * as Utils from "./utils/utils.js";
 import * as Settings from "./utils/settings.js";
 import * as WorkingTime from "./utils/workingtime.js";
+import * as WorkingTimeStats from "./utils/workingtimestats.js";
 import * as Calendars from "./utils/calendars.js";
 import * as ToDo from "./utils/todo.js";
 
@@ -22,6 +23,7 @@ window._App = {
   ToDo,
   Utils,
   WorkingTime,
+  WorkingTimeStats,
 };
 
 // Initialize appdata

@@ -5,8 +5,10 @@ import { errorAlert } from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
+import { localInputFormat } from "../../utils/calendars.js";
 import * as Dashboard from "../dashboard.js";
 import { TooltipIcon } from "../tooltips.js";
+import * as Stats from "../../utils/workingtimestats.js";
 
 class WorkSessionTableRow extends React.Component {
   constructor(props) {
@@ -76,6 +78,78 @@ class WorkSessionTableRow extends React.Component {
         <td className="debug-only">{this.props.session.id}</td>
       </tr>
     );
+  }
+}
+
+class WorkingTimeStats extends React.Component {
+  constructor(props) {
+    super(props);
+    this.getDurationDisplay = this.getDurationDisplay.bind(this);
+    this.apply = this.apply.bind(this);
+
+    this.state = {
+      start: new Date(new Date() - 7 * 24 * 60 * 60 * 1000),
+      end: new Date(),
+    }
+  }
+
+  apply() {
+    let start = new Date(document.getElementById("stats-range-start").value);
+    let end = new Date(document.getElementById("stats-range-end").value);
+    if (start > end) {
+      errorAlert("Das Startdatum muss vor dem Enddatum liegen.");
+      return;
+    }
+    this.setState({start, end})
+  }
+
+  getDurationDisplay() {
+    let data = seconds2HoursMinutesSeconds(this.props.duration);
+    return `${data.hours}h ${data.minutes}min ${data.seconds}s`;
+  }
+
+  render() {
+    let filteredsessions = Stats.filterByDateRange(this.props.sessions, this.state.start, this.state.end);
+    let data = Stats.chartDataByDays(filteredsessions, this.state.start, this.state.end);
+    return [
+      <div className="row row-cols-lg-auto m-1 g-2" key="settings">
+        <div className="col-12">
+          <div className="input-group">
+            <div className="input-group-text">Von</div>
+            <input
+              type="datetime-local"
+              className="form-control"
+              id="stats-range-start"
+              defaultValue={localInputFormat(new Date() - 7 * 24 * 60 * 60 * 1000)}
+            />
+          </div>
+        </div>
+        <div className="col-12">
+          <div className="input-group">
+            <div className="input-group-text">Bis</div>
+            <input
+              type="datetime-local"
+              className="form-control"
+              id="stats-range-end"
+              defaultValue={localInputFormat(new Date())}
+            />
+          </div>
+        </div>
+        <div className="col-12">
+          <button className="btn btn-outline-primary" onClick={this.apply}>Anwenden</button>
+        </div>
+      </div>,
+      <Recharts.ResponsiveContainer width="100%" height={300} key="chart">
+        <Recharts.BarChart data={data} margin={{ top: 30, right: 20, left: 0, bottom: 5 }} width={500} height={300}>
+          <Recharts.CartesianGrid strokeDasharray="3 3" />
+          <Recharts.XAxis dataKey="name" />
+          <Recharts.YAxis />
+          <Recharts.Tooltip />
+          <Recharts.Legend />
+          <Recharts.Bar dataKey="hours" name="Dauer" unit="h" fill="#8884d8" />
+        </Recharts.BarChart>
+      </Recharts.ResponsiveContainer>,
+    ];
   }
 }
 
@@ -265,11 +339,11 @@ export default class Page_WorkingTime extends React.Component {
                 <div className="text-center">
                   {this.props.current_worksession ? (
                     <button className="btn btn-danger" onClick={this.stopSession}>
-                      Zeitmessung beenden
+                      Aufzeichnung beenden
                     </button>
                   ) : (
                     <button className="btn btn-success" onClick={this.startSession}>
-                      Zeitmessung starten
+                      Aufzeichnung starten
                     </button>
                   )}
                 </div>
@@ -277,6 +351,7 @@ export default class Page_WorkingTime extends React.Component {
             </Dashboard.DashboardColumn>
             <Dashboard.DashboardColumn size="12" sizes={{ lg: 12, sm: 6, md: 6 }}>
               <Dashboard.DashboardTile title="Sitzung erfassen">
+                <p className="ms-1">Aufzeichnung verpasst? Kein Problem. Hier können Sitzungen nachträglich manuell erfasst werden.</p>
                 <div className="text-center">
                   <button className="btn btn-outline-success" onClick={this.createSession}>
                     Sitzung hinzufügen
@@ -301,6 +376,14 @@ export default class Page_WorkingTime extends React.Component {
               </thead>
               <tbody>{rows}</tbody>
             </table>
+          </Dashboard.DashboardTile>
+        </Dashboard.DashboardColumn>
+
+        <Dashboard.DashboardColumn>
+          <Dashboard.DashboardTile title="Statistiken">
+              <WorkingTimeStats
+                sessions={Object.values(this.props.worksessions)}
+              />
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
