@@ -13,12 +13,22 @@ export function chartDataByDays(sessions, start, end) {
         let day = roundDays(start, i);
         days[day] = {
             name: getDateString(day),
-            hours: 0,
+            duration_s: 0,
+            duration_h: "0",
         };
     }
     sessions.forEach(session => {
         const day = roundDays(new Date(session.time_start));
-        days[day].hours += session.duration / 3600;
+        days[day].duration_s += session.duration;
+        days[day].duration_h = (days[day].duration_s / 3600).toFixed(2);
     });
     return Object.values(days);
+}
+
+export function totalDuration(sessions) {
+    let total = 0;
+    sessions.forEach(session => {
+        total += session.duration;
+    });
+    return total;
 }

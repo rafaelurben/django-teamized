@@ -111,8 +111,9 @@ class WorkingTimeStats extends React.Component {
   render() {
     let filteredsessions = Stats.filterByDateRange(this.props.sessions, this.state.start, this.state.end);
     let data = Stats.chartDataByDays(filteredsessions, this.state.start, this.state.end);
+    let totalHours = Stats.totalDuration(filteredsessions) / 3600;
     return [
-      <div className="row row-cols-lg-auto m-1 g-2" key="settings">
+      <div className="row row-cols-lg-auto m-1 g-2 align-items-center" key="settings">
         <div className="col-12">
           <div className="input-group">
             <div className="input-group-text">Von</div>
@@ -138,6 +139,9 @@ class WorkingTimeStats extends React.Component {
         <div className="col-12">
           <button className="btn btn-outline-primary" onClick={this.apply}>Anwenden</button>
         </div>
+        <div className="col-12">
+          <span className="text-muted">Gesamtdauer: {totalHours.toFixed(2)}h</span>
+        </div>
       </div>,
       <Recharts.ResponsiveContainer width="100%" height={300} key="chart">
         <Recharts.BarChart data={data} margin={{ top: 30, right: 20, left: 0, bottom: 5 }} width={500} height={300}>
@@ -146,7 +150,7 @@ class WorkingTimeStats extends React.Component {
           <Recharts.YAxis />
           <Recharts.Tooltip />
           <Recharts.Legend />
-          <Recharts.Bar dataKey="hours" name="Dauer" unit="h" fill="#8884d8" />
+          <Recharts.Bar dataKey="duration_h" name="Dauer" unit="h" fill="#8884d8" />
         </Recharts.BarChart>
       </Recharts.ResponsiveContainer>,
     ];
@@ -351,7 +355,7 @@ export default class Page_WorkingTime extends React.Component {
             </Dashboard.DashboardColumn>
             <Dashboard.DashboardColumn size="12" sizes={{ lg: 12, sm: 6, md: 6 }}>
               <Dashboard.DashboardTile title="Sitzung erfassen">
-                <p className="ms-1">Aufzeichnung verpasst? Kein Problem. Hier können Sitzungen nachträglich manuell erfasst werden.</p>
+                <p className="ms-1">Aufzeichnung vergessen? Kein Problem. Hier können Sitzungen nachträglich manuell erfasst werden.</p>
                 <div className="text-center">
                   <button className="btn btn-outline-success" onClick={this.createSession}>
                     Sitzung hinzufügen
@@ -362,7 +366,7 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.DashboardRow>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 9 }}>
-          <Dashboard.DashboardTile title="Erfasste Zeiten (ausgewähltes Team)">
+          <Dashboard.DashboardTile title="Erfasste Zeiten">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
