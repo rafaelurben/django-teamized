@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-import orgatask.api.admin
+import orgatask.api.utils.admin
 from orgatask import models
 
 # Register your models here.

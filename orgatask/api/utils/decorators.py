@@ -8,11 +8,11 @@ from django.db.models import fields
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
 
-from orgatask.api.constants import (
+from orgatask.api.utils.constants import (
     NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED,
     METHOD_NOT_ALLOWED, OBJ_NOT_FOUND, NOT_AN_UUID
 )
-from orgatask.api.models import ApiKey
+from orgatask.api.utils.models import ApiKey
 from orgatask import exceptions
 
 def _is_valid_uuid(val):

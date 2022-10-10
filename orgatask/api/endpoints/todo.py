@@ -4,8 +4,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from orgatask.api.constants import NO_PERMISSION, OBJ_NOT_FOUND
-from orgatask.api.decorators import require_objects, api_view
+from orgatask.api.utils.constants import NO_PERMISSION, OBJ_NOT_FOUND
+from orgatask.api.utils.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
 from orgatask.models import ToDoList, ToDoListItem, Team, User
 

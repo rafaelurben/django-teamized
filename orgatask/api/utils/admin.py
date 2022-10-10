@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from orgatask.api.models import ApiKey
+from orgatask.api.utils.models import ApiKey
 
 
 @admin.register(ApiKey)

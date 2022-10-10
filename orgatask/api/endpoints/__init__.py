@@ -3,7 +3,7 @@
 from django.views.decorators.csrf import csrf_exempt
 
 from orgatask.api.endpoints import main, workingtime, calendar, todo
-from orgatask.api.constants import ENDPOINT_NOT_FOUND
+from orgatask.api.utils.constants import ENDPOINT_NOT_FOUND
 
 # Basic API views
 
