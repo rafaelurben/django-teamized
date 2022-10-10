@@ -13,7 +13,7 @@ from orgatask.models import Calendar
 
 def home(request):
     "Show the home page"
-    return render(request, 'orgatask/home.html', {"indexable": True})
+    return render(request, 'orgatask/home.html')
 
 # App views
 
@@ -26,7 +26,7 @@ def app(request):
 @login_required(login_url=reverse_lazy('account:login'))
 def app_debug(request):
     "Show the debug page"
-    return render(request, 'orgatask/debug.html', {"indexable": False})
+    return render(request, 'orgatask/debug.html')
 
 def manifest(request):
     "Render the manifest.json file"

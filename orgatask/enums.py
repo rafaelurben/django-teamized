@@ -1,4 +1,7 @@
-"Lists and more"
+"""Lists and more
+
+Note: These are not "real" enum objects.
+"""
 
 from django.utils.translation import gettext as _
 
@@ -15,30 +18,32 @@ class Roles:
         (MEMBER, _('Mitglied')),
     ]
 
-class Scopes:
-    TEAM = 'team'
-    MEMBERS = 'members'
-    MEMBER = 'member'
+# The following enums are part of a planned feature: Logging
 
-    SCOPES = [
-        (TEAM, _("Teamverwaltung")),
-        (MEMBERS, _("Mitgliederverwaltung")),
-        (MEMBER, _("Mitgliedschaft & Einstellungen")),
-    ]
+# class Scopes:
+#     TEAM = 'team'
+#     MEMBERS = 'members'
+#     MEMBER = 'member'
 
-class Actions:
-    CREATE = 'create'
-    CHANGE = 'change'
-    DELETE = 'delete'
-    INVITE = 'invite'
-    JOIN = 'join'
-    LEAVE = 'leave'
+#     SCOPES = [
+#         (TEAM, _("Teamverwaltung")),
+#         (MEMBERS, _("Mitgliederverwaltung")),
+#         (MEMBER, _("Mitgliedschaft & Einstellungen")),
+#     ]
 
-    ACTIONS = [
-        (CREATE, _("Erstellen")),
-        (CHANGE, _("Ändern")),
-        (DELETE, _("Löschen")),
-        (INVITE, _("Einladen")),
-        (JOIN, _("Beitreten")),
-        (LEAVE, _("Verlassen")),
-    ]
+# class Actions:
+#     CREATE = 'create'
+#     CHANGE = 'change'
+#     DELETE = 'delete'
+#     INVITE = 'invite'
+#     JOIN = 'join'
+#     LEAVE = 'leave'
+
+#     ACTIONS = [
+#         (CREATE, _("Erstellen")),
+#         (CHANGE, _("Ändern")),
+#         (DELETE, _("Löschen")),
+#         (INVITE, _("Einladen")),
+#         (JOIN, _("Beitreten")),
+#         (LEAVE, _("Verlassen")),
+#     ]

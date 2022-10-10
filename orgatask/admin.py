@@ -1,8 +1,16 @@
+"""Admin classes
+
+These classes are required for the django admin interface.
+The admin interface is something only the developer will ever see.
+"""
+
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-import orgatask.api.utils.admin
 from orgatask import models
+
+# This is required for the apikey admin view
+import orgatask.api.utils.admin
 
 # Register your models here.
 

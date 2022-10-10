@@ -60,13 +60,13 @@ class BaseValidator():
                     _("Das Attribut '{}' darf nicht null sein!").format(attr))
             return None
 
-        # Before convert
+        # Before convert (for subclasses)
         value = cls._before_convert(value, **kwargs)
 
         # Try to convert the value
         value = cls._try_convert(value, **kwargs)
 
-        # After convert
+        # After convert (for subclasses)
         value = cls._after_convert(value, **kwargs)
 
         return value

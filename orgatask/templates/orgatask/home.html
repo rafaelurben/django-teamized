@@ -1,11 +1,24 @@
 {% extends 'orgatask/base.html' %}
 {% load i18n %}
 
+{% comment %}
+    This is the home page where a user can open the app or read more about it.
+    This is the only page that doesn't require authentication and the only
+    page that allows search engines to index it.
+
+    Some things on this page have been borrowed from the Bootstrap examples
+    https://getbootstrap.com/docs/5.2/examples/heroes/
+{% endcomment %}
+
 {% block title %}Startseite{% endblock title %}
+
+{% block noindex %}
+{% comment %} Override the noindex tag that would normally be here. {% endcomment %}
+{% endblock noindex %}
 
 {% block extrahead %}
     <style>
-        .b-example-divider {
+        .divider {
             height: 2rem;
             background-color: rgba(0, 0, 0, .1);
             border: solid rgba(0, 0, 0, .15);
@@ -29,16 +42,17 @@
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">
                 Arbeite zusammen mit deinem Team oder alleine an deinen Lieblingsprojekten.<br />
-                Diese App unterstützt dich bei der Planung und Umsetzung von Projekten in deinem Team.
+                Diese App unterstützt dich bei der Planung und Umsetzung von Projekten in deinem Team.<br />
+                Sie entstand im Rahmen der Maturaarbeit von Rafael Urben.
             </p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                 <a href="{% url 'orgatask:app' %}" class="btn btn-primary btn-lg px-4 gap-3">Zur App</a>
-                <a href="#features" class="btn btn-outline-secondary btn-lg px-4 disabled">Weitere Infos</a>
+                <a href="https://rafaelurben.ch/maturaarbeit/" class="btn btn-outline-secondary btn-lg px-4">Zur Maturaarbeit</a>
             </div>
         </div>
     </div>
 
-    <div class="b-example-divider"></div>
+    <div class="divider"></div>
 
     <div class="container px-4 py-5" id="features">
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
@@ -72,7 +86,7 @@
         </div>
     </div>
 
-    <div class="b-example-divider"></div>
+    <div class="divider"></div>
 
     <div class="bg-dark text-secondary px-4 py-5 text-center">
         <div class="py-5">

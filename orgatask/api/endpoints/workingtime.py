@@ -4,11 +4,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from orgatask import enums, exceptions
-from orgatask.api.utils.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
+from orgatask import exceptions
+from orgatask.api.utils.constants import NO_PERMISSION, OBJ_NOT_FOUND
 from orgatask.api.utils.decorators import require_objects, api_view
 from orgatask.decorators import orgatask_prep
-from orgatask.models import User, Member, Team, WorkSession
+from orgatask.models import User, Team, WorkSession
 
 @api_view(["get", "post"])
 @csrf_exempt
@@ -27,7 +27,7 @@ def endpoint_worksessions(request, team: Team):
     member = team.get_member(user)
 
     if request.method == "GET":
-        # Get all sessions of the user in the team
+        # Get all ended sessions of the user in the team
         sessions = member.work_sessions.filter(is_ended=True).order_by('-time_start').all()
         return JsonResponse({
             "worksessions": [session.as_dict() for session in sessions],
@@ -53,6 +53,8 @@ def endpoint_worksession(request, team: Team, session: WorkSession):
     """
     Endpoint for managing or deleting a WorkSession.
     """
+
+    # Note: The team argument is only here to maintain the same url structure as the endpoint above.
 
     user: User = request.orgatask_user
 
@@ -103,6 +105,9 @@ def endpoint_tracking_start(request, team: Team):
         return NO_PERMISSION
 
     # Check if the user is already tracking a session
+    # Note: This does not completely prevent the user from creating multiple tracking sessions
+    #       at the same time, but it should be enough to prevent the user from accidentally
+    #       creating multiple sessions. (There's a very small time window where the user could)
     active_session = user.get_active_work_session()
     if active_session is not None:
         raise exceptions.AlertException(

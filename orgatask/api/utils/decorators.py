@@ -25,6 +25,7 @@ def _is_valid_uuid(val):
 
 def api_view(allowed_methods=["get"], perms_required=()):
     """Decorator: Protect an api view from unauthorized access."""
+
     def decorator(function):
         @wraps(function)
         def wrap(request, *args, **kwargs):
@@ -34,6 +35,7 @@ def api_view(allowed_methods=["get"], perms_required=()):
 
                 apikey = request.GET.get("apikey", None)
 
+                # If the user provided an apikey, try to authenticate with it
                 if apikey:
                     if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
                         keyobject = ApiKey.objects.get(key=apikey)
@@ -52,6 +54,7 @@ def api_view(allowed_methods=["get"], perms_required=()):
 
                     return APIKEY_INVALID
 
+                # If there's no apikey, try to authenticate via Django session
                 if request.user.is_authenticated:
                     if request.user.has_perms(perms_required):
                         return function(request, *args, **kwargs)
@@ -77,30 +80,34 @@ def require_objects(config, allow_none=False):
             for elem in config:
                 elem = list(elem)
 
+                # Fill the optional arguments if they are not given
                 if len(elem) == 2:
                     elem.append(elem[0])
                 if len(elem) == 3:
                     elem.append("pk")
 
+                # Extract the four arguments from the list
                 field_in, model, field_out, dbfieldname = elem
+                value = kwargs.pop(field_in)
 
+                # Find the primary key of the model if the placeholder "pk" is given
                 if dbfieldname == "pk":
                     dbfieldname = model._meta.pk.name
 
+                # Find the field in the model and check its type
                 dbfield = model._meta.get_field(dbfieldname)
-                value = kwargs.pop(field_in)
-
                 if isinstance(dbfield, fields.UUIDField) and not _is_valid_uuid(value):
                     return NOT_AN_UUID
 
+                # Find the object with the given id
                 search = {dbfieldname: value}
                 if model.objects.filter(**search).exists():
                     kwargs[field_out] = model.objects.get(**search)
-                    continue
+                    continue # Go to the next object (if present
 
                 if allow_none:
                     kwargs[field_out] = None
-                    continue
+                    continue # Go to the next object (if present)
 
                 if hasattr(model, "NOT_FOUND_TEXT"):
                     return JsonResponse({

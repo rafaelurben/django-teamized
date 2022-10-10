@@ -1,4 +1,3 @@
-from django.utils.timezone import utc
 from datetime import timedelta, datetime, date
 
 def get_week_start_end(dt: datetime, weekoffset=0):
@@ -37,6 +36,6 @@ def ical_text(text: str):
 
 def iddict(lst: list):
     """
-    Returns a dictionary from a list objects with an id attribute
+    Returns a dictionary from a list of objects with an id attribute
     """
     return {x['id']: x for x in lst}

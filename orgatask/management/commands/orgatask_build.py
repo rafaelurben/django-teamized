@@ -1,5 +1,8 @@
 """
 Run the OrgaTask app build
+
+Note: This is a management command, so it can be run with the command
+"python manage.py orgatask_build" from the project root directory.
 """
 
 import os
@@ -17,9 +20,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         oldcwd = os.getcwd()
 
+        # Navigate to the "app" directory relative from this file
         filepath = os.path.abspath(__file__)
         folderpath = os.path.dirname(os.path.dirname(os.path.dirname(filepath)))
-
         newcwd = os.path.join(folderpath, "app")
         os.chdir(newcwd)
 
@@ -33,5 +36,6 @@ class Command(BaseCommand):
         except KeyboardInterrupt:
             self.stdout.write(self.style.WARNING("Keyboard interrupt!"))
 
+        # Navigate back to the old working directory
         os.chdir(oldcwd)
         self.stdout.write(self.style.SUCCESS("Finished building OrgaTask app..."))

@@ -8,7 +8,8 @@ from django.conf import settings
 
 
 class ApiKey(models.Model):
-    """Model representing an api key"""
+    """Model representing an api key
+    An API key is an optional way to authenticate the user to the API."""
 
     key = models.UUIDField(
         verbose_name="Key",

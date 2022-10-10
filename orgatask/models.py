@@ -1,4 +1,7 @@
-"""OrgaTask Models"""
+"""Database Models
+
+Django will handle the database itself. Only the models need to be defined here.
+"""
 
 import uuid
 import hashlib
@@ -19,7 +22,7 @@ from orgatask import enums, options, exceptions, utils, decorators, validation
 
 class User(models.Model):
     """
-    An intermediary model to extend the auth user model.
+    An intermediary model to extend the auth user model with custom settings.
     """
 
     uid = models.UUIDField(
@@ -71,12 +74,17 @@ class User(models.Model):
 
     @property
     def avatar_url(self) -> str:
+        """
+        Generate the avatar url for this user for the gravatar service.
+        The email address itself is never passed to the service.
+        More info: https://gravatar.com/site/implement/images/
+        """
         mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
         return "https://www.gravatar.com/avatar/"+mailhash+"?s=80&d=retro"
 
     def create_team(self, name, description) -> "Team":
         """
-        Create a new team and add this user as an owner.
+        Shortcut: Create a new team and add this user as an owner.
         """
 
         team = Team.objects.create(
@@ -102,13 +110,14 @@ class User(models.Model):
     def can_create_team(self) -> bool:
         """
         Check if the user can create a team.
+        Team creation is limited via options.MAX_OWNED_TEAMS.
         """
 
         return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_TEAMS
 
     def get_active_work_session(self) -> typing.Union["WorkSession", None]:
         """
-        Get the active work session for this user.
+        Get the active work session for this user, if there is any.
         """
 
         if self.work_sessions.filter(is_ended=False, is_created_via_tracking=True).exists():
@@ -242,6 +251,8 @@ class Member(models.Model):
         return {
             "id": self.uid,
             "role": self.role,
+            # get_..._display() returns the human-readable value of the field
+            # https://docs.djangoproject.com/en/4.1/ref/models/instances/#django.db.models.Model.get_FOO_display
             "role_text": self.get_role_display(),
             "user": self.user.as_dict(),
         }
@@ -321,13 +332,15 @@ class Invite(models.Model):
         "Check if the invitation is still valid"
 
         if self.uses_left <= 0:
+            # no uses left
             return False
         if self.valid_until is not None and (self.valid_until - timezone.now()).total_seconds() <= 0:
+            # expired
             return False
         return True
 
     def check_validity_for_user(self, user: User) -> bool:
-        "Check if an user can use an invite - raise AlertEcxeption if not."
+        "Check if an user can use an invite - raise AlertException if not."
 
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
@@ -342,7 +355,10 @@ class Invite(models.Model):
         return True
 
     def accept(self, user: User) -> "Member":
-        "Use the invitation (IMPORTANT: Check validity first via check_validity_for_user()!)"
+        """Use the invitation 
+
+        IMPORTANT: This does not check validity! Use check_validity_for_user() first!
+        """
 
         self.uses_left -= 1
         self.uses_used += 1
@@ -352,8 +368,9 @@ class Invite(models.Model):
 
     @classmethod
     @decorators.validation_func()
-    def from_post_data(cls, data: dict, team: Team) -> "Calendar":
-        """Create a new calendar from post data"""
+    def from_post_data(cls, data: dict, team: Team) -> "Invite":
+        """Create a new Invite from POST data"""
+
         return cls.objects.create(
             team=team,
             note=validation.text(data, "note", True),
@@ -369,7 +386,7 @@ class Invite(models.Model):
         self.save()
 
 class WorkSession(models.Model):
-    "Model for logging work sessions"
+    "Model for work sessions"
 
     uid = models.UUIDField(
         primary_key=True,
@@ -380,7 +397,7 @@ class WorkSession(models.Model):
     """ [Author's note]
     Adding user, team and member to the model leads to data redundancy, but it makes
     it possible to keep the object even after the user or team is deleted or
-    after the user leaves the team the session was created in.
+    after the user leaves the team the session was created in. (for future use)
     """
     user = models.ForeignKey(
         to="User",
@@ -456,7 +473,8 @@ class WorkSession(models.Model):
     @classmethod
     @decorators.validation_func()
     def from_post_data(cls, data: dict, team: Team, member: Member, user: User) -> "WorkSession":
-        """Create a new WorkSession from post data"""
+        """Create a new WorkSession from POST data"""
+
         session = cls(
             team=team,
             member=member,
@@ -479,48 +497,6 @@ class WorkSession(models.Model):
             self.validate()
         self.save()
 
-# class TeamLog(models.Model):
-#     "Used for logging changes in a team"
-
-#     uid = models.UUIDField(
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False,
-#     )
-
-#     team = models.ForeignKey(
-#         to='Team',
-#         related_name="logs",
-#         on_delete=models.CASCADE,
-#     )
-#     user = models.ForeignKey(
-#         to='User',
-#         related_name="orgatask_logs",
-#         null=True,
-#         on_delete=models.SET_NULL,
-#     )
-
-#     scope = models.CharField(
-#         max_length=16,
-#         default=enums.Scopes.TEAM,
-#         choices=enums.Scopes.SCOPES,
-#     )
-#     action = models.CharField(
-#         max_length=16,
-#         default=enums.Actions.CREATE,
-#         choices=enums.Actions.ACTIONS,
-#     )
-#     data = models.JSONField(
-#     )
-
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     objects = models.Manager()
-
-#     class Meta:
-#         verbose_name = _("Log")
-#         verbose_name_plural = _("Logs")
-
 class Calendar(models.Model):
     """
     Calendar model
@@ -538,7 +514,7 @@ class Calendar(models.Model):
         on_delete=models.CASCADE,
     )
 
-    # START calendar properties
+    # calendar properties
 
     name = models.CharField(
         max_length=50,
@@ -551,8 +527,7 @@ class Calendar(models.Model):
 
     color = models.CharField(max_length=20, blank=True, default="#000000")
 
-    # END calendar properties
-    # START calendar publishing
+    # calendar publishing
 
     ics_uid = models.UUIDField(
         default=uuid.uuid4,
@@ -561,8 +536,6 @@ class Calendar(models.Model):
     is_public = models.BooleanField(
         default=True,
     )
-
-    # END calendar publishing
 
     objects = models.Manager()
 
@@ -585,15 +558,21 @@ class Calendar(models.Model):
         }
 
     def as_ics_text(self, request=None) -> str:
+        """Get the calendar in ics format
+
+        Read more: https://icalendar.org/
+        """
+
         morelines = []
         if request is not None:
-            morelines.append("URL:"+self.get_online_url(request)+f"?p=calendars&t={self.team_id}")
+            morelines.append("URL:"+self.get_online_url(request))
             morelines.append("SOURCE;VALUE=URI:"+self.get_ics_url(request))
 
         eventlines = []
         for event in self.events.all():
             eventlines += event.as_ics_lines()
 
+        # Some attributes are duplicated because they are required for some clients
         calendarlines = [
             "BEGIN:VCALENDAR",
             "VERSION:2.0",
@@ -616,15 +595,20 @@ class Calendar(models.Model):
 
     def as_ics_response(self, request=None) -> HttpResponse:
         """Get the calendar as an ics file response"""
+
         response = HttpResponse(self.as_ics_text(request), content_type="text/calendar")
         response["Content-Disposition"] = "attachment; filename=calendar.ics"
         return response
 
     def get_online_url(self, request):
+        "Get the url to the calendar page in the app"
+
         path = reverse("orgatask:app")
-        return request.build_absolute_uri(path)
+        return request.build_absolute_uri(path)+f"?p=calendars&t={self.team_id}"
 
     def get_ics_url(self, request=None):
+        "Get the url to the ics file"
+
         path = reverse("orgatask:calendar_ics", args=[self.ics_uid])
         if request is None:
             return path
@@ -633,7 +617,8 @@ class Calendar(models.Model):
     @classmethod
     @decorators.validation_func()
     def from_post_data(cls, data: dict, team: Team) -> "Calendar":
-        """Create a new calendar from post data"""
+        """Create a new Calendar from POST data"""
+
         return cls.objects.create(
             team=team,
             name=validation.text(data, "name", True, max_length=50),
@@ -649,6 +634,10 @@ class Calendar(models.Model):
         self.save()
 
 class CalendarEvent(models.Model):
+    """
+    Calendar event model
+    """
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -664,7 +653,7 @@ class CalendarEvent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # START event properties
+    # event properties
 
     name = models.CharField(
         max_length=50,
@@ -682,8 +671,6 @@ class CalendarEvent(models.Model):
     fullday = models.BooleanField(default=False)
 
     location = models.CharField(max_length=250, blank=True, default="")
-
-    # END event properties
 
     objects = models.Manager()
 
@@ -708,8 +695,14 @@ class CalendarEvent(models.Model):
         }
 
     def as_ics_lines(self) -> list:
+        """Get the event in ics format
+
+        Read more: https://icalendar.org/
+        """
+
         if self.fullday:
             start = "DTSTART;VALUE=DATE:" + utils.ical_date(self.dstart)
+            # According to the iCalendar standard, the end date is exclusive for all-day events
             end = "DTEND;VALUE=DATE:" + utils.ical_date(self.dend+utils.timedelta(days=1))
         else:
             start = "DTSTART:" + utils.ical_datetime(self.dtstart)
@@ -749,7 +742,7 @@ class CalendarEvent(models.Model):
     @classmethod
     @decorators.validation_func()
     def from_post_data(cls, data: dict, calendar: Calendar) -> "CalendarEvent":
-        "Creates an event from POST data"
+        """Create a new CalendarEvent from POST data"""
 
         fullday = validation.boolean(data, "fullday", False, default=True)
         name = validation.text(data, "name", True, max_length=50)
@@ -783,11 +776,9 @@ class CalendarEvent(models.Model):
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
-        "Creates an event from POST data"
-
         self.fullday = validation.boolean(data, "fullday", False, default=self.fullday)
         self.name = validation.text(data, "name", False, default=self.name, max_length=50)
-        self.description = validation.text(data, "description", False, default=self.fullday)
+        self.description = validation.text(data, "description", False, default=self.description)
         self.location = validation.text(data, "location", False, default=self.location)
 
         if self.fullday:
@@ -802,6 +793,10 @@ class CalendarEvent(models.Model):
 
 
 class ToDoList(models.Model):
+    """
+    To do list model
+    """
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -843,7 +838,7 @@ class ToDoList(models.Model):
     @classmethod
     @decorators.validation_func()
     def from_post_data(cls, data: dict, team: Team) -> "ToDoList":
-        "Creates a ToDoList from POST data"
+        """Create a new ToDoList from POST data"""
 
         return cls.objects.create(
             team=team,
@@ -854,7 +849,7 @@ class ToDoList(models.Model):
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
-        "Updates the ToDoList from POST data"
+        """Update the ToDoList from POST data"""
 
         self.name = validation.text(data, "name", False, default=self.name, max_length=50)
         self.description = validation.text(data, "description", False, default=self.description)
@@ -908,7 +903,7 @@ class ToDoListItem(models.Model):
     @classmethod
     @decorators.validation_func()
     def from_post_data(cls, data: dict, user: User, todolist: ToDoList) -> "ToDoListItem":
-        "Creates a ToDoListItem from POST data"
+        """Create a new ToDoListItem from POST data"""
 
         return cls.objects.create(
             todolist=todolist,
@@ -919,7 +914,7 @@ class ToDoListItem(models.Model):
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict, user: User):
-        "Update a ToDoListItem from POST data"
+        """Update a ToDoListItem from POST data"""
 
         self.name = validation.text(data, "name", False, default=self.name, max_length=50)
         self.description = validation.text(data, "description", False, default=self.description)
@@ -935,3 +930,47 @@ class ToDoListItem(models.Model):
             self.done_at = None
 
         self.save()
+
+# This model is for future use
+
+# class TeamLog(models.Model):
+#     "Used for logging changes in a team"
+
+#     uid = models.UUIDField(
+#         primary_key=True,
+#         default=uuid.uuid4,
+#         editable=False,
+#     )
+
+#     team = models.ForeignKey(
+#         to='Team',
+#         related_name="logs",
+#         on_delete=models.CASCADE,
+#     )
+#     user = models.ForeignKey(
+#         to='User',
+#         related_name="orgatask_logs",
+#         null=True,
+#         on_delete=models.SET_NULL,
+#     )
+
+#     scope = models.CharField(
+#         max_length=16,
+#         default=enums.Scopes.TEAM,
+#         choices=enums.Scopes.SCOPES,
+#     )
+#     action = models.CharField(
+#         max_length=16,
+#         default=enums.Actions.CREATE,
+#         choices=enums.Actions.ACTIONS,
+#     )
+#     data = models.JSONField(
+#     )
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     objects = models.Manager()
+
+#     class Meta:
+#         verbose_name = _("Log")
+#         verbose_name_plural = _("Logs")

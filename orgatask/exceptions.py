@@ -1,4 +1,4 @@
-"Custom exceptions for OrgaTask"
+"""Custom exceptions"""
 
 from django.http import JsonResponse
 

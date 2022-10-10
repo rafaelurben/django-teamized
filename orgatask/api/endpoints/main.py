@@ -14,7 +14,7 @@ from orgatask.models import User, Member, Team, Invite
 @orgatask_prep()
 def endpoint_profile(request):
     """
-    Get the user's profile.
+    Endpoint for getting the user's profile.
     """
     user: User = request.orgatask_user
     return JsonResponse({
@@ -27,7 +27,7 @@ def endpoint_profile(request):
 @orgatask_prep()
 def endpoint_settings(request):
     """
-    Get or modify the user's settings.
+    Endpoint for getting or modifying the user's settings.
     """
     user: User = request.orgatask_user
 
@@ -200,10 +200,10 @@ def endpoint_member(request, team: Team, member: Member):
         role = request.POST.get("role", member.role)
 
         if role != member.role and not team.user_is_owner(user):
-            # Only owner can change the role of a member
+            # Only owners can change the role of a member
             return NO_PERMISSION
         if member.role == enums.Roles.OWNER:
-            # Owners cannot change their roles
+            # Roles of owners cannot be changed
             return NO_PERMISSION
         if role not in [enums.Roles.MEMBER, enums.Roles.ADMIN]:
             # Check if role is valid
@@ -224,7 +224,7 @@ def endpoint_member(request, team: Team, member: Member):
 
     if request.method == "DELETE":
         if member.is_admin() and not team.user_is_owner(user):
-            # Can't delete an admin if not owner
+            # Only owners can remove admins
             return NO_PERMISSION
 
         member.delete()

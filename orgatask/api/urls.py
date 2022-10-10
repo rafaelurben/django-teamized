@@ -1,4 +1,4 @@
-"""OrgaTask API urls"""
+"""API url patterns"""
 
 from django.urls import path, re_path
 

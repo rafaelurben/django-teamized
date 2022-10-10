@@ -1,17 +1,21 @@
 {% extends 'orgatask/base.html' %}
 {% load static i18n %}
 
+{% comment %} This is the main app page. All the action happens on this page.{% endcomment %}
+
 {% block title %}{% translate "App" %}{% endblock title %}
 
 {% block extrahead %}
-    <!-- Sweetalert -->
+    <!-- SweetAlert 2 stylesheets (dark mode and light mode)-->
     <link id="swal-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5.0.12/dark.min.css" integrity="sha256-skRkShokaAoYfW/d2CyV/joIeNGSgJDhirUmy9NKTNk=" crossorigin="anonymous">
     <link id="swal-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.32/dist/sweetalert2.min.css" integrity="sha256-9sjPKPDYQR/DJmNyvwjrb45imS33xVjgOS9nLcWvSac=" crossorigin="anonymous">
+    <!-- Custom stylesheets -->
     <link rel="stylesheet" href="{% static 'orgatask/css/app.css' %}">
     <link rel="stylesheet" href="{% static 'orgatask/css/darkinvert.css' %}">
 {% endblock extrahead %}
 
 {% block menubartitle %}
+    <!-- Sidebar trigger with menubar title -->
     <a id="menubartitle" class="navbar-brand ms-1" href="#">
         <i class="fas fa-fw fa-bars me-1"></i>
         OrgaTask
@@ -19,15 +23,18 @@
 {% endblock menubartitle %}
 
 {% block additional_menubar_items %}
+    <!-- Team switcher -->
     <div id="app-menubar">
         <!-- Filled by React -->
     </div>
+    <!-- Reload button -->
     <li class="nav-item border-lg rounded border-secondary ms-2" id="refreshbutton">
         <a class="nav-link ms-1 me-1" href="#" title="{% translate "Neu laden" %} (F5)">
             <i class="fas fa-fw fa-rotate"></i>
             <span class="d-lg-none ms-2">{% translate "Neu laden" %}</span>
         </a>
     </li>
+    <!-- Hidden DEBUG menu item (activate via Shift+F6) -->
     <li class="nav-item dropdown border-lg rounded border-danger ms-2 debug-only">
         <a class="nav-link dropdown-toggle ms-1 me-1 text-danger" href="#" title="DEBUG MENU" role="button" data-bs-toggle="dropdown">
             <i class="fas fa-fw fa-bug"></i>
@@ -65,15 +72,18 @@
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js" integrity="sha384-/AfDwVDXNopzPvhxMPQ11y1OCpR6mVkWx47qzSwIiquvxkcMkZddEzDNtIOtfCpk" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/recharts@2.1.14/umd/Recharts.js" integrity="sha384-McIwLMjYwQ/jaH9xt0XsbkbFUVD8MlKY/t2/qMcUGZHcoSN2kWEBwmVdtfqAAdHr" crossorigin="anonymous"></script>
 
-    <!-- App -->
+    <!-- Main app script -->
     <script src="{% static 'orgatask/app/app.js' %}" type="module"></script>
 {% endblock scripts %}
 
 {% block contentcontainer %}
+    <!-- Main content area (everything below the menubar) -->
     <div id="app-root" class="d-flex sidebar-visible">
         <div id="app-sidebar">
+            <!-- Filled by React -->
         </div>
         <div id="app-maincontent" class="w-100 overflow-auto">
+            <!-- Filled by React -->
         </div>
     </div>
 {% endblock contentcontainer %}

@@ -1,4 +1,7 @@
-{% comment %} Base template for all OrgaTask pages {% endcomment %}
+{% comment %} 
+    Base template for all pages
+    Other templates should extend this template and fill/replace blocks
+{% endcomment %}
 
 <!DOCTYPE html>
 <html lang="de">
@@ -9,21 +12,24 @@
         {% block head %}
             <title>{% block title %}{% endblock %} | OrgaTask</title>
             <meta charset="utf-8"/>
-            {% if not indexable %}
+            {% block noindex %}
                 <meta name="robots" content="noindex">
-            {% endif %}
+            {% endblock noindex %}
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="theme-color" content="#212529">
             <link rel="manifest" href="{% url "orgatask:manifest" %}">
 
             {% block stylesheets %}
+                <!-- FontAwesome (icon library) -->
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
+                <!-- Bootstrap (CSS framework) -->
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+                <!-- Custom CSS -->
                 <link rel="stylesheet" href="{% static 'orgatask/css/base.css' %}">
             {% endblock %}
 
-        {% endblock %}
+        {% endblock head %}
         {% block extrahead %}{% endblock %}
     </head>
 
@@ -44,9 +50,11 @@
                     {% block menubartitle %}
                         <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'orgatask:home' %}">OrgaTask</a>
                     {% endblock menubartitle %}
+                    <!-- Navbar toggle for small devices -->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+                    <!-- Navigation bar -->
                     <div class="collapse navbar-collapse" id="navbar">
                         <ul class="navbar-nav nav w-100 me-1 mb-2 justify-content-end">
                             {% block additional_menubar_items %}
@@ -106,6 +114,7 @@
         
         <!-- Scripts -->
         {% block scripts %}
+            <!-- Bootstrap (used for tooltips) -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.js" integrity="sha256-DAPL0IEYaurMA/ksCcxTTi1vNL6KujHBiL4Nar589FQ=" crossorigin="anonymous"></script>
         
         {% endblock scripts%}
