@@ -9,6 +9,7 @@ import { localInputFormat } from "../../utils/calendars.js";
 import * as Dashboard from "../dashboard.js";
 import { TooltipIcon } from "../tooltips.js";
 import * as Stats from "../../utils/workingtimestats.js";
+import { roundDays } from "../../utils/calendars.js";
 
 class WorkSessionTableRow extends React.Component {
   constructor(props) {
@@ -81,6 +82,50 @@ class WorkSessionTableRow extends React.Component {
   }
 }
 
+
+class SessionTable extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <table className="table table-borderless align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Start &amp; Ende</th>
+            <th>Dauer</th>
+            <th>Notiz</th>
+            <th style={{ width: "1px" }}></th>
+            <th style={{ width: "1px" }}></th>
+            <th className="debug-only">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.props.sessions.length === 0 ? (
+              <tr>
+                <td colSpan="3">
+                  Noch keine Zeiten im ausgewählten Zeitraum erfasst.
+                </td>
+              </tr>
+            ) : (
+              this.props.sessions.map((session) => {
+                return (
+                  <WorkSessionTableRow
+                    session={session}
+                    key={session.id}
+                    team={this.props.selectedTeam}
+                  />
+                )
+              })
+            )
+          }
+        </tbody>
+      </table>
+    );
+  }
+}
 class WorkingTimeStats extends React.Component {
   constructor(props) {
     super(props);
@@ -109,9 +154,6 @@ class WorkingTimeStats extends React.Component {
   }
 }
 
-const DEFAULT_SESSION_TABLE_ROW_COUNT = 5;
-const SESSION_TABLE_SHOW_MORE_INTERVAL = 3;
-
 export default class Page_WorkingTime extends React.Component {
   constructor(props) {
     super(props);
@@ -122,14 +164,12 @@ export default class Page_WorkingTime extends React.Component {
     this.updateCurrentSession = this.updateCurrentSession.bind(this);
     this.renameCurrentSession = this.renameCurrentSession.bind(this);
     this.tick = this.tick.bind(this);
-    this.showMoreRows = this.showMoreRows.bind(this);
     this.applyStatsRange = this.applyStatsRange.bind(this);
 
     this.state = {
       timeDisplay: this.getTimeDisplay(),
-      listCount: DEFAULT_SESSION_TABLE_ROW_COUNT,
-      statsRangeStart: new Date(new Date() - 7 * 24 * 60 * 60 * 1000),
-      statsRangeEnd: new Date(),
+      statsRangeStart: roundDays(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+      statsRangeEnd: roundDays(new Date(), 1),
     };
 
     this.clockRefreshIntervalID = 0;
@@ -147,10 +187,6 @@ export default class Page_WorkingTime extends React.Component {
       return;
     }
     this.setState({ statsRangeStart: start, statsRangeEnd: end });
-  }
-
-  showMoreRows(amount) {
-    this.setState({ listCount: this.state.listCount + amount });
   }
 
   async createSession() {
@@ -239,68 +275,6 @@ export default class Page_WorkingTime extends React.Component {
       sessions.sort((a, b) => {
         return new Date(b.time_start) - new Date(a.time_start);
       });
-
-      if (sessions.length === 0) {
-        rows = (
-          <tr>
-            <td colSpan="3">Noch keine Zeiten erfasst.</td>
-          </tr>
-        );
-      } else {
-
-        let mapper = (session) => {
-          return (
-            <WorkSessionTableRow
-              session={session}
-              key={session.id}
-              team={this.props.selectedTeam}
-            />
-          );
-        };
-
-        let canShowMore = sessions.length > this.state.listCount;
-        let canShowLess = this.state.listCount > DEFAULT_SESSION_TABLE_ROW_COUNT;
-
-        if (canShowMore) {
-          rows = sessions.slice(0, this.state.listCount).map(mapper);
-        } else {
-          rows = sessions.map(mapper);
-        }
-
-        if (canShowMore || canShowLess) {
-          rows.push(
-            <tr key="more-less" id="worksessions-show-moreless">
-              <td colSpan="5">
-                {canShowMore ? (
-                  <a
-                    href="#worksessions-show-moreless"
-                    onClick={() =>
-                      this.showMoreRows(SESSION_TABLE_SHOW_MORE_INTERVAL)
-                    }
-                    className="me-2"
-                  >
-                    Mehr anzeigen
-                  </a>
-                ) : (
-                  null
-                )}
-                {canShowLess ? (
-                  <a
-                    href="#worksessions-show-moreless"
-                    onClick={() =>
-                      this.showMoreRows(-SESSION_TABLE_SHOW_MORE_INTERVAL)
-                    }
-                  >
-                    Weniger anzeigen
-                  </a>
-                ) : (
-                  null
-                )}
-              </td>
-            </tr>
-          );
-        }
-      }
     }
 
     return (
@@ -368,7 +342,7 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.DashboardRow>
           <Dashboard.DashboardRow>
             <Dashboard.DashboardColumn>
-              <Dashboard.DashboardTile title="Statistikeinstellungen">
+              <Dashboard.DashboardTile title="Filter">
                 <div className="row m-2 g-2">
                   <div className="input-group col-12 p-0 m-0">
                     <div className="input-group-text" style={{minWidth: "4em"}}>Von</div>
@@ -378,9 +352,7 @@ export default class Page_WorkingTime extends React.Component {
                       id="stats-range-start"
                       required
                       min="2022-01-01T00:00"
-                      defaultValue={localInputFormat(
-                        new Date() - 7 * 24 * 60 * 60 * 1000
-                      )}
+                      defaultValue={localInputFormat(this.state.statsRangeStart)}
                     />
                   </div>
                   <div className="input-group col-12 p-0">
@@ -391,7 +363,7 @@ export default class Page_WorkingTime extends React.Component {
                       id="stats-range-end"
                       required
                       min="2022-01-01T00:00"
-                      defaultValue={localInputFormat(new Date())}
+                      defaultValue={localInputFormat(this.state.statsRangeEnd)}
                     />
                   </div>
                   <button
@@ -406,7 +378,7 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.DashboardRow>
         </Dashboard.DashboardColumn>
         <Dashboard.DashboardColumn sizes={{ lg: 9 }}>
-          <Dashboard.DashboardTile title="Statistiken">
+          <Dashboard.DashboardTile title="Statistiken" help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird.">
             <WorkingTimeStats
               sessions={sessions}
               start={this.state.statsRangeStart}
@@ -416,20 +388,11 @@ export default class Page_WorkingTime extends React.Component {
         </Dashboard.DashboardColumn>
 
         <Dashboard.DashboardColumn>
-          <Dashboard.DashboardTile title="Erfasste Zeiten">
-            <table className="table table-borderless align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>Start &amp; Ende</th>
-                  <th>Dauer</th>
-                  <th>Notiz</th>
-                  <th style={{ width: "1px" }}></th>
-                  <th style={{ width: "1px" }}></th>
-                  <th className="debug-only">ID</th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </table>
+          <Dashboard.DashboardTile title="Erfasste Zeiten" help="Erfasste Zeiten im ausgewählten Zeitraum.">
+            <SessionTable
+              sessions={sessions}
+              selectedTeam={this.props.selectedTeam}
+            />
           </Dashboard.DashboardTile>
         </Dashboard.DashboardColumn>
       </Dashboard.Dashboard>
