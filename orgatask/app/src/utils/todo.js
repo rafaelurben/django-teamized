@@ -24,7 +24,7 @@ export async function createToDoList(teamId, name, description, color) {
 
 export async function createToDoListPopup(team) {
     return (await Swal.fire({
-        title: `ToDo-Liste erstellen`,
+        title: `To-do-Liste erstellen`,
         html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Name:</label>
@@ -73,7 +73,7 @@ export async function editToDoList(teamId, todolistId, name, description, color)
 
 export async function editToDoListPopup(team, todolist) {
     return (await Swal.fire({
-        title: `ToDo-Liste bearbeiten`,
+        title: `To-do-Lis­te bearbeiten`,
         html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Name:</label>
@@ -118,7 +118,7 @@ export async function deleteToDoList(teamId, todolistId) {
 
 export async function deleteToDoListPopup(team, todolist) {
     await doubleConfirmAlert(
-        "Willst du folgende ToDo-Liste wirklich löschen?<br /><br />" +
+        "Willst du folgende To-do-Lis­te wirklich löschen?<br /><br />" +
         `<b>Name:</b> ${todolist.name} <br /><b>Beschreibung: </b>${todolist.description}`,
         async () => await deleteToDoList(team.id, todolist.id)
     );

@@ -98,7 +98,7 @@ class ListView extends React.Component {
     if (!this.props.selectedList) {
       return (
         <p className="ms-1 mb-0">
-          Im ausgewählten Team ist noch keine ToDo-Liste vorhanden.{" "}
+          Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{" "}
           {this.props.isAdmin ? (
             <TooltipIcon
               key="admin"
@@ -301,7 +301,7 @@ class ListInfo extends React.Component {
     if (todolist === undefined) {
       return (
         <p className="ms-1 mb-0">
-          Im ausgewählten Team ist noch keine ToDo-Liste vorhanden.{" "}
+          Im ausgewählten Team ist noch keine To-do-Lis­te vorhanden.{" "}
           {this.props.isAdmin ? (
             <TooltipIcon key="admin" title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></TooltipIcon>
           ) : (
@@ -423,13 +423,13 @@ export default class Page_ToDo extends React.Component {
 
     return (
       <Dashboard.Page
-        title="ToDo [Beta]"
+        title="To-do-Listen [Beta]"
         subtitle="Behalte den Überblick über die Aufgaben deines Teams"
       >
         <Dashboard.Column sizes={{ lg: 4 }}>
           <Dashboard.Tile
-            title="ToDo-Listen"
-            help="Wechsle zwischen den ToDo-Listen deines Teams oder erstelle eine neue."
+            title="To-do-Lis­ten"
+            help="Wechsle zwischen den To-do-Lis­ten deines Teams oder erstelle eine neue."
           >
             <ListSelector
               team={this.props.team}
@@ -451,7 +451,7 @@ export default class Page_ToDo extends React.Component {
           </Dashboard.Tile>
         </Dashboard.Column>
         <Dashboard.Column sizes={{ lg: 8 }}>
-          <Dashboard.Tile title="ToDo-Liste">
+          <Dashboard.Tile title="To-do-Lis­te">
             <ListView
               team={this.props.team}
               selectedListId={this.state.selectedListId}

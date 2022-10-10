@@ -820,8 +820,8 @@ class ToDoList(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _("ToDo-Liste")
-        verbose_name_plural = _("ToDo-Listen")
+        verbose_name = _("To-do-Liste")
+        verbose_name_plural = _("To-do-Listen")
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
@@ -884,8 +884,8 @@ class ToDoListItem(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _("ToDo-Listeneintrag")
-        verbose_name_plural = _("ToDo-Listeneinträge")
+        verbose_name = _("To-do-Lis­teneintrag")
+        verbose_name_plural = _("To-do-Lis­teneinträge")
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"

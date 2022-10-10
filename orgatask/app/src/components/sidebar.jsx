@@ -105,7 +105,7 @@ export default class AppSidebar extends React.Component {
               onClick={this.selectPage("todo")}
             >
               <i className="fas fa-fw fa-tasks" />
-              ToDo
+              To-do-Listen
             </a>
           </li>
           {adminPages}

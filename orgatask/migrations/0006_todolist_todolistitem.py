@@ -42,8 +42,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "ToDo-Liste",
-                "verbose_name_plural": "ToDo-Listen",
+                "verbose_name": "To-do-Liste",
+                "verbose_name_plural": "To-do-Listen",
             },
         ),
         migrations.CreateModel(
@@ -92,8 +92,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "ToDo-Listeneintrag",
-                "verbose_name_plural": "ToDo-Listeneinträge",
+                "verbose_name": "To-do-Listeneintrag",
+                "verbose_name_plural": "To-do-Listeneinträge",
             },
         ),
     ]

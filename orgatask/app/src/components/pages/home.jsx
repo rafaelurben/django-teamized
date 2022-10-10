@@ -78,7 +78,7 @@ export default class Page_Home extends React.Component {
                 <b>11. September 2022</b>
               </h6>
               <ul className="small">
-                <li>ToDo-Listen sind nun in der Beta</li>
+                <li>To-do-Listen sind nun in der Beta</li>
                 <li>Diverse Fehlerbehebungen</li>
               </ul>
               <h6>

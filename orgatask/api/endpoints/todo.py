@@ -40,8 +40,8 @@ def endpoint_todolists(request, team: Team):
             "id": todolist.uid,
             "todolist": todolist.as_dict(),
             "alert": {
-                "title": _("ToDo-Liste erstellt"),
-                "text": _("Die ToDo-Liste wurde erfolgreich erstellt."),
+                "title": _("To-do-Liste erstellt"),
+                "text": _("Die To-do-Liste wurde erfolgreich erstellt."),
             }
         })
 
@@ -79,8 +79,8 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
             "id": todolist.uid,
             "todolist": todolist.as_dict(),
             "alert": {
-                "title": _("ToDo-Liste geändert"),
-                "text": _("Die ToDo-Liste wurde erfolgreich geändert."),
+                "title": _("To-do-Lis­te geändert"),
+                "text": _("Die To-do-Lis­te wurde erfolgreich geändert."),
             }
         })
     if request.method == "DELETE":
@@ -91,8 +91,8 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
         return JsonResponse({
             "success": True,
             "alert": {
-                "title": _("ToDo-Liste gelöscht"),
-                "text": _("Die ToDo-Liste wurde erfolgreich gelöscht."),
+                "title": _("To-do-Lis­te gelöscht"),
+                "text": _("Die To-do-Lis­te wurde erfolgreich gelöscht."),
             }
         })
 
