@@ -185,7 +185,8 @@ class ListSelectorRow extends React.Component {
       borderLeftColor: this.props.todolist.color,
       borderLeftStyle: "solid",
       cursor: "pointer",
-      opacity: this.props.isSelected ? 0.75 : 1,
+      opacity: this.props.isSelected ? 1 : 0.75,
+      fontWeight: this.props.isSelected ? "bold" : "normal",
     };
   }
 
@@ -196,7 +197,7 @@ class ListSelectorRow extends React.Component {
         style={this.getStyle()}
         onClick={this.handleSelect}
       >
-        <b className="d-inline-block w-100">{this.props.todolist.name}</b>
+        <span className="d-inline-block w-100">{this.props.todolist.name}</span>
       </div>
     );
   }
