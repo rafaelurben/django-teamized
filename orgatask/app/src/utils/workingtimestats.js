@@ -2,20 +2,24 @@ import { isInRange, roundDays, getDateString } from './calendars.js';
 
 export function filterByDateRange(sessions, start, end) {
     let result = sessions.filter(session => {
-        return isInRange(new Date(session.time_start), start, end) || isInRange(new Date(session.time_end), start, end);
+        return isInRange(new Date(session.time_start), start, end) && isInRange(new Date(session.time_end), start, end);
     });
     return result;
 }
 
 export function chartDataByDays(sessions, start, end) {
     const days = {};
-    for (let i = -1; i <= ((end - start) / (1000 * 3600 * 24)) + 1; i++) {
-        let day = roundDays(start, i);
+    var i = 0;
+    while (true) {
+        let day = roundDays(start, i++);
         days[day] = {
             name: getDateString(day),
             duration_s: 0,
             duration_h: "0",
         };
+        if (day >= roundDays(end)) {
+            break;
+        }
     }
     sessions.forEach(session => {
         const day = roundDays(new Date(session.time_start));
