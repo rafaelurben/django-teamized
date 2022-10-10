@@ -25,14 +25,15 @@ export async function createToDoList(teamId, name, description, color) {
 export async function createToDoListPopup(team) {
     return (await Swal.fire({
         title: `ToDo-Liste erstellen`,
-        html:
-            `<p>Team: ${team.name}</p><hr />` +
-            '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Listenname">' +
-            '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Listenbeschreibung"></textarea>' +
-            '<label class="swal2-input-label" for="swal-input-color">Farbe:</label>' +
-            '<input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">',
+        html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="Listenname">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="Listenbeschreibung"></textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">
+        `,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Erstellen",
@@ -73,14 +74,15 @@ export async function editToDoList(teamId, todolistId, name, description, color)
 export async function editToDoListPopup(team, todolist) {
     return (await Swal.fire({
         title: `ToDo-Liste bearbeiten`,
-        html:
-            `<p>Team: ${team.name}</p><hr />` +
-            '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${todolist.name}" value="${todolist.name}">` +
-            '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${todolist.description}">${todolist.description}</textarea>` +
-            '<label class="swal2-input-label" for="swal-input-color">Farbe:</label>' +
-            `<input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${todolist.color}">`,
+        html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${todolist.name}" value="${todolist.name}">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${todolist.description}">${todolist.description}</textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${todolist.color}">
+        `,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Speichern",
@@ -154,16 +156,17 @@ export async function editToDoListItem(teamId, todolistId, itemId, name, descrip
 export async function editToDoListItemPopup(team, todolist, item) {
     return (await Swal.fire({
         title: `Listeneintrag bearbeiten`,
-        html:
-            `<p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />` +
-            '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${item.name}" value="${item.name}">` +
-            '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea><hr />` +
-            `<label for="swal-input-done" class="swal2-checkbox d-flex">` +
-                `<input type="checkbox" value="0" id="swal-input-done" ${item.done ? "checked" : ""}>` +
-                `<span class="swal2-label">Erledigt</span>` +
-            `</label>`,
+        html: `
+            <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${item.name}" value="${item.name}">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea><hr />
+            <label for="swal-input-done" class="swal2-checkbox d-flex">
+                <input type="checkbox" value="0" id="swal-input-done" ${item.done ? "checked" : ""}>
+                <span class="swal2-label">Erledigt</span>
+            </label>
+        `,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Speichern",

@@ -75,11 +75,12 @@ export async function createTeam(name, description) {
 export async function createTeamPopup() {
   return (await Swal.fire({
     title: "Team erstellen",
-    html:
-      '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-      '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">' +
-      '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-      '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>',
+    html: `
+      <label class="swal2-input-label mt-0" for="swal-input-name">Name:</label>
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">
+      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>
+    `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",
@@ -122,12 +123,13 @@ export async function editTeam(teamId, name, description) {
 export async function editTeamPopup(team) {
   return (await Swal.fire({
     title: "Team bearbeiten",
-    html:
-      `<p>Team: ${team.name}</p><hr />` +
-      '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-      `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">` +
-      '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-      `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>`,
+    html: `
+      <p>Team: ${team.name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-name">Name:</label>
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">
+      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>
+    `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Aktualisieren",
@@ -266,14 +268,15 @@ export async function createInvite(teamId, note, uses_left, valid_until) {
 export async function createInvitePopup(team) {
   return (await Swal.fire({
     title: `Einladung erstellen`,
-    html:
-      `<p>Team: ${team.name}</p><hr />` +	
-      '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
-      '<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>' +
-      '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
-      '<input type="number" id="swal-input-uses_left" class="swal2-input" value="1">' +
-      '<label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>' +
-      '<input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">',
+    html: `
+      <p>Team: ${team.name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
+      <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>
+      <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
+      <input type="number" id="swal-input-uses_left" class="swal2-input" value="1">
+      <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
+      <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">
+    `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Erstellen",
@@ -311,14 +314,15 @@ export async function editInvite(teamId, inviteId, note, uses_left, valid_until)
 export async function editInvitePopup(team, invite) {
   return (await Swal.fire({
     title: "Einladung bearbeiten",
-    html:
-      `<p>Team: ${team.name}</p><hr />` +
-      '<label class="swal2-input-label" for="swal-input-note">Notizen:</label>' +
-      `<textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>` +
-      '<label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>' +
-      `<input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">` +
-      '<label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>' +
-      `<input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">`,
+    html: `
+      <p>Team: ${team.name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
+      <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>
+      <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
+      <input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">
+      <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
+      <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">
+    `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Aktualisieren",

@@ -66,14 +66,15 @@ export async function createCalendar(teamId, name, description, color) {
 export async function createCalendarPopup(team) {
     return (await Swal.fire({
         title: `Kalender erstellen`,
-        html:
-            `<p>Team: ${team.name}</p><hr />` +
-            '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Kalendername">' +
-            '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Kalenderbeschreibung"></textarea>' +
-            '<label class="swal2-input-label" for="swal-input-color">Farbe:</label>' +
-            '<input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">',
+        html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="Kalendername">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="Kalenderbeschreibung"></textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">
+        `,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Erstellen",
@@ -113,14 +114,15 @@ export async function editCalendar(teamId, calendarId, name, description, color)
 export async function editCalendarPopup(team, calendar) {
     return (await Swal.fire({
         title: `Kalender bearbeiten`,
-        html:
-            `<p>Team: ${team.name}</p><hr />` +
-            '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-            `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">` +
-            '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-            `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>`+
-            '<label class="swal2-input-label" for="swal-input-color">Farbe:</label>' +
-            `<input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${calendar.color}">`,
+        html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${calendar.color}">
+        `,
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: "Speichern",
@@ -203,28 +205,29 @@ export function createEventPopup(team, date) {
         let _d = localInputFormat(date, true);
         Swal.fire({
             title: `Ereignis erstellen`,
-            html:
-                `<p>Team: ${team.name}</p><hr />` +
-                '<label class="swal2-input-label" for="swal-input-calendar">Kalender:</label>' +
-                '<select id="swal-input-calendar" class="swal2-input swal2-select"></select><hr />' +
-                '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-                '<input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">' +
-                '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-                '<textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>' +
-                '<label class="swal2-input-label" for="swal-input-location">Ort:</label>' +
-                '<input type="text" id="swal-input-location" class="swal2-input" placeholder="Ort">' + 
-                `<label for="swal-input-fullday" class="swal2-checkbox d-flex">` + 
-                    `<input type="checkbox" value="0" id="swal-input-fullday">` +
-                    `<span class="swal2-label">Ganztägig</span>` + 
-                `</label><hr />` +
-                '<label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>' +
-                `<input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${_d}">` +
-                '<label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>' +
-                `<input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${_d}">` +
-                '<label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>' +
-                `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${_dt}">` +
-                '<label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>' +
-                `<input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${_dt}">`,
+            html: `
+                <p>Team: ${team.name}</p><hr />
+                <label class="swal2-input-label" for="swal-input-calendar">Kalender:</label>
+                <select id="swal-input-calendar" class="swal2-input swal2-select"></select><hr />
+                <label class="swal2-input-label" for="swal-input-name">Name:</label>
+                <input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">
+                <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+                <textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>
+                <label class="swal2-input-label" for="swal-input-location">Ort:</label>
+                <input type="text" id="swal-input-location" class="swal2-input" placeholder="Ort">
+                <label for="swal-input-fullday" class="swal2-checkbox d-flex">
+                    <input type="checkbox" value="0" id="swal-input-fullday">
+                    <span class="swal2-label">Ganztägig</span>
+                </label><hr />
+                <label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>
+                <input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${_d}">
+                <label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>
+                <input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${_d}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>
+                <input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${_dt}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>
+                <input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${_dt}">
+            `,
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: "Erstellen",
@@ -315,27 +318,28 @@ export function editEventPopup(team, calendar, event, makeCopy = false) {
 
         Swal.fire({
             title: makeCopy ? "Ereignis kopieren" : "Ereignis bearbeiten",
-            html:
-                `<p>Team: ${team.name}</p>` +
-                `<p>Kalendar: ${calendar.name}</p><hr />` +
-                '<label class="swal2-input-label" for="swal-input-name">Name:</label>' +
-                `<input type="text" id="swal-input-name" class="swal2-input" placeholder="${event.name}" value="${event.name}">` +
-                '<label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>' +
-                `<textarea id="swal-input-description" class="swal2-textarea" placeholder="${event.description}">${event.description}</textarea>` +
-                '<label class="swal2-input-label" for="swal-input-location">Ort:</label>' +
-                `<input type="text" id="swal-input-location" class="swal2-input" placeholder="${event.location}" value="${event.location}">` +
-                `<label for="swal-input-fullday" class="swal2-checkbox d-flex">` +
-                `<input type="checkbox" ${event.fullday ? "checked" : ""} id="swal-input-fullday">` +
-                `<span class="swal2-label">Ganztägig</span>` +
-                `</label><hr />` +
-                '<label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>' +
-                `<input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${dstart}">` +
-                '<label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>' +
-                `<input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${dend}">` +
-                '<label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>' +
-                `<input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${dtstart}">` +
-                '<label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>' +
-                `<input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">`,
+            html: `
+                <p>Team: ${team.name}</p>
+                <p>Kalender: ${calendar.name}</p><hr />
+                <label class="swal2-input-label" for="swal-input-name">Name:</label>
+                <input type="text" id="swal-input-name" class="swal2-input" placeholder="${event.name}" value="${event.name}">
+                <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+                <textarea id="swal-input-description" class="swal2-textarea" placeholder="${event.description}">${event.description}</textarea>
+                <label class="swal2-input-label" for="swal-input-location">Ort:</label>
+                <input type="text" id="swal-input-location" class="swal2-input" placeholder="${event.location}" value="${event.location}">
+                <label for="swal-input-fullday" class="swal2-checkbox d-flex">
+                    <input type="checkbox" ${event.fullday ? "checked" : ""} id="swal-input-fullday">
+                    <span class="swal2-label">Ganztägig</span>
+                </label><hr />
+                <label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>
+                <input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${dstart}">
+                <label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>
+                <input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${dend}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>
+                <input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${dtstart}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>
+                <input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">
+            `,
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: makeCopy ? "Kopie erstellen" : "Speichern",
