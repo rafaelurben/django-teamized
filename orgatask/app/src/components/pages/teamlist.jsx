@@ -139,12 +139,12 @@ export default class Page_TeamList extends React.Component {
     const prefilledInviteToken = new URL(window.location.href).searchParams.get("invite", "");
 
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="Deine Teams"
         subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei"
       >
-        <Dashboard.DashboardColumn>
-          <Dashboard.DashboardTile title="Teamübersicht">
+        <Dashboard.Column>
+          <Dashboard.Tile title="Teamübersicht">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
@@ -158,9 +158,9 @@ export default class Page_TeamList extends React.Component {
               </thead>
               <tbody>{rows}</tbody>
             </table>
-          </Dashboard.DashboardTile>
+          </Dashboard.Tile>
 
-          <Dashboard.DashboardTile title="Team erstellen oder beitreten">
+          <Dashboard.Tile title="Team erstellen oder beitreten">
             <p className="mx-1">Klicke auf "Team erstellen", um ein neues Team zu erstellen oder gib einen Einladungstoken ein und klicke auf "Team beitreten", um einem Team beizutreten.</p>
             <div className="input-group my-2 px-1">
               <button
@@ -185,9 +185,9 @@ export default class Page_TeamList extends React.Component {
                 Team beitreten
               </button>
             </div>
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+          </Dashboard.Tile>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }

@@ -3,10 +3,10 @@
 import { TooltipIcon } from "./tooltips.js";
 
 /*
-    This component is made to be reused. It represents a part of the dashboard.
+    These components create the basic dashboard layout (and style).
 */
 
-export class Dashboard extends React.Component {
+export class Page extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -43,7 +43,7 @@ export class Dashboard extends React.Component {
   }
 }
 
-export class DashboardColumn extends React.Component {
+export class Column extends React.Component {
   constructor(props) {
     super(props);
 
@@ -65,7 +65,7 @@ export class DashboardColumn extends React.Component {
   }
 }
 
-export class DashboardRow extends React.Component {
+export class Row extends React.Component {
   constructor(props) {
     super(props);
 
@@ -81,7 +81,7 @@ export class DashboardRow extends React.Component {
   }
 }
 
-export class DashboardTile extends React.Component {
+export class Tile extends React.Component {
   constructor(props) {
     super(props);
   }

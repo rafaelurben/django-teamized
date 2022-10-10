@@ -18,12 +18,12 @@ export default class Page_Home extends React.Component {
 
   render() {
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="Startseite"
         subtitle={`Hallo ${this.props.user.first_name}`}
       >
-        <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
-          <Dashboard.DashboardTile title="Willkommen">
+        <Dashboard.Column sizes={{ lg: 8 }}>
+          <Dashboard.Tile title="Willkommen">
             <p className="ms-1 mb-1">
               <span>Verwende die Menuleiste (rechts) und die Seitenleiste (links), um zu navigieren.</span>
               <span className="d-md-none" aria-hidden="true">
@@ -34,8 +34,8 @@ export default class Page_Home extends React.Component {
                 DEBUG
               </a>
             </p>
-          </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Einstellungen">
+          </Dashboard.Tile>
+          <Dashboard.Tile title="Einstellungen">
             <div className="mb-2 ms-1">
                 <label htmlFor="appearance" className="form-label">Erscheinungsbild</label>
                 <div className="btn-group form-control px-2" role="group">
@@ -51,10 +51,10 @@ export default class Page_Home extends React.Component {
                 <div className="form-text">Bei "Automatisch" wird das Erscheinungsbild automatisch dem des Systems oder Browsers angepasst.</div>
             </div>
 
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
-          <Dashboard.DashboardTile title="Neuste Updates" help="Neue Funktionen, Bugfixes und Änderungen">
+          </Dashboard.Tile>
+        </Dashboard.Column>
+        <Dashboard.Column sizes={{ lg: 4 }}>
+          <Dashboard.Tile title="Neuste Updates" help="Neue Funktionen, Bugfixes und Änderungen">
             <div className="ms-1 mt-1">
               <h6>
                 <b>10. Oktober 2022</b>
@@ -96,9 +96,9 @@ export default class Page_Home extends React.Component {
                 <li>Kalender-Features sind nun aus der Beta</li>
               </ul>
             </div>
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+          </Dashboard.Tile>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }

@@ -276,17 +276,17 @@ export default class Page_WorkingTime extends React.Component {
     }
 
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="Deine Arbeitszeit [Beta]"
         subtitle="Erfasse und verwalte deine Arbeitszeit"
       >
-        <Dashboard.DashboardColumn sizes={{ lg: 3 }}>
-          <Dashboard.DashboardRow>
-            <Dashboard.DashboardColumn
+        <Dashboard.Column sizes={{ lg: 3 }}>
+          <Dashboard.Row>
+            <Dashboard.Column
               size="12"
               sizes={{ lg: 12, sm: 6, md: 6 }}
             >
-              <Dashboard.DashboardTile title="Sitzung aufzeichnen">
+              <Dashboard.Tile title="Sitzung aufzeichnen">
                 <h1 className="text-center">{this.state.timeDisplay}</h1>
 
                 <div className="text-center">
@@ -316,13 +316,13 @@ export default class Page_WorkingTime extends React.Component {
                     </div>
                   )}
                 </div>
-              </Dashboard.DashboardTile>
-            </Dashboard.DashboardColumn>
-            <Dashboard.DashboardColumn
+              </Dashboard.Tile>
+            </Dashboard.Column>
+            <Dashboard.Column
               size="12"
               sizes={{ lg: 12, sm: 6, md: 6 }}
             >
-              <Dashboard.DashboardTile title="Sitzung erfassen">
+              <Dashboard.Tile title="Sitzung erfassen">
                 <p className="ms-1">
                   Aufzeichnung vergessen? Kein Problem. Hier können Sitzungen
                   nachträglich manuell erfasst werden.
@@ -335,12 +335,12 @@ export default class Page_WorkingTime extends React.Component {
                     Sitzung hinzufügen
                   </button>
                 </div>
-              </Dashboard.DashboardTile>
-            </Dashboard.DashboardColumn>
-          </Dashboard.DashboardRow>
-          <Dashboard.DashboardRow>
-            <Dashboard.DashboardColumn>
-              <Dashboard.DashboardTile title="Filter">
+              </Dashboard.Tile>
+            </Dashboard.Column>
+          </Dashboard.Row>
+          <Dashboard.Row>
+            <Dashboard.Column>
+              <Dashboard.Tile title="Filter">
                 <div className="row m-2 g-2">
                   <div className="input-group col-12 p-0 m-0">
                     <div className="input-group-text" style={{minWidth: "4em"}}>Von</div>
@@ -371,29 +371,29 @@ export default class Page_WorkingTime extends React.Component {
                     Anwenden
                   </button>
                 </div>
-              </Dashboard.DashboardTile>
-            </Dashboard.DashboardColumn>
-          </Dashboard.DashboardRow>
-        </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{ lg: 9 }}>
-          <Dashboard.DashboardTile title="Statistiken" help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird.">
+              </Dashboard.Tile>
+            </Dashboard.Column>
+          </Dashboard.Row>
+        </Dashboard.Column>
+        <Dashboard.Column sizes={{ lg: 9 }}>
+          <Dashboard.Tile title="Statistiken" help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird.">
             <WorkingTimeStats
               sessions={sessions}
               start={this.state.statsRangeStart}
               end={this.state.statsRangeEnd}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
+          </Dashboard.Tile>
+        </Dashboard.Column>
 
-        <Dashboard.DashboardColumn>
-          <Dashboard.DashboardTile title="Erfasste Zeiten" help="Erfasste Zeiten im ausgewählten Zeitraum.">
+        <Dashboard.Column>
+          <Dashboard.Tile title="Erfasste Zeiten" help="Erfasste Zeiten im ausgewählten Zeitraum.">
             <SessionTable
               sessions={sessions}
               selectedTeam={this.props.selectedTeam}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+          </Dashboard.Tile>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }

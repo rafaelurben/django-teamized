@@ -331,18 +331,18 @@ export default class Page_Team extends React.Component {
     }
 
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="Dein Team"
         subtitle="Infos über dein ausgewähltes Team"
       >
-        <Dashboard.DashboardColumn>
-          <Dashboard.DashboardTile title="Teaminfos">
+        <Dashboard.Column>
+          <Dashboard.Tile title="Teaminfos">
             <table className="table table-borderless mb-0">
               <tbody>{inforows}</tbody>
             </table>
-          </Dashboard.DashboardTile>
+          </Dashboard.Tile>
 
-          <Dashboard.DashboardTile title="Mitglieder">
+          <Dashboard.Tile title="Mitglieder">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
@@ -357,10 +357,10 @@ export default class Page_Team extends React.Component {
               </thead>
               <tbody>{memberrows}</tbody>
             </table>
-          </Dashboard.DashboardTile>
+          </Dashboard.Tile>
 
           {this.props.team.member.role === "owner" ? (
-            <Dashboard.DashboardTile title="Einladungen">
+            <Dashboard.Tile title="Einladungen">
               <table className="table table-borderless align-middle mb-0">
                 <thead>
                   <tr>
@@ -388,12 +388,12 @@ export default class Page_Team extends React.Component {
                   </tr>
                 </tbody>
               </table>
-            </Dashboard.DashboardTile>
+            </Dashboard.Tile>
           ) : (
             null
           )}
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }

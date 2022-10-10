@@ -422,12 +422,12 @@ export default class Page_ToDo extends React.Component {
     let selectedList = Cache.getCurrentTeamData().todolists[this.state.selectedListId];
 
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="ToDo [Beta]"
         subtitle="Behalte den Überblick über die Aufgaben deines Teams"
       >
-        <Dashboard.DashboardColumn sizes={{ lg: 4 }}>
-          <Dashboard.DashboardTile
+        <Dashboard.Column sizes={{ lg: 4 }}>
+          <Dashboard.Tile
             title="ToDo-Listen"
             help="Wechsle zwischen den ToDo-Listen deines Teams oder erstelle eine neue."
           >
@@ -439,8 +439,8 @@ export default class Page_ToDo extends React.Component {
               onListSelect={this.handleListSelect.bind(this)}
               isAdmin={this.props.isAdmin}
             />
-          </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Listendetails">
+          </Dashboard.Tile>
+          <Dashboard.Tile title="Listendetails">
             <ListInfo
               team={this.props.team}
               selectedListId={this.state.selectedListId}
@@ -448,19 +448,19 @@ export default class Page_ToDo extends React.Component {
               onListSelect={this.handleListSelect.bind(this)}
               isAdmin={this.props.isAdmin}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{ lg: 8 }}>
-          <Dashboard.DashboardTile title="ToDo-Liste">
+          </Dashboard.Tile>
+        </Dashboard.Column>
+        <Dashboard.Column sizes={{ lg: 8 }}>
+          <Dashboard.Tile title="ToDo-Liste">
             <ListView
               team={this.props.team}
               selectedListId={this.state.selectedListId}
               selectedList={selectedList}
               isAdmin={this.props.isAdmin}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+          </Dashboard.Tile>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }

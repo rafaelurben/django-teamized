@@ -717,12 +717,12 @@ export default class Page_Calendars extends React.Component {
     let selectedCalendar = Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
 
     return (
-      <Dashboard.Dashboard
+      <Dashboard.Page
         title="Kalender"
         subtitle="Kalender für dich und dein Team"
       >
-        <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile
+        <Dashboard.Column sizes={{ lg: 6 }}>
+          <Dashboard.Tile
             title="Ereignisübersicht"
             help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
           >
@@ -732,17 +732,17 @@ export default class Page_Calendars extends React.Component {
               selectedDate={this.state.selectedDate}
               events={Object.values(this.events)}
             />
-          </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile title="Ausgewähltes Ereignis" help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen.">
+          </Dashboard.Tile>
+          <Dashboard.Tile title="Ausgewähltes Ereignis" help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen.">
             {/* Selected event */}
             <CalendarEventDisplay
               event={this.events[this.state.selectedEventId]}
               team={this.props.team}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-        <Dashboard.DashboardColumn sizes={{ lg: 6 }}>
-          <Dashboard.DashboardTile title={"Ereignisse am " + dayDisplay} help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">
+          </Dashboard.Tile>
+        </Dashboard.Column>
+        <Dashboard.Column sizes={{ lg: 6 }}>
+          <Dashboard.Tile title={"Ereignisse am " + dayDisplay} help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">
             {/* Events from the selected day & Create new event button */}
             <CalendarEventPicker
               onEventSelect={this.handleEventSelect}
@@ -756,8 +756,8 @@ export default class Page_Calendars extends React.Component {
               team={this.props.team}
               isAdmin={this.props.isAdmin}
             />
-          </Dashboard.DashboardTile>
-          <Dashboard.DashboardTile
+          </Dashboard.Tile>
+          <Dashboard.Tile
             title="Kalenderinfos"
             help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
           >
@@ -770,9 +770,9 @@ export default class Page_Calendars extends React.Component {
               selectedCalendar={selectedCalendar}
               isAdmin={this.props.isAdmin}
             />
-          </Dashboard.DashboardTile>
-        </Dashboard.DashboardColumn>
-      </Dashboard.Dashboard>
+          </Dashboard.Tile>
+        </Dashboard.Column>
+      </Dashboard.Page>
     );
   }
 }
