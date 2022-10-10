@@ -170,3 +170,40 @@ export async function stopTrackingSession() {
         }
     );
 }
+
+// Rename session without the date options/text
+
+export async function renameWorkSession(teamId, sessionId, note) {
+    return await API.POST(`teams/${teamId}/me/worksessions/${sessionId}`, {
+        note
+    }).then(
+        async (data) => {
+            requestSuccessAlert(data);
+            if (data.session.id in Cache.getCurrentTeamData().me_worksessions) {
+                Cache.getCurrentTeamData().me_worksessions[data.session.id] = data.session;
+            }
+            if (window.appdata.current_worksession && window.appdata.current_worksession.id === data.session.id) {
+                window.appdata.current_worksession = data.session;
+            }
+            return data.session;
+        }
+    )
+}
+
+export async function renameWorkSessionPopup(team, session) {
+    return (await Swal.fire({
+        title: `Sitzung umbenennen`,
+        html:
+            `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Speichern",
+        cancelButtonText: "Abbrechen",
+        preConfirm: async () => {
+            const note = document.getElementById("swal-input-note").value;
+
+            Swal.showLoading();
+            return await renameWorkSession(team.id, session.id, note);
+        },
+    })).value;
+}

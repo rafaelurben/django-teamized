@@ -168,6 +168,7 @@ export default class Page_WorkingTime extends React.Component {
     this.startSession = this.startSession.bind(this);
     this.stopSession = this.stopSession.bind(this);
     this.updateCurrentSession = this.updateCurrentSession.bind(this);
+    this.renameCurrentSession = this.renameCurrentSession.bind(this);
     this.tick = this.tick.bind(this);
     this.showMoreRows = this.showMoreRows.bind(this);
 
@@ -210,6 +211,11 @@ export default class Page_WorkingTime extends React.Component {
       }).catch(errorAlert);
       this.stop_in_progress = false;
     }
+  }
+
+  async renameCurrentSession() {
+    await WorkingTime.renameWorkSessionPopup(this.props.selectedTeam, this.props.current_worksession);
+    Navigation.renderPage();
   }
 
   async updateCurrentSession() {
@@ -342,13 +348,20 @@ export default class Page_WorkingTime extends React.Component {
 
                 <div className="text-center">
                   {this.props.current_worksession ? (
-                    <button className="btn btn-danger" onClick={this.stopSession}>
-                      Aufzeichnung beenden
-                    </button>
+                    <div className="row m-2 g-2">
+                      <button className="btn btn-danger col" onClick={this.stopSession}>
+                        Aufzeichnung&nbsp;beenden
+                      </button>
+                      <button className="btn btn-outline-dark col" onClick={this.renameCurrentSession}>
+                        Aufzeichnung&nbsp;benennen
+                      </button>
+                    </div>
                   ) : (
-                    <button className="btn btn-success" onClick={this.startSession}>
-                      Aufzeichnung starten
-                    </button>
+                    <div className="row m-2">
+                      <button className="btn btn-success col" onClick={this.startSession}>
+                        Aufzeichnung&nbsp;starten
+                      </button>
+                    </div>
                   )}
                 </div>
               </Dashboard.DashboardTile>
@@ -356,8 +369,8 @@ export default class Page_WorkingTime extends React.Component {
             <Dashboard.DashboardColumn size="12" sizes={{ lg: 12, sm: 6, md: 6 }}>
               <Dashboard.DashboardTile title="Sitzung erfassen">
                 <p className="ms-1">Aufzeichnung vergessen? Kein Problem. Hier können Sitzungen nachträglich manuell erfasst werden.</p>
-                <div className="text-center">
-                  <button className="btn btn-outline-success" onClick={this.createSession}>
+                <div className="row m-2">
+                  <button className="btn btn-outline-success col" onClick={this.createSession}>
                     Sitzung hinzufügen
                   </button>
                 </div>
