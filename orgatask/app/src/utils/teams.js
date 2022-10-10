@@ -1,11 +1,11 @@
 import { requestSuccessAlert, confirmAlert, infoAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
+import { isoFormat, localInputFormat } from "./datetime.js";
 import * as Navigation from "./navigation.js";
 import * as Cache from "./cache.js";
 import * as Utils from "./utils.js";
 
-import { isoFormat, localInputFormat } from "./calendars.js";
-export { getTeamsList, getCurrentTeamData as getCurrentTeam } from "./cache.js";
+export { getTeamsList } from "./cache.js";
 
 export function isCurrentTeamAdmin() {
     const teamdata = Cache.getCurrentTeamData();

@@ -1,14 +1,15 @@
 import * as Alerts from "./utils/alerts.js";
 import * as API from "./utils/api.js";
 import * as Cache from "./utils/cache.js";
+import * as Calendars from "./utils/calendars.js";
+import * as DateTime from "./utils/datetime.js";
 import * as Navigation from "./utils/navigation.js";
-import * as Teams from "./utils/teams.js";
-import * as Utils from "./utils/utils.js";
 import * as Settings from "./utils/settings.js";
+import * as Teams from "./utils/teams.js";
+import * as ToDo from "./utils/todo.js";
+import * as Utils from "./utils/utils.js";
 import * as WorkingTime from "./utils/workingtime.js";
 import * as WorkingTimeStats from "./utils/workingtimestats.js";
-import * as Calendars from "./utils/calendars.js";
-import * as ToDo from "./utils/todo.js";
 
 // Make namespaces available in the console (for debugging)
 
@@ -17,6 +18,7 @@ window._App = {
   API,
   Cache,
   Calendars,
+  DateTime,
   Navigation,
   Settings,
   Teams,

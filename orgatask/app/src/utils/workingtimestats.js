@@ -1,4 +1,4 @@
-import { isInRange, roundDays, getDateString } from './calendars.js';
+import { isInRange, roundDays, getDateString } from './datetime.js';
 
 export function filterByDateRange(sessions, start, end) {
     let result = sessions.filter(session => {

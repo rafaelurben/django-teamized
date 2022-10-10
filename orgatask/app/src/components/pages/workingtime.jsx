@@ -1,15 +1,13 @@
 "use strict";
 
-import { ms2HoursMinutesSeconds, seconds2HoursMinutesSeconds } from "../../utils/utils.js";
 import { errorAlert } from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
-import { localInputFormat } from "../../utils/calendars.js";
 import * as Dashboard from "../dashboard.js";
 import { TooltipIcon } from "../tooltips.js";
 import * as Stats from "../../utils/workingtimestats.js";
-import { roundDays } from "../../utils/calendars.js";
+import { roundDays, localInputFormat, ms2HoursMinutesSeconds, seconds2HoursMinutesSeconds } from "../../utils/datetime.js";
 
 class WorkSessionTableRow extends React.Component {
   constructor(props) {

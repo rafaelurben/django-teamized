@@ -1,7 +1,6 @@
 "use strict";
 
-import { validateUUID } from "../../utils/utils.js";
-import { errorAlert, waitingAlert } from "../../utils/alerts.js";
+import { waitingAlert } from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";

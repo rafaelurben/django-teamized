@@ -2,7 +2,7 @@ import { successAlert, waitingAlert, requestSuccessAlert, confirmAlert } from ".
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
-import { isoFormat, localInputFormat } from "./calendars.js";
+import { isoFormat, localInputFormat } from "./datetime.js";
 
 export async function getMyWorkSessionsInTeam(teamId) {
     return await Cache.refreshTeamCacheCategory(teamId, "me_worksessions");
