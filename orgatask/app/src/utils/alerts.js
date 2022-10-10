@@ -1,6 +1,6 @@
 // Request reactions
 
-export function requestErrorAlert(request) {
+export function ajaxRequestErrorAlert(request) {
     console.debug("Error: " + request.status + " " + request.statusText, request);
     let jsondata;
     let alertdata;
