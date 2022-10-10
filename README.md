@@ -1,6 +1,6 @@
 # django-orgatask
 
-This project is part of my matura paper.
+This project is part of my [matura paper](https://rafaelurben.ch/maturaarbeit/).
 
 Time coding: [![wakatime](https://wakatime.com/badge/user/c61e21c4-90ec-4953-b64f-e1a589f1e09c/project/ccc28ce1-c6f3-41d5-9d0d-61ced0dba37b.svg?style=flat)](https://wakatime.com/@rafaelurben/projects/bvjthjmhzy)
 
@@ -27,3 +27,4 @@ Note: The account management pages are part of my [django-account](https://githu
 - [Bootstrap](https://getbootstrap.com/) (basic styling)
 - [FontAwesome](https://fontawesome.com/) (icons)
 - [SweetAlert2](https://sweetalert2.github.io/) (alerts & forms)
+- [Recharts](http://recharts.org/) (charts)
