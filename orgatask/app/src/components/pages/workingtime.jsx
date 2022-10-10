@@ -138,7 +138,7 @@ class WorkingTimeStats extends React.Component {
           <span className="text-muted">Gesamtdauer: {totalHours.toFixed(2)}h</span>
         </div>
       </div>,
-      <Recharts.ResponsiveContainer width="100%" height={550} key="chart">
+      <Recharts.ResponsiveContainer width="100%" minHeight={400} height="90%" key="chart">
         <Recharts.BarChart data={data} margin={{ top: 30, right: 20, left: 0, bottom: 5 }}>
           <Recharts.CartesianGrid strokeDasharray="3 3" />
           <Recharts.XAxis dataKey="name" />
@@ -286,7 +286,7 @@ export default class Page_WorkingTime extends React.Component {
               size="12"
               sizes={{ lg: 12, sm: 6, md: 6 }}
             >
-              <Dashboard.Tile title="Sitzung aufzeichnen">
+              <Dashboard.Tile title="Sitzung aufzeichnen" grow>
                 <h1 className="text-center">{this.state.timeDisplay}</h1>
 
                 <div className="text-center">
@@ -322,7 +322,7 @@ export default class Page_WorkingTime extends React.Component {
               size="12"
               sizes={{ lg: 12, sm: 6, md: 6 }}
             >
-              <Dashboard.Tile title="Sitzung erfassen">
+              <Dashboard.Tile title="Sitzung erfassen" grow>
                 <p className="ms-1">
                   Aufzeichnung vergessen? Kein Problem. Hier können Sitzungen
                   nachträglich manuell erfasst werden.
@@ -376,7 +376,11 @@ export default class Page_WorkingTime extends React.Component {
           </Dashboard.Row>
         </Dashboard.Column>
         <Dashboard.Column sizes={{ lg: 9 }}>
-          <Dashboard.Tile title="Statistiken" help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird.">
+          <Dashboard.Tile
+            title="Statistiken"
+            help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird."
+            grow
+          >
             <WorkingTimeStats
               sessions={sessions}
               start={this.state.statsRangeStart}

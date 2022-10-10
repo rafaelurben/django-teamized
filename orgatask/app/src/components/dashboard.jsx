@@ -50,15 +50,21 @@ export class Column extends React.Component {
     let size = props.size || 12;
     let sizes = props.sizes || {};
 
-    this.colClass = `dashboard-column col-${size}`;
+    this.className = `dashboard-column d-flex flex-column col-${size}`;
     for (let breakpoint of Object.keys(sizes)) {
-      this.colClass += ` col-${breakpoint}-${sizes[breakpoint]}`;
+      this.className += ` col-${breakpoint}-${sizes[breakpoint]}`;
+    }
+    if (this.props.hasOwnProperty("grow")) {
+      this.className += " flex-grow-1";
+    }
+    if (this.props.hasOwnProperty("className")) {
+      this.className += ` ${this.props.className}`;
     }
   }
 
   render() {
     return (
-      <div className={this.colClass}>
+      <div className={this.className}>
         {this.props.children}
       </div>
     );
@@ -69,12 +75,18 @@ export class Row extends React.Component {
   constructor(props) {
     super(props);
 
-    this.rowClass = `dashboard-row row w-100 g-0`;
+    this.className = `dashboard-row row w-100 g-0`;
+    if (this.props.hasOwnProperty("grow")) {
+      this.className += " flex-grow-1";
+    }
+    if (this.props.hasOwnProperty("className")) {
+      this.className += ` ${this.props.className}`;
+    }
   }
 
   render() {
     return (
-      <div className={this.rowClass}>
+      <div className={this.className}>
         {this.props.children}
       </div>
     );
@@ -91,7 +103,7 @@ export class Tile extends React.Component {
 
     if (this.props.hasOwnProperty("title")) {
       header.push(
-        <h5 key="title" className="dashboard-tile-title pt-2 text-bold">
+        <h5 key="title" className="dashboard-tile-title pt-2 text-bold"  style={{flexBasis: 0}}>
           {this.props.title}
           {this.props.help ? <TooltipIcon className="ms-2 small" title={this.props.help} /> : null}
         </h5>
@@ -103,10 +115,18 @@ export class Tile extends React.Component {
       );
     }
 
+    this.className = "dashboard-tile row border border-dark rounded rounded-5 mx-2 mb-3 mt-0 flex-column";
+    if (this.props.hasOwnProperty("grow")) {
+      this.className += " flex-grow-1";
+    }
+    if (this.props.hasOwnProperty("className")) {
+      this.className += ` ${this.props.className}`;
+    }
+
     return (
-      <div className="dashboard-tile row border border-dark rounded rounded-5 mx-2 mb-3 mt-0">
+      <div className={this.className}>
         {header}
-        <div className="p-2 w-100 overflow-auto">
+        <div className="p-2 w-100 overflow-auto flex-grow-1">
           {this.props.children}
         </div>
       </div>
