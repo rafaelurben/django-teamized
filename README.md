@@ -1,4 +1,4 @@
-# django-orgatask
+# django-teamized
 
 This project is part of my [matura paper](https://rafaelurben.ch/maturaarbeit/).
 

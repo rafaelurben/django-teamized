@@ -1,0 +1,19 @@
+{
+  "name": "teamized-reactapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx babel src --out-dir ../static/teamized/app --presets @babel/preset-react,minify --no-comments",
+    "build-live": "npx babel --watch src --out-dir ../static/teamized/app --presets @babel/preset-react"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/preset-react": "^7.16.7",
+    "babel-preset-minify": "^0.5.2"
+  }
+}
