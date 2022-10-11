@@ -102,7 +102,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="members",
-                        to="orgatask.team",
+                        to="teamized.team",
                     ),
                 ),
                 (
@@ -110,7 +110,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="member_instances",
-                        to="orgatask.user",
+                        to="teamized.user",
                     ),
                 ),
             ],
@@ -146,7 +146,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="invites",
-                        to="orgatask.team",
+                        to="teamized.team",
                     ),
                 ),
             ],
@@ -228,7 +228,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="work_sessions",
-                        to="orgatask.member",
+                        to="teamized.member",
                     ),
                 ),
                 (
@@ -237,7 +237,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="work_sessions",
-                        to="orgatask.team",
+                        to="teamized.team",
                     ),
                 ),
                 (
@@ -246,7 +246,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="work_sessions",
-                        to="orgatask.user",
+                        to="teamized.user",
                     ),
                 ),
             ],
@@ -277,7 +277,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="calendars",
-                        to="orgatask.team",
+                        to="teamized.team",
                     ),
                 ),
                 (
@@ -317,7 +317,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="events",
-                        to="orgatask.calendar",
+                        to="teamized.calendar",
                     ),
                 ),
                 ("location", models.CharField(blank=True, default="", max_length=250)),
@@ -353,7 +353,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="todolists",
-                        to="orgatask.team",
+                        to="teamized.team",
                     ),
                 ),
             ],
@@ -387,7 +387,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="+",
-                        to="orgatask.user",
+                        to="teamized.user",
                     ),
                 ),
                 (
@@ -396,7 +396,7 @@ class Migration(migrations.Migration):
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
                         related_name="+",
-                        to="orgatask.user",
+                        to="teamized.user",
                     ),
                 ),
                 (
@@ -404,7 +404,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="items",
-                        to="orgatask.todolist",
+                        to="teamized.todolist",
                     ),
                 ),
             ],
