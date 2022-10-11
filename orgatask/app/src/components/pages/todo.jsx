@@ -5,7 +5,7 @@ import * as Dashboard from "../dashboard.js";
 import * as ToDo from "../../utils/todo.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Cache from "../../utils/cache.js";
-import { TooltipIcon, Tooltip } from "../tooltips.js";
+import { IconTooltip, Tooltip } from "../tooltips.js";
 
 class ListViewItem extends React.Component {
   constructor(props) {
@@ -100,15 +100,15 @@ class ListView extends React.Component {
         <p className="ms-1 mb-0">
           Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{" "}
           {this.props.isAdmin ? (
-            <TooltipIcon
+            <IconTooltip
               key="admin"
               title='Du kannst mit den "Liste erstellen"-Knopf eine neue Liste erstellen.'
-            ></TooltipIcon>
+            ></IconTooltip>
           ) : (
-            <TooltipIcon
+            <IconTooltip
               key="noadmin"
               title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."
-            ></TooltipIcon>
+            ></IconTooltip>
           )}
         </p>
       );
@@ -303,9 +303,9 @@ class ListInfo extends React.Component {
         <p className="ms-1 mb-0">
           Im ausgewählten Team ist noch keine To-do-Lis­te vorhanden.{" "}
           {this.props.isAdmin ? (
-            <TooltipIcon key="admin" title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></TooltipIcon>
+            <IconTooltip key="admin" title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
           ) : (
-            <TooltipIcon key="noadmin" title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></TooltipIcon>
+            <IconTooltip key="noadmin" title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></IconTooltip>
           )}
         </p>
       );

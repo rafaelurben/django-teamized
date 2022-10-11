@@ -5,7 +5,7 @@ import * as Cache from "../../utils/cache.js";
 import * as Navigation from "../../utils/navigation.js";
 
 import * as Dashboard from "../dashboard.js";
-import { TooltipIcon, Tooltip } from "../tooltips.js";
+import { IconTooltip, Tooltip } from "../tooltips.js";
 
 const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
@@ -316,9 +316,9 @@ class CalendarEventPicker extends React.Component {
         <p className="ms-1 mb-0" key="empty">
           Im ausgewählten Team ist noch kein Kalender vorhanden.{" "}
           {this.props.isAdmin ? (
-            <TooltipIcon title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></TooltipIcon>
+            <IconTooltip title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></IconTooltip>
           ) : (
-            <TooltipIcon title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></TooltipIcon>
+            <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
           )}
         </p>
       );

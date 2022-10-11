@@ -5,7 +5,7 @@ import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
 import * as Dashboard from "../dashboard.js";
-import { TooltipIcon } from "../tooltips.js";
+import { IconTooltip } from "../tooltips.js";
 import * as Stats from "../../utils/workingtimestats.js";
 import { roundDays, localInputFormat, ms2HoursMinutesSeconds, seconds2HoursMinutesSeconds } from "../../utils/datetime.js";
 
@@ -41,9 +41,9 @@ class WorkSessionTableRow extends React.Component {
             <br />
             {new Date(this.props.session.time_end).toLocaleString()}
             {this.props.session.is_created_via_tracking ? (
-              <TooltipIcon icon="fas fa-stopwatch" title="Diese Sitzung wurde via Aufzeichnung erstellt." className="ms-1"></TooltipIcon>
+              <IconTooltip icon="fas fa-stopwatch" title="Diese Sitzung wurde via Aufzeichnung erstellt." className="ms-1"></IconTooltip>
             ) : (
-              <TooltipIcon icon="fas fa-pencil" title="Diese Sitzung wurde manuell erfasst." className="ms-1"></TooltipIcon>
+              <IconTooltip icon="fas fa-pencil" title="Diese Sitzung wurde manuell erfasst." className="ms-1"></IconTooltip>
             )}
           </span>
         </td>

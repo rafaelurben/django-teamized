@@ -22,7 +22,7 @@ export class Tooltip extends React.Component {
   }
 }
 
-export class TooltipIcon extends React.Component {
+export class IconTooltip extends React.Component {
   constructor(props) {
     super(props);
     this.icon = this.props.icon || "fas fa-info-circle";

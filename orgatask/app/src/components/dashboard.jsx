@@ -1,6 +1,6 @@
 "use strict";
 
-import { TooltipIcon } from "./tooltips.js";
+import { IconTooltip } from "./tooltips.js";
 
 /*
     These components create the basic dashboard layout (and style).
@@ -105,7 +105,7 @@ export class Tile extends React.Component {
       header.push(
         <h5 key="title" className="dashboard-tile-title pt-2 text-bold"  style={{flexBasis: 0}}>
           {this.props.title}
-          {this.props.help ? <TooltipIcon className="ms-2 small" title={this.props.help} /> : null}
+          {this.props.help ? <IconTooltip className="ms-2 small" title={this.props.help} /> : null}
         </h5>
       );
     }

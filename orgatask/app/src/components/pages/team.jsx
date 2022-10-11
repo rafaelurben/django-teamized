@@ -5,7 +5,7 @@ import * as Cache from "../../utils/cache.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
-import { TooltipIcon } from "../tooltips.js";
+import { IconTooltip } from "../tooltips.js";
 
 
 class TeamMembersTableRow extends React.Component {
@@ -346,7 +346,7 @@ export default class Page_Team extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th width="32px" className="text-center"><TooltipIcon title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" /></th>
+                  <th width="32px" className="text-center"><IconTooltip title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" /></th>
                   <th>Name</th>
                   <th>Benutzername &amp; E-Mail</th>
                   <th>Rolle</th>
@@ -365,9 +365,9 @@ export default class Page_Team extends React.Component {
                 <thead>
                   <tr>
                     <th>Notiz</th>
-                    <th style={{ minWidth: "5.5rem" }}>Teilen <TooltipIcon title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
+                    <th style={{ minWidth: "5.5rem" }}>Teilen <IconTooltip title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
                     <th style={{ minWidth: "6rem" }}>Gültig bis</th>
-                    <th style={{ minWidth: "10rem" }}>Verwendungen <TooltipIcon title="Bereits verwendet / noch verfügbar" /></th>
+                    <th style={{ minWidth: "10rem" }}>Verwendungen <IconTooltip title="Bereits verwendet / noch verfügbar" /></th>
                     <th style={{width: "1px"}}></th>
                     <th style={{width: "1px"}}></th>
                     <th className="debug-only">ID</th>
