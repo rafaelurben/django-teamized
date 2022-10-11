@@ -382,7 +382,7 @@ export default class Page_WorkingTime extends React.Component {
         <Dashboard.Column sizes={{ lg: 9 }}>
           <Dashboard.Tile
             title="Statistiken"
-            help="Statistiken für den ausgewählten Zeitraum. Der Startzeitpunkt einer Sitzung bestimmt den Tag, zu der sie gezählt wird."
+            help="Statistiken für den ausgewählten Zeitraum."
             grow
           >
             <WorkingTimeStats
