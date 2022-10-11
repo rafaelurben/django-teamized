@@ -1,4 +1,4 @@
-"""Endpoints for the OrgaTask API"""
+"""Endpoints for the API"""
 
 from django.views.decorators.csrf import csrf_exempt
 

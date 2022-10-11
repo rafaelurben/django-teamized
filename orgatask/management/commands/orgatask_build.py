@@ -1,5 +1,5 @@
 """
-Run the OrgaTask app build
+Run the app build
 
 Note: This is a management command, so it can be run with the command
 "python manage.py orgatask_build" from the project root directory.

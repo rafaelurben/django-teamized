@@ -1,4 +1,4 @@
-"""OrgaTask API models"""
+"""API models"""
 
 import uuid
 

@@ -1,10 +1,8 @@
-"OrgaTask views - the logic behind endpoints"
+"""Views - the logic behind endpoints"""
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.utils.translation import gettext as _
 
 from orgatask.decorators import orgatask_prep
 from orgatask.models import Calendar

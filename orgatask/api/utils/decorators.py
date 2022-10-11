@@ -1,4 +1,4 @@
-"""OrgaTask API decorators"""
+"""API decorators"""
 
 import uuid
 

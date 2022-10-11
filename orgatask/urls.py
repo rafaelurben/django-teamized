@@ -1,4 +1,4 @@
-"OrgaTask URLs"
+"""Generic URL patterns"""
 
 from django.urls import path, include
 
@@ -9,16 +9,20 @@ from . import views
 app_name = 'orgatask'
 
 urlpatterns = [
-    # generic views
+    # Home page (public)
     path('',
          views.home,
          name="home"),
+
+    # App pages (login required)
     path('app/',
          views.app,
          name="app"),
     path('app/debug',
          views.app_debug,
          name="app-debug"),
+
+    # PWA manifest (public)
     path('manifest.json',
          views.manifest,
          name="manifest"),
@@ -26,7 +30,7 @@ urlpatterns = [
     path('api/',
          include('orgatask.api.urls')),
 
-    # public URLs
+    # Calendar .ics file (public, but must know uuid token)
 
     path('calendar/<uuid:uuid>.ics',
          views.calendar_ics,

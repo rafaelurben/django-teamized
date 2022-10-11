@@ -1,4 +1,4 @@
-"""OrgaTask API admin views"""
+"""API admin views"""
 
 from django.contrib import admin
 

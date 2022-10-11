@@ -26,7 +26,10 @@ def orgatask_prep():
             if not request.user.is_authenticated:
                 return render(request, 'orgatask/404.html', status=404)
 
-            # Create a new OrgaTask.User if the current Auth.User doesn't have one.
+            # Create a new custom User if the current Auth.User doesn't have one.
+            # Note: Auth users are created automatically by Django when a user logs in
+            #       Because we need to store additional data, we need to create a custom User
+            #       object for each Auth.User (that is linked to the Auth.User via a foreign key)
 
             if getattr(request.user, 'orgatask_user', None) is None:
                 models.User.objects.create(auth_user=request.user)
