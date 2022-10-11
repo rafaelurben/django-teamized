@@ -15,6 +15,7 @@ export async function getProfile() {
 // Settings
 
 function applySettings(settings) {
+    window.appdata.settings = settings;
     // Color scheme ('darkmode')
     if (settings.darkmode === true) {
         setColorScheme('dark');
@@ -27,12 +28,13 @@ function applySettings(settings) {
             setColorScheme('light');
         }
     }
+    // Rerender the page to apply the changes
+    Navigation.render();
 }
 
 export async function getSettings() {
     return await API.GET('settings').then(
         (data) => {
-            window.appdata.settings = data.settings;
             applySettings(data.settings);
             return data.settings;
         }
@@ -43,14 +45,11 @@ export async function editSettings(settings) {
     // Apply new settings
     let newsettings = { ...window.appdata.settings, ...settings };
     applySettings(newsettings);
-    window.appdata.settings = newsettings;
-    Navigation.render();
     // Save new settings on server
     return await API.POST('settings', settings).then(
         (data) => {
             // Reapply settings if the server changed them
             if (data.settings !== newsettings) {
-                window.appdata.settings = data.settings;
                 applySettings(data.settings);
             }
             return data.settings;
