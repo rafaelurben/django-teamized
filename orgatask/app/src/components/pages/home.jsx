@@ -57,6 +57,12 @@ export default class Page_Home extends React.Component {
           <Dashboard.Tile title="Neuste Updates" help="Neue Funktionen, Bugfixes und Änderungen">
             <div className="ms-1 mt-1">
               <h6>
+                <b>11. Oktober 2022</b>
+              </h6>
+              <ul className="small">
+                <li>Diverse Fehlerbehebungen</li>
+              </ul>
+              <h6>
                 <b>10. Oktober 2022</b>
               </h6>
               <ul className="small">
