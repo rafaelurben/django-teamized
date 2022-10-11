@@ -451,7 +451,7 @@ export default class Page_ToDo extends React.Component {
           </Dashboard.Tile>
         </Dashboard.Column>
         <Dashboard.Column sizes={{ lg: 8 }}>
-          <Dashboard.Tile title="To-do-Lis­te">
+          <Dashboard.Tile title={selectedList ? "To-do-Lis­te: " + selectedList.name : "To-do-Lis­te"}>
             <ListView
               team={this.props.team}
               selectedListId={this.state.selectedListId}
