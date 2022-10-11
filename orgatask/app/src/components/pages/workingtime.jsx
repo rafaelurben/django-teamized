@@ -180,6 +180,10 @@ export default class Page_WorkingTime extends React.Component {
   applyStatsRange() {
     let start = new Date(document.getElementById("stats-range-start").value);
     let end = new Date(document.getElementById("stats-range-end").value);
+    if (isNaN(start.valueOf()) || isNaN(end.valueOf())) {
+      errorAlert("Ungültiges Datum!");
+      return;
+    }
     if (start > end) {
       errorAlert("Das Startdatum muss vor dem Enddatum liegen.");
       return;
