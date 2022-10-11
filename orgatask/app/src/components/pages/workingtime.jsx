@@ -300,13 +300,13 @@ export default class Page_WorkingTime extends React.Component {
                         className="btn btn-danger col-12"
                         onClick={this.stopSession}
                       >
-                        Aufzeichnung&nbsp;beenden
+                        Aufzeichnung beenden
                       </button>
                       <button
                         className="btn btn-outline-dark col-12"
                         onClick={this.renameCurrentSession}
                       >
-                        Aufzeichnung&nbsp;benennen
+                        Aufzeichnung benennen
                       </button>
                     </div>
                   ) : (
@@ -315,7 +315,7 @@ export default class Page_WorkingTime extends React.Component {
                         className="btn btn-success col-12"
                         onClick={this.startSession}
                       >
-                        Aufzeichnung&nbsp;starten
+                        Aufzeichnung starten
                       </button>
                     </div>
                   )}
