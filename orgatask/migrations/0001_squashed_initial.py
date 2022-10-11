@@ -36,6 +36,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Team",
                 "verbose_name_plural": "Teams",
+                "db_table": "orgatask_team",
             },
         ),
         migrations.CreateModel(
@@ -66,6 +67,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Benutzer",
                 "verbose_name_plural": "Benutzer",
+                "db_table": "orgatask_user",
             },
         ),
         migrations.CreateModel(
@@ -115,6 +117,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Mitglied",
                 "verbose_name_plural": "Mitglieder",
+                "db_table": "orgatask_member",
             },
         ),
         migrations.CreateModel(
@@ -150,6 +153,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Einladung",
                 "verbose_name_plural": "Einladungen",
+                "db_table": "orgatask_invite",
             },
         ),
         migrations.CreateModel(
@@ -198,6 +202,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "API key",
                 "verbose_name_plural": "API keys",
+                "db_table": "orgatask_apikey",
             },
         ),
         migrations.CreateModel(
@@ -248,6 +253,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Sitzung",
                 "verbose_name_plural": "Sitzungen",
+                "db_table": "orgatask_worksession",
             },
         ),
         migrations.CreateModel(
@@ -282,6 +288,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Kalender",
                 "verbose_name_plural": "Kalender",
+                "db_table": "orgatask_calendar",
             },
         ),
         migrations.CreateModel(
@@ -318,6 +325,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "Ereignis",
                 "verbose_name_plural": "Ereignisse",
+                "db_table": "orgatask_calendarevent",
             },
         ),
         migrations.CreateModel(
@@ -352,6 +360,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "To-do-Liste",
                 "verbose_name_plural": "To-do-Listen",
+                "db_table": "orgatask_todolist",
             },
         ),
         migrations.CreateModel(
@@ -402,6 +411,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "To-do-Listeneintrag",
                 "verbose_name_plural": "To-do-Listeneinträge",
+                "db_table": "orgatask_todolistitem",
             },
         ),
     ]

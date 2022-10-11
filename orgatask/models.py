@@ -47,6 +47,7 @@ class User(models.Model):
     class Meta:
         verbose_name = _("Benutzer")
         verbose_name_plural = _("Benutzer")
+        db_table = "orgatask_user"
 
     def as_dict(self) -> dict:
         return {
@@ -153,6 +154,7 @@ class Team(models.Model):
     class Meta:
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
+        db_table = "orgatask_team"
 
     def as_dict(self, member=None) -> dict:
         data = {
@@ -246,6 +248,7 @@ class Member(models.Model):
     class Meta:
         verbose_name = _("Mitglied")
         verbose_name_plural = _("Mitglieder")
+        db_table = "orgatask_member"
 
     def as_dict(self) -> dict:
         return {
@@ -308,6 +311,7 @@ class Invite(models.Model):
     class Meta:
         verbose_name = _("Einladung")
         verbose_name_plural = _("Einladungen")
+        db_table = "orgatask_invite"
 
     def as_dict(self) -> dict:
         return {
@@ -439,6 +443,7 @@ class WorkSession(models.Model):
     class Meta:
         verbose_name = _("Sitzung")
         verbose_name_plural = _("Sitzungen")
+        db_table = "orgatask_worksession"
 
     def as_dict(self) -> dict:
         return {
@@ -542,6 +547,7 @@ class Calendar(models.Model):
     class Meta:
         verbose_name = _("Kalender")
         verbose_name_plural = _("Kalender")
+        db_table = "orgatask_calendar"
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
@@ -677,6 +683,7 @@ class CalendarEvent(models.Model):
     class Meta:
         verbose_name = _("Ereignis")
         verbose_name_plural = _("Ereignisse")
+        db_table = "orgatask_calendarevent"
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
@@ -822,6 +829,7 @@ class ToDoList(models.Model):
     class Meta:
         verbose_name = _("To-do-Liste")
         verbose_name_plural = _("To-do-Listen")
+        db_table = "orgatask_todolist"
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
@@ -886,6 +894,7 @@ class ToDoListItem(models.Model):
     class Meta:
         verbose_name = _("To-do-Listeneintrag")
         verbose_name_plural = _("To-do-Listeneinträge")
+        db_table = "orgatask_todolistitem"
 
     def __str__(self) -> str:
         return f"{self.name} ({self.uid})"
@@ -974,3 +983,4 @@ class ToDoListItem(models.Model):
 #     class Meta:
 #         verbose_name = _("Log")
 #         verbose_name_plural = _("Logs")
+#         db_table = "orgatask_teamlog"

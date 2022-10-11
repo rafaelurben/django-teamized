@@ -60,3 +60,4 @@ class ApiKey(models.Model):
     class Meta:
         verbose_name = "API key"
         verbose_name_plural = "API keys"
+        db_table = "orgatask_apikey"
