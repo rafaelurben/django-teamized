@@ -9,15 +9,6 @@ import uuid
 
 class Migration(migrations.Migration):
 
-    replaces = [
-        ("orgatask", "0001_initial"),
-        ("orgatask", "0002_worksession"),
-        ("orgatask", "0003_calendar_calendarevent"),
-        ("orgatask", "0004_auto_20220608_2144"),
-        ("orgatask", "0005_user_settings_darkmode"),
-        ("orgatask", "0006_todolist_todolistitem"),
-    ]
-
     initial = True
 
     dependencies = [
