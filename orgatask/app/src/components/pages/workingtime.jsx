@@ -91,9 +91,9 @@ class SessionTable extends React.Component {
       <table className="table table-borderless align-middle mb-0">
         <thead>
           <tr>
-            <th>Start &amp; Ende</th>
-            <th>Dauer</th>
-            <th>Notiz</th>
+            <th style={{ minWidth: "12rem" }}>Start &amp; Ende</th>
+            <th style={{ minWidth: "8rem" }}>Dauer</th>
+            <th style={{ minWidth: "15rem" }}>Notiz</th>
             <th style={{ width: "1px" }}></th>
             <th style={{ width: "1px" }}></th>
             <th className="debug-only">ID</th>

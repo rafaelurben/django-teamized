@@ -148,11 +148,11 @@ export default class Page_TeamList extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th>Name &amp; Beschreibung</th>
+                  <th style={{ minWidth: "10rem" }}>Name &amp; Beschreibung</th>
                   <th>Deine Rolle</th>
-                  <th style={{width: "1px"}}></th>
-                  <th style={{width: "1px"}}></th>
-                  <th style={{width: "1px"}}></th>
+                  <th style={{ width: "1px" }}></th>
+                  <th style={{ width: "1px" }}></th>
+                  <th style={{ width: "1px" }}></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>

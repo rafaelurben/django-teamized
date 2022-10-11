@@ -365,9 +365,9 @@ export default class Page_Team extends React.Component {
                 <thead>
                   <tr>
                     <th>Notiz</th>
-                    <th>Teilen <TooltipIcon title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
-                    <th>Gültig bis</th>
-                    <th>Verwendungen <TooltipIcon title="Bereits verwendet / noch verfügbar" /></th>
+                    <th style={{ minWidth: "5.5rem" }}>Teilen <TooltipIcon title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
+                    <th style={{ minWidth: "6rem" }}>Gültig bis</th>
+                    <th style={{ minWidth: "10rem" }}>Verwendungen <TooltipIcon title="Bereits verwendet / noch verfügbar" /></th>
                     <th style={{width: "1px"}}></th>
                     <th style={{width: "1px"}}></th>
                     <th className="debug-only">ID</th>
