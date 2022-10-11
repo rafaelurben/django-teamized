@@ -134,7 +134,7 @@ class WorkingTimeStats extends React.Component {
     let totalHours = Stats.totalDuration(this.props.sessions) / 3600;
     return [
       <div className="row row-cols-lg-auto m-1 g-2 align-items-center" key="settings">
-        <div className="col-12">
+        <div className="col-12 mt-0">
           <span className="text-muted">Gesamtdauer: {totalHours.toFixed(2)}h</span>
         </div>
       </div>,
@@ -142,7 +142,7 @@ class WorkingTimeStats extends React.Component {
         <Recharts.BarChart data={data} margin={{ top: 30, right: 20, left: 0, bottom: 5 }}>
           <Recharts.CartesianGrid strokeDasharray="3 3" />
           <Recharts.XAxis dataKey="name" />
-          <Recharts.YAxis />
+          <Recharts.YAxis dataKey="duration_h" domain={[0, 'dataMax']} />
           <Recharts.Tooltip />
           <Recharts.Legend />
           <Recharts.Bar dataKey="duration_h" name="Dauer" unit="h" fill="#8884d8" />

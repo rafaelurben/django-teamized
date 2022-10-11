@@ -55,7 +55,8 @@ export function chartDataByDays(sessions, start, end) {
         days[day] = {
             name: getDateString(day),
             duration_s: 0,
-            duration_h: "0",
+            duration_h: 0,
+            duration_h_string: "0",
         };
         if (day >= roundDays(end)) {
             break;
@@ -68,7 +69,7 @@ export function chartDataByDays(sessions, start, end) {
     splitsessions.forEach(session => {
         const day = roundDays(new Date(session.time_start));
         days[day].duration_s += session.duration;
-        days[day].duration_h = (days[day].duration_s / 3600).toFixed(2);
+        days[day].duration_h = +(days[day].duration_s / 3600).toFixed(2);
     });
     return Object.values(days);
 }
