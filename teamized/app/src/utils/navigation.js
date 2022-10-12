@@ -69,12 +69,18 @@ export function importFromURL() {
 }
 
 export function toggleSidebar() {
-    document.getElementById('app-root').classList.toggle('sidebar-visible');
+    document.body.classList.toggle('sidebar-visible');
 }
 
 export function hideSidebarOnMobile() {
     if (window.innerWidth < 992) {
-        document.getElementById('app-root').classList.remove('sidebar-visible');
+        document.body.classList.remove('sidebar-visible');
+    }
+}
+
+export function showSidebarOnDesktop() {
+    if (window.innerWidth >= 992) {
+        document.body.classList.add('sidebar-visible');
     }
 }
 

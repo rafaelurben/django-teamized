@@ -16,9 +16,10 @@
 
 {% block menubartitle %}
     <!-- Sidebar trigger with menubar title -->
-    <a id="menubartitle" class="navbar-brand ms-1" href="#">
-        <i class="fas fa-fw fa-bars me-1"></i>
-        Teamized
+    <a id="menubartitle" class="navbar-brand ms-1 sidebar-toggle" href="#">
+        <i class="fa-fw fa-solid fa-square-caret-left when-open"></i>
+        <i class="fa-fw fa-solid fa-square-caret-right when-closed"></i>
+        <span class="ms-1">Teamized</span>
     </a>
 {% endblock menubartitle %}
 
@@ -78,7 +79,7 @@
 
 {% block contentcontainer %}
     <!-- Main content area (everything below the menubar) -->
-    <div id="app-root" class="d-flex sidebar-visible">
+    <div id="app-root" class="d-flex">
         <div id="app-sidebar">
             <!-- Filled by React -->
         </div>

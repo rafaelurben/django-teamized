@@ -24,7 +24,19 @@ body {
     position: relative
 }
 
-#app-root:not(.sidebar-visible) #app-sidebar {
+/* Sidebar */
+
+body:not(.sidebar-visible) #app-sidebar {
+    display: none;
+}
+
+/* Sidebar toggle */
+
+body:not(.sidebar-visible) .sidebar-toggle .when-open {
+    display: none;
+}
+
+body.sidebar-visible .sidebar-toggle .when-closed {
     display: none;
 }
 
@@ -36,11 +48,11 @@ body {
         padding-bottom: 0.3rem;
     }
 
-    #app-root.sidebar-visible #app-maincontent {
+    body.sidebar-visible #app-maincontent {
         display: none;
     }
 
-    #app-root.sidebar-visible #app-sidebar {
+    body.sidebar-visible #app-sidebar {
         width: 100vw;
     }
 }

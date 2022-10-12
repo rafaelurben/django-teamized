@@ -60,7 +60,7 @@ async function initialize() {
 
   startLoading();
 
-  Navigation.hideSidebarOnMobile();
+  Navigation.showSidebarOnDesktop();
   Navigation.importFromURL();
   Navigation.render();
 
