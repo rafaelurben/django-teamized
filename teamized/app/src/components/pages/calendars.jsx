@@ -96,20 +96,11 @@ class CalendarManager extends React.Component {
 
     let calendarPanelButtons = [];
     if (this.props.isAdmin) {
-      calendarPanelButtons.push(
-        <button
-          key="create"
-          className="btn btn-outline-success"
-          onClick={this.createCalendar}
-        >
-          Kalender erstellen
-        </button>
-      );
       if (calendar !== undefined) {
         calendarPanelButtons.push(
           <button
             key="edit"
-            className="btn btn-outline-dark mx-2"
+            className="btn btn-outline-dark"
             onClick={this.editCalendar}
           >
             Bearbeiten
@@ -125,6 +116,15 @@ class CalendarManager extends React.Component {
           </button>
         );
       }
+      calendarPanelButtons.push(
+        <button
+          key="create"
+          className="btn btn-outline-success"
+          onClick={this.createCalendar}
+        >
+          Kalender&nbsp;erstellen
+        </button>
+      );
     } else {
       calendarPanelButtons.push(
         <Tooltip key="noadmin" title="Diese Aktionen stehen nur Admins zur Verfügung">
@@ -181,7 +181,9 @@ class CalendarManager extends React.Component {
           </tbody>
         </table>
       ) : null,
-      calendarPanelButtons,
+      <div key="buttons" className="d-flex flex-wrap gap-2">
+        {calendarPanelButtons}
+      </div>,
     ];
   }
 }
@@ -605,27 +607,26 @@ class CalendarEventDisplay extends React.Component {
           </tr>
         </tbody>
       </table>,
-      <button
-        key="edit"
-        className="btn btn-outline-dark"
-        onClick={this.editEvent}
-      >
-        Bearbeiten
-      </button>,
-      <button
-        key="clone"
-        className="btn btn-outline-dark ms-2"
-        onClick={this.cloneEvent}
-      >
-        Duplizieren
-      </button>,
-      <button
-        key="delete"
-        className="btn btn-outline-danger ms-2"
-        onClick={this.deleteEvent}
-      >
-        Löschen
-      </button>,
+      <div key="buttons" className="d-flex flex-wrap gap-2">
+        <button
+          className="btn btn-outline-dark"
+          onClick={this.editEvent}
+        >
+          Bearbeiten
+        </button>
+        <button
+          className="btn btn-outline-dark"
+          onClick={this.cloneEvent}
+        >
+          Duplizieren
+        </button>
+        <button
+          className="btn btn-outline-danger"
+          onClick={this.deleteEvent}
+        >
+          Löschen
+        </button>
+      </div>,
     ];
   };
 }
