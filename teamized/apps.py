@@ -7,4 +7,4 @@ class DefaultConfig(AppConfig):
     default_auto_field = 'django.db.models.AutoField'
     name = 'teamized'
     label = 'teamized'
-    verbose_name = "TEAMized"
+    verbose_name = "Teamized"

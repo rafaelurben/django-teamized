@@ -44,5 +44,5 @@ msgid "Ausloggen"
 msgstr ""
 
 #: .\templates\teamized\home.html:7
-msgid "Willkommen bei TEAMized! Diese Seite ist in Arbeit."
+msgid "Willkommen bei Teamized! Diese Seite ist in Arbeit."
 msgstr ""

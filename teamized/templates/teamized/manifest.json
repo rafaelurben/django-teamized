@@ -1,6 +1,6 @@
 {
-    "name": "TEAMized",
-    "short_name": "TEAMized",
+    "name": "Teamized",
+    "short_name": "Teamized",
     "start_url": "{% url 'teamized:app' %}",
     "scope": "{% url 'teamized:home' %}",
     "display": "standalone",

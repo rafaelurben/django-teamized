@@ -44,8 +44,8 @@ msgid "Ausloggen"
 msgstr "Logout"
 
 #: .\templates\teamized\home.html:7
-msgid "Willkommen bei TEAMized! Diese Seite ist in Arbeit."
-msgstr "Welcome to TEAMized! This page is work in progress."
+msgid "Willkommen bei Teamized! Diese Seite ist in Arbeit."
+msgstr "Welcome to Teamized! This page is work in progress."
 
 #~ msgid "Passwort zurücksetzen"
 #~ msgstr "Reset password"

@@ -582,7 +582,7 @@ class Calendar(models.Model):
         calendarlines = [
             "BEGIN:VCALENDAR",
             "VERSION:2.0",
-            "PRODID:-//Rafael Urben//TEAMized Calendar//EN",
+            "PRODID:-//Rafael Urben//Teamized Calendar//EN",
             "CALSCALE:GREGORIAN",
             "METHOD:PUBLISH",
             "UID:" + str(self.ics_uid),

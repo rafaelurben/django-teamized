@@ -12,7 +12,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = ("Run the TEAMized app build")
+    help = ("Run the Teamized app build")
 
     def add_arguments(self, parser):
         parser.add_argument('--live', action='store_true',)
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         newcwd = os.path.join(folderpath, "app")
         os.chdir(newcwd)
 
-        self.stdout.write(self.style.SUCCESS("Building TEAMized app..."))
+        self.stdout.write(self.style.SUCCESS("Building Teamized app..."))
 
         try:
             if options["live"]:
@@ -38,4 +38,4 @@ class Command(BaseCommand):
 
         # Navigate back to the old working directory
         os.chdir(oldcwd)
-        self.stdout.write(self.style.SUCCESS("Finished building TEAMized app..."))
+        self.stdout.write(self.style.SUCCESS("Finished building Teamized app..."))
