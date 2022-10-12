@@ -41,7 +41,6 @@ function splitMultiDaySessions(sessions) {
             // Start and end are on the same day or was already split (no action needed)
             result.push(session);
         }
-        if (result.length > 10) break;
     }
     return result;
 }
