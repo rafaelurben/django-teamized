@@ -51,17 +51,18 @@ class CalendarManager extends React.Component {
 
     Swal.fire({
       title: "Kalender abonnieren",
-      html:
-        "Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:" +
-        "<hr><h5>1) Webcal-Link</h5>" +
-        "Auf allen Apple-Geräten sowie weiteren unterstützten Geräten kannst du Webcal-Links direkt in deiner Kalender-App öffnen. " +
-        "Bei manchen anderen Apps (z. B. Google Calendar) musst du den Link kopieren und manuell einfügen.<br>" +
-        `<br><a href="${webcalurl}" target="_blank" class="btn btn-outline-info">Webcal-URL</a><br>` +
-        "<hr><h5>2) HTTP-Link</h5>" +
-        "Falls dein Gerät oder deine App Webcal-Links nicht unterstützt, kannst du den Kalender auch über HTTP(S) abonnieren. " +
-        "Hierbei musst du aber aufpassen, dass du den Link nicht öffnest, sondern ihn kopierst und in deiner Kalender-App einfügst. " +
-        "Sonst wird nur der aktuelle Stand des Kalenders heruntergeladen, aber keine Änderungen mehr übertragen.<br>" +
-        `<br><a href="${httpurl}" target="_blank" class="btn btn-outline-info">HTTP(S)-URL</a><br>`,
+      html: `
+        Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
+        <hr><h5>1) Webcal-Link</h5>
+        Auf allen Apple-Geräten sowie weiteren unterstützten Geräten kannst du Webcal-Links direkt in deiner Kalender-App öffnen.
+        Bei manchen anderen Apps (z. B. Google Calendar) musst du den Link kopieren und manuell einfügen.<br>
+        <br><a href="${webcalurl}" target="_blank" class="btn btn-outline-info">Webcal-URL</a><br>
+        <hr><h5>2) HTTP-Link</h5>
+        Falls dein Gerät oder deine App Webcal-Links nicht unterstützt, kannst du den Kalender auch über HTTP(S) abonnieren.
+        Hierbei musst du aber aufpassen, dass du den Link nicht öffnest, sondern ihn kopierst und in deiner Kalender-App einfügst.
+        Sonst wird nur der aktuelle Stand des Kalenders heruntergeladen, aber keine Änderungen mehr übertragen.<br>
+        <br><a href="${httpurl}" target="_blank" class="btn btn-outline-info">HTTP(S)-URL</a><br>
+      `,
       showCancelButton: true,
       showConfirmButton: false,
       cancelButtonText: "Schliessen",
