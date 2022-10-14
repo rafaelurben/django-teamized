@@ -1,6 +1,6 @@
 """Generic URL patterns"""
 
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from . import views
 
@@ -37,6 +37,6 @@ urlpatterns = [
          name="calendar_ics"),
 
     # 404 error page
-    path('*', views.notfound),
+    re_path('.*', views.notfound),
 
 ]
