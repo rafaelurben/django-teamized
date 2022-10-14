@@ -281,7 +281,7 @@ export default class Page_WorkingTime extends React.Component {
 
     return (
       <Dashboard.Page
-        title="Deine Arbeitszeit [Beta]"
+        title="Deine Arbeitszeit"
         subtitle="Erfasse und verwalte deine Arbeitszeit"
       >
         <Dashboard.Column sizes={{ lg: 3 }}>
