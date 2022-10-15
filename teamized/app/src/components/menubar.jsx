@@ -47,9 +47,10 @@ export default class AppMenubar extends React.Component {
           <a
             className="nav-link mx-1 px-2"
             onClick={this.selectPage("teamlist")}
+            title="Zur Teamliste"
             href="#"
           >
-            <i className="fas fa-fw fa-list"></i>
+            <i className="fas fa-fw fa-user-group"></i>
           </a>
         </li>
 
@@ -58,7 +59,7 @@ export default class AppMenubar extends React.Component {
           id="teamswitcher"
           value={this.props.selectedTeamId || ""}
           className="form-select bg-dark text-white-50 border-dark"
-          aria-label="team selector"
+          title="Team auswählen"
           onInput={this.handleTeamSelect}
         >
           {teamlist}
@@ -69,9 +70,10 @@ export default class AppMenubar extends React.Component {
           <a
             className="nav-link mx-1 px-2"
             onClick={this.selectPage("team")}
+            title="Zur Teamseite"
             href="#"
           >
-            <i className="fas fa-fw fa-users"></i>
+            <i className="fas fa-fw fa-users-viewfinder"></i>
           </a>
         </li>
       </div>
