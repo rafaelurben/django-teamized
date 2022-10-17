@@ -158,9 +158,9 @@ export async function editToDoListItemPopup(team, todolist, item) {
         title: `Listeneintrag bearbeiten`,
         html: `
             <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <label class="swal2-input-label" for="swal-input-name">Titel:</label>
             <input type="text" id="swal-input-name" class="swal2-input" placeholder="${item.name}" value="${item.name}">
-            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <label class="swal2-input-label" for="swal-input-description">Zusätzliche Notiz:</label>
             <textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea><hr />
             <label for="swal-input-done" class="swal2-checkbox d-flex">
                 <input type="checkbox" value="0" id="swal-input-done" ${item.done ? "checked" : ""}>
@@ -179,7 +179,7 @@ export async function editToDoListItemPopup(team, todolist, item) {
             const done = document.getElementById("swal-input-done").checked;
 
             if (!name) {
-                Swal.showValidationMessage("Du musst einen Namen angeben");
+                Swal.showValidationMessage("Du musst einen Titel angeben!");
                 return false;
             }
 
