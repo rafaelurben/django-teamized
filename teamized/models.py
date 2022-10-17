@@ -628,7 +628,7 @@ class Calendar(models.Model):
         return cls.objects.create(
             team=team,
             name=validation.text(data, "name", True, max_length=50),
-            description=validation.text(data, "description", True),
+            description=validation.text(data, "description", False),
             color=validation.text(data, "color", True, default="#FF0000", max_length=20),
         )
 
@@ -851,7 +851,7 @@ class ToDoList(models.Model):
         return cls.objects.create(
             team=team,
             name = validation.text(data, "name", True, max_length=50),
-            description = validation.text(data, "description", True),
+            description = validation.text(data, "description", False),
             color = validation.text(data, "color", False, default="#FFFFFF"),
         )
 

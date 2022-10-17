@@ -86,8 +86,8 @@ export async function createCalendarPopup(team) {
             ).value;
             const color = document.getElementById("swal-input-color").value;
 
-            if (!name || !description) {
-                Swal.showValidationMessage("Bitte fülle alle Felder aus");
+            if (!name) {
+                Swal.showValidationMessage("Bitte gib einen Namen ein");
                 return false;
             }
 
@@ -134,8 +134,8 @@ export async function editCalendarPopup(team, calendar) {
             ).value;
             const color = document.getElementById("swal-input-color").value;
 
-            if (!name || !description) {
-                Swal.showValidationMessage("Bitte fülle alle Felder aus");
+            if (!name) {
+                Swal.showValidationMessage("Bitte gib einen Namen ein!");
                 return false;
             }
 
