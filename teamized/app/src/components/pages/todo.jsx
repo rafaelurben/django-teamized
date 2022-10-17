@@ -78,6 +78,10 @@ class ListView extends React.Component {
     super(props);
 
     this.createItem = this.createItem.bind(this);
+
+    this.state = {
+      isCreating: false,
+    }
   }
 
   createItem(e) {
@@ -87,9 +91,11 @@ class ListView extends React.Component {
     if (name === "") {
       errorAlert("Leeres Feld", "Bitte gib einen Namen ein");
     } else {
+      this.setState({ isCreating: true });
       ToDo.createToDoListItem(this.props.team.id, this.props.selectedList.id, name).then(() => {
         Navigation.renderPage();
         document.getElementById("newItemName").value = "";
+        this.setState({ isCreating: false });
       });
     }
   }
@@ -150,12 +156,18 @@ class ListView extends React.Component {
                 <input
                   type="text"
                   className="form-control"
+                  disabled={this.state.isCreating}
                   id="newItemName"
                   placeholder="Neues Element hinzufügen"
                 />
               </td>
               <td colSpan="2">
-                <button type="submit" className="btn btn-success" title="Erstellen">
+                <button
+                  type="submit"
+                  className="btn btn-success"
+                  disabled={this.state.isCreating}
+                  title="Erstellen"
+                >
                   <i className="fas fa-fw fa-plus"></i>
                 </button>
               </td>
