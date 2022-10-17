@@ -159,6 +159,7 @@ class ListView extends React.Component {
                   disabled={this.state.isCreating}
                   id="newItemName"
                   placeholder="Neues Element hinzufügen"
+                  maxlength={50}
                 />
               </td>
               <td colSpan="2">
