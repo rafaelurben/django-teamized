@@ -92,7 +92,7 @@ export async function createTeamPopup() {
       ).value;
 
       if (!name || !description) {
-        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        Swal.showValidationMessage("Bitte fülle alle Felder aus!");
         return false;
       }
 
@@ -141,7 +141,7 @@ export async function editTeamPopup(team) {
       ).value;
 
       if (!name || !description) {
-        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        Swal.showValidationMessage("Bitte fülle alle Felder aus!");
         return false;
       }
 
@@ -287,7 +287,7 @@ export async function createInvitePopup(team) {
       const valid_until = document.getElementById("swal-input-valid_until").value;
 
       if (!uses_left || !note) {
-        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        Swal.showValidationMessage("Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!");
         return false;
       }
 
@@ -333,7 +333,7 @@ export async function editInvitePopup(team, invite) {
       const valid_until = document.getElementById("swal-input-valid_until").value;
 
       if (!uses_left || !note) {
-        Swal.showValidationMessage("Bitte fülle alle Felder aus");
+        Swal.showValidationMessage("Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!");
         return false;
       }
 
