@@ -1,6 +1,7 @@
 import { requestSuccessAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
+import { getDateString } from "./datetime.js";
 
 // ToDoList lists
 
@@ -159,9 +160,9 @@ export async function editToDoListItemPopup(team, todolist, item) {
         html: `
             <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Titel:</label>
-            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${item.name}" value="${item.name}">
+            <input type="text" id="swal-input-name" class="swal2-input w-100" placeholder="${item.name}" value="${item.name}">
             <label class="swal2-input-label" for="swal-input-description">Zusätzliche Notiz:</label>
-            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${item.description}">${item.description}</textarea><hr />
+            <textarea id="swal-input-description" class="swal2-textarea w-100" placeholder="${item.description}">${item.description}</textarea><hr />
             <label for="swal-input-done" class="swal2-checkbox d-flex">
                 <input type="checkbox" value="0" id="swal-input-done" ${item.done ? "checked" : ""}>
                 <span class="swal2-label">Erledigt</span>
@@ -187,6 +188,29 @@ export async function editToDoListItemPopup(team, todolist, item) {
             return await editToDoListItem(team.id, todolist.id, item.id, name, description, done);
         },
     })).value;
+}
+
+// ToDoListItem view
+
+export async function viewToDoListItemPopup(team, todolist, item) {
+    return await Swal.fire({
+        title: item.name,
+        html: `
+            <p style="white-space: pre;">${item.description || "<i>Keine zusätzliche Notiz vorhanden</i>"}</p>
+            <hr />
+            <span class="swal2-label">
+                ${item.done ? "Erledigt am "+getDateString(new Date(item.done_at)) : "Noch nicht erledigt"}
+            </span>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Bearbeiten",
+        cancelButtonText: "Schliessen",
+    }).then(value => {
+        if (value.isConfirmed) {
+            editToDoListItemPopup(team, todolist, item);
+        }
+    });
 }
 
 // ToDoListItem deletion

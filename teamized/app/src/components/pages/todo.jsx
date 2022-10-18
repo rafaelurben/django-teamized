@@ -12,7 +12,7 @@ class ListViewItem extends React.Component {
     super(props);
 
     this.markDone = this.markDone.bind(this);
-    this.editItem = this.editItem.bind(this);
+    this.viewItem = this.viewItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
   }
 
@@ -20,8 +20,8 @@ class ListViewItem extends React.Component {
     ToDo.editToDoListItem(this.props.team.id, this.props.list.id, this.props.item.id, this.props.item.name, this.props.item.description, true).then(Navigation.renderPage);
   }
 
-  editItem() {
-    ToDo.editToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
+  viewItem() {
+    ToDo.viewToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
   }
 
   deleteItem() {
@@ -52,10 +52,10 @@ class ListViewItem extends React.Component {
         <td>
           <a
             className="btn btn-outline-dark border-1"
-            onClick={this.editItem}
-            title="Bearbeiten"
+            onClick={this.viewItem}
+            title="Ansehen oder bearbeiten"
           >
-            <i className="fas fa-fw fa-pen-to-square"></i>
+            <i className="fas fa-fw fa-eye"></i>
           </a>
         </td>
         <td>
