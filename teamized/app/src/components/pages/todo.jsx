@@ -159,7 +159,7 @@ class ListView extends React.Component {
                   disabled={this.state.isCreating}
                   id="newItemName"
                   placeholder="Neues Element hinzufügen"
-                  maxlength={50}
+                  maxLength={50}
                 />
               </td>
               <td colSpan="2">
@@ -438,6 +438,7 @@ export default class Page_ToDo extends React.Component {
       <Dashboard.Page
         title="To-do-Listen [Beta]"
         subtitle="Behalte den Überblick über die Aufgaben deines Teams"
+        loading={Cache.getCurrentTeamData()._state.todolists._initial}
       >
         <Dashboard.Column sizes={{ lg: 4 }}>
           <Dashboard.Tile

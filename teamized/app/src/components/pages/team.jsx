@@ -334,6 +334,7 @@ export default class Page_Team extends React.Component {
       <Dashboard.Page
         title="Dein Team"
         subtitle="Infos über dein ausgewähltes Team"
+        loading={Cache.getCurrentTeamData()._state.members._initial}
       >
         <Dashboard.Column>
           <Dashboard.Tile title="Teaminfos">

@@ -722,6 +722,7 @@ export default class Page_Calendars extends React.Component {
       <Dashboard.Page
         title="Kalender"
         subtitle="Kalender für dich und dein Team"
+        loading={Cache.getCurrentTeamData()._state.calendars._initial}
       >
         <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
           <Dashboard.Tile title={"Ereignisse am " + dayDisplay} help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">

@@ -12,11 +12,30 @@ export class Page extends React.Component {
   }
 
   render() {
+    var content;
+
+    if (this.props.loading) {
+      content = (
+        <div className="w-100 flex-grow-1 d-flex flex-column align-items-center justify-content-center">
+          <div className="spinner-border mb-3" role="status">
+            <span className="visually-hidden">Laden...</span>
+          </div>
+          <p>Seite wird geladen...</p>
+        </div>
+      )
+    } else {
+      content = (
+        <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">
+          {this.props.children}
+        </div>
+      )
+    }
+
     let header = [];
 
     if (this.props.hasOwnProperty("title")) {
       header.push(
-        <h4 key="title" className="dashboard-title mt-3 mx-3 text-bold">{this.props.title}</h4>
+        <h4 key="title" className="dashboard-title pt-3 mx-3 text-bold">{this.props.title}</h4>
       );
     }
     if (this.props.hasOwnProperty("subtitle")) {
@@ -33,11 +52,9 @@ export class Page extends React.Component {
     }
 
     return (
-      <div className="dashboard container-fluid p-0">
+      <div className="dashboard p-0 w-100 h-100 d-flex flex-column">
         {header}
-        <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">
-            {this.props.children}
-        </div>
+        {content}
       </div>
     );
   }

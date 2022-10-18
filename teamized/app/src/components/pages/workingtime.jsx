@@ -283,6 +283,7 @@ export default class Page_WorkingTime extends React.Component {
       <Dashboard.Page
         title="Deine Arbeitszeit"
         subtitle="Erfasse und verwalte deine Arbeitszeit"
+        loading={Cache.getCurrentTeamData()._state.me_worksessions._initial}
       >
         <Dashboard.Column sizes={{ lg: 3 }}>
           <Dashboard.Row>
