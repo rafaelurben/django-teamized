@@ -454,6 +454,7 @@ class WorkSession(models.Model):
             "is_ended": self.is_ended,
             "duration": self.duration,
             "note": self.note,
+            "_team_id": self.team_id,
         }
 
     def end(self) -> None:

@@ -170,7 +170,7 @@ export async function stopTrackingSession() {
         (data) => {
             successAlert("Die Zeitmessung wurde gestoppt", "Tracking gestoppt");
             window.appdata.current_worksession = null;
-            Cache.getCurrentTeamData().me_worksessions[data.session.id] = data.session;
+            Cache.getTeamData(data.session._team_id).me_worksessions[data.session.id] = data.session;
             return data.session;
         }
     );
