@@ -78,10 +78,16 @@ class ListView extends React.Component {
     super(props);
 
     this.createItem = this.createItem.bind(this);
+    this.updateShowDone = this.updateShowDone.bind(this);
 
     this.state = {
       isCreating: false,
+      showDone: false,
     }
+  }
+
+  updateShowDone(e) {
+    this.setState({ showDone: e.target.checked });
   }
 
   createItem(e) {
@@ -120,7 +126,12 @@ class ListView extends React.Component {
       );
     }
 
-    let items = Object.values(this.props.selectedList.items).map(item => {
+    var items = Object.values(this.props.selectedList.items);
+    if (!this.state.showDone) {
+      items = items.filter((item) => !item.done);
+    }
+
+    let viewItems = items.map(item => {
       return (
         <ListViewItem
           key={item.id}
@@ -133,6 +144,19 @@ class ListView extends React.Component {
 
     return (
       <form onSubmit={this.createItem}>
+        <div className="form-check form-switch m-2">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+            onClick={this.updateShowDone}
+          />
+          <label className="form-check-label ms-1" htmlFor="flexSwitchCheckDefault">
+            Erledigte anzeigen
+          </label>
+        </div>
+
         <table className="table table-borderless align-middle mb-0">
           <thead>
             <tr>
@@ -144,7 +168,7 @@ class ListView extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {items}
+            {viewItems}
             <tr>
               {/* Create item */}
               <td>
