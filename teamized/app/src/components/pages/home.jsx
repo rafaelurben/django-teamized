@@ -60,6 +60,7 @@ export default class Page_Home extends React.Component {
                 <b>18. Oktober 2022</b>
               </h6>
               <ul className="small">
+                <li>Verbesserungen bei To-do-Listen</li>
                 <li>Diverse Fehlerbehebungen und Korrekturen</li>
               </ul>
               <h6>
