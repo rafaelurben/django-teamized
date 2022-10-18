@@ -840,7 +840,7 @@ class ToDoList(models.Model):
             "name": self.name,
             "description": self.description,
             "color": self.color,
-            "items": utils.iddict(map(lambda i: i.as_dict(), self.items.all())),
+            "items": utils.iddict(map(lambda i: i.as_dict(), self.items.all().order_by('done', 'name'))),
         }
 
     @classmethod

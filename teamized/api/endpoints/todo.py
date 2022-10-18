@@ -116,7 +116,7 @@ def endpoint_todolistitems(request, team: Team, todolist: ToDoList):
         return NO_PERMISSION
 
     if request.method == "GET":
-        items = todolist.items.all()
+        items = todolist.items.all().order_by("done", "name")
         return JsonResponse({
             "items": [item.as_dict() for item in items],
         })
