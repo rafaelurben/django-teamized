@@ -55,7 +55,6 @@ export function chartDataByDays(sessions, start, end) {
             name: getDateString(day),
             duration_s: 0,
             duration_h: 0,
-            duration_h_string: "0",
         };
         if (day >= roundDays(new Date(end-1))) {
             break;
