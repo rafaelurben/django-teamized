@@ -196,7 +196,7 @@ export async function viewToDoListItemPopup(team, todolist, item) {
     return await Swal.fire({
         title: item.name,
         html: `
-            <p style="white-space: pre;">${item.description || "<i>Keine zusätzliche Notiz vorhanden</i>"}</p>
+            <p style="white-space: pre;" class="text-wrap">${item.description || "<i>Keine zusätzliche Notiz vorhanden</i>"}</p>
             <hr />
             <span class="swal2-label">
                 ${item.done ? "Erledigt am "+getDateString(new Date(item.done_at)) : "Noch nicht erledigt"}
