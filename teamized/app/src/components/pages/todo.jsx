@@ -218,7 +218,8 @@ class ListSelectorRow extends React.Component {
   
   getStyle() {
     return {
-      borderLeftWidth: "5px",
+      paddingLeft: this.props.isSelected ? ".5rem" : "calc(.5rem + 3px)",
+      borderLeftWidth: this.props.isSelected ? "8px" : "5px",
       borderLeftColor: this.props.todolist.color,
       borderLeftStyle: "solid",
       cursor: "pointer",
@@ -230,7 +231,7 @@ class ListSelectorRow extends React.Component {
   render() {
     return (
       <div
-        className="ps-2 py-1 mb-1 dm-invert dm-invert-children"
+        className="py-1 mb-1 dm-invert dm-invert-children"
         style={this.getStyle()}
         onClick={this.handleSelect}
       >
@@ -254,30 +255,21 @@ class ListSelector extends React.Component {
   }
 
   render() {
-    let listview = [];
-    if (Cache.getCurrentTeamData()._state.todolists._initial) {
-      listview = [
-        <p key="loading">Laden...</p>
-      ];
-    } else if (Object.keys(this.props.todolists).length === 0) {
-      // Don't show a message if there are no lists, because the ListDetails component will show a message
-    } else {
-      listview = Object.values(this.props.todolists).map(lst => {
-        return (
-          <ListSelectorRow
-            key={lst.id}
-            todolist={lst}
-            onSelect={this.props.onListSelect}
-            isSelected={this.props.selectedListId === lst.id}
-          />
-        );
-      });
-    }
+    let listview = Object.values(this.props.todolists).map((lst) => {
+      return (
+        <ListSelectorRow
+          key={lst.id}
+          todolist={lst}
+          onSelect={this.props.onListSelect}
+          isSelected={this.props.selectedListId === lst.id}
+        />
+      );
+    });
 
     let content = [];
     if (listview.length > 0) {
       content.push(
-        <div key="todolistselect" id="todolistselect" className="mb-2">
+        <div key="todolistselect" className="mb-2">
           {listview}
         </div>
       );
@@ -466,7 +458,7 @@ export default class Page_ToDo extends React.Component {
       >
         <Dashboard.Column sizes={{ lg: 4 }}>
           <Dashboard.Tile
-            title="To-do-Lis­ten"
+            title="Listenübersicht"
             help="Wechsle zwischen den To-do-Lis­ten deines Teams oder erstelle eine neue."
           >
             <ListSelector
@@ -478,7 +470,10 @@ export default class Page_ToDo extends React.Component {
               isAdmin={this.props.isAdmin}
             />
           </Dashboard.Tile>
-          <Dashboard.Tile title="Listendetails">
+          <Dashboard.Tile
+            title="Listendetails"
+            help="Sieh dir Infos zur oben ausgewählten Liste an."
+          >
             <ListInfo
               team={this.props.team}
               selectedListId={this.state.selectedListId}

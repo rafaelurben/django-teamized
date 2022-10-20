@@ -9,28 +9,113 @@ import { IconTooltip, Tooltip } from "../tooltips.js";
 
 const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
-class CalendarManager extends React.Component {
+class CalendarSelectorRow extends React.Component {
   constructor(props) {
     super(props);
-    this.handleCalendarSelect = this.handleCalendarSelect.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  handleSelect() {
+    if (!this.props.isSelected) {
+      this.props.onSelect(this.props.calendar.id);
+    }
+  }
+
+  getStyle() {
+    return {
+      paddingLeft: this.props.isSelected ? ".5rem" : "calc(.5rem + 3px)",
+      borderLeftWidth: this.props.isSelected ? "8px" : "5px",
+      borderLeftColor: this.props.calendar.color,
+      borderLeftStyle: "solid",
+      cursor: "pointer",
+      opacity: this.props.isSelected ? 1 : 0.75,
+      fontWeight: this.props.isSelected ? "bold" : "normal",
+    };
+  }
+
+  render() {
+    return (
+      <div
+        className="py-1 mb-1 dm-invert dm-invert-children"
+        style={this.getStyle()}
+        onClick={this.handleSelect}
+      >
+        <span className="d-inline-block w-100">{this.props.calendar.name}</span>
+      </div>
+    );
+  }
+}
+
+
+class CalendarSelector extends React.Component {
+  constructor(props) {
+    super(props);
 
     this.createCalendar = this.createCalendar.bind(this);
+  }
+
+  createCalendar() {
+    Calendars.createCalendarPopup(this.props.team).then((calendar) => {
+      this.props.onCalendarSelect(calendar.id);
+    });
+  }
+
+  render() {
+    let listview = Object.values(this.props.calendars).map((calendar) => {
+      return (
+        <CalendarSelectorRow
+          key={calendar.id}
+          calendar={calendar}
+          onSelect={this.props.onCalendarSelect}
+          isSelected={this.props.selectedCalendarId === calendar.id}
+        />
+      );
+    });
+
+    let content = [];
+    if (listview.length > 0) {
+      content.push(
+        <div key="calendarselect" className="mb-2">
+          {listview}
+        </div>
+      );
+    }
+
+    if (this.props.isAdmin) {
+      content.push(
+        <button
+          key="create"
+          className="btn btn-outline-success"
+          onClick={this.createCalendar}
+        >
+          Kalender erstellen
+        </button>
+      );
+    } else {
+      content.push(
+        <Tooltip
+          key="noadmin"
+          title="Diese Aktion steht nur Admins zur Verfügung"
+        >
+          <button className="btn btn-outline-dark disabled">
+            Kalender Erstellen
+          </button>
+        </Tooltip>
+      );
+    }
+
+    return content;
+  }
+}
+
+class CalendarInfo extends React.Component {
+  constructor(props) {
+    super(props);
+
     this.editCalendar = this.editCalendar.bind(this);
     this.deleteCalendar = this.deleteCalendar.bind(this);
   
     this.subscriptionPopup = this.subscriptionPopup.bind(this);
-  }
-  
-  handleCalendarSelect(event) {
-    this.props.onCalendarSelect(event.target.value);
-  }
-
-  createCalendar() {
-    Calendars.createCalendarPopup(this.props.team).then(
-      (calendar) => {
-        this.props.onCalendarSelect(calendar.id);
-      }
-    );
   }
 
   editCalendar() {
@@ -70,30 +155,25 @@ class CalendarManager extends React.Component {
   }
 
   render() {
-    let calendarSelectOptions = [];
-    if (Cache.getCurrentTeamData()._state.calendars._initial) {
-      calendarSelectOptions.push(
-        <option key="0" value="0">
-          Laden...
-        </option>
-      );
-    } else if (Object.keys(this.props.calendars).length === 0) {
-      calendarSelectOptions.push(
-        <option key="0" value="0">
-          Keine Kalender vorhanden
-        </option>
-      );
-    } else {
-      calendarSelectOptions = Object.entries(this.props.calendars).map(
-        ([calId, calendar]) => (
-          <option key={calId} value={calId}>
-            {calendar.name}
-          </option>
-        )
+    let calendar = this.props.selectedCalendar;
+    if (calendar === undefined) {
+      return (
+        <p className="ms-1 mb-0">
+          Im ausgewählten Team ist noch kein Kalender vorhanden.{" "}
+          {this.props.isAdmin ? (
+            <IconTooltip
+              key="admin"
+              title='Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+            ></IconTooltip>
+          ) : (
+            <IconTooltip
+              key="noadmin"
+              title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."
+            ></IconTooltip>
+          )}
+        </p>
       );
     }
-
-    let calendar = this.props.selectedCalendar;
 
     let calendarPanelButtons = [];
     if (this.props.isAdmin) {
@@ -117,71 +197,51 @@ class CalendarManager extends React.Component {
           </button>
         );
       }
-      calendarPanelButtons.push(
-        <button
-          key="create"
-          className="btn btn-outline-success"
-          onClick={this.createCalendar}
-        >
-          Kalender&nbsp;erstellen
-        </button>
-      );
     } else {
       calendarPanelButtons.push(
         <Tooltip key="noadmin" title="Diese Aktionen stehen nur Admins zur Verfügung">
           <button className="btn btn-outline-dark disabled">
-            Erstellen/Bearbeiten/Löschen
+            Bearbeiten/Löschen
           </button>
         </Tooltip>
       );
     }
+    calendarPanelButtons.push(
+      <button
+        key="subscribe"
+        className="btn btn-outline-info"
+        onClick={this.subscriptionPopup}
+      >
+        Abonnieren
+      </button>
+    );
 
     return [
-      <select
-        key="select"
-        id="calendar-manager-calendar-select"
-        className="form-select mb-2"
-        onInput={this.handleCalendarSelect}
-        disabled={calendar === undefined}
-        value={this.props.selectedCalendarId || "0"}
-      >
-        {calendarSelectOptions}
-      </select>,
-      calendar !== undefined ? (
-        <table key="table" className="table table-borderless mb-2">
-          <tbody>
-            <tr>
-              <th>Name:</th>
-              <td>{calendar.name}</td>
-            </tr>
-            <tr>
-              <th>Beschreibung:</th>
-              <td style={{ whiteSpace: "pre" }}>{calendar.description}</td>
-            </tr>
-            <tr>
-              <th>Farbe:</th>
-              <td>
-                <i
-                  style={{ color: calendar.color }}
-                  className="fas fa-circle small dm-invert"
-                ></i>
-              </td>
-            </tr>
-            <tr>
-              <th>Abonnieren:</th>
-              <td>
-                <button className="btn btn-outline-info" onClick={this.subscriptionPopup}>
-                  Abonnieren
-                </button>
-              </td>
-            </tr>
-            <tr className="debug-only">
-              <th>ID:</th>
-              <td>{calendar.id}</td>
-            </tr>
-          </tbody>
-        </table>
-      ) : null,
+      <table key="table" className="table table-borderless mb-2">
+        <tbody>
+          <tr>
+            <th>Name:</th>
+            <td>{calendar.name}</td>
+          </tr>
+          <tr>
+            <th>Beschreibung:</th>
+            <td style={{ whiteSpace: "pre" }}>{calendar.description}</td>
+          </tr>
+          <tr>
+            <th>Farbe:</th>
+            <td>
+              <i
+                style={{ color: calendar.color }}
+                className="fas fa-circle small dm-invert"
+              ></i>
+            </td>
+          </tr>
+          <tr className="debug-only">
+            <th>ID:</th>
+            <td>{calendar.id}</td>
+          </tr>
+        </tbody>
+      </table>,
       <div key="buttons" className="d-flex flex-wrap gap-2">
         {calendarPanelButtons}
       </div>,
@@ -266,7 +326,9 @@ class CalendarEventPicker extends React.Component {
   }
 
   createEvent() {
-    Calendars.createEventPopup(this.props.team, this.props.selectedDate).then(Navigation.renderPage)
+    Calendars.createEventPopup(
+      this.props.team, this.props.selectedDate, this.props.calendars, this.props.selectedCalendar.id
+    ).then(Navigation.renderPage)
   }
 
   render() {
@@ -732,6 +794,7 @@ export default class Page_Calendars extends React.Component {
               selectedDate={this.state.selectedDate}
               selectedEventId={this.state.selectedEventId}
               selectedCalendar={selectedCalendar}
+              calendars={this.props.calendars}
               events={Calendars.filterCalendarEventsByDate(
                 Object.values(this.events),
                 this.state.selectedDate
@@ -761,11 +824,25 @@ export default class Page_Calendars extends React.Component {
             />
           </Dashboard.Tile>
           <Dashboard.Tile
-            title="Kalenderinfos"
-            help="Hier können die Kalender des aktuellen Teams angesehen und verwaltet (nur Admins) werden. Die Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
+            title="Kalenderübersicht"
+            help="Wechsle zwischen den Kalendern deines Teams oder erstelle einen neuen. Diese Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
+          >
+            {/* Calendar selector/creator */}
+            <CalendarSelector
+              onCalendarSelect={this.handleCalendarSelect}
+              team={this.props.team}
+              calendars={this.props.calendars}
+              selectedCalendarId={this.state.selectedCalendarId}
+              selectedCalendar={selectedCalendar}
+              isAdmin={this.props.isAdmin}
+            />
+          </Dashboard.Tile>
+          <Dashboard.Tile
+            title="Kalenderdetails"
+            help="Sieh dir Infos zum oben ausgewählten Kalender an."
           >
             {/* Selecting, creating and managing calendars */}
-            <CalendarManager
+            <CalendarInfo
               onCalendarSelect={this.handleCalendarSelect}
               team={this.props.team}
               calendars={this.props.calendars}

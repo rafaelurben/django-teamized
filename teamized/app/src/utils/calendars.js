@@ -199,7 +199,7 @@ export async function createEvent(teamId, calendarId, name, description, locatio
     )
 }
 
-export function createEventPopup(team, date) {
+export function createEventPopup(team, date, calendars, selectedCalendarId) {
     return new Promise((resolve, reject) => {
         let _dt = localInputFormat(date);
         let _d = localInputFormat(date, true);
@@ -235,8 +235,16 @@ export function createEventPopup(team, date) {
             didOpen: () => {
                 _updateFullDayToggle(true);
                 $('#swal-input-fullday').on('change', () => _updateFullDayToggle());
-                $('#swal-input-calendar').html($('#calendar-manager-calendar-select').html());
-                $('#swal-input-calendar').val($('#calendar-manager-calendar-select').val());
+                $('#swal-input-calendar').html(
+                    Object.entries(calendars).map(
+                        ([calId, calendar]) => (`
+                            <option key="${calId}" value="${calId}">
+                                ${calendar.name}
+                            </option>
+                        `)
+                    ).join('')
+                );
+                $('#swal-input-calendar').val(selectedCalendarId);
             },
             preConfirm: async () => {
                 let calendarId = $('#swal-input-calendar').val();
