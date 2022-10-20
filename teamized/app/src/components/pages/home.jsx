@@ -21,6 +21,7 @@ export default class Page_Home extends React.Component {
       <Dashboard.Page
         title="Startseite"
         subtitle={`Hallo ${this.props.user.first_name}`}
+        loading={this.props.settings === undefined}
       >
         <Dashboard.Column sizes={{ lg: 8 }}>
           <Dashboard.Tile title="Willkommen">
