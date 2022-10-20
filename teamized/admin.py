@@ -34,7 +34,7 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'auth_user',)}),
-        ('Settings', {'fields': ()}),
+        ('Settings', {'fields': ('settings_darkmode',)}),
     ]
 
     ordering = ('uid', )
@@ -60,7 +60,7 @@ class TeamAdminInviteInline(admin.TabularInline):
 
     readonly_fields = ('token', 'is_valid', 'uses_used')
 
-    fields = ('uses_left', 'uses_used', 'is_valid', 'valid_until', 'token',)
+    fields = ('uses_left', 'uses_used', 'is_valid', 'valid_until', 'note', 'token',)
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
@@ -74,7 +74,6 @@ class TeamAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'name', 'description',)}),
-        ('Settings', {'fields': ()}),
     ]
 
     ordering = ('uid', )
@@ -131,4 +130,29 @@ class CalendarAdmin(admin.ModelAdmin):
         ('Verbindungen', {'fields': ('team',)}),
         ('Infos', {'fields': ('name', 'description', 'color',)}),
         ('Veröffentlichung', {'fields': ('is_public', 'ics_uid',), 'classes': ('collapse',)}),
+    ]
+
+# Todo
+
+class ToDoAdminListInline(admin.TabularInline):
+    model = models.ToDoListItem
+    extra = 0
+    verbose_name = _("Listeneintrag")
+    verbose_name_plural = _("Listeneinträge")
+
+
+@admin.register(models.ToDoList)
+class ToDoListAdmin(admin.ModelAdmin):
+    list_display = ['uid', 'name', 'description']
+
+    readonly_fields = ['uid']
+
+    autocomplete_fields = ['team', ]
+
+    inlines = [ToDoAdminListInline]
+
+    fieldsets = [
+        (None, {'fields': ('uid',)}),
+        ('Verbindungen', {'fields': ('team',)}),
+        ('Infos', {'fields': ('name', 'description', 'color',)}),
     ]
