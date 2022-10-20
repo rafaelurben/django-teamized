@@ -269,7 +269,7 @@ def endpoint_invites(request, team: Team):
             "invite": inv.as_dict(),
             "alert": {
                 "title": _("Einladung erstellt"),
-                "text": _("Token: %s") % str(inv.token),
+                "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>" % _("Bitte kopier mich!"),
                 "timer": 0,
                 "showConfirmButton": True,
                 "toast": False,
@@ -370,7 +370,7 @@ def endpoint_invite_info(request, invite: Invite):
     if request.method == "GET":
         if invite is None:
             raise exceptions.AlertException(
-                text=_("Deine Einladung existiert leider nicht (mehr), sorry."),
+                text=_("Diese Einladung existiert leider nicht (mehr), sorry."),
                 title=_("Einladung nicht gefunden"),
                 errorname="invite-not-found",
             )

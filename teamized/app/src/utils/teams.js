@@ -379,8 +379,8 @@ export async function checkInvite(token) {
 export async function checkInvitePopup(token) {
   if (!Utils.validateUUID(token)) {
     infoAlert(
-      "Keine gültige Einladung",
-      "Jemand hat versucht, dich einzuladen, jedoch liegt der Token nicht im korrekten Format (UUID) vor."
+      "Ungültiges Einladungsformat",
+      "Diese Einladung liegt nicht im richtigen Format vor."
     );
     Navigation.exportToURL({ removeParams: ["invite"] });
     return;
@@ -391,8 +391,10 @@ export async function checkInvitePopup(token) {
   if (data.status == "invite-valid") {
     const team = data.team;
     confirmAlert(
-      "Möchtest du folgendem Team beitreten?<br /><br />" +
-      `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br />`,
+      `Möchtest du folgendem Team beitreten?<br /><br />
+      <b>Name:</b> ${team.name}<br />
+      <b>Beschreibung: </b>${team.description}<br />
+      <b>Anzahl Mitglieder: </b>${team.membercount}<br />`,
       async () => {
         Swal.showLoading();
         await acceptInvite(token);
@@ -403,7 +405,7 @@ export async function checkInvitePopup(token) {
     )
   } else {
     infoAlert(
-      "Keine gültige Einladung",
+      "Ungültige Einladung",
       "Jemand hat versucht, dich einzuladen, jedoch ist die Einladung nicht mehr gültig oder du bist dem Team bereits beigetreten."
     );
     Navigation.exportToURL({ removeParams: ["invite"] });

@@ -391,6 +391,12 @@ class Invite(models.Model):
         self.valid_until = validation.datetime(data, "valid_until", False, default=self.valid_until, null=True)
         self.save()
 
+    @property
+    def url(self) -> str:
+        """Get the relative URL for the invite"""
+
+        return reverse("teamized:app")+"?invite="+str(self.token)
+
 class WorkSession(models.Model):
     "Model for work sessions"
 
