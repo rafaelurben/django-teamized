@@ -1,5 +1,6 @@
 """Main API endpoints"""
 
+from django.db import models
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
@@ -53,10 +54,10 @@ def endpoint_teams(request):
     user: User = request.teamized_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all().select_related('team').order_by("team__name")
+        memberinstances = user.member_instances.all().select_related('team', 'user').order_by("team__name").annotate(membercount=models.Count('team__members'))
         return JsonResponse({
             "teams": [
-                mi.team.as_dict(member=mi)
+                mi.team.as_dict(member=mi, membercount=mi.membercount)
                 for mi in memberinstances
             ],
             "defaultTeamId": memberinstances[0].team.uid,

@@ -156,11 +156,13 @@ class Team(models.Model):
         verbose_name_plural = _("Teams")
         db_table = "teamized_team"
 
-    def as_dict(self, member=None) -> dict:
+    def as_dict(self, member=None, membercount=None, **additional_items) -> dict:
         data = {
             "id": self.uid,
             "name": self.name,
             "description": self.description,
+            "membercount": membercount or self.members.count(),
+            **additional_items,
         }
         if member:
             data["member"] = member.as_dict()
