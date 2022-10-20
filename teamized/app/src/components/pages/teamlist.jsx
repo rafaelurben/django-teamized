@@ -37,8 +37,14 @@ class TeamTableRow extends React.Component {
         {/* Name and description */}
         <td className="py-2">
           <span>{this.props.team.name}</span>
-          <br />
-          <i>{this.props.team.description}</i>
+          <br className="d-none d-lg-inline-block" />
+          <i className="d-none d-lg-inline-block">
+            {this.props.team.description}
+          </i>
+        </td>
+        {/* Member count */}
+        <td>
+          <span>{this.props.team.membercount}</span>
         </td>
         {/* Member role */}
         <td>
@@ -57,16 +63,14 @@ class TeamTableRow extends React.Component {
           </td>
         ) : (
           <td>
-            <a
-              className="btn btn-success disabled"
-              title="Ausgewählt"
-            >
+            <a className="btn btn-success disabled" title="Ausgewählt">
               <i className="fas fa-fw fa-circle-check"></i>
             </a>
           </td>
         )}
         {/* Action: Edit */}
-        {this.props.team.member.role === "owner" || this.props.team.member.role === "admin" ? (
+        {this.props.team.member.role === "owner" ||
+        this.props.team.member.role === "admin" ? (
           <td>
             <a
               className="btn btn-outline-dark border-1"
@@ -110,9 +114,7 @@ class TeamTableRow extends React.Component {
           </td>
         )}
         {/* ID */}
-        <td className="debug-only">
-          {this.props.team.id}
-        </td>
+        <td className="debug-only">{this.props.team.id}</td>
       </tr>
     );
   }
@@ -148,7 +150,11 @@ export default class Page_TeamList extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th style={{ minWidth: "10rem" }}>Name &amp; Beschreibung</th>
+                  <th>
+                    <span>Name </span>
+                    <span className="d-none d-lg-inline-block">&amp; Beschreibung</span>
+                  </th>
+                  <th>Mitglieder</th>
                   <th>Deine Rolle</th>
                   <th style={{ width: "1px" }}></th>
                   <th style={{ width: "1px" }}></th>

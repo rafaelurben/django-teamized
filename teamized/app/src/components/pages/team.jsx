@@ -302,6 +302,10 @@ export default class Page_Team extends React.Component {
         <th>Beschreibung:</th>
         <td>{this.props.team.description}</td>
       </tr>,
+      <tr key="membercount">
+        <th>Mitglieder:</th>
+        <td>{this.props.team.membercount}</td>
+      </tr>,
       <tr key="id" className="debug-only">
         <th>ID:</th>
         <td>{this.props.team.id}</td>

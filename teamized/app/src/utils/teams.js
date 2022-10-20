@@ -196,7 +196,9 @@ export async function leaveTeamPopup(team) {
 // Member list
 
 export async function getMembers(teamId) {
-  return await Cache.refreshTeamCacheCategory(teamId, "members");
+  let members = await Cache.refreshTeamCacheCategory(teamId, "members");
+  Cache.getTeamData(teamId).team.membercount = members.length;
+  return members;
 }
 
 // Member edit
@@ -233,7 +235,9 @@ export async function deleteMember(teamId, memberId) {
   return await API.DELETE(`teams/${teamId}/members/${memberId}`).then(
     async (data) => {
       requestSuccessAlert(data);
-      delete Cache.getTeamData(teamId).members[memberId];
+      let teamdata = Cache.getTeamData(teamId);
+      delete teamdata.members[memberId];
+      teamdata.team.membercount -= 1;
     }
   )
 }
