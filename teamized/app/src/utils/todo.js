@@ -206,9 +206,9 @@ export async function viewToDoListItemPopup(team, todolist, item) {
         showCancelButton: true,
         confirmButtonText: "Bearbeiten",
         cancelButtonText: "Schliessen",
-    }).then(value => {
+    }).then(async (value) => {
         if (value.isConfirmed) {
-            editToDoListItemPopup(team, todolist, item);
+            return await editToDoListItemPopup(team, todolist, item);
         }
     });
 }
