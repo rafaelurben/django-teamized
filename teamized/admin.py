@@ -44,7 +44,7 @@ class MemberAdmin(admin.ModelAdmin):
     list_display = ['uid', 'user', 'team', 'role', 'note']
 
     readonly_fields = ('uid',)
-    search_fields = ('uid', 'user__uid', 'user__auth_user__username', 'user__auth_user__email', 'user__auth_user__first_name', 'user__auth_user__last_name', 'team__uid', 'team__name', 'team__description', 'team__note', 'role', 'note')
+    search_fields = ('uid', 'user__uid', 'user__auth_user__username', 'user__auth_user__email', 'user__auth_user__first_name', 'user__auth_user__last_name', 'team__uid', 'team__name', 'team__description', 'role', 'note')
 
 class TeamAdminMemberInline(admin.TabularInline):
     model = models.Member
