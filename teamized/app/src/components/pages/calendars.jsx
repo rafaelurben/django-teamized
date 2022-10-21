@@ -224,8 +224,8 @@ class CalendarInfo extends React.Component {
             <td>{calendar.name}</td>
           </tr>
           <tr>
-            <th>Beschreibung:</th>
-            <td style={{ whiteSpace: "pre" }}>{calendar.description}</td>
+            <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
+            <td style={{ whiteSpace: "pre-line" }}>{calendar.description}</td>
           </tr>
           <tr>
             <th>Farbe:</th>
@@ -646,8 +646,8 @@ class CalendarEventDisplay extends React.Component {
           </tr>
           {event.description ? (
             <tr>
-              <th>Beschreibung:</th>
-              <td style={{ whiteSpace: "pre" }}>{event.description}</td>
+              <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
+              <td style={{ whiteSpace: "pre-line" }}>{event.description}</td>
             </tr>
           ) : null}
           {event.location ? (

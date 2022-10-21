@@ -169,7 +169,7 @@ class TeamInvitesTableRow extends React.Component {
     return (
       <tr>
         {/* Note */}
-        <td>
+        <td style={{ whiteSpace: "pre-line" }}>
           <span>{invite.note}</span>
         </td>
         {/* Share */}
@@ -293,47 +293,6 @@ export default class Page_Team extends React.Component {
       }
     }
 
-    let inforows = [
-      <tr key="name">
-        <th>Name:</th>
-        <td>{this.props.team.name}</td>
-      </tr>,
-      <tr key="description" style={{ whiteSpace: "pre" }}>
-        <th>Beschreibung:</th>
-        <td>{this.props.team.description}</td>
-      </tr>,
-      <tr key="membercount">
-        <th>Mitglieder:</th>
-        <td>{this.props.team.membercount}</td>
-      </tr>,
-      <tr key="id" className="debug-only">
-        <th>ID:</th>
-        <td>{this.props.team.id}</td>
-      </tr>,
-    ];
-
-    if (this.props.team.member.role === "owner") {
-      inforows.push(
-        <tr key="settings">
-          <th>Einstellungen:</th>
-          <td className="d-flex">
-            <a
-              className="btn btn-outline-dark border-1"
-              onClick={this.handleTeamEditButtonClick}
-            >
-              Team&nbsp;bearbeiten
-            </a>
-            <a
-              className="btn btn-outline-danger border-1 ms-1"
-              onClick={this.handleTeamDeleteButtonClick}
-            >
-              Team&nbsp;löschen
-            </a>
-          </td>
-        </tr>
-      );
-    }
-
     return (
       <Dashboard.Page
         title="Dein Team"
@@ -342,21 +301,56 @@ export default class Page_Team extends React.Component {
       >
         <Dashboard.Column>
           <Dashboard.Tile title="Teaminfos">
-            <table className="table table-borderless mb-0">
-              <tbody>{inforows}</tbody>
+            <table className="table table-borderless mb-2">
+              <tbody>
+                <tr key="name">
+                  <th>Name:</th>
+                  <td>{this.props.team.name}</td>
+                </tr>
+                <tr key="description">
+                  <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
+                  <td style={{ whiteSpace: "pre-line" }}>{this.props.team.description}</td>
+                </tr>
+                <tr key="membercount">
+                  <th>Mitglieder:</th>
+                  <td>{this.props.team.membercount}</td>
+                </tr>
+                <tr key="id" className="debug-only">
+                  <th>ID:</th>
+                  <td>{this.props.team.id}</td>
+                </tr>
+              </tbody>
             </table>
+            {this.props.team.member.role === "owner" ? (
+              <button
+                className="btn btn-outline-dark border-1 me-2"
+                onClick={this.handleTeamEditButtonClick}
+              >
+                Team&nbsp;bearbeiten
+              </button>
+            ) : null}
+            {this.props.team.member.role === "owner" ? (
+              <button
+                className="btn btn-outline-danger border-1"
+                onClick={this.handleTeamDeleteButtonClick}
+              >
+                Team&nbsp;löschen
+              </button>
+            ) : null}
           </Dashboard.Tile>
 
           <Dashboard.Tile title="Mitglieder">
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th width="32px" className="text-center"><IconTooltip title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" /></th>
+                  <th width="32px" className="text-center">
+                    <IconTooltip title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" />
+                  </th>
                   <th>Name</th>
-                  <th>Benutzername &amp; E-Mail</th>
+                  <th>Benutzername&nbsp;&amp;&nbsp;E-Mail</th>
                   <th>Rolle</th>
-                  <th style={{width: "1px"}}></th>
-                  <th style={{width: "1px"}}></th>
+                  <th style={{ width: "1px" }}></th>
+                  <th style={{ width: "1px" }}></th>
                   <th className="debug-only">ID</th>
                 </tr>
               </thead>
@@ -370,11 +364,17 @@ export default class Page_Team extends React.Component {
                 <thead>
                   <tr>
                     <th>Notiz</th>
-                    <th style={{ minWidth: "5.5rem" }}>Teilen <IconTooltip title="Auf Icons klicken, um Token bzw. Link zu kopieren" /></th>
+                    <th style={{ minWidth: "5.5rem" }}>
+                      Teilen{" "}
+                      <IconTooltip title="Auf Icons klicken, um Token bzw. Link zu kopieren" />
+                    </th>
                     <th style={{ minWidth: "6rem" }}>Gültig bis</th>
-                    <th style={{ minWidth: "10rem" }}>Verwendungen <IconTooltip title="Bereits verwendet / noch verfügbar" /></th>
-                    <th style={{width: "1px"}}></th>
-                    <th style={{width: "1px"}}></th>
+                    <th style={{ minWidth: "10rem" }}>
+                      Verwendungen{" "}
+                      <IconTooltip title="Bereits verwendet / noch verfügbar" />
+                    </th>
+                    <th style={{ width: "1px" }}></th>
+                    <th style={{ width: "1px" }}></th>
                     <th className="debug-only">ID</th>
                   </tr>
                 </thead>
@@ -394,9 +394,7 @@ export default class Page_Team extends React.Component {
                 </tbody>
               </table>
             </Dashboard.Tile>
-          ) : (
-            null
-          )}
+          ) : null}
         </Dashboard.Column>
       </Dashboard.Page>
     );

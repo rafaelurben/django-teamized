@@ -4,6 +4,7 @@ import { waitingAlert } from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
+import { IconTooltip } from "../tooltips.js";
 
 class TeamTableRow extends React.Component {
   constructor(props) {
@@ -34,6 +35,10 @@ class TeamTableRow extends React.Component {
   render() {
     return (
       <tr>
+        {/* Member count */}
+        <td className="align-middle text-center">
+          <span>{this.props.team.membercount}</span>
+        </td>
         {/* Name and description */}
         <td className="py-2">
           <span>{this.props.team.name}</span>
@@ -41,10 +46,6 @@ class TeamTableRow extends React.Component {
           <i className="d-none d-lg-inline-block">
             {this.props.team.description}
           </i>
-        </td>
-        {/* Member count */}
-        <td>
-          <span>{this.props.team.membercount}</span>
         </td>
         {/* Member role */}
         <td>
@@ -150,11 +151,13 @@ export default class Page_TeamList extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
+                  <th className="text-center" style={{ width: "1px" }}>
+                    <IconTooltip icon="fa-solid fa-fw fa-users" title="Anzahl Mitglieder" />
+                  </th>
                   <th>
                     <span>Name </span>
                     <span className="d-none d-lg-inline-block">&amp; Beschreibung</span>
                   </th>
-                  <th>Mitglieder</th>
                   <th>Deine Rolle</th>
                   <th style={{ width: "1px" }}></th>
                   <th style={{ width: "1px" }}></th>
