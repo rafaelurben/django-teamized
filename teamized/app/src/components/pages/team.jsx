@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Team page component (main component at the end of this file)
+ */
+
 import { successAlert } from "../../utils/alerts.js";
 import * as Cache from "../../utils/cache.js";
 import * as Teams from "../../utils/teams.js";

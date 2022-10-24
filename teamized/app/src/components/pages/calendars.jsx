@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Calendar page component (main component at the end of this file)
+ */
+
 import * as Calendars from "../../utils/calendars.js";
 import * as Cache from "../../utils/cache.js";
 import * as Navigation from "../../utils/navigation.js";

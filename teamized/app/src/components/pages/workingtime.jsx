@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Workingtime page component (main component at the bottom of this file)
+ */
+
 import { errorAlert } from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";

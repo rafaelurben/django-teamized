@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Home page component
+ */
+
 import * as Dashboard from "../dashboard.js";
 import * as Utils from "../../utils/utils.js";
 import * as Settings from "../../utils/settings.js";

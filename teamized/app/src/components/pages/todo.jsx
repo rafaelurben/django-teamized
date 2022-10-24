@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * Todo page component (main component at the bottom of this file)
+ */
+
 import { errorAlert } from "../../utils/alerts.js";
 import * as Dashboard from "../dashboard.js";
 import * as ToDo from "../../utils/todo.js";
