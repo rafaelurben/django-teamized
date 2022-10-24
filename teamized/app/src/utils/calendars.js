@@ -1,15 +1,25 @@
+/**
+ * Functions used in the calendar module
+ */
+
 import { requestSuccessAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import { roundDays, isInRange, isoFormat, localInputFormat } from "./datetime.js";
 
+// Reexport so that datetime.js functions can also be imported from calendars.js
 export * from "./datetime.js";
 
 // Calendar utils
 
+/**
+ * Check wheter a date is during an event
+ * 
+ * @param {Date} date 
+ * @param {object} evt the event object
+ * @returns {Boolean}
+ */
 export function isDateInEvent(date, evt) {
-    // Check whether a part of the event is during the date
-
     var evtStart; var evtEnd;
     if (evt.fullday) {
         // roundDays() for fullday events is used to avoid issues with timezones
@@ -22,9 +32,14 @@ export function isDateInEvent(date, evt) {
     return isInRange(date, evtStart, evtEnd);
 }
 
+/**
+ * Flattens an object of calendars into an array of events
+ * (e.g. merge events from all calendars into a single array)
+ * 
+ * @param {object} calendars 
+ * @returns {Array}
+ */
 export function flattenCalendarEvents(calendars) {
-    // Merge events from calendars into a single object
-
     let events = {};
     Object.values(calendars).forEach(calendar => {
         Object.values(calendar.events).forEach(evt => {
@@ -37,6 +52,13 @@ export function flattenCalendarEvents(calendars) {
     return events;
 }
 
+/**
+ * Filter an array of events by a date
+ * 
+ * @param {Array} events 
+ * @param {Date} date 
+ * @returns {Array}
+ */
 export function filterCalendarEventsByDate(events, date) {
     return events.filter(event => {
         return isDateInEvent(date, event);

@@ -1,3 +1,7 @@
+/**
+ * Utils for settings and profile
+ */
+
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 
@@ -59,6 +63,11 @@ export async function editSettings(settings) {
 
 // Dark mode
 
+/**
+ * Update the used color scheme
+ * 
+ * @param {String} scheme "dark" or "light"
+ */
 function setColorScheme(scheme) {
     if (scheme === 'dark') {
         $('#app-maincontent').addClass('darkmode');

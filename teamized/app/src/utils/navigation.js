@@ -1,3 +1,7 @@
+/**
+ * Module for navigation, routing and rendering
+ */
+
 import { PageLoader, PAGELIST } from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
 import AppSidebar from "../components/sidebar.js";
@@ -10,6 +14,11 @@ function ensureExistingPage() {
     }
 }
 
+/**
+ * Export changes from the cache to the URL
+ * 
+ * @param {object} options 
+ */
 export function exportToURL(options) {
     ensureExistingPage();
     Teams.ensureExistingTeam();
@@ -60,6 +69,9 @@ export function exportToURL(options) {
     }
 }
 
+/**
+ * Import changes from the URL to the cache
+ */
 export function importFromURL() {
     // Import the pagename and teamid from the URL
 
@@ -136,6 +148,11 @@ export function reRender() {
     render();
 }
 
+/**
+ * Change the current page (and render it)
+ * 
+ * @param {String} page 
+ */
 export function selectPage(page) {
     if (PAGELIST.includes(page)) {
         window.appdata.currentPage = page;
@@ -147,6 +164,9 @@ export function selectPage(page) {
     }
 }
 
+/**
+ * Handle the browser back and forward buttons
+ */
 export function handleHistoryNavigation() {
     console.log("Navigated in history! Switching page...");
     importFromURL();

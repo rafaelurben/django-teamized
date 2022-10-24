@@ -1,9 +1,13 @@
+/**
+ * Functions used in the todo module
+ */
+
 import { requestSuccessAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import { getDateString } from "./datetime.js";
 
-// ToDoList lists
+// ToDoList list
 
 export async function getToDoLists(teamId) {
     return await Cache.refreshTeamCacheCategory(teamId, "todolists");

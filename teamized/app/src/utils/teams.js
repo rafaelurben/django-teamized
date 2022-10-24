@@ -1,3 +1,7 @@
+/**
+ * Utils for the base team features
+ */
+
 import { requestSuccessAlert, confirmAlert, infoAlert, doubleConfirmAlert, waitingAlert } from "./alerts.js";
 import * as API from "./api.js";
 import { isoFormat, localInputFormat } from "./datetime.js";

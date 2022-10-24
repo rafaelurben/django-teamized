@@ -1,4 +1,6 @@
-// Caching
+/**
+ * Utils for the local team cache
+ */
 
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
@@ -38,7 +40,7 @@ export function getMemberInTeam(teamId, memberId) {
 // Add and remove teams from cache
 
 function updateTeam(team) {
-    for (let category of ["members", "invites", "calendars"]) {
+    for (let category of ["members", "invites", "calendars", "todolists"]) {
         if (team.hasOwnProperty(category)) {
             window.appdata.teamcache[team.id][category] = {}
             replaceTeamCacheCategory(team.id, category, team[category]);

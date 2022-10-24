@@ -1,5 +1,17 @@
+/**
+ * Functions used to create charts in the workingtime module
+ */
+
 import { isInRange, roundDays, getDateString } from './datetime.js';
 
+/**
+ * Filter sessions for a given date range
+ * 
+ * @param {Array} sessions 
+ * @param {Date} start 
+ * @param {Date} end 
+ * @returns {Array}
+ */
 export function filterByDateRange(sessions, start, end) {
     let result = sessions.filter(session => {
         return isInRange(new Date(session.time_start), start, end) && isInRange(new Date(session.time_end), start, end);
@@ -7,6 +19,12 @@ export function filterByDateRange(sessions, start, end) {
     return result;
 }
 
+/**
+ * Modify an array of sessions to split sessions that span multiple days into multiple sessions
+ * 
+ * @param {Array} sessions 
+ * @returns {Array}
+ */
 function splitMultiDaySessions(sessions) {
     // When a session starts before midnight and ends after midnight, it has to be split into multiple sessions
     let tosplit = [...sessions];
@@ -45,6 +63,14 @@ function splitMultiDaySessions(sessions) {
     return result;
 }
 
+/**
+ * Generate chart data for a chart split by day
+ * 
+ * @param {Array} sessions 
+ * @param {Date} start 
+ * @param {Date} end 
+ * @returns {Array}
+ */
 export function chartDataByDays(sessions, start, end) {
     // Create a dictionary of all days in the range
     const days = {};
@@ -72,6 +98,12 @@ export function chartDataByDays(sessions, start, end) {
     return Object.values(days);
 }
 
+/**
+ * Get the total duration of all sessions in a list
+ * 
+ * @param {Array} sessions 
+ * @returns {Number} duration in seconds
+ */
 export function totalDuration(sessions) {
     let total = 0;
     sessions.forEach(session => {

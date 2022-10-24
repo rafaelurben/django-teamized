@@ -1,3 +1,7 @@
+/**
+ * Functions used in the workingtime module
+ */
+
 import { successAlert, waitingAlert, requestSuccessAlert, confirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
