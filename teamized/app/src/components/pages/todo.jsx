@@ -456,7 +456,7 @@ export default class Page_ToDo extends React.Component {
 
     return (
       <Dashboard.Page
-        title="To-do-Listen [Beta]"
+        title="To-do-Listen"
         subtitle="Behalte den Überblick über die Aufgaben deines Teams"
         loading={Cache.getCurrentTeamData()._state.todolists._initial}
       >
