@@ -1,0 +1,52 @@
+{% extends 'teamized/club/base.html' %}
+{% load static %}
+
+{% block title %}{{ club.name }}{% endblock title %}
+{% block menubartitlecontent %}{{ club.name }}{% endblock menubartitlecontent %}
+
+{% block menubar_items %}
+<li class="nav-item border-lg rounded border-secondary ms-2">
+    <a class="nav-link ms-1 me-1" href="{% url 'clubmanager:club_login' clubuid=club.uid %}" title="Vereinsseite">
+        <i class="fas fa-fw fa-home"></i>
+        <span class="d-lg-none ms-2">Vereinsseite</span>
+    </a>
+</li>
+<li class="nav-item border-lg rounded border-secondary ms-2">
+    <form method="post" action="{% url 'clubmanager:member_logout' memberuid=member.uid %}">
+        {% csrf_token %}
+        <button class="btn nav-link ms-1 me-1" type="submit" title="Logout">
+            <i class="fas fa-fw fa-sign-out-alt"></i>
+            <span class="d-lg-none ms-2">Logout</span>
+        </button>
+    </form>
+</li>
+{% endblock menubar_items %}
+
+
+{% block contentcontainer %}
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js" integrity="sha384-Bsupiv7OpT7E3CJ6GTeszyRbP70Dn+u0ifdC42h1D6Nb05l2ZZcKdOy459MsxgUv" crossorigin="anonymous"></script>
+    <!-- JQuery -->	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- React -->
+    {% if debug %}
+    <script src="https://unpkg.com/react@18.2.0/umd/react.development.js" integrity="sha384-0HL/VWVbwweJfp0saUL50fXRuSABCdVeinTBoJCDXprLkJ49VI0QMWNGMRt8ebnT" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js" integrity="sha384-79Od0yhavbvtuP2nWl+Y6mwgs8AlknSIikYSw0+uOc65GTyH8SW7e2hCyCB303Y2" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-router@6.13.0/dist/umd/react-router.development.js" integrity="sha384-PAOSqPPLmXLe3RbpGzYchgw9hiRIUxb3r+72WZHKGLnw0V6Cfm9I1Z2IzYqlXA1W" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-router-dom@6.13.0/dist/umd/react-router-dom.development.js" integrity="sha384-yjQ5cM939FsVam7vF2NiIV5FGkRsqj11hiZWcIkYDNDGVRF8ffymbK99Fl604Gha" crossorigin="anonymous"></script>
+    {% else %}
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" integrity="sha384-tMH8h3BGESGckSAVGZ82T9n90ztNXxvdwvdM6UoR56cYcf+0iGXBliJ29D+wZ/x8" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" integrity="sha384-bm7MnzvK++ykSwVJ2tynSE5TRdN+xL418osEVF2DE/L/gfWHj91J2Sphe582B1Bh" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-router@6.13.0/dist/umd/react-router.production.min.js" integrity="sha384-0uFoSUuHaKyn0+X+CbYQdGx2roobPl0qGXSk2pG2Tx8LkCHb3KKLILi/Z5TJ8rPQ" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-router-dom@6.13.0/dist/umd/react-router-dom.production.min.js" integrity="sha384-LcCiYd6iEPznKpaGKVTjjo2rJlE9/lCO6HV32NdmpybE0MTq5n9YIOynEZtnEUgH" crossorigin="anonymous"></script>
+    {% endif %}
+
+    <script>
+        document.api_base = "{% url 'clubmanager:api-memberinfo' memberuid=member.uid %}";
+    </script>
+    <script src="{% static 'clubmanager/app/memberapp.js' %}" type="module"></script>
+
+    <div id="app-maincontent" class="w-100 overflow-auto px-4 py-3 container-fluid">
+        <!-- Filled by React -->
+    </div>
+{% endblock contentcontainer %}

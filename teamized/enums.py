@@ -3,20 +3,16 @@
 Note: These are not "real" enum objects.
 """
 
+from django.db import models
 from django.utils.translation import gettext as _
 
-class Roles:
+class Roles(models.TextChoices):
     "Roles a team member can have"
 
-    OWNER = 'owner'
-    ADMIN = 'admin'
-    MEMBER = 'member'
+    OWNER = 'owner', _('Besitzer')
+    ADMIN = 'admin', _('Administrator')
+    MEMBER = 'member', _('Mitglied')
 
-    ROLES = [
-        (OWNER, _('Besitzer')),
-        (ADMIN, _('Administrator')),
-        (MEMBER, _('Mitglied')),
-    ]
 
 # The following enums are part of a planned feature: Logging
 
@@ -47,3 +43,11 @@ class Roles:
 #         (JOIN, _("Beitreten")),
 #         (LEAVE, _("Verlassen")),
 #     ]
+
+class PollFieldTypes(models.TextChoices):
+    SHORT_TEXT = 'short_text', 'Kurzer Text'
+    LONG_TEXT = 'long_text', 'Langer Text'
+    NUMBER = 'number', 'Zahl'
+    YESNO = 'yesno', 'Ja/Nein'
+    CHOICE = 'choice', 'Auswahl'
+    CHOICE_MULTIPLE = 'choice_multiple', 'Auswahl (mehrere)'

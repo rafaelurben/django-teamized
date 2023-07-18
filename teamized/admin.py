@@ -9,6 +9,8 @@ from django.utils.translation import gettext as _
 
 from teamized import models
 
+# This is required for the club admin views
+import teamized.club.admin
 # This is required for the apikey admin view
 import teamized.api.utils.admin
 
@@ -69,11 +71,13 @@ class TeamAdmin(admin.ModelAdmin):
 
     readonly_fields = ('uid',)
     search_fields = ('uid', 'name', 'description',)
+    autocomplete_fields = ('linked_club',)
 
     inlines = [TeamAdminMemberInline, TeamAdminInviteInline]
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'name', 'description',)}),
+        ('Verbindungen', {'fields': ('linked_club',)}),
     ]
 
     ordering = ('uid', )

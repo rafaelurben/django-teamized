@@ -1,0 +1,39 @@
+{% extends 'teamized/club/base.html' %}
+
+{% block title %}{{ club.name }}{% endblock title %}
+{% block menubartitlecontent %}{{ club.name }}{% endblock menubartitlecontent %}
+
+{% block menubar_items %}
+<li class="nav-item border-lg rounded border-secondary ms-2">
+    <a class="nav-link ms-1 me-1" href="{% url 'clubmanager:club_login' clubuid=club.uid %}" title="Vereinsseite">
+        <i class="fas fa-fw fa-home"></i>
+        <span class="d-lg-none ms-2">Vereinsseite</span>
+    </a>
+</li>
+{% endblock menubar_items %}
+
+
+{% block content %}
+
+<p>Hallo {{ member.first_name }}!</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% if can_login %}
+    <p>Bitte klicke auf den Knopf, um dich einzuloggen:</p>
+    <button class="btn btn-success" type="submit">
+        <i class="fas fa-fw fa-sign-in-alt"></i>
+        <span class="ms-2">Einloggen</span>
+    </button>
+    {% else %}
+    <p>
+        Um zu bestätigen, dass es wirklich du bist, musst du deine E-Mail bestätigen.<br>
+        Bitte klicke auf den Knopf, um einen magischen Login-Link zu erhalten:
+    </p>
+    <button class="btn btn-primary" type="submit">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span class="ms-2">Magischen Link anfordern</span>
+    </button>
+    {% endif %}
+</form>
+{% endblock content %}

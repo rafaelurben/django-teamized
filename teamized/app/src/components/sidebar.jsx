@@ -27,18 +27,18 @@ export default class AppSidebar extends React.Component {
   }
 
   render() {
-    let adminPages = null;
-    if (this.props.isAdmin) {
-      adminPages = [
-        <hr className="my-1" key="hr-admin" />,
-        <li key="page-admin">
+    let clubPages = null;
+    if (this.props.isClubEnabled) {
+      clubPages = [
+        <hr className="my-1" key="hr-club" />,
+        <li key="page-club">
           <a
             href="#"
-            className={this.getLinkClass("adminhome")+" text-decoration-line-through"} // TODO: Implement
-            onClick={this.selectPage("adminhome")}
+            className={this.getLinkClass("club")}
+            onClick={this.selectPage("club")}
           >
-            <i className="fas fa-fw fa-key" />
-            Admin
+            <i className="fas fa-fw fa-people-group" />
+            Verein
           </a>
         </li>,
       ];
@@ -108,7 +108,7 @@ export default class AppSidebar extends React.Component {
               To-do-Listen
             </a>
           </li>
-          {adminPages}
+          {clubPages}
         </ul>
         <hr />
         <div className="dropup">

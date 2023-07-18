@@ -1,6 +1,7 @@
 "use strict";
 
 import Page_Calendars from "./pages/calendars.js";
+import Page_Club from "./pages/club.js";
 import Page_Home from "./pages/home.js";
 import Page_TeamList from "./pages/teamlist.js";
 import Page_Team from "./pages/team.js";
@@ -16,6 +17,7 @@ import * as Cache from "../utils/cache.js";
 
 export const PAGELIST = [
     "home",
+    "club",
     "calendars",
     "team",
     "teamlist",
@@ -37,7 +39,7 @@ export class PageLoader extends React.Component {
           <div className="spinner-border mb-3" role="status">
             <span className="visually-hidden">Laden...</span>
           </div>
-          <p>Teams werden geladen...</p>
+          <p>Daten werden abgerufen...</p>
         </div>
       );
     };
@@ -87,6 +89,13 @@ export class PageLoader extends React.Component {
           <Page_ToDo
             team={teamdata.team}
             todolists={teamdata.todolists}
+            isAdmin={Teams.isCurrentTeamAdmin()}
+          />
+        );
+      case "club":
+        return (
+          <Page_Club
+            team={teamdata.team}
             isAdmin={Teams.isCurrentTeamAdmin()}
           />
         );

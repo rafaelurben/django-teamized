@@ -1,4 +1,6 @@
+import uuid
 from datetime import timedelta, datetime, date
+from django.utils import timezone
 
 def get_week_start_end(dt: datetime, weekoffset=0):
     """
@@ -39,3 +41,19 @@ def iddict(lst: list):
     Returns a dictionary from a list of objects with an id attribute
     """
     return {x['id']: x for x in lst}
+
+def now_plus_1h():
+    return timezone.now() + timezone.timedelta(hours=1)
+
+def now_plus_2w():
+    return timezone.now() + timezone.timedelta(weeks=2)
+
+def now_plus_8w():
+    return timezone.now() + timezone.timedelta(weeks=8)
+
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False

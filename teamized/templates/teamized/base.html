@@ -57,47 +57,49 @@
                     <!-- Navigation bar -->
                     <div class="collapse navbar-collapse" id="navbar">
                         <ul class="navbar-nav nav w-100 me-1 mb-2 justify-content-end">
-                            {% block additional_menubar_items %}
-                            {% endblock additional_menubar_items %}
-                            {% block menubar_items_end %}
-                                {% if not user.is_authenticated %}
-                                    <li class="nav-item border-lg rounded border-secondary ms-2">
-                                        <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}" title="{% translate "Startseite" %}">
-                                            <i class="fas fa-fw fa-home"></i>
-                                            <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item border-lg rounded border-secondary ms-2">
-                                        <a class="nav-link ms-1 me-1" href="{% url 'account:login' %}?next={% url 'teamized:app' %}" title="{% translate "Login" %}">
-                                            <i class="fas fa-fw fa-sign-in-alt"></i>
-                                            <span class="d-lg-none ms-2">{% translate "Login" %}</span>
-                                        </a>
-                                    </li>
-                                {% else %}
-                                    <li class="nav-item border-lg rounded border-secondary ms-2">
-                                        <a class="nav-link ms-1 me-1" href="{% url 'account:home' %}?next={% url 'teamized:app' %}" title="{% translate "Account" %}">
-                                            <i class="fas fa-fw fa-user"></i>
-                                            <span class="d-lg-none ms-2">{% translate "Account" %}:</span>
-                                            <span class="navbar-text ms-0 ms-lg-2">{{ user.username }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item border-lg rounded border-secondary ms-2">
-                                        <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}" title="{% translate "Startseite" %}">
-                                            <i class="fas fa-fw fa-home"></i>
-                                            <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item border-lg rounded border-secondary ms-2">
-                                        <form method="post" action="{% url 'account:logout' %}?next={% url 'teamized:home' %}">
-                                            {% csrf_token %}
-                                            <button class="btn nav-link ms-1 me-1" type="submit" title="{% translate "Logout" %}">
-                                                <i class="fas fa-fw fa-sign-out-alt"></i>
-                                                <span class="d-lg-none ms-2">{% translate "Logout" %}</span>
-                                            </button>
-                                        </form>
-                                    </li>
-                                {% endif %}
-                            {% endblock menubar_items_end %}
+                            {% block all_menubar_items %}
+                                {% block additional_menubar_items %}
+                                {% endblock additional_menubar_items %}
+                                {% block menubar_items_end %}
+                                    {% if not user.is_authenticated %}
+                                        <li class="nav-item border-lg rounded border-secondary ms-2">
+                                            <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}" title="{% translate "Startseite" %}">
+                                                <i class="fas fa-fw fa-home"></i>
+                                                <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item border-lg rounded border-secondary ms-2">
+                                            <a class="nav-link ms-1 me-1" href="{% url 'account:login' %}?next={% url 'teamized:app' %}" title="{% translate "Login" %}">
+                                                <i class="fas fa-fw fa-sign-in-alt"></i>
+                                                <span class="d-lg-none ms-2">{% translate "Login" %}</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item border-lg rounded border-secondary ms-2">
+                                            <a class="nav-link ms-1 me-1" href="{% url 'account:home' %}?next={% url 'teamized:app' %}" title="{% translate "Account" %}">
+                                                <i class="fas fa-fw fa-user"></i>
+                                                <span class="d-lg-none ms-2">{% translate "Account" %}:</span>
+                                                <span class="navbar-text ms-0 ms-lg-2">{{ user.username }}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item border-lg rounded border-secondary ms-2">
+                                            <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}" title="{% translate "Startseite" %}">
+                                                <i class="fas fa-fw fa-home"></i>
+                                                <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item border-lg rounded border-secondary ms-2">
+                                            <form method="post" action="{% url 'account:logout' %}?next={% url 'teamized:home' %}">
+                                                {% csrf_token %}
+                                                <button class="btn nav-link ms-1 me-1" type="submit" title="{% translate "Logout" %}">
+                                                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                                                    <span class="d-lg-none ms-2">{% translate "Logout" %}</span>
+                                                </button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
+                                {% endblock menubar_items_end %}
+                            {% endblock all_menubar_items %}
                         </ul>
                     </div>
                 </div>

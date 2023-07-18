@@ -43,6 +43,12 @@ urlpatterns = [
     path('teams/<team>/todolists/<todolist>/items', ep.todo.endpoint_todolistitems, name='api-todolistitems'),
     path('teams/<team>/todolists/<todolist>/items/<item>', ep.todo.endpoint_todolistitem, name='api-todolistitem'),
 
+    # Club API views
+
+    # path('teams/<team>/club', ep.club.endpoint_club, name='api-club'),
+    # path('teams/<team>/club/members', ep.club.endpoint_members, name='api-club-members'),
+    # path('teams/<team>/club/members/<member>', ep.club.endpoint_member, name='api-club-member'),
+
     # Catch-all error view for 404 JSON responses
     re_path('.*', ep.endpoint_not_found, name="api-not-found")
 ]

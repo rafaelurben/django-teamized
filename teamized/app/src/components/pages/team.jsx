@@ -304,7 +304,15 @@ export default class Page_Team extends React.Component {
         loading={Cache.getCurrentTeamData()._state.members._initial}
       >
         <Dashboard.Column>
-          <Dashboard.Tile title="Teaminfos">
+          <Dashboard.Tile 
+            title={this.props.team.club === null ? "Teaminfos" : [
+              "Teaminfos",
+              <div className="badge bg-info ms-2">
+                Vereinsmodus aktiviert
+                <IconTooltip title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar." className="ms-1" />
+              </div>
+            ]}
+          >
             <table className="table table-borderless mb-2">
               <tbody>
                 <tr key="name">

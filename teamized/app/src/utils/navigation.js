@@ -102,6 +102,7 @@ export function renderSidebar() {
             page={window.appdata.currentPage}
             user={window.appdata.user}
             isAdmin={Teams.isCurrentTeamAdmin()}
+            isClubEnabled={Teams.hasCurrentTeamLinkedClub()}
             onPageSelect={selectPage}
         />,
         document.getElementById("app-sidebar")

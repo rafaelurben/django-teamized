@@ -7,6 +7,7 @@ import * as Alerts from "./utils/alerts.js";
 import * as API from "./utils/api.js";
 import * as Cache from "./utils/cache.js";
 import * as Calendars from "./utils/calendars.js";
+import * as Club from "./utils/club.js";
 import * as DateTime from "./utils/datetime.js";
 import * as Navigation from "./utils/navigation.js";
 import * as Settings from "./utils/settings.js";
@@ -23,6 +24,7 @@ window._App = {
   API,
   Cache,
   Calendars,
+  Club,
   DateTime,
   Navigation,
   Settings,

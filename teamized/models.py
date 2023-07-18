@@ -15,6 +15,7 @@ from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.urls import reverse
 
+import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
 
 # Create your models here.
@@ -143,6 +144,16 @@ class Team(models.Model):
         default="",
     )
 
+    linked_club = models.OneToOneField(
+        to=club_models.Club,
+        related_name="team",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name=_("Verlinkter Verein"),
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -161,6 +172,7 @@ class Team(models.Model):
             "id": self.uid,
             "name": self.name,
             "description": self.description,
+            "club": self.linked_club.as_dict() if self.linked_club else None,
             "membercount": membercount or self.members.count(),
             **additional_items,
         }
@@ -232,7 +244,7 @@ class Member(models.Model):
     role = models.CharField(
         max_length=16,
         default=enums.Roles.MEMBER,
-        choices=enums.Roles.ROLES,
+        choices=enums.Roles.choices,
     )
     note = models.TextField(
         blank=True,

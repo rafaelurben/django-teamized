@@ -1,0 +1,7 @@
+Hallo {{ member.first_name }}!
+
+Du kannst dich über folgenden Link einloggen:
+
+{{ magicurl }}
+
+Bitte beachte, dass dieser Link nur einmal und nur 60 Minuten lang gültig ist.

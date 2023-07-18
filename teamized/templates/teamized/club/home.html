@@ -1,0 +1,12 @@
+{% extends 'teamized/club/base.html' %}
+
+{% block title %}Startseite{% endblock title %}
+{% block menubartitlecontent %}{{ block.super }}{% endblock menubartitlecontent %}
+
+{% block content %}
+
+<p>Hallo!</p>
+<p>Diese Seite ist noch nicht fertig.</p>
+<p>Zum <a href="{% url 'clubmanager:admin_home' %}">Adminbereich</a>.</p>
+
+{% endblock content %}

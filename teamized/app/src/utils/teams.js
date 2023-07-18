@@ -19,6 +19,14 @@ export function isCurrentTeamAdmin() {
     return false;
 }
 
+export function hasCurrentTeamLinkedClub() {
+    const teamdata = Cache.getCurrentTeamData();
+    if (teamdata) {
+        return teamdata.team.club !== null;
+    }
+    return false;
+}
+
 export function ensureExistingTeam() {
   if (window.appdata.selectedTeamId) {
     // Team selected; check if it is valid
