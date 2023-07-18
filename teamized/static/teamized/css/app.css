@@ -74,6 +74,12 @@ body.swal2-shown:not(.swal2-no-backdrop) {
     margin: 1em 0 3px;
 }
 
+.swal2-input,
+.swal2-textarea {
+    /* Make input fields full width */
+    width: 100%;
+}
+
 /* DEBUG */
 
 body:not(.debug) .debug-only {

@@ -95,7 +95,7 @@ export async function createCalendarPopup(team) {
             <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
             <textarea id="swal-input-description" class="swal2-textarea" placeholder="Kalenderbeschreibung"></textarea>
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color">
         `,
         focusConfirm: false,
         showCancelButton: true,
@@ -143,7 +143,7 @@ export async function editCalendarPopup(team, calendar) {
             <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
             <textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${calendar.color}">
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color" value="${calendar.color}">
         `,
         focusConfirm: false,
         showCancelButton: true,
