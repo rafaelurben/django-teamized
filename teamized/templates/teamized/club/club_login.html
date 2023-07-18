@@ -1,11 +1,12 @@
 {% extends 'teamized/club/base.html' %}
 
 {% block title %}{{ club.name }}{% endblock title %}
+{% block menubartitleurl %}{% url 'teamized:club_login' clubslug=club.slug %}{% endblock menubartitleurl %}
 {% block menubartitlecontent %}{{ club.name }}{% endblock menubartitlecontent %}
 
 {% block content %}
 
-{{ club.description | linebreaks }}
+{{ club.description | linebreaks | urlize }}
 
 <hr />
 
@@ -42,6 +43,6 @@
 
 <hr />
 
-<p class="mt-4">Auf der Suche nach dem Adminbereich? <a href="{% url 'clubmanager:admin_app' clubuid=club.uid %}">Hier entlang!</a></p>
+<p class="mt-4">Auf der Suche nach dem Adminbereich? <a href="{% url 'teamized:app' %}">Hier entlang!</a></p>
 
 {% endblock content %}

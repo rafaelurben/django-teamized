@@ -60,15 +60,17 @@ class Club(models.Model):
             "uid": str(self.uid),
             "name": str(self.name),
             "description": str(self.description),
+            "slug": str(self.slug),
+            "url": reverse("teamized:club_login", kwargs={"clubslug": self.slug}),
         }
 
     def session_get_logged_in_members(self, request):
         members = []
-        if "clubmanager_sessions" in request.session:
-            sessions = request.session["clubmanager_sessions"]
+        if "teamized_clubmember_sessions" in request.session:
+            sessions = request.session["teamized_clubmember_sessions"]
             if str(self.uid) in sessions:
                 for memberuid, magicuid in deepcopy(
-                    request.session["clubmanager_sessions"][str(self.uid)]
+                    request.session["teamized_clubmember_sessions"][str(self.uid)]
                 ).items():
                     if ClubMemberMagicLink.objects.filter(
                         uid=magicuid,
@@ -89,14 +91,17 @@ class Club(models.Model):
                                 "member": magiclink.member,
                                 "url": (
                                     reverse(
-                                        "clubmanager:member_app",
-                                        kwargs={"memberuid": magiclink.member.uid},
+                                        "teamized:club_member_app",
+                                        kwargs={
+                                            "clubslug": magiclink.member.club.slug,
+                                            "memberuid": magiclink.member.uid
+                                        },
                                     )
                                 ),
                             }
                         )
                     else:
-                        del request.session["clubmanager_sessions"][str(self.uid)][memberuid]
+                        del request.session["teamized_clubmember_sessions"][str(self.uid)][memberuid]
                         request.session.modified = True
         return members
 
@@ -157,7 +162,7 @@ class ClubMember(models.Model):
         return str(self.uid)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} (Vereinsmitglied)"
+        return f"{self.first_name} {self.last_name} ({self.email})"
 
     def as_dict(self, detailed=False):
         if detailed:
@@ -204,8 +209,8 @@ class ClubMember(models.Model):
         ).exists()
 
     def session_is_logged_in(self, request):
-        if "clubmanager_sessions" in request.session:
-            sessions = request.session["clubmanager_sessions"]
+        if "teamized_clubmember_sessions" in request.session:
+            sessions = request.session["teamized_clubmember_sessions"]
             if self.clubuid in sessions:
                 if self.memberuid in sessions[self.clubuid]:
                     if self.can_use_magicuid(
@@ -228,11 +233,11 @@ class ClubMember(models.Model):
             disabled=False,
         ).mark_logged_in()
 
-        if not "clubmanager_sessions" in request.session:
-            request.session["clubmanager_sessions"] = {}
-        if not self.clubuid in request.session["clubmanager_sessions"]:
-            request.session["clubmanager_sessions"][self.clubuid] = {}
-        request.session["clubmanager_sessions"][self.clubuid][self.memberuid] = str(
+        if not "teamized_clubmember_sessions" in request.session:
+            request.session["teamized_clubmember_sessions"] = {}
+        if not self.clubuid in request.session["teamized_clubmember_sessions"]:
+            request.session["teamized_clubmember_sessions"][self.clubuid] = {}
+        request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid] = str(
             magic_uid
         )
         request.session.modified = True
@@ -240,22 +245,22 @@ class ClubMember(models.Model):
         return True
 
     def session_logout(self, request):
-        if "clubmanager_sessions" in request.session:
-            if self.clubuid in request.session["clubmanager_sessions"]:
+        if "teamized_clubmember_sessions" in request.session:
+            if self.clubuid in request.session["teamized_clubmember_sessions"]:
                 if (
                     self.memberuid
-                    in request.session["clubmanager_sessions"][self.clubuid]
+                    in request.session["teamized_clubmember_sessions"][self.clubuid]
                 ):
-                    magic_uid = request.session["clubmanager_sessions"][self.clubuid][
+                    magic_uid = request.session["teamized_clubmember_sessions"][self.clubuid][
                         self.memberuid
                     ]
-                    del request.session["clubmanager_sessions"][self.clubuid][
+                    del request.session["teamized_clubmember_sessions"][self.clubuid][
                         self.memberuid
                     ]
-                    if len(request.session["clubmanager_sessions"][self.clubuid]) == 0:
-                        del request.session["clubmanager_sessions"][self.clubuid]
-                    if len(request.session["clubmanager_sessions"]) == 0:
-                        del request.session["clubmanager_sessions"]
+                    if len(request.session["teamized_clubmember_sessions"][self.clubuid]) == 0:
+                        del request.session["teamized_clubmember_sessions"][self.clubuid]
+                    if len(request.session["teamized_clubmember_sessions"]) == 0:
+                        del request.session["teamized_clubmember_sessions"]
                     if ClubMemberMagicLink.objects.filter(uid=magic_uid, member=self).exists():
                         ClubMemberMagicLink.objects.get(uid=magic_uid, member=self).disable()
         request.session.modified = True
@@ -321,7 +326,7 @@ class ClubMemberMagicLink(models.Model):
         url = (
             request.build_absolute_uri(
                 reverse(
-                    "clubmanager:member_login", kwargs={"memberuid": self.member.uid}
+                    "teamized:club_member_login", kwargs={"clubslug": self.member.club.slug, "memberuid": self.member.uid}
                 )
             )
             + f"?magicuid={self.uid}"
@@ -330,7 +335,7 @@ class ClubMemberMagicLink(models.Model):
         send_mail(
             subject="Dein magischer Login-Link",
             message=render_to_string(
-                "clubmanager/emails/magic_mail.txt",
+                "teamized/club/emails/magic_mail.txt",
                 {
                     "magicurl": url,
                     "member": self.member,

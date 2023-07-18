@@ -3,53 +3,35 @@ from django.urls import reverse
 from django.contrib import messages
 
 import teamized.club.models as models
+from teamized.club.decorators import clubview
 
 # Create your views here.
 
-
-def home(request):
-    """Generic home view - shows information about the project"""
-    return render(request, "teamized/club/home.html")
-
-### Club member views
-
-
-def member_app(request, memberuid):
+@clubview()
+def member_app(request, club, member):
     """Member app view - shows the member app for a specific member"""
-
-    if not models.ClubMember.objects.filter(uid=memberuid).exists():
-        messages.error(request, "Dieser Link ist ungültig.")
-        return render(request, "teamized/club/error.html", status=404)
-
-    member = models.ClubMember.objects.get(uid=memberuid)
 
     if not member.session_is_logged_in(request):
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"memberuid": memberuid})
+            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
         )
 
     return render(
-        request, "teamized/club/member_app.html", {"member": member, "club": member.club}
+        request, "teamized/club/member_app.html", {"member": member, "club": club}
     )
 
-
-def member_login(request, memberuid):
+@clubview()
+def member_login(request, club, member):
     """Member login view - shows the login page for a specific member
 
     If a magicuid is provided in the url parameters, the member is automatically logged in.
     Otherwise, the member can request a magic link to be sent to their email address.
     """
 
-    if not models.ClubMember.objects.filter(uid=memberuid).exists():
-        messages.error(request, "Dieser Link ist ungültig.")
-        return render(request, "teamized/club/error.html", status=404)
-
-    member = models.ClubMember.objects.get(uid=memberuid)
-
     if member.session_is_logged_in(request):
         messages.success(request, "Du bist bereits eingeloggt.")
         return redirect(
-            reverse("teamized:club_member_app", kwargs={"memberuid": memberuid})
+            reverse("teamized:club_member_app", kwargs={"clubslug": club.slug, "memberuid": member.uid})
         )
 
     magicuid = request.GET.get("magicuid", None)
@@ -62,14 +44,14 @@ def member_login(request, memberuid):
         )
         # Redirect to remove magicuid from url
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"memberuid": memberuid})
+            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
         )
 
     if request.method == "POST":
         if can_login:
             member.session_login(request, magicuid)
             return redirect(
-                reverse("teamized:club_member_app", kwargs={"memberuid": memberuid})
+                reverse("teamized:club_member_app", kwargs={"clubslug": club.slug, "memberuid": member.uid})
             )
 
         member.send_magic_link(request)
@@ -78,7 +60,7 @@ def member_login(request, memberuid):
         )
         # Redirect to prevent resubmission of form
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"memberuid": memberuid})
+            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
         )
 
     return render(
@@ -86,18 +68,14 @@ def member_login(request, memberuid):
         "teamized/club/member_login.html",
         {
             "member": member,
-            "club": member.club,
+            "club": club,
             "can_login": can_login,
         },
     )
 
-
-def member_logout(request, memberuid):
-    if not models.ClubMember.objects.filter(uid=memberuid).exists():
-        messages.error(request, "Dieser Link ist ungültig.")
-        return render(request, "teamized/club/error.html", status=404)
-
-    member = models.ClubMember.objects.get(uid=memberuid)
+@clubview()
+def member_logout(request, club, member):
+    """Member logout view - logs out a specific member"""
 
     if member.session_is_logged_in(request):
         member.session_logout(request)
@@ -106,16 +84,12 @@ def member_logout(request, memberuid):
         messages.warning(request, "Du warst gar nicht eingeloggt.")
 
     return redirect(
-        reverse("teamized:club_login", kwargs={"clubuid": member.club_id})
+        reverse("teamized:club_login", kwargs={"clubslug": club.slug})
     )
 
-
-def club_login(request, clubuid):
-    if not models.Club.objects.filter(uid=clubuid).exists():
-        messages.error(request, "Dieser Link ist ungültig.")
-        return render(request, "teamized/club/error.html", status=404)
-
-    club = models.Club.objects.get(uid=clubuid)
+@clubview()
+def club_login(request, club):
+    """Club login view - shows the login page for a specific club"""
 
     if request.method == "POST":
         email = request.POST.get("email", None)
@@ -140,9 +114,7 @@ def club_login(request, clubuid):
         {"club": club, "logged_in_members": logged_in_members},
     )
 
-
 ### Error
-
 
 def error(request):
     messages.error(request, "Diese Seite wurde nicht gefunden.")

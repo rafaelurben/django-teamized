@@ -106,6 +106,10 @@ export default class Page_Club extends React.Component {
                   <th>Name:</th>
                   <td>{this.props.team.club.name}</td>
                 </tr>
+                <tr key="url">
+                  <th>Login URL:</th>
+                  <td><a target="_blank" href={this.props.team.club.url}>{this.props.team.club.slug}</a></td>
+                </tr>
                 <tr key="description">
                   <th style={{ width: "1px" }} className="pe-3">
                     Beschreibung:
@@ -120,7 +124,7 @@ export default class Page_Club extends React.Component {
                 </tr>
                 <tr key="id" className="debug-only">
                   <th>ID:</th>
-                  <td>{this.props.team.id}</td>
+                  <td>{this.props.team.club.id}</td>
                 </tr>
               </tbody>
             </table>

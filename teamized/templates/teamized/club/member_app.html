@@ -2,17 +2,18 @@
 {% load static %}
 
 {% block title %}{{ club.name }}{% endblock title %}
+{% block menubartitleurl %}{% url 'teamized:club_login' clubslug=club.slug %}{% endblock menubartitleurl %}
 {% block menubartitlecontent %}{{ club.name }}{% endblock menubartitlecontent %}
 
 {% block menubar_items %}
 <li class="nav-item border-lg rounded border-secondary ms-2">
-    <a class="nav-link ms-1 me-1" href="{% url 'clubmanager:club_login' clubuid=club.uid %}" title="Vereinsseite">
+    <a class="nav-link ms-1 me-1" href="{% url 'teamized:club_login' clubslug=club.slug %}" title="Vereinsseite">
         <i class="fas fa-fw fa-home"></i>
         <span class="d-lg-none ms-2">Vereinsseite</span>
     </a>
 </li>
 <li class="nav-item border-lg rounded border-secondary ms-2">
-    <form method="post" action="{% url 'clubmanager:member_logout' memberuid=member.uid %}">
+    <form method="post" action="{% url 'teamized:club_member_logout' clubslug=club.slug memberuid=member.uid %}">
         {% csrf_token %}
         <button class="btn nav-link ms-1 me-1" type="submit" title="Logout">
             <i class="fas fa-fw fa-sign-out-alt"></i>
@@ -42,11 +43,12 @@
     {% endif %}
 
     <script>
-        document.api_base = "{% url 'clubmanager:api-memberinfo' memberuid=member.uid %}";
+        {% comment %} document.api_base = "{% url 'teamized:club-api-memberinfo' memberuid=member.uid %}"; {% endcomment %}
     </script>
-    <script src="{% static 'clubmanager/app/memberapp.js' %}" type="module"></script>
+    {% comment %} <script src="{% static '' %}" type="module"></script> {% endcomment %}
 
     <div id="app-maincontent" class="w-100 overflow-auto px-4 py-3 container-fluid">
+        Da ist noch nix drin...
         <!-- Filled by React -->
     </div>
 {% endblock contentcontainer %}

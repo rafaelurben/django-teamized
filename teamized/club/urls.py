@@ -6,16 +6,11 @@ import teamized.club.views as views
 
 ##############
 
-app_name = 'clubmanager'
-
 urlpatterns = [
-    path('', views.home, name="club_home"),
-    path('member/<uuid:memberuid>/', views.member_app, name="club_member_app"),
-    path('member/<uuid:memberuid>/login', views.member_login, name="club_member_login"),
-    path('member/<uuid:memberuid>/logout', views.member_logout, name="club_member_logout"),
-    path('club/<uuid:clubuid>/', views.club_login, name="club_club_login"),
-
-    # path('api/', include('teamized.club.api'), name="api_home"),
+    path('<slug:clubslug>/<uuid:memberuid>', views.member_app, name="club_member_app"),
+    path('<slug:clubslug>/<uuid:memberuid>/login', views.member_login, name="club_member_login"),
+    path('<slug:clubslug>/<uuid:memberuid>/logout', views.member_logout, name="club_member_logout"),
+    path('<slug:clubslug>/', views.club_login, name="club_login"),
 
     re_path(".*", views.error)
 ]

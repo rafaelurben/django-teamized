@@ -22,6 +22,10 @@ urlpatterns = [
          views.app_debug,
          name="app-debug"),
 
+    # Club pages (public)
+    path('clubs/',
+         include('teamized.club.urls')),
+
     # PWA manifest (public)
     path('manifest.json',
          views.manifest,
@@ -31,7 +35,6 @@ urlpatterns = [
          include('teamized.api.urls')),
 
     # Calendar .ics file (public, but must know uuid token)
-
     path('calendar/<uuid:uuid>.ics',
          views.calendar_ics,
          name="calendar_ics"),

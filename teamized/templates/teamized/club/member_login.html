@@ -1,11 +1,12 @@
 {% extends 'teamized/club/base.html' %}
 
 {% block title %}{{ club.name }}{% endblock title %}
+{% block menubartitleurl %}{% url 'teamized:club_login' clubslug=club.slug %}{% endblock menubartitleurl %}
 {% block menubartitlecontent %}{{ club.name }}{% endblock menubartitlecontent %}
 
 {% block menubar_items %}
 <li class="nav-item border-lg rounded border-secondary ms-2">
-    <a class="nav-link ms-1 me-1" href="{% url 'clubmanager:club_login' clubuid=club.uid %}" title="Vereinsseite">
+    <a class="nav-link ms-1 me-1" href="{% url 'teamized:club_login' clubslug=club.slug %}" title="Vereinsseite">
         <i class="fas fa-fw fa-home"></i>
         <span class="d-lg-none ms-2">Vereinsseite</span>
     </a>

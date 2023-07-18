@@ -2,8 +2,8 @@
 {% load i18n static %}
 
 {% block menubartitle %}
-    <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'teamized:home' %}">
-        {% block menubartitlecontent %}Clubmanager{% endblock menubartitlecontent %}
+    <a id="menubartitle" class="navbar-brand ms-3" href="{% block menubartitleurl %}{% url 'teamized:home' %}{% endblock menubartitleurl %}">
+        {% block menubartitlecontent %}Teamized: Clubs{% endblock menubartitlecontent %}
     </a>
 {% endblock menubartitle %}
 
