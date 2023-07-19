@@ -158,3 +158,17 @@ export function ms2HoursMinutesSeconds(ms) {
 export function seconds2HoursMinutesSeconds(seconds) {
     return ms2HoursMinutesSeconds(seconds * 1000);
 }
+
+/**
+ * 
+ * @param {String} birthDateString 
+ * @returns {Number} age in years
+ */
+export function getAge(birthDateString) {
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const month = today.getMonth() - birthDate.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) age--;
+    return age;
+}

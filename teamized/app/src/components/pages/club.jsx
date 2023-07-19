@@ -4,6 +4,7 @@
  * Club page component
  */
 
+import { getDateString, getAge } from "../../utils/datetime.js";
 import * as Dashboard from "../dashboard.js";
 import * as Cache from "../../utils/cache.js";
 import * as Club from "../../utils/club.js";
@@ -40,7 +41,7 @@ class ClubMembersTableRow extends React.Component {
         </td>
         <td>
           <span>
-            {member.birth_date}
+            {getDateString(new Date(member.birth_date))} ({getAge(member.birth_date)})
           </span>
         </td>
         {/* Email */}
@@ -68,6 +69,41 @@ class ClubMembersTableRow extends React.Component {
   }
 }
 
+class ClubMembersTable extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let memberrows = Object.values(this.props.members).map((member) => {
+      return (
+        <ClubMembersTableRow
+          key={member.id}
+          member={member}
+          team={this.props.team}
+          loggedinmember={this.props.team.member}
+        />
+      );
+    });
+
+    return (
+      <table className="table table-borderless align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Geburtsdatum</th>
+            <th>E-Mail-Adresse</th>
+            <th style={{ width: "1px" }}></th>
+            <th style={{ width: "1px" }}></th>
+            <th className="debug-only">ID</th>
+          </tr>
+        </thead>
+        <tbody>{memberrows}</tbody>
+      </table>
+    );
+  }
+}
 
 export default class Page_Club extends React.Component {
   constructor(props) {
@@ -87,25 +123,12 @@ export default class Page_Club extends React.Component {
   }
 
   render() {
-    var memberrows;
+    var membertilecontent;
     if (Cache.getCurrentTeamData()._state.club_members._initial) {
-      memberrows = (
-        <tr>
-          <td colSpan="4">Laden...</td>
-        </tr>
-      );
       Club.getClubMembers(this.props.team.id);
+      membertilecontent = (<p className="ms-2">Wird geladen...</p>);
     } else {
-      memberrows = Object.values(this.props.club_members).map((member) => {
-        return (
-          <ClubMembersTableRow
-            key={member.id}
-            member={member}
-            team={this.props.team}
-            loggedinmember={this.props.team.member}
-          />
-        );
-      });
+      membertilecontent = (<ClubMembersTable team={this.props.team} members={this.props.club_members} />)
     }
 
     return (
@@ -163,20 +186,7 @@ export default class Page_Club extends React.Component {
           </Dashboard.Tile>
 
           <Dashboard.Tile title="Vereinsmitglieder">
-            <table className="table table-borderless align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>Vorname</th>
-                  <th>Nachname</th>
-                  <th>Geburtsdatum</th>
-                  <th>E-Mail-Adresse</th>
-                  <th style={{ width: "1px" }}></th>
-                  <th style={{ width: "1px" }}></th>
-                  <th className="debug-only">ID</th>
-                </tr>
-              </thead>
-              <tbody>{memberrows}</tbody>
-            </table>
+            {membertilecontent}
           </Dashboard.Tile>
         </Dashboard.Column>
       </Dashboard.Page>
