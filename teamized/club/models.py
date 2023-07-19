@@ -419,7 +419,7 @@ class ClubMemberGroup(models.Model):
 
     def as_dict(self):
         return {
-            "uid": self.uid,
+            "id": self.uid,
             "name": self.name,
             "description": self.description or "",
             "memberids": [ms.member_id for ms in self.memberships.all()],

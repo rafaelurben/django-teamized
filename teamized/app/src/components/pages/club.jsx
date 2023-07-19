@@ -9,6 +9,7 @@ import * as Dashboard from "../dashboard.js";
 import * as Cache from "../../utils/cache.js";
 import * as Club from "../../utils/club.js";
 import * as Navigation from "../../utils/navigation.js";
+import { IconTooltip } from "../tooltips.js";
 
 
 class ClubMembersTableRow extends React.Component {
@@ -75,7 +76,7 @@ class ClubMembersTable extends React.Component {
   }
 
   render() {
-    let memberrows = Object.values(this.props.members).map((member) => {
+    let memberrows = this.props.members.map((member) => {
       return (
         <ClubMembersTableRow
           key={member.id}
@@ -95,7 +96,7 @@ class ClubMembersTable extends React.Component {
             <th>Geburtsdatum</th>
             <th>E-Mail-Adresse</th>
             <th style={{ width: "1px" }}></th>
-            <th style={{ width: "1px" }}></th>
+            {/* <th style={{ width: "1px" }}></th> */}
             <th className="debug-only">ID</th>
           </tr>
         </thead>
@@ -108,9 +109,16 @@ class ClubMembersTable extends React.Component {
 export default class Page_Club extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { selectedTab: "all" };
+
+    this.selectTab = this.selectTab.bind(this);
     this.handleClubEditButtonClick = this.handleClubEditButtonClick.bind(this);
     this.handleClubDeleteButtonClick = this.handleClubDeleteButtonClick.bind(this);
   }
+
+  selectTab = (tab) => (e) => {
+    this.setState({ selectedTab: tab });
+  };
 
   async handleClubEditButtonClick() {
     await Club.editClubPopup(this.props.team);
@@ -123,12 +131,85 @@ export default class Page_Club extends React.Component {
   }
 
   render() {
+    let teamdata = Cache.getCurrentTeamData();
     var membertilecontent;
-    if (Cache.getCurrentTeamData()._state.club_members._initial) {
-      Club.getClubMembers(this.props.team.id);
-      membertilecontent = (<p className="ms-2">Wird geladen...</p>);
+
+    if (
+      teamdata._state.club_members._initial ||
+      teamdata._state.club_groups._initial
+    ) {
+      if (teamdata._state.club_members._initial) Club.getClubMembers(this.props.team.id);
+      if (teamdata._state.club_groups._initial) Club.getClubGroups(this.props.team.id);
+      membertilecontent = <p className="ms-2">Wird geladen...</p>;
     } else {
-      membertilecontent = (<ClubMembersTable team={this.props.team} members={this.props.club_members} />)
+      let nav = (
+        <div key="nav" className="m-2 border-0">
+          <ul key="ul" className="nav nav-tabs">
+            <li key="all" className="nav-item">
+              <button 
+                className={this.state.selectedTab === "all" ? "nav-link active" : "nav-link"} 
+                onClick={this.selectTab('all')}
+              >
+                Alle ({Object.keys(teamdata.club_members).length})
+              </button>
+            </li>
+            {Object.values(teamdata.club_groups).map((group) => {
+              return (
+                <li key={group.id} className="nav-item">
+                  <button className={this.state.selectedTab === group.id ? "nav-link active" : "nav-link"} onClick={this.selectTab(group.id)}>
+                    {group.name} ({group.memberids.length})
+                    {group.description ? (
+                      <IconTooltip className="ms-1" title={group.description} />
+                    )  : null}
+                  </button>
+                </li>
+              )
+            })}
+            <li key="edit" className="nav-item ms-auto">
+              <button
+                className={this.state.selectedTab === "edit" ? "nav-link active" : "nav-link"}
+                onClick={this.selectTab("edit")}
+              >
+                <i className="fa-solid fa-pen-to-square"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      );
+
+      switch (this.state.selectedTab) {
+        case "all": // all members
+          membertilecontent = [
+            nav,
+            <ClubMembersTable
+              key="table"
+              team={this.props.team}
+              members={Object.values(teamdata.club_members)}
+            />
+          ];
+          break;
+        case "edit": // edit groups
+          membertilecontent = [
+            nav,
+            <p key="notyethere" className="m-2">Hier ist noch nix; hier gehört Gruppenbearbeitung hin</p>
+          ];
+          break;
+        default: // filtered members by group
+          let group = teamdata.club_groups[this.state.selectedTab];
+          let groupmembers = Object.values(teamdata.club_members).filter((member) => {
+            return group.memberids.includes(member.id);
+          });
+
+          membertilecontent = [
+            nav,
+            <ClubMembersTable
+              key="table"
+              team={this.props.team}
+              members={groupmembers}
+            />,
+          ];
+          break;
+      }
     }
 
     return (
