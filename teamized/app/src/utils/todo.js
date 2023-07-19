@@ -37,7 +37,7 @@ export async function createToDoListPopup(team) {
             <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
             <textarea id="swal-input-description" class="swal2-textarea" placeholder="Listenbeschreibung"></textarea>
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50">
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color">
         `,
         focusConfirm: false,
         showCancelButton: true,
@@ -86,7 +86,7 @@ export async function editToDoListPopup(team, todolist) {
             <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
             <textarea id="swal-input-description" class="swal2-textarea" placeholder="${todolist.description}">${todolist.description}</textarea>
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color w-50" value="${todolist.color}">
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color" value="${todolist.color}">
         `,
         focusConfirm: false,
         showCancelButton: true,

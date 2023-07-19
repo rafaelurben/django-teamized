@@ -80,7 +80,7 @@ class BooleanValidator(BaseValidator):
         return bool(value)
 
     @classmethod
-    def _before_convert(self, value, **kwargs):
+    def _before_convert(cls, value, **kwargs):
         if isinstance(value, str) and value.lower() == "false":
             return False
         return value
@@ -102,7 +102,7 @@ class StringValidator(BaseValidator):
         return value is None
 
     @classmethod
-    def _after_convert(self, value, max_length: int = None, **kwargs):
+    def _after_convert(cls, value, max_length: int = None, **kwargs):
         if max_length and len(value) > max_length:
             return value[:max_length]
         return value

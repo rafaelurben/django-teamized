@@ -296,7 +296,7 @@ class ListSelector extends React.Component {
           title="Diese Aktion steht nur Admins zur Verfügung"
         >
           <button className="btn btn-outline-dark disabled">
-            Liste Erstellen
+            Liste erstellen
           </button>
         </Tooltip>
       );

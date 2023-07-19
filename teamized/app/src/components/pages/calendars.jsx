@@ -102,7 +102,7 @@ class CalendarSelector extends React.Component {
           title="Diese Aktion steht nur Admins zur Verfügung"
         >
           <button className="btn btn-outline-dark disabled">
-            Kalender Erstellen
+            Kalender erstellen
           </button>
         </Tooltip>
       );
