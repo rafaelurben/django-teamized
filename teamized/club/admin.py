@@ -12,6 +12,13 @@ class ClubAdminMemberInline(admin.TabularInline):
 
     fields = ('first_name', 'last_name', 'email')
 
+class ClubAdminMemberGroupInline(admin.TabularInline):
+    model = models.ClubMemberGroup
+    extra = 0
+    show_change_link = True
+
+    fields = ('name', 'description')
+
 # class ClubAdminPollInline(admin.TabularInline):
 #     model = models.ClubPoll
 #     extra = 0
@@ -28,7 +35,7 @@ class ClubAdmin(admin.ModelAdmin):
     search_fields = ('uid', 'name', 'description')
     prepopulated_fields = {'slug': ('name',)}
 
-    inlines = [ClubAdminMemberInline]#, ClubAdminPollInline]
+    inlines = [ClubAdminMemberInline, ClubAdminMemberGroupInline]#, ClubAdminPollInline]
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'name', 'description', 'slug')}),
@@ -96,4 +103,22 @@ class ClubMemberAdmin(admin.ModelAdmin):
         ('Adresse', {'fields': ('street', 'zip_code', 'city',)}),
         ('Kontakt', {'fields': ('email', 'phone', 'mobile',)}),
         ('Notizen', {'fields': ('notes',)}),
+    ]
+
+class ClubMemberGroupAdminGroupMembershipInline(admin.TabularInline):
+    model = models.ClubMemberGroupMembership
+    extra = 0
+
+    fields = ('member',)
+
+@admin.register(models.ClubMemberGroup)
+class ClubMemberGroupAdmin(admin.ModelAdmin):
+    list_display = ('uid', 'club', 'name', 'description')
+
+    readonly_fields = ('uid',)
+
+    inlines = [ClubMemberGroupAdminGroupMembershipInline]
+
+    fieldsets = [
+        ('Infos', {'fields': ('uid', 'club', 'name', 'description')}),
     ]

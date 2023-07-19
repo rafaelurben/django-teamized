@@ -59,6 +59,8 @@ export function addTeam(team) {
         "members": {},
         "todolists": {},
         "me_worksessions": {},
+        "club_members": {},
+        "club_groups": {},
         "_state": {
             calendars: {_initial: true, _refreshing: false},
             invites: {_initial: true, _refreshing: false},
@@ -66,6 +68,7 @@ export function addTeam(team) {
             todolists: {_initial: true, _refreshing: false},
             me_worksessions: {_initial: true, _refreshing: false},
             club_members: {_initial: true, _refreshing: false},
+            club_groups: {_initial: true, _refreshing: false},
         },
     };
     updateTeam(team);

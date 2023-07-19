@@ -9,7 +9,7 @@ from teamized import enums, exceptions
 from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from teamized.api.utils.decorators import require_objects, api_view
 from teamized.decorators import teamized_prep
-from teamized.club.models import Club, ClubMember, ClubMemberMagicLink
+from teamized.club.models import Club, ClubMember, ClubMemberMagicLink, ClubMemberGroup
 from teamized.models import User, Team
 
 @api_view(["post"])
@@ -138,7 +138,7 @@ def endpoint_members(request, team: Team):
 @require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
 def endpoint_member(request, team: Team, member: ClubMember):
     """
-    Endpoint for editing and deleting a member
+    Endpoint for editing and deleting a club member
     """
 
     user: User = request.teamized_user
@@ -175,5 +175,92 @@ def endpoint_member(request, team: Team, member: ClubMember):
             "alert": {
                 "title": _("Mitglied entfernt"),
                 "text": _("Das Mitglied wurde erfolgreich entfernt."),
+            }
+        })
+
+
+@api_view(["get", "post"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team")])
+def endpoint_groups(request, team: Team):
+    """
+    Endpoint for listing and creating club member groups
+    """
+
+    user: User = request.teamized_user
+    if not team.user_is_member(user):
+        return NO_PERMISSION
+
+    if team.linked_club is None:
+        return ENDPOINT_NOT_FOUND
+    club: Club = team.linked_club
+
+    if request.method == "GET":
+        groups = club.groups.order_by("name")
+
+        return JsonResponse({
+            "groups": [
+                group.as_dict() for group in groups
+            ]
+        })
+    if request.method == "POST":
+        if not team.user_is_admin(user):
+            return NO_PERMISSION
+
+        group = ClubMemberGroup.from_post_data(request.POST, club=club)
+
+        return JsonResponse({
+            "success": True,
+            "group": group.as_dict(),
+            "alert": {
+                "title": _("Gruppe erstellt"),
+                "text": _("Die Gruppe wurde erfolgreich hinzugefügt."),
+            }
+        })
+
+
+@api_view(["post", "delete"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team"), ("group", ClubMemberGroup, "group")])
+def endpoint_group(request, team: Team, group: ClubMemberGroup):
+    """
+    Endpoint for editing and deleting a club member group
+    """
+
+    user: User = request.teamized_user
+    if not team.user_is_admin(user):
+        return NO_PERMISSION
+
+    if team.linked_club is None:
+        return ENDPOINT_NOT_FOUND
+    club: Club = team.linked_club
+
+    # Check if member group corresponds to club
+    if group.club != club:
+        return OBJ_NOT_FOUND
+
+    # Methods
+    if request.method == "POST":
+        group.update_from_post_data(request.POST)
+        group.save()
+        return JsonResponse({
+            "success": True,
+            "id": group.uid,
+            "group": group.as_dict(),
+            "alert": {
+                "title": _("Gruppe aktualisiert"),
+                "text": _("Die Gruppe wurde erfolgreich aktualisiert."),
+            }
+        })
+
+    if request.method == "DELETE":
+        group.delete()
+        return JsonResponse({
+            "success": True,
+            "alert": {
+                "title": _("Gruppe entfernt"),
+                "text": _("Die Gruppe wurde erfolgreich entfernt."),
             }
         })

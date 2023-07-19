@@ -385,9 +385,91 @@ class ClubMemberMagicLink(models.Model):
         )
 
 
-# class ClubMemberGroup(models.Model):
+class ClubMemberGroup(models.Model):
+    uid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+    )
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="groups")
 
-# class ClubMemberGroupMembership(models.Model):
+    name = models.CharField(max_length=50, verbose_name=_("Name"))
+    description = models.TextField(verbose_name=_("Beschreibung"), blank=True)
+
+    members = models.ManyToManyField(
+        to=ClubMember,
+        verbose_name=_("Mitglieder"),
+        related_name="groups",
+        through="ClubMemberGroupMembership",
+    )
+
+    date_created = models.DateTimeField(
+        verbose_name=_("Erstellt am"), auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=_("Zuletzt geändert am"), auto_now=True
+    )
+
+    class Meta:
+        verbose_name = _("Vereinsmitgliedergruppe")
+        verbose_name_plural = _("Vereinsmitgliedergruppen")
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.name
+
+    def as_dict(self):
+        return {
+            "uid": self.uid,
+            "name": self.name,
+            "description": self.description or "",
+            "memberids": [ms.member_id for ms in self.memberships.all()],
+        }
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, club: Club) -> "ClubMemberGroup":
+        """Create a new object from POST data"""
+
+        return cls.objects.create(
+            club=club,
+            name=validation.text(data, "name", True),
+            description=validation.text(data, "description", False, default=""),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.name = validation.text(data, "name", False, default=self.name)
+        self.description = validation.text(data, "description", False, default=self.description)
+        self.save()
+
+class ClubMemberGroupMembership(models.Model):
+    uid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+    )
+    group = models.ForeignKey(
+        to=ClubMemberGroup,
+        on_delete=models.CASCADE,
+        verbose_name=_("Gruppe"),
+        related_name="memberships",
+    )
+    member = models.ForeignKey(
+        to=ClubMember,
+        on_delete=models.CASCADE,
+        verbose_name=_("Mitglied"),
+        related_name="group_memberships",
+    )
+
+    date_created = models.DateTimeField(
+        verbose_name=_("Erstellt am"), auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=_("Zuletzt geändert am"), auto_now=True
+    )
+
+    class Meta:
+        verbose_name = _("Gruppenmitgliedschaft")
+        verbose_name_plural = _("Gruppenmitgliedschaften")
+        unique_together = [["group", "member"]]
 
 
 # class ClubPoll(models.Model):

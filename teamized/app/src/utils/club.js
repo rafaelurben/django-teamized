@@ -158,7 +158,7 @@ export async function editClubMember(teamId, memberId, data) {
     (data) => {
       requestSuccessAlert(data);
       Cache.getTeamData(teamId).club_members[memberId] = data.member;
-      return data.id;
+      return data.member;
     }
   )
 }
@@ -180,5 +180,56 @@ export async function deleteClubMemberPopup(team, member) {
   return await confirmAlert(
     `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club.name}' entfernen?`,
     async () => await deleteClubMember(team.id, member.id)
+  );
+}
+
+// Group list
+
+export async function getClubGroups(teamId) {
+  let groups = await Cache.refreshTeamCacheCategory(teamId, "club_groups");
+  return groups;
+}
+
+// Group creation
+
+export async function createClubGroup(teamId, data) {
+  return await API.POST(`teams/${teamId}/club/groups`, data).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId)
+      teamdata.club_groups[data.group.id] = data.group;
+      return data.group;
+    }
+  )
+}
+
+// Group edit
+
+export async function editClubGroup(teamId, groupId, data) {
+  return await API.POST(`teams/${teamId}/club/groups/${groupId}`, data).then(
+    (data) => {
+      requestSuccessAlert(data);
+      Cache.getTeamData(teamId).club_groups[groupId] = data.group;
+      return data.group;
+    }
+  )
+}
+
+// Group deletion
+
+export async function deleteClubGroup(teamId, groupId) {
+  return await API.DELETE(`teams/${teamId}/club/groups/${groupId}`).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId);
+      delete teamdata.club_groups[groupId];
+    }
+  )
+}
+
+export async function deleteClubGroupPopup(team, group) {
+  return await confirmAlert(
+    `Willst du die Gruppe '${group.name}' wirklich löschen?`,
+    async () => await deleteClubGroup(team.id, group.id)
   );
 }
