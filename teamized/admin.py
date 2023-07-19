@@ -66,7 +66,7 @@ class TeamAdminInviteInline(admin.TabularInline):
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'name', 'description']
+    list_display = ['uid', 'name', 'description', 'linked_club']
     list_filter = []
 
     readonly_fields = ('uid',)

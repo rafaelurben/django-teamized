@@ -5,6 +5,7 @@ These utils are used in API endpoints or models to make validation of POST data 
 """
 
 import datetime as dt
+import re
 
 from django.utils.translation import gettext as _
 
@@ -119,6 +120,14 @@ class DateValidator(BaseValidator):
     def _convert(cls, value, fmt="%Y-%m-%d", **kwargs):
         return dt.datetime.strptime(value, fmt).date()
 
+class RegexValidator(StringValidator):
+    @classmethod
+    def _convert(cls, value, regex, **kwargs):
+        if not re.match(regex, value):
+            raise ValidationError(
+                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value))
+        return value
+
 # Shortcuts
 
 
@@ -140,3 +149,7 @@ def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datet
 
 def date(datadict: dict, attr: str, required: bool = True, default: dt.date = None, null=False, fmt="%Y-%m-%d") -> dt.date:
     return DateValidator.validate(datadict, attr, required, default, null, fmt=fmt)
+
+
+def slug(datadict: dict, attr: str, required: bool = True, default: str = "", null=False, max_length: int = None) -> str:
+    return RegexValidator.validate(datadict, attr, required, default, null, max_length=max_length, regex=r'^[0-9a-z\-_]+$')

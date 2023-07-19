@@ -73,11 +73,17 @@ export default class Page_Club extends React.Component {
   constructor(props) {
     super(props);
     this.handleClubEditButtonClick = this.handleClubEditButtonClick.bind(this);
+    this.handleClubDeleteButtonClick = this.handleClubDeleteButtonClick.bind(this);
   }
 
   async handleClubEditButtonClick() {
     await Club.editClubPopup(this.props.team);
-    Navigation.renderPage();
+    Navigation.render();
+  }
+
+  async handleClubDeleteButtonClick() {
+    await Club.deleteClubPopup(this.props.team);
+    Navigation.selectPage("team");
   }
 
   render() {
@@ -144,6 +150,14 @@ export default class Page_Club extends React.Component {
                 onClick={this.handleClubEditButtonClick}
               >
                 Verein&nbsp;bearbeiten
+              </button>
+            ) : null}
+            {this.props.team.member.role === "owner" ? (
+              <button
+                className="btn btn-outline-danger border-1"
+                onClick={this.handleClubDeleteButtonClick}
+              >
+                Verein&nbsp;löschen
               </button>
             ) : null}
           </Dashboard.Tile>

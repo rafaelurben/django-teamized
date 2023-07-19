@@ -138,6 +138,20 @@ def endpoint_team(request, team: Team):
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
+        if team.linked_club is not None:
+            raise exceptions.AlertException(
+                text=_("Solange der Vereinsmodus aktiv ist, kann das Team nicht gelöscht werden."),
+                title=_("Vereinsmodus aktiv"),
+                errorname="club-mode-active",
+            )
+
+        if team.members.count() > 1:
+            raise exceptions.AlertException(
+                text=_("Das Team kann nicht gelöscht werden, da es noch Mitglieder enthält."),
+                title=_("Team ist nicht leer"),
+                errorname="team-has-members",
+            )
+
         team.delete()
         return JsonResponse({
             "success": True,

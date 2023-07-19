@@ -12,6 +12,35 @@ from teamized.decorators import teamized_prep
 from teamized.club.models import Club, ClubMember, ClubMemberMagicLink
 from teamized.models import User, Team
 
+@api_view(["post"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team")])
+def endpoint_create_club(request, team: Team):
+    """Endpoint for creating a club"""
+
+    user: User = request.teamized_user
+    if not team.user_is_owner(user):
+        return NO_PERMISSION
+
+    if team.linked_club is not None:
+        return ENDPOINT_NOT_FOUND
+
+    if request.method == "POST":
+        club = Club.from_post_data(request.POST)
+        team.linked_club = club
+        team.save()
+
+        return JsonResponse({
+            "success": True,
+            "id": club.uid,
+            "club": club.as_dict(),
+            "alert": {
+                "title": _("Verein erstellt"),
+                "text": _("Der Verein wurde erfolgreich erstellt."),
+            }
+        })
+
 @api_view(["get", "post", "delete"])
 @csrf_exempt
 @teamized_prep()
@@ -31,19 +60,14 @@ def endpoint_club(request, team: Team):
 
     if request.method == "GET":
         return JsonResponse({
-            "id": team.uid,
+            "id": club.uid,
             "club": club.as_dict(),
         })
     if request.method == "POST":
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
-        name = request.POST.get("name", "")[:49]
-        description = request.POST.get("description", "")
-
-        club.name = name
-        club.description = description
-        club.save()
+        club.update_from_post_data(request.POST)
         return JsonResponse({
             "success": True,
             "id": club.uid,

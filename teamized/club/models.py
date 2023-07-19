@@ -106,6 +106,22 @@ class Club(models.Model):
                         request.session.modified = True
         return members
 
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict) -> "Club":
+        """Create a new object from POST data"""
+
+        return cls.objects.create(
+            name=validation.text(data, "name", True),
+            description=validation.text(data, "description", False, default=""),
+            slug=validation.slug(data, "slug", True),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.name = validation.text(data, "name", False, default=self.name)
+        self.description = validation.text(data, "description", False, default=self.description)
+        self.save()
 
 class ClubMember(models.Model):
     uid = models.UUIDField(

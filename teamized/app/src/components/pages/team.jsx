@@ -6,10 +6,11 @@
 
 import { successAlert } from "../../utils/alerts.js";
 import * as Cache from "../../utils/cache.js";
+import * as Club from "../../utils/club.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
-import { IconTooltip } from "../tooltips.js";
+import { IconTooltip, Tooltip } from "../tooltips.js";
 
 
 class TeamMembersTableRow extends React.Component {
@@ -228,6 +229,7 @@ export default class Page_Team extends React.Component {
     this.handleInviteCreateButtonClick = this.handleInviteCreateButtonClick.bind(this);
     this.handleTeamEditButtonClick = this.handleTeamEditButtonClick.bind(this);
     this.handleTeamDeleteButtonClick = this.handleTeamDeleteButtonClick.bind(this);
+    this.handleClubCreateButtonClick = this.handleClubCreateButtonClick.bind(this);
   }
 
   async handleInviteCreateButtonClick() {
@@ -245,6 +247,11 @@ export default class Page_Team extends React.Component {
     if (response.isConfirmed) {
       Navigation.selectPage("teamlist");
     }
+  }
+
+  async handleClubCreateButtonClick() {
+    await Club.createClubPopup(this.props.team);
+    Navigation.selectPage("club");
   }
 
   render() {
@@ -306,20 +313,20 @@ export default class Page_Team extends React.Component {
         <Dashboard.Column>
           <Dashboard.Tile
             title={
-              this.props.team.club === null
-                ? "Teaminfos"
-                : (
-                    <div>
-                      Teaminfos
-                      <div className="badge bg-info ms-2">
-                        Vereinsmodus aktiviert
-                        <IconTooltip
-                          title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar."
-                          className="ms-1"
-                        />
-                      </div>
-                    </div>
-                  )
+              this.props.team.club === null ? (
+                "Teaminfos"
+              ) : (
+                <div>
+                  Teaminfos
+                  <div className="badge bg-info ms-2">
+                    Vereinsmodus aktiviert
+                    <IconTooltip
+                      title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar."
+                      className="ms-1"
+                    />
+                  </div>
+                </div>
+              )
             }
           >
             <table className="table table-borderless mb-2">
@@ -355,11 +362,38 @@ export default class Page_Team extends React.Component {
               </button>
             ) : null}
             {this.props.team.member.role === "owner" ? (
+              !this.props.team.club ? (
+                this.props.team.membercount === 1 ? (
+                  <button
+                    className="btn btn-outline-danger border-1"
+                    onClick={this.handleTeamDeleteButtonClick}
+                  >
+                    Team&nbsp;löschen
+                  </button>
+                ) : (
+                  <Tooltip title="Das Team kann nicht gelöscht werden, solange noch Mitglieder vorhanden sind.">
+                    <button
+                      className="btn btn-outline-danger border-1"
+                      disabled
+                    >
+                      Team&nbsp;löschen
+                    </button>
+                  </Tooltip>
+                )
+              ) : (
+                <Tooltip title="Das Team kann nicht gelöscht werden, solange der Vereinsmodus aktiv ist.">
+                  <button className="btn btn-outline-danger border-1" disabled>
+                    Team&nbsp;löschen
+                  </button>
+                </Tooltip>
+              )
+            ) : null}
+            {(this.props.team.member.role === "owner" && !this.props.team.club) ? (
               <button
-                className="btn btn-outline-danger border-1"
-                onClick={this.handleTeamDeleteButtonClick}
+                className="btn btn-outline-info border-1 ms-2"
+                onClick={this.handleClubCreateButtonClick}
               >
-                Team&nbsp;löschen
+                Vereinsmodus&nbsp;aktivieren
               </button>
             ) : null}
           </Dashboard.Tile>

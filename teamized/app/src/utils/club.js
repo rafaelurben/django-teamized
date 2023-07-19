@@ -2,7 +2,7 @@
  * Utils for the club features
  */
 
-import { requestSuccessAlert, confirmAlert } from "./alerts.js";
+import { requestSuccessAlert, confirmAlert, doubleConfirmAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 
@@ -15,6 +15,55 @@ export function getCurrentClubData() {
 }
 
 //// API calls ////
+
+// Club creation
+
+export async function createClub(teamId, data) {
+  return await API.POST(`teams/${teamId}/create-club`, data).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      Cache.getTeamData(teamId).team.club = data.club;
+      return data.team;
+    }
+  )
+}
+
+export async function createClubPopup(team) {
+  return (await Swal.fire({
+    title: "Verein erstellen",
+    html: `
+      <label class="swal2-input-label" for="swal-input-name">Name:</label>
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="Dein Verein">
+      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Infos über deinen Verein"></textarea>
+      <label class="swal2-input-label" for="swal-input-slug">Slug:</label>
+      <input type="text" id="swal-input-slug" class="swal2-input" placeholder="dein-verein">
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Erstellen",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const name = document.getElementById("swal-input-name").value;
+      const description = document.getElementById(
+        "swal-input-description"
+      ).value;
+      const slug = document.getElementById("swal-input-slug").value;
+
+      if (!name || !description || !slug) {
+        Swal.showValidationMessage("Bitte fülle alle Felder aus!");
+        return false;
+      }
+      if (!slug.match(/^[0-9a-z\-_]+$/)) {
+        Swal.showValidationMessage("Der Slug darf nur aus Kleinbuchstaben, Zahlen und Bindestrichen bestehen!");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await createClub(team.id, { name, slug, description });
+    },
+  })).value;
+}
 
 // Club edit
 
@@ -57,6 +106,27 @@ export async function editClubPopup(team) {
       return await editClub(team.id, { name, description });
     },
   })).value;
+}
+
+// Club delete
+
+export async function deleteClub(teamId) {
+  return await API.DELETE(`teams/${teamId}/club`).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId);
+      teamdata.team.club = null;
+      teamdata.club_members = {};
+      return data.team;
+    }
+  )
+}
+
+export async function deleteClubPopup(team) {
+  return await doubleConfirmAlert(
+    `Willst du den Verein '${team.club.name}' wirklich löschen und somit den Vereinsmodus im Team '${team.name}' deaktivieren?`,
+    async () => await deleteClub(team.id)
+  );
 }
 
 // Member list
