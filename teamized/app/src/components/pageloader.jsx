@@ -96,6 +96,7 @@ export class PageLoader extends React.Component {
         return (
           <Page_Club
             team={teamdata.team}
+            club_members={teamdata.club_members}
             isAdmin={Teams.isCurrentTeamAdmin()}
           />
         );

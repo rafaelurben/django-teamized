@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('notes', models.TextField(blank=True, default='', verbose_name='Notizen')),
                 ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
                 ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
-                ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='teamized.club', verbose_name='Verein')),
+                ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='teamized.club', verbose_name='Verein', related_name="members")),
             ],
             options={
                 'verbose_name': 'Vereinsmitglied',

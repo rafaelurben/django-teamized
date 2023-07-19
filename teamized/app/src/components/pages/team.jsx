@@ -304,14 +304,23 @@ export default class Page_Team extends React.Component {
         loading={Cache.getCurrentTeamData()._state.members._initial}
       >
         <Dashboard.Column>
-          <Dashboard.Tile 
-            title={this.props.team.club === null ? "Teaminfos" : [
-              "Teaminfos",
-              <div className="badge bg-info ms-2">
-                Vereinsmodus aktiviert
-                <IconTooltip title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar." className="ms-1" />
-              </div>
-            ]}
+          <Dashboard.Tile
+            title={
+              this.props.team.club === null
+                ? "Teaminfos"
+                : (
+                    <div>
+                      Teaminfos
+                      <div className="badge bg-info ms-2">
+                        Vereinsmodus aktiviert
+                        <IconTooltip
+                          title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar."
+                          className="ms-1"
+                        />
+                      </div>
+                    </div>
+                  )
+            }
           >
             <table className="table table-borderless mb-2">
               <tbody>
@@ -320,8 +329,12 @@ export default class Page_Team extends React.Component {
                   <td>{this.props.team.name}</td>
                 </tr>
                 <tr key="description">
-                  <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
-                  <td style={{ whiteSpace: "pre-line" }}>{this.props.team.description}</td>
+                  <th style={{ width: "1px" }} className="pe-3">
+                    Beschreibung:
+                  </th>
+                  <td style={{ whiteSpace: "pre-line" }}>
+                    {this.props.team.description}
+                  </td>
                 </tr>
                 <tr key="membercount">
                   <th>Mitglieder:</th>

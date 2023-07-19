@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.urls import reverse
 
-from teamized import enums, utils
+from teamized import enums, utils, decorators, validation
 
 _ = (
     lambda s: s  # dummy translation function # pylint: disable=unnecessary-lambda-assignment
@@ -57,11 +57,12 @@ class Club(models.Model):
 
     def as_dict(self):
         return {
-            "uid": str(self.uid),
+            "id": str(self.uid),
             "name": str(self.name),
             "description": str(self.description),
             "slug": str(self.slug),
             "url": reverse("teamized:club_login", kwargs={"clubslug": self.slug}),
+            "membercount": self.members.count(),
         }
 
     def session_get_logged_in_members(self, request):
@@ -110,7 +111,7 @@ class ClubMember(models.Model):
     uid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
     )
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, verbose_name=_("Verein"))
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="members")
 
     email = models.EmailField(verbose_name=_("E-Mail"))
 
@@ -167,7 +168,7 @@ class ClubMember(models.Model):
     def as_dict(self, detailed=False):
         if detailed:
             return{
-                "uid": str(self.memberuid),
+                "id": str(self.memberuid),
                 "email": str(self.email),
                 "first_name": str(self.first_name),
                 "last_name": str(self.last_name),
@@ -180,10 +181,11 @@ class ClubMember(models.Model):
                 "notes": str(self.notes),
             }
         return {
-            "uid": str(self.memberuid),
+            "id": str(self.memberuid),
             "email": str(self.email),
             "first_name": str(self.first_name),
             "last_name": str(self.last_name),
+            "birth_date": str(self.birth_date),
         }
 
     def can_login_with_magicuid(self, magic_uid):
@@ -271,6 +273,26 @@ class ClubMember(models.Model):
         magic_link = ClubMemberMagicLink.objects.create(member=self)
         magic_link.send_email(request)
 
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, club: Club) -> "ClubMember":
+        """Create a new object from POST data"""
+
+        return cls.objects.create(
+            club=club,
+            first_name=validation.text(data, "note", True),
+            last_name=validation.text(data, "note", True),
+            email=validation.text(data, "email", True),
+            birth_date=validation.datetime(data, "birth_date", False, default=None, null=True),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.first_name = validation.text(data, "first_name", False, default=self.first_name)
+        self.last_name = validation.text(data, "last_name", False, default=self.last_name)
+        self.email = validation.text(data, "email", False, default=self.email)
+        self.birth_date = validation.date(data, "birth_date", False, default=self.birth_date, null=True)
+        self.save()
 
 class ClubMemberMagicLink(models.Model):
     uid = models.UUIDField(

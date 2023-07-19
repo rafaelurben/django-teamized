@@ -1,5 +1,5 @@
 /**
- * Utils for the base team features
+ * Utils for the club features
  */
 
 import { requestSuccessAlert, confirmAlert } from "./alerts.js";
@@ -16,12 +16,10 @@ export function getCurrentClubData() {
 
 //// API calls ////
 
-// Team edit
+// Club edit
 
-export async function editClub(teamId, name, description) {
-  return await API.POST(`teams/${teamId}/club`, {
-    name, description,
-  }).then(
+export async function editClub(teamId, data) {
+  return await API.POST(`teams/${teamId}/club`, data).then(
     async (data) => {
       requestSuccessAlert(data);
       Cache.getTeamData(teamId).team.club = data.club;
@@ -56,12 +54,12 @@ export async function editClubPopup(team) {
       }
 
       Swal.showLoading();
-      return await editClub(team.id, name, description);
+      return await editClub(team.id, { name, description });
     },
   })).value;
 }
 
-// // Member list
+// Member list
 
 export async function getClubMembers(teamId) {
   let members = await Cache.refreshTeamCacheCategory(teamId, "club_members");
@@ -69,19 +67,31 @@ export async function getClubMembers(teamId) {
   return members;
 }
 
-// // Member edit
+// Member creation
 
-// export async function editClubMember(teamId, memberId, OPTIONS) {
-//   return await API.POST(`teams/${teamId}/club/members/${memberId}`, {
-//     OPTIONS,
-//   }).then(
-//     (data) => {
-//       requestSuccessAlert(data);
-//       Cache.getTeamData(teamId).club_members[memberId] = data.member;
-//       return data.id;
-//     }
-//   )
-// }
+export async function createClubMember(teamId, data) {
+  return await API.POST(`teams/${teamId}/club/members`, data).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId)
+      teamdata.club_members[data.member.id] = data.member;
+      teamdata.team.club.membercount += 1;
+      return data.member;
+    }
+  )
+}
+
+// Member edit
+
+export async function editClubMember(teamId, memberId, data) {
+  return await API.POST(`teams/${teamId}/club/members/${memberId}`, data).then(
+    (data) => {
+      requestSuccessAlert(data);
+      Cache.getTeamData(teamId).club_members[memberId] = data.member;
+      return data.id;
+    }
+  )
+}
 
 // Member deletion
 
@@ -98,7 +108,7 @@ export async function deleteClubMember(teamId, memberId) {
 
 export async function deleteClubMemberPopup(team, member) {
   return await confirmAlert(
-    `Willst du ${member.user.last_name} ${member.user.first_name} aus dem Verein '${team.club.name}' entfernen?`,
+    `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club.name}' entfernen?`,
     async () => await deleteClubMember(team.id, member.id)
   );
 }

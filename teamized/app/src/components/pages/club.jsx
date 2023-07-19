@@ -30,12 +30,22 @@ class ClubMembersTableRow extends React.Component {
         {/* Name */}
         <td>
           <span>
-            {member.first_name} {member.last_name}
+            {member.first_name}
+          </span>
+        </td>
+        <td>
+          <span>
+            {member.last_name}
+          </span>
+        </td>
+        <td>
+          <span>
+            {member.birth_date}
           </span>
         </td>
         {/* Email */}
         <td>
-          <a href={"mailto:" + member.user.email}>{member.user.email}</a>
+          <a href={"mailto:" + member.email}>{member.email}</a>
         </td>
         {/* Action: Delete */}
         {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
@@ -80,7 +90,7 @@ export default class Page_Club extends React.Component {
       );
       Club.getClubMembers(this.props.team.id);
     } else {
-      memberrows = Object.values(this.props.team.club_members).map((member) => {
+      memberrows = Object.values(this.props.club_members).map((member) => {
         return (
           <ClubMembersTableRow
             key={member.id}
@@ -142,7 +152,9 @@ export default class Page_Club extends React.Component {
             <table className="table table-borderless align-middle mb-0">
               <thead>
                 <tr>
-                  <th>Vor- & Nachname</th>
+                  <th>Vorname</th>
+                  <th>Nachname</th>
+                  <th>Geburtsdatum</th>
                   <th>E-Mail-Adresse</th>
                   <th style={{ width: "1px" }}></th>
                   <th style={{ width: "1px" }}></th>
