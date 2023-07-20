@@ -49,6 +49,7 @@ urlpatterns = [
     path('teams/<team>/club', ep.club.endpoint_club, name='api-club'),
     path('teams/<team>/club/members', ep.club.endpoint_members, name='api-club-members'),
     path('teams/<team>/club/members/<member>', ep.club.endpoint_member, name='api-club-member'),
+    path('teams/<team>/club/members/<member>/create-magic-link', ep.club.endpoint_member_create_magic_link, name='api-club-member-create-magic-link'),
     path('teams/<team>/club/groups', ep.club.endpoint_groups, name='api-club-groups'),
     path('teams/<team>/club/groups/<group>', ep.club.endpoint_group, name='api-club-group'),
 

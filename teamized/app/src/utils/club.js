@@ -251,6 +251,17 @@ export async function deleteClubMemberPopup(team, member) {
   );
 }
 
+// Member magic link
+
+export async function createClubMemberMagicLink(teamId, memberId) {
+  return await API.POST(`teams/${teamId}/club/members/${memberId}/create-magic-link`).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      return data.url;
+    }
+  )
+}
+
 // Group list
 
 export async function getClubGroups(teamId) {

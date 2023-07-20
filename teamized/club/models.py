@@ -283,10 +283,15 @@ class ClubMember(models.Model):
                         ClubMemberMagicLink.objects.get(uid=magic_uid, member=self).disable()
         request.session.modified = True
 
-    def send_magic_link(self, request):
-        """Send a new magic link to the member's email address."""
+    def create_magic_link(self) -> "ClubMemberMagicLink":
+        """Create a new magic link for this member."""
 
-        magic_link = ClubMemberMagicLink.objects.create(member=self)
+        return ClubMemberMagicLink.objects.create(member=self)
+
+    def send_magic_link(self, request):
+        """Send a new magic link to the member's email address. Request ist needed for building the link."""
+
+        magic_link = self.create_magic_link()
         magic_link.send_email(request)
 
     @classmethod
@@ -358,17 +363,19 @@ class ClubMemberMagicLink(models.Model):
         self.disabled = True
         self.save()
 
-    def send_email(self, request):
-        """Send the magic link to the member's email address."""
-
-        url = (
+    def get_absolute_url(self, request):
+        return (
             request.build_absolute_uri(
                 reverse(
                     "teamized:club_member_login", kwargs={"clubslug": self.member.club.slug, "memberuid": self.member.uid}
                 )
-            )
-            + f"?magicuid={self.uid}"
+            ) + f"?magicuid={self.uid}"
         )
+
+    def send_email(self, request):
+        """Send the magic link to the member's email address."""
+
+        url = self.get_absolute_url(request)
 
         send_mail(
             subject="Dein magischer Login-Link",

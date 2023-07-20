@@ -17,6 +17,7 @@ class ClubMembersTableRow extends React.Component {
     super(props);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+    this.handleCreateMagicLinkButtonClick = this.handleCreateMagicLinkButtonClick.bind(this);
   }
 
   async handleRemoveButtonClick() {
@@ -29,6 +30,10 @@ class ClubMembersTableRow extends React.Component {
     Navigation.renderPage();
   }
 
+  async handleCreateMagicLinkButtonClick() {
+    await Club.createClubMemberMagicLink(this.props.team.id, this.props.member.id);
+  }
+
   render() {
     let member = this.props.member;
     let loggedinmember = this.props.loggedinmember;
@@ -37,21 +42,18 @@ class ClubMembersTableRow extends React.Component {
       <tr>
         {/* Name */}
         <td>
-          <span>
-            {member.first_name}
-          </span>
+          <span>{member.first_name}</span>
         </td>
         <td>
-          <span>
-            {member.last_name}
-          </span>
+          <span>{member.last_name}</span>
         </td>
         <td>
           {member.birth_date === null ? (
             <span>(unbekannt)</span>
           ) : (
             <span>
-              {getDateString(new Date(member.birth_date))} ({getAge(member.birth_date)})
+              {getDateString(new Date(member.birth_date))} (
+              {getAge(member.birth_date)})
             </span>
           )}
         </td>
@@ -59,6 +61,20 @@ class ClubMembersTableRow extends React.Component {
         <td>
           <a href={"mailto:" + member.email}>{member.email}</a>
         </td>
+        {/* Action: Create magic link */}
+        {loggedinmember.role === "owner" ? (
+          <td>
+            <a
+              className="btn btn-outline-primary border-1"
+              onClick={this.handleCreateMagicLinkButtonClick}
+              title="Magischer Link erstellen"
+            >
+              <i className="fas fa-fw fa-key"></i>
+            </a>
+          </td>
+        ) : (
+          <td></td>
+        )}
         {/* Action: Edit */}
         {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
           <td>
@@ -132,6 +148,7 @@ class ClubMembersTable extends React.Component {
                 icon="fas fa-circle-exclamation text-warning"
               />
             </th>
+            <th style={{ width: "1px" }}></th>
             <th style={{ width: "1px" }}></th>
             <th style={{ width: "1px" }}></th>
             <th className="debug-only">ID</th>

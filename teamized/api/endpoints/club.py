@@ -179,6 +179,46 @@ def endpoint_member(request, team: Team, member: ClubMember):
         })
 
 
+@api_view(["post"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
+def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
+    """
+    Endpoint for creating a magic link for a club member. (owner only)
+    """
+
+    user: User = request.teamized_user
+    if not team.user_is_owner(user):
+        return NO_PERMISSION
+
+    if team.linked_club is None:
+        return ENDPOINT_NOT_FOUND
+    club: Club = team.linked_club
+
+    # Check if member corresponds to club
+    if member.club != club:
+        return OBJ_NOT_FOUND
+
+    # Methods
+    if request.method == "POST":
+        link = member.create_magic_link()
+        url = link.get_absolute_url(request)
+
+        return JsonResponse({
+            "success": True,
+            "url": url,
+            "alert": {
+                "title": _("Magischer Link erstellt"),
+                "html": f"URL: <a href='{url}'>%s</a>" % _("Bitte kopier mich!"),
+                "timer": 0,
+                "showConfirmButton": True,
+                "toast": False,
+                "position": "center",
+            }
+        })
+
+
 @api_view(["get", "post"])
 @csrf_exempt
 @teamized_prep()
