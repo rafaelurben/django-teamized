@@ -220,8 +220,8 @@ class CalendarInfo extends React.Component {
       </button>
     );
 
-    return [
-      <table key="table" className="table table-borderless mb-2">
+    return (
+      <Dashboard.Table>
         <tbody>
           <tr>
             <th>Name:</th>
@@ -245,11 +245,11 @@ class CalendarInfo extends React.Component {
             <td>{calendar.id}</td>
           </tr>
         </tbody>
-      </table>,
-      <div key="buttons" className="d-flex flex-wrap gap-2">
-        {calendarPanelButtons}
-      </div>,
-    ];
+        <Dashboard.TableButtonFooter notopborder={true}>
+          {calendarPanelButtons}
+        </Dashboard.TableButtonFooter>
+      </Dashboard.Table>
+    );
   }
 }
 
@@ -641,8 +641,8 @@ class CalendarEventDisplay extends React.Component {
       evtenddsp = Calendars.getDateTimeString(new Date(this.props.event.dtend));
     }
 
-    return [
-      <table key="table" className="table table-borderless mb-2">
+    return (
+      <Dashboard.Table>
         <tbody>
           <tr>
             <th>Name:</th>
@@ -673,28 +673,29 @@ class CalendarEventDisplay extends React.Component {
             <td>{event.id}</td>
           </tr>
         </tbody>
-      </table>,
-      <div key="buttons" className="d-flex flex-wrap gap-2">
-        <button
-          className="btn btn-outline-dark"
-          onClick={this.editEvent}
-        >
-          Bearbeiten
-        </button>
-        <button
-          className="btn btn-outline-dark"
-          onClick={this.cloneEvent}
-        >
-          Duplizieren
-        </button>
-        <button
-          className="btn btn-outline-danger"
-          onClick={this.deleteEvent}
-        >
-          Löschen
-        </button>
-      </div>,
-    ];
+
+        <Dashboard.TableButtonFooter notopborder={true}>
+          <button
+            className="btn btn-outline-dark"
+            onClick={this.editEvent}
+          >
+            Bearbeiten
+          </button>
+          <button
+            className="btn btn-outline-dark"
+            onClick={this.cloneEvent}
+          >
+            Duplizieren
+          </button>
+          <button
+            className="btn btn-outline-danger"
+            onClick={this.deleteEvent}
+          >
+            Löschen
+          </button>
+        </Dashboard.TableButtonFooter>
+      </Dashboard.Table>
+    );
   };
 }
 

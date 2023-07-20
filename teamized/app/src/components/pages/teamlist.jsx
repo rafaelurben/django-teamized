@@ -152,7 +152,7 @@ export default class Page_TeamList extends React.Component {
       >
         <Dashboard.Column>
           <Dashboard.Tile title="Teamübersicht">
-            <table className="table table-borderless align-middle mb-0">
+            <Dashboard.Table>
               <thead>
                 <tr>
                   <th className="text-center" style={{ width: "1px" }}>
@@ -170,7 +170,7 @@ export default class Page_TeamList extends React.Component {
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
-            </table>
+            </Dashboard.Table>
           </Dashboard.Tile>
 
           <Dashboard.Tile title="Team erstellen oder beitreten">

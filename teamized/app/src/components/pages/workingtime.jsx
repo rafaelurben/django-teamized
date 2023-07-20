@@ -92,7 +92,7 @@ class SessionTable extends React.Component {
 
   render() {
     return (
-      <table className="table table-borderless align-middle mb-0">
+      <Dashboard.Table>
         <thead>
           <tr>
             <th style={{ minWidth: "13rem" }}>Start &amp; Ende</th>
@@ -124,7 +124,7 @@ class SessionTable extends React.Component {
             )
           }
         </tbody>
-      </table>
+      </Dashboard.Table>
     );
   }
 }

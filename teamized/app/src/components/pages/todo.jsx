@@ -161,7 +161,7 @@ class ListView extends React.Component {
           </label>
         </div>
 
-        <table className="table table-borderless align-middle mb-0">
+        <Dashboard.Table className="table-borderless">
           <thead>
             <tr>
               <th className="p-0" style={{ width: "1px" }}></th>
@@ -202,7 +202,7 @@ class ListView extends React.Component {
               </td>
             </tr>
           </tbody>
-        </table>
+        </Dashboard.Table>
       </form>
     );
   }
@@ -377,8 +377,8 @@ class ListInfo extends React.Component {
       );
     }
 
-    return [
-      <table key="table" className="table table-borderless mb-2">
+    return (
+      <Dashboard.Table>
         <tbody>
           <tr>
             <th>Name:</th>
@@ -402,9 +402,11 @@ class ListInfo extends React.Component {
             <td>{todolist.id}</td>
           </tr>
         </tbody>
-      </table>,
-      listPanelButtons,
-    ];
+        <Dashboard.TableButtonFooter notopborder={true}>
+          {listPanelButtons}
+        </Dashboard.TableButtonFooter>
+      </Dashboard.Table>
+    );
   }
 }
 

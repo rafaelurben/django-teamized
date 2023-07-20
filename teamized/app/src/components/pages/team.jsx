@@ -250,8 +250,8 @@ export default class Page_Team extends React.Component {
   }
 
   async handleClubCreateButtonClick() {
-    await Club.createClubPopup(this.props.team);
-    Navigation.selectPage("club");
+    let result = await Club.createClubPopup(this.props.team);
+    if (result) Navigation.selectPage("club");
   }
 
   render() {
@@ -329,7 +329,7 @@ export default class Page_Team extends React.Component {
               )
             }
           >
-            <table className="table table-borderless mb-2">
+            <Dashboard.Table>
               <tbody>
                 <tr key="name">
                   <th>Name:</th>
@@ -352,26 +352,37 @@ export default class Page_Team extends React.Component {
                   <td>{this.props.team.id}</td>
                 </tr>
               </tbody>
-            </table>
-            {this.props.team.member.role === "owner" ? (
-              <button
-                className="btn btn-outline-dark border-1 me-2"
-                onClick={this.handleTeamEditButtonClick}
+
+              <Dashboard.TableButtonFooter
+                show={this.props.team.member.role === "owner"}
+                notopborder={true}
               >
-                Team&nbsp;bearbeiten
-              </button>
-            ) : null}
-            {this.props.team.member.role === "owner" ? (
-              !this.props.team.club ? (
-                this.props.team.membercount === 1 ? (
-                  <button
-                    className="btn btn-outline-danger border-1"
-                    onClick={this.handleTeamDeleteButtonClick}
-                  >
-                    Team&nbsp;löschen
-                  </button>
+                <button
+                  className="btn btn-outline-dark border-1"
+                  onClick={this.handleTeamEditButtonClick}
+                >
+                  Team&nbsp;bearbeiten
+                </button>
+                {!this.props.team.club ? (
+                  this.props.team.membercount === 1 ? (
+                    <button
+                      className="btn btn-outline-danger border-1"
+                      onClick={this.handleTeamDeleteButtonClick}
+                    >
+                      Team&nbsp;löschen
+                    </button>
+                  ) : (
+                    <Tooltip title="Das Team kann nicht gelöscht werden, solange noch Mitglieder vorhanden sind.">
+                      <button
+                        className="btn btn-outline-danger border-1"
+                        disabled
+                      >
+                        Team&nbsp;löschen
+                      </button>
+                    </Tooltip>
+                  )
                 ) : (
-                  <Tooltip title="Das Team kann nicht gelöscht werden, solange noch Mitglieder vorhanden sind.">
+                  <Tooltip title="Das Team kann nicht gelöscht werden, solange der Vereinsmodus aktiv ist.">
                     <button
                       className="btn btn-outline-danger border-1"
                       disabled
@@ -379,27 +390,21 @@ export default class Page_Team extends React.Component {
                       Team&nbsp;löschen
                     </button>
                   </Tooltip>
-                )
-              ) : (
-                <Tooltip title="Das Team kann nicht gelöscht werden, solange der Vereinsmodus aktiv ist.">
-                  <button className="btn btn-outline-danger border-1" disabled>
-                    Team&nbsp;löschen
+                )}
+                {!this.props.team.club ? (
+                  <button
+                    className="btn btn-outline-info border-1"
+                    onClick={this.handleClubCreateButtonClick}
+                  >
+                    Vereinsmodus&nbsp;aktivieren
                   </button>
-                </Tooltip>
-              )
-            ) : null}
-            {(this.props.team.member.role === "owner" && !this.props.team.club) ? (
-              <button
-                className="btn btn-outline-info border-1 ms-2"
-                onClick={this.handleClubCreateButtonClick}
-              >
-                Vereinsmodus&nbsp;aktivieren
-              </button>
-            ) : null}
+                ) : null}
+              </Dashboard.TableButtonFooter>
+            </Dashboard.Table>
           </Dashboard.Tile>
 
           <Dashboard.Tile title="Mitglieder">
-            <table className="table table-borderless align-middle mb-0">
+            <Dashboard.Table>
               <thead>
                 <tr>
                   <th width="32px" className="text-center">
@@ -414,12 +419,12 @@ export default class Page_Team extends React.Component {
                 </tr>
               </thead>
               <tbody>{memberrows}</tbody>
-            </table>
+            </Dashboard.Table>
           </Dashboard.Tile>
 
           {this.props.team.member.role === "owner" ? (
             <Dashboard.Tile title="Einladungen">
-              <table className="table table-borderless align-middle mb-0">
+              <Dashboard.Table>
                 <thead>
                   <tr>
                     <th>Notiz</th>
@@ -437,21 +442,17 @@ export default class Page_Team extends React.Component {
                     <th className="debug-only">ID</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {inviterows}
-                  <tr>
-                    <td colSpan="6">
-                      <button
-                        type="button"
-                        className="btn btn-outline-success border-1"
-                        onClick={this.handleInviteCreateButtonClick}
-                      >
-                        Einladung erstellen
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <tbody>{inviterows}</tbody>
+                <Dashboard.TableButtonFooter>
+                  <button
+                    type="button"
+                    className="btn btn-outline-success border-1"
+                    onClick={this.handleInviteCreateButtonClick}
+                  >
+                    Einladung erstellen
+                  </button>
+                </Dashboard.TableButtonFooter>
+              </Dashboard.Table>
             </Dashboard.Tile>
           ) : null}
         </Dashboard.Column>

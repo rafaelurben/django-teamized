@@ -116,9 +116,10 @@ class ClubMembersTable extends React.Component {
         />
       );
     });
+    let loggedinmember = this.props.team.member;
 
     return (
-      <table className="table table-borderless align-middle mb-0">
+      <Dashboard.Table>
         <thead>
           <tr>
             <th>Vorname</th>
@@ -126,31 +127,32 @@ class ClubMembersTable extends React.Component {
             <th>Geburtsdatum</th>
             <th style={{ minWidth: "15rem" }}>
               E-Mail-Adresse{" "}
-              <IconTooltip title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden." icon="fas fa-circle-exclamation text-warning" />
+              <IconTooltip
+                title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
+                icon="fas fa-circle-exclamation text-warning"
+              />
             </th>
             <th style={{ width: "1px" }}></th>
             <th style={{ width: "1px" }}></th>
             <th className="debug-only">ID</th>
           </tr>
         </thead>
-        <tbody>
-          {memberrows}
-          {this.props.team.member.role === "owner" ||
-          this.props.team.member.role === "admin" ? (
-            <tr>
-              <td colSpan="7">
-                <button
-                  type="button"
-                  className="btn btn-outline-success border-1"
-                  onClick={this.handleCreateButtonClick}
-                >
-                  Mitglied erstellen
-                </button>
-              </td>
-            </tr>
-          ) : null}
-        </tbody>
-      </table>
+        <tbody>{memberrows}</tbody>
+
+        <Dashboard.TableButtonFooter
+          show={
+            loggedinmember.role === "owner" || loggedinmember.role === "admin"
+          }
+        >
+          <button
+            type="button"
+            className="btn btn-outline-success border-1"
+            onClick={this.handleCreateButtonClick}
+          >
+            Mitglied erstellen
+          </button>
+        </Dashboard.TableButtonFooter>
+      </Dashboard.Table>
     );
   }
 }
@@ -247,7 +249,7 @@ class ClubGroupsTable extends React.Component {
     });
 
     return (
-      <table className="table table-borderless align-middle mb-0">
+      <Dashboard.Table>
         <thead>
           <tr>
             <th>Gruppenname</th>
@@ -259,21 +261,21 @@ class ClubGroupsTable extends React.Component {
         </thead>
         <tbody>
           {grouprows}
-          {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
-            <tr>
-              <td colSpan="6">
-                <button
-                  type="button"
-                  className="btn btn-outline-success border-1"
-                  onClick={this.handleCreateButtonClick}
-                >
-                  Gruppe erstellen
-                </button>
-              </td>
-            </tr>
-          ) : null}
         </tbody>
-      </table>
+        <Dashboard.TableButtonFooter
+          show={
+            loggedinmember.role === "owner" || loggedinmember.role === "admin"
+          }
+        >
+          <button
+            type="button"
+            className="btn btn-outline-success border-1"
+            onClick={this.handleCreateButtonClick}
+          >
+            Gruppe erstellen
+          </button>
+        </Dashboard.TableButtonFooter>
+      </Dashboard.Table>
     );
   }
 }
@@ -397,7 +399,7 @@ export default class Page_Club extends React.Component {
       >
         <Dashboard.Column>
           <Dashboard.Tile title="Vereinsinfos">
-            <table className="table table-borderless mb-2">
+            <Dashboard.Table>
               <tbody>
                 <tr key="name">
                   <th>Name:</th>
@@ -405,7 +407,11 @@ export default class Page_Club extends React.Component {
                 </tr>
                 <tr key="url">
                   <th>Login URL:</th>
-                  <td><a target="_blank" href={this.props.team.club.url}>{this.props.team.club.slug}</a></td>
+                  <td>
+                    <a target="_blank" href={this.props.team.club.url}>
+                      {this.props.team.club.slug}
+                    </a>
+                  </td>
                 </tr>
                 <tr key="description">
                   <th style={{ width: "1px" }} className="pe-3">
@@ -424,23 +430,24 @@ export default class Page_Club extends React.Component {
                   <td>{this.props.team.club.id}</td>
                 </tr>
               </tbody>
-            </table>
-            {this.props.team.member.role === "owner" ? (
-              <button
-                className="btn btn-outline-dark border-1 me-2"
-                onClick={this.handleClubEditButtonClick}
+              <Dashboard.TableButtonFooter
+                show={this.props.team.member.role === "owner"}
+                notopborder={true}
               >
-                Verein&nbsp;bearbeiten
-              </button>
-            ) : null}
-            {this.props.team.member.role === "owner" ? (
-              <button
-                className="btn btn-outline-danger border-1"
-                onClick={this.handleClubDeleteButtonClick}
-              >
-                Verein&nbsp;löschen
-              </button>
-            ) : null}
+                <button
+                  className="btn btn-outline-dark border-1 me-2"
+                  onClick={this.handleClubEditButtonClick}
+                >
+                  Verein&nbsp;bearbeiten
+                </button>
+                <button
+                  className="btn btn-outline-danger border-1"
+                  onClick={this.handleClubDeleteButtonClick}
+                >
+                  Verein&nbsp;löschen
+                </button>
+              </Dashboard.TableButtonFooter>
+            </Dashboard.Table>
           </Dashboard.Tile>
 
           <Dashboard.Tile title="Vereinsmitglieder">

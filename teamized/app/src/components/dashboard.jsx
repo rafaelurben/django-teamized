@@ -150,3 +150,42 @@ export class Tile extends React.Component {
     );
   }
 }
+
+export class Table extends React.Component {
+  constructor(props) {
+    super(props);
+    this.className = "table align-middle mb-0" + (this.props.className ? ` ${this.props.className}` : "");
+  }
+
+  render() {
+    return (
+      <table className={this.className}>
+        {this.props.children}
+      </table>
+    )
+  }
+}
+
+export class TableButtonFooter extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    if ("show" in this.props && !this.props.show) {
+      return null;
+    }
+
+    return (
+      <tfoot className={this.props.notopborder ? "border-top-0" : ""}>
+        <tr>
+          <td colSpan="1000" className="border-bottom-0">
+            <div className="w-100 d-inline-flex justify-content-end gap-2">
+              {this.props.children}
+            </div>
+          </td>
+        </tr>
+      </tfoot>
+    );
+  }
+}
