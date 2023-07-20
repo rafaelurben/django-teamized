@@ -154,7 +154,11 @@ export class Tile extends React.Component {
 export class Table extends React.Component {
   constructor(props) {
     super(props);
-    this.className = "table align-middle mb-0" + (this.props.className ? ` ${this.props.className}` : "");
+    this.className = "table mb-0" + (this.props.className ? ` ${this.props.className}` : "");
+
+    if (!this.props.vertical) {
+      this.className += " align-middle"
+    }
   }
 
   render() {

@@ -399,7 +399,7 @@ export default class Page_Club extends React.Component {
       >
         <Dashboard.Column>
           <Dashboard.Tile title="Vereinsinfos">
-            <Dashboard.Table>
+            <Dashboard.Table vertical={true}>
               <tbody>
                 <tr key="name">
                   <th>Name:</th>

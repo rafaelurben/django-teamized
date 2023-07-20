@@ -329,7 +329,7 @@ export default class Page_Team extends React.Component {
               )
             }
           >
-            <Dashboard.Table>
+            <Dashboard.Table vertical={true}>
               <tbody>
                 <tr key="name">
                   <th>Name:</th>
@@ -443,6 +443,7 @@ export default class Page_Team extends React.Component {
                   </tr>
                 </thead>
                 <tbody>{inviterows}</tbody>
+
                 <Dashboard.TableButtonFooter>
                   <button
                     type="button"

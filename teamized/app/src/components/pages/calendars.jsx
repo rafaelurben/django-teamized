@@ -642,7 +642,7 @@ class CalendarEventDisplay extends React.Component {
     }
 
     return (
-      <Dashboard.Table>
+      <Dashboard.Table vertical={true}>
         <tbody>
           <tr>
             <th>Name:</th>
@@ -650,7 +650,9 @@ class CalendarEventDisplay extends React.Component {
           </tr>
           {event.description ? (
             <tr>
-              <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
+              <th style={{ width: "1px" }} className="pe-3">
+                Beschreibung:
+              </th>
               <td style={{ whiteSpace: "pre-line" }}>{event.description}</td>
             </tr>
           ) : null}
@@ -675,22 +677,13 @@ class CalendarEventDisplay extends React.Component {
         </tbody>
 
         <Dashboard.TableButtonFooter notopborder={true}>
-          <button
-            className="btn btn-outline-dark"
-            onClick={this.editEvent}
-          >
+          <button className="btn btn-outline-dark" onClick={this.editEvent}>
             Bearbeiten
           </button>
-          <button
-            className="btn btn-outline-dark"
-            onClick={this.cloneEvent}
-          >
+          <button className="btn btn-outline-dark" onClick={this.cloneEvent}>
             Duplizieren
           </button>
-          <button
-            className="btn btn-outline-danger"
-            onClick={this.deleteEvent}
-          >
+          <button className="btn btn-outline-danger" onClick={this.deleteEvent}>
             Löschen
           </button>
         </Dashboard.TableButtonFooter>

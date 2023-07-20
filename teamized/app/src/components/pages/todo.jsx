@@ -378,14 +378,16 @@ class ListInfo extends React.Component {
     }
 
     return (
-      <Dashboard.Table>
+      <Dashboard.Table vertical={true}>
         <tbody>
           <tr>
             <th>Name:</th>
             <td>{todolist.name}</td>
           </tr>
           <tr>
-            <th style={{ width: "1px" }} className="pe-3">Beschreibung:</th>
+            <th style={{ width: "1px" }} className="pe-3">
+              Beschreibung:
+            </th>
             <td style={{ whiteSpace: "pre-line" }}>{todolist.description}</td>
           </tr>
           <tr>
