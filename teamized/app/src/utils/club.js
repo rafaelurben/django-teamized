@@ -203,6 +203,37 @@ export async function createClubGroup(teamId, data) {
   )
 }
 
+export async function createClubGroupPopup(team) {
+  return (await Swal.fire({
+    title: "Gruppe erstellen",
+    html: `
+      <p>Verein: ${team.club.name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-name">Name:</label>
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">
+      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Erstellen",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const name = document.getElementById("swal-input-name").value;
+      const description = document.getElementById(
+        "swal-input-description"
+      ).value;
+
+      if (!name) {
+        Swal.showValidationMessage("Bitte gib einen Namen ein!");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await createClubGroup(team.id, { name, description });
+    },
+  })).value;
+}
+
 // Group edit
 
 export async function editClubGroup(teamId, groupId, data) {
@@ -213,6 +244,37 @@ export async function editClubGroup(teamId, groupId, data) {
       return data.group;
     }
   )
+}
+
+export async function editClubGroupPopup(team, group) {
+  return (await Swal.fire({
+    title: "Gruppe bearbeiten",
+    html: `
+      <p>Gruppe: ${group.name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-name">Name:</label>
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="${group.name}" value="${group.name}">
+      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="${group.description}">${group.description}</textarea>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Aktualisieren",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const name = document.getElementById("swal-input-name").value;
+      const description = document.getElementById(
+        "swal-input-description"
+      ).value;
+
+      if (!name) {
+        Swal.showValidationMessage("Bitte gib einen Namen ein!");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await editClubGroup(team.id, group.id, { name, description });
+    },
+  })).value;
 }
 
 // Group deletion

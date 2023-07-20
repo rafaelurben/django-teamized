@@ -106,6 +106,130 @@ class ClubMembersTable extends React.Component {
   }
 }
 
+
+class ClubGroupsTableRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+  }
+
+  async handleRemoveButtonClick() {
+    await Club.deleteClubGroupPopup(this.props.team, this.props.group);
+    Navigation.renderPage();
+  }
+
+  async handleEditButtonClick() {
+    await Club.editClubGroupPopup(this.props.team, this.props.group);
+    Navigation.renderPage();
+  }
+
+  render() {
+    let group = this.props.group;
+    let loggedinmember = this.props.loggedinmember;
+
+    return (
+      <tr>
+        {/* Name */}
+        <td>
+          <span>{group.name}</span>
+        </td>
+        {/* Beschreibung */}
+        <td>
+          <span>{group.description}</span>
+        </td>
+        {/* Action: Edit */}
+        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+          <td>
+            <a
+              className="btn btn-outline-dark border-1"
+              onClick={this.handleEditButtonClick}
+              title="Gruppe bearbeiten"
+            >
+              <i className="fas fa-fw fa-pen-to-square"></i>
+            </a>
+          </td>
+        ) : (
+          <td></td>
+        )}
+        {/* Action: Delete */}
+        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+          <td>
+            <a
+              className="btn btn-outline-danger border-1"
+              onClick={this.handleRemoveButtonClick}
+              title="Gruppe löschen"
+            >
+              <i className="fas fa-fw fa-trash"></i>
+            </a>
+          </td>
+        ) : (
+          <td></td>
+        )}
+        {/* ID */}
+        <td className="debug-only">{group.id}</td>
+      </tr>
+    );
+  }
+}
+
+class ClubGroupsTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCreateButtonClick = this.handleCreateButtonClick.bind(this);
+  }
+
+  async handleCreateButtonClick() {
+    await Club.createClubGroupPopup(this.props.team);
+    Navigation.renderPage();
+  }
+
+  render() {
+    let loggedinmember = this.props.team.member;
+    let grouprows = this.props.groups.map((group) => {
+      return (
+        <ClubGroupsTableRow
+          key={group.id}
+          group={group}
+          team={this.props.team}
+          loggedinmember={loggedinmember}
+        />
+      );
+    });
+
+    return (
+      <table className="table table-borderless align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Gruppenname</th>
+            <th>Beschreibung</th>
+            <th style={{ width: "1px" }}></th>
+            <th style={{ width: "1px" }}></th>
+            <th className="debug-only">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {grouprows}
+          {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+            <tr>
+              <td colSpan="6">
+                <button
+                  type="button"
+                  className="btn btn-outline-success border-1"
+                  onClick={this.handleCreateButtonClick}
+                >
+                  Gruppe erstellen
+                </button>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
+    );
+  }
+}
+
+
 export default class Page_Club extends React.Component {
   constructor(props) {
     super(props);
@@ -191,7 +315,11 @@ export default class Page_Club extends React.Component {
         case "edit": // edit groups
           membertilecontent = [
             nav,
-            <p key="notyethere" className="m-2">Hier ist noch nix; hier gehört Gruppenbearbeitung hin</p>
+            <ClubGroupsTable
+              key="table"
+              team={this.props.team}
+              groups={Object.values(teamdata.club_groups)}
+            />,
           ];
           break;
         default: // filtered members by group
