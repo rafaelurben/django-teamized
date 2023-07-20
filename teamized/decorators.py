@@ -6,6 +6,7 @@
 import traceback
 from functools import wraps
 
+from django.db.utils import IntegrityError
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 
@@ -56,6 +57,13 @@ def validation_func():
                 # If the function already throws an alert exception, just reraise it
                 # Note: ValidationError is a subclass of AlertException and will also be reraised
                 raise exc
+            except IntegrityError as exc:
+                traceback.print_exc()
+                traceback.print_stack()
+                raise exceptions.ValidationError(
+                    _("Integritätsfehler. Möglicherweise existiert ein Objekt mit denselben Daten (z. B. E-Mail-Adresse) bereits."),
+                    status=400, # Error code 400 indicates that this is a Bad Request
+                ) from exc
             except Exception as exc:
                 # If there should really be an error, throw a validation error instead
                 traceback.print_exc()

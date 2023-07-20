@@ -201,7 +201,7 @@ class ClubMember(models.Model):
             "email": str(self.email),
             "first_name": str(self.first_name),
             "last_name": str(self.last_name),
-            "birth_date": str(self.birth_date),
+            "birth_date": str(self.birth_date) if self.birth_date is not None else None,
         }
 
     def can_login_with_magicuid(self, magic_uid):
@@ -296,10 +296,10 @@ class ClubMember(models.Model):
 
         return cls.objects.create(
             club=club,
-            first_name=validation.text(data, "note", True),
-            last_name=validation.text(data, "note", True),
+            first_name=validation.text(data, "first_name", True),
+            last_name=validation.text(data, "last_name", True),
             email=validation.text(data, "email", True),
-            birth_date=validation.datetime(data, "birth_date", False, default=None, null=True),
+            birth_date=validation.date(data, "birth_date", False, default=None, null=True),
         )
 
     @decorators.validation_func()

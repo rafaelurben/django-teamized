@@ -16,10 +16,16 @@ class ClubMembersTableRow extends React.Component {
   constructor(props) {
     super(props);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
+    this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
   }
 
   async handleRemoveButtonClick() {
     await Club.deleteClubMemberPopup(this.props.team, this.props.member);
+    Navigation.renderPage();
+  }
+
+  async handleEditButtonClick() {
+    await Club.editClubMemberPopup(this.props.team, this.props.member);
     Navigation.renderPage();
   }
 
@@ -41,14 +47,32 @@ class ClubMembersTableRow extends React.Component {
           </span>
         </td>
         <td>
-          <span>
-            {getDateString(new Date(member.birth_date))} ({getAge(member.birth_date)})
-          </span>
+          {member.birth_date === null ? (
+            <span>(unbekannt)</span>
+          ) : (
+            <span>
+              {getDateString(new Date(member.birth_date))} ({getAge(member.birth_date)})
+            </span>
+          )}
         </td>
         {/* Email */}
         <td>
           <a href={"mailto:" + member.email}>{member.email}</a>
         </td>
+        {/* Action: Edit */}
+        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+          <td>
+            <a
+              className="btn btn-outline-dark border-1"
+              onClick={this.handleEditButtonClick}
+              title="Mitglied bearbeiten"
+            >
+              <i className="fas fa-fw fa-pen-to-square"></i>
+            </a>
+          </td>
+        ) : (
+          <td></td>
+        )}
         {/* Action: Delete */}
         {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
           <td>
@@ -73,6 +97,12 @@ class ClubMembersTableRow extends React.Component {
 class ClubMembersTable extends React.Component {
   constructor(props) {
     super(props);
+    this.handleCreateButtonClick = this.handleCreateButtonClick.bind(this);
+  }
+
+  async handleCreateButtonClick() {
+    await Club.createClubMemberPopup(this.props.team);
+    Navigation.renderPage();
   }
 
   render() {
@@ -94,13 +124,32 @@ class ClubMembersTable extends React.Component {
             <th>Vorname</th>
             <th>Nachname</th>
             <th>Geburtsdatum</th>
-            <th>E-Mail-Adresse</th>
+            <th style={{ minWidth: "15rem" }}>
+              E-Mail-Adresse{" "}
+              <IconTooltip title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden." icon="fas fa-circle-exclamation text-warning" />
+            </th>
             <th style={{ width: "1px" }}></th>
-            {/* <th style={{ width: "1px" }}></th> */}
+            <th style={{ width: "1px" }}></th>
             <th className="debug-only">ID</th>
           </tr>
         </thead>
-        <tbody>{memberrows}</tbody>
+        <tbody>
+          {memberrows}
+          {this.props.team.member.role === "owner" ||
+          this.props.team.member.role === "admin" ? (
+            <tr>
+              <td colSpan="7">
+                <button
+                  type="button"
+                  className="btn btn-outline-success border-1"
+                  onClick={this.handleCreateButtonClick}
+                >
+                  Mitglied erstellen
+                </button>
+              </td>
+            </tr>
+          ) : null}
+        </tbody>
       </table>
     );
   }

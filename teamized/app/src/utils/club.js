@@ -151,6 +151,40 @@ export async function createClubMember(teamId, data) {
   )
 }
 
+export async function createClubMemberPopup(team) {
+  return (await Swal.fire({
+    title: "Vereinsmitglied hinzufügen",
+    html: `
+      <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
+      <input type="text" id="swal-input-first_name" class="swal2-input" placeholder="Max">
+      <label class="swal2-input-label" for="swal-input-last_name">Nachname:</label>
+      <input type="text" id="swal-input-last_name" class="swal2-input" placeholder="Mustermann">
+      <label class="swal2-input-label" for="swal-input-email">E-Mail:</label>
+      <input type="email" id="swal-input-email" class="swal2-input" placeholder="max.mustermann@example.com">
+      <label class="swal2-input-label" for="swal-input-birth_date">Geburtsdatum:</label>
+      <input type="date" id="swal-input-birth_date" class="swal2-input">
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Hinzufügen",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const first_name = document.getElementById("swal-input-first_name").value;
+      const last_name = document.getElementById("swal-input-last_name").value;
+      const email = document.getElementById("swal-input-email").value;
+      const birth_date = document.getElementById("swal-input-birth_date").value;
+
+      if (!first_name || !last_name || !email) {
+        Swal.showValidationMessage("Namen und E-Mail-Adresse sind Pflichtfelder!");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await createClubMember(team.id, { first_name, last_name, email, birth_date });
+    },
+  })).value;
+}
+
 // Member edit
 
 export async function editClubMember(teamId, memberId, data) {
@@ -161,6 +195,40 @@ export async function editClubMember(teamId, memberId, data) {
       return data.member;
     }
   )
+}
+
+export async function editClubMemberPopup(team, member) {
+  return (await Swal.fire({
+    title: "Vereinsmitglied bearbeiten",
+    html: `
+      <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
+      <input type="text" id="swal-input-first_name" class="swal2-input" placeholder="${member.first_name}" value="${member.first_name}">
+      <label class="swal2-input-label" for="swal-input-last_name">Nachname:</label>
+      <input type="text" id="swal-input-last_name" class="swal2-input" placeholder="${member.last_name}" value="${member.last_name}">
+      <label class="swal2-input-label" for="swal-input-email">E-Mail:</label>
+      <input type="email" id="swal-input-email" class="swal2-input" placeholder="${member.email}" value="${member.email}">
+      <label class="swal2-input-label" for="swal-input-birth_date">Geburtsdatum:</label>
+      <input type="date" id="swal-input-birth_date" class="swal2-input" value="${member.birth_date}">
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Aktualisieren",
+    cancelButtonText: "Abbrechen",
+    preConfirm: async () => {
+      const first_name = document.getElementById("swal-input-first_name").value;
+      const last_name = document.getElementById("swal-input-last_name").value;
+      const email = document.getElementById("swal-input-email").value;
+      const birth_date = document.getElementById("swal-input-birth_date").value;
+
+      if (!first_name || !last_name || !email) {
+        Swal.showValidationMessage("Namen und E-Mail-Adresse sind Pflichtfelder!");
+        return false;
+      }
+
+      Swal.showLoading();
+      return await editClubMember(team.id, member.id, { first_name, last_name, email, birth_date });
+    },
+  })).value;
 }
 
 // Member deletion
