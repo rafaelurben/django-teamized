@@ -2,7 +2,7 @@
  * Utils for the club features
  */
 
-import { requestSuccessAlert, confirmAlert, doubleConfirmAlert } from "./alerts.js";
+import { requestSuccessAlert, confirmAlert, doubleConfirmAlert, successAlert } from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 
@@ -373,4 +373,83 @@ export async function deleteClubGroupPopup(team, group) {
     `Willst du die Gruppe '${group.name}' wirklich löschen?`,
     async () => await deleteClubGroup(team.id, group.id)
   );
+}
+
+// Add/remove member to/from group
+
+export async function addClubMemberToGroup(teamId, memberId, groupId) {
+  return await API.POST(`teams/${teamId}/club/members/${memberId}/membership/${groupId}`).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId);
+      teamdata.club_groups[groupId].memberids.push(memberId);
+    }
+  )
+}
+
+export async function removeClubMemberFromGroup(teamId, memberId, groupId) {
+  return await API.DELETE(`teams/${teamId}/club/members/${memberId}/membership/${groupId}`).then(
+    async (data) => {
+      requestSuccessAlert(data);
+      let teamdata = Cache.getTeamData(teamId);
+      teamdata.club_groups[groupId].memberids.splice(teamdata.club_groups[groupId].memberids.indexOf(memberId), 1);
+    }
+  )
+}
+
+export async function updateClubMemberGroupsPopup(team, member) {
+  // Show a sweetalert with a multi-select of all groups; on submit, make add/remove requests for each group respectively
+  let teamdata = Cache.getTeamData(team.id);
+  let groups = Object.values(teamdata.club_groups);
+
+  var currentgroupids = [];
+  for (let group of Object.values(groups)) {
+    if (group.memberids.includes(member.id)) {
+      currentgroupids.push(group.id);
+    }
+  }
+
+  return (await Swal.fire({
+    title: "Gruppenzuordnung",
+    html: `
+      <p>Vereinsmitglied: ${member.first_name} ${member.last_name}</p><hr />
+      <label class="swal2-input-label" for="swal-input-groups">Gruppen:</label>
+      <select id="swal-input-groups" class="swal2-input h-auto py-3" multiple size="${groups.length}"></select>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Aktualisieren",
+    cancelButtonText: "Abbrechen",
+    didOpen: () => {
+      $('#swal-input-groups').html(
+        groups.map(
+          (group) => (`
+            <option value="${group.id}">
+                ${group.name}
+            </option>
+          `)
+        ).join('')
+      );
+      $('#swal-input-groups').val(currentgroupids);
+    },
+    preConfirm: async () => {
+      let selectedgroupids = $('#swal-input-groups').val();
+
+      Swal.showLoading();
+      let requests = [];
+      for (let groupId of selectedgroupids) {
+        if (!currentgroupids.includes(groupId)) {
+          requests.push(addClubMemberToGroup(team.id, member.id, groupId));
+        }
+      }
+      for (let groupId of currentgroupids) {
+        if (!selectedgroupids.includes(groupId)) {
+          requests.push(removeClubMemberFromGroup(team.id, member.id, groupId));
+        }
+      }
+      await Promise.all(requests);
+      successAlert("Gruppenzuordnung aktualisiert!");
+      return true;
+    }
+  })).value;
 }

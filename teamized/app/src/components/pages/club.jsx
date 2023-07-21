@@ -17,6 +17,7 @@ class ClubMembersTableRow extends React.Component {
     super(props);
     this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+    this.handleGroupEditButtonClick = this.handleGroupEditButtonClick.bind(this);
     this.handleCreateMagicLinkButtonClick = this.handleCreateMagicLinkButtonClick.bind(this);
   }
 
@@ -27,6 +28,11 @@ class ClubMembersTableRow extends React.Component {
 
   async handleEditButtonClick() {
     await Club.editClubMemberPopup(this.props.team, this.props.member);
+    Navigation.renderPage();
+  }
+
+  async handleGroupEditButtonClick() {
+    await Club.updateClubMemberGroupsPopup(this.props.team, this.props.member);
     Navigation.renderPage();
   }
 
@@ -82,6 +88,20 @@ class ClubMembersTableRow extends React.Component {
               title="Mitglied bearbeiten"
             >
               <i className="fas fa-fw fa-pen-to-square"></i>
+            </a>
+          </td>
+        ) : (
+          null
+        )}
+        {/* Action: Manage groups */}
+        {loggedinmember.is_admin ? (
+          <td>
+            <a
+              className="btn btn-outline-dark border-1"
+              onClick={this.handleGroupEditButtonClick}
+              title="Gruppen anpassen"
+            >
+              <i className="fas fa-fw fa-users-rectangle"></i>
             </a>
           </td>
         ) : (
@@ -155,16 +175,15 @@ class ClubMembersTable extends React.Component {
             {loggedinmember.is_admin ? (
               <th style={{ width: "1px" }}></th>
             ) : null}
+            {loggedinmember.is_admin ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
             <th className="debug-only">ID</th>
           </tr>
         </thead>
         <tbody>{memberrows}</tbody>
 
-        <Dashboard.TableButtonFooter
-          show={
-            loggedinmember.is_admin
-          }
-        >
+        <Dashboard.TableButtonFooter show={loggedinmember.is_admin}>
           <button
             type="button"
             className="btn btn-outline-success border-1"

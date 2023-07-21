@@ -179,6 +179,59 @@ def endpoint_member(request, team: Team, member: ClubMember):
         })
 
 
+@api_view(["post", "delete"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team"), ("member", ClubMember, "member"), ("group", ClubMemberGroup, "group")])
+def endpoint_member_groupmembership(request, team: Team, member: ClubMember, group: ClubMemberGroup):
+    """
+    Endpoint for editing group membership of a club member
+    """
+
+    user: User = request.teamized_user
+    if not team.user_is_admin(user):
+        return NO_PERMISSION
+
+    if team.linked_club is None:
+        return ENDPOINT_NOT_FOUND
+    club: Club = team.linked_club
+
+    # Check if member corresponds to club
+    if member.club != club:
+        return OBJ_NOT_FOUND
+    # Check if group corresponds to club
+    if group.club != club:
+        return OBJ_NOT_FOUND
+
+    # Methods
+    if request.method == "POST":
+        if member.groups.filter(uid=group.uid).exists():
+            return DATA_INVALID
+        member.groups.add(group)
+        return JsonResponse({
+            "success": True,
+            "id": member.uid,
+            "member": member.as_dict(),
+            "alert": {
+                "title": _("Gruppe hinzugefügt"),
+                "text": _("Das Mitglied wurde erfolgreich der Gruppe hinzugefügt."),
+            }
+        })
+
+
+    if request.method == "DELETE":
+        if not member.groups.filter(uid=group.uid).exists():
+            return DATA_INVALID
+        member.groups.remove(group)
+        return JsonResponse({
+            "success": True,
+            "alert": {
+                "title": _("Gruppe entfernt"),
+                "text": _("Das Mitglied wurde erfolgreich aus der Gruppe entfernt."),
+            }
+        })
+
+
 @api_view(["post"])
 @csrf_exempt
 @teamized_prep()
