@@ -10,6 +10,7 @@ import * as Dashboard from "../dashboard.js";
 import * as Utils from "../../utils/utils.js";
 import * as Settings from "../../utils/settings.js";
 import * as Navigation from "../../utils/navigation.js";
+import { IconTooltip } from "../tooltips.js";
 
 export default class Page_Home extends React.Component {
   constructor(props) {
@@ -124,6 +125,14 @@ export default class Page_Home extends React.Component {
               {changelogitems.map((item, i) => [
                 <h6 key={i + "header"}>
                   <b>{getDateString(new Date(item.date))}</b>
+                  {item.milestone ? (
+                    <IconTooltip
+                      icon="fa-solid fa-flag ms-2 text-danger"
+                      title="Meilenstein"
+                    />
+                  ) : (
+                    ""
+                  )}
                 </h6>,
                 <ul key={i + "list"} className="small">
                   {item.changes.map((change, j) => (
