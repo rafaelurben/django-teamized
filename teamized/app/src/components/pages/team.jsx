@@ -12,7 +12,6 @@ import * as Navigation from "../../utils/navigation.js";
 import * as Dashboard from "../dashboard.js";
 import { IconTooltip, Tooltip } from "../tooltips.js";
 
-
 class TeamMembersTableRow extends React.Component {
   constructor(props) {
     super(props);
@@ -77,32 +76,34 @@ class TeamMembersTableRow extends React.Component {
           <span>{member.role_text}</span>
         </td>
         {/* Action: Promote/Demote */}
-        {loggedinmember.role === "owner" && member.role !== "owner" ? (
-          member.role === "member" ? (
-            <td>
-              <a
-                className="btn btn-outline-dark border-1"
-                onClick={this.handlePromoteButtonClick}
-              >
-                Befördern
-              </a>
-            </td>
+        {loggedinmember.is_owner ? (
+          !member.is_owner ? (
+            !member.is_admin ? (
+              <td>
+                <a
+                  className="btn btn-outline-dark border-1"
+                  onClick={this.handlePromoteButtonClick}
+                >
+                  Befördern
+                </a>
+              </td>
+            ) : (
+              <td>
+                <a
+                  className="btn btn-outline-dark border-1"
+                  onClick={this.handleDemoteButtonClick}
+                >
+                  Degradieren
+                </a>
+              </td>
+            )
           ) : (
-            <td>
-              <a
-                className="btn btn-outline-dark border-1"
-                onClick={this.handleDemoteButtonClick}
-              >
-                Degradieren
-              </a>
-            </td>
+            <td></td>
           )
-        ) : (
-          <td></td>
-        )}
-        {/* Action: Leave/Delete */}
+        ) : null}
+        {/* Action: Leave / remove member */}
         {member.id === loggedinmember.id ? (
-          loggedinmember.role !== "owner" ? (
+          !loggedinmember.is_owner ? (
             <td>
               <a
                 className="btn btn-outline-danger border-1"
@@ -115,8 +116,8 @@ class TeamMembersTableRow extends React.Component {
           ) : (
             <td></td>
           )
-        ) : loggedinmember.role === "owner" ||
-          (loggedinmember.role === "admin" && member.role === "member") ? (
+        ) : loggedinmember.is_owner ||
+          (loggedinmember.is_admin && !member.is_admin) ? (
           <td>
             <a
               className="btn btn-outline-danger border-1"
@@ -130,9 +131,7 @@ class TeamMembersTableRow extends React.Component {
           <td></td>
         )}
         {/* ID */}
-        <td className="debug-only">
-          {member.id}
-        </td>
+        <td className="debug-only">{member.id}</td>
       </tr>
     );
   }
@@ -141,7 +140,8 @@ class TeamMembersTableRow extends React.Component {
 class TeamInvitesTableRow extends React.Component {
   constructor(props) {
     super(props);
-    this.inviteurl = window.location.href.split("?")[0] + "?invite=" + this.props.invite.token;
+    this.inviteurl =
+      window.location.href.split("?")[0] + "?invite=" + this.props.invite.token;
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
     this.copyToken = this.copyToken.bind(this);
@@ -160,12 +160,18 @@ class TeamInvitesTableRow extends React.Component {
 
   copyToken() {
     navigator.clipboard.writeText(this.props.invite.token);
-    successAlert("Der Token wurde in die Zwischenablage kopiert.", "Token kopiert");
+    successAlert(
+      "Der Token wurde in die Zwischenablage kopiert.",
+      "Token kopiert"
+    );
   }
 
   copyURL() {
     navigator.clipboard.writeText(this.inviteurl);
-    successAlert("Der Link wurde in die Zwischenablage kopiert.", "Link kopiert");
+    successAlert(
+      "Der Link wurde in die Zwischenablage kopiert.",
+      "Link kopiert"
+    );
   }
 
   render() {
@@ -188,7 +194,11 @@ class TeamInvitesTableRow extends React.Component {
         </td>
         {/* Valid until */}
         <td>
-          <span>{invite.valid_until ? new Date(invite.valid_until).toLocaleString() : "\u221e"}</span>
+          <span>
+            {invite.valid_until
+              ? new Date(invite.valid_until).toLocaleString()
+              : "\u221e"}
+          </span>
         </td>
         {/* Uses */}
         <td className="text-align-end">
@@ -226,10 +236,13 @@ class TeamInvitesTableRow extends React.Component {
 export default class Page_Team extends React.Component {
   constructor(props) {
     super(props);
-    this.handleInviteCreateButtonClick = this.handleInviteCreateButtonClick.bind(this);
+    this.handleInviteCreateButtonClick =
+      this.handleInviteCreateButtonClick.bind(this);
     this.handleTeamEditButtonClick = this.handleTeamEditButtonClick.bind(this);
-    this.handleTeamDeleteButtonClick = this.handleTeamDeleteButtonClick.bind(this);
-    this.handleClubCreateButtonClick = this.handleClubCreateButtonClick.bind(this);
+    this.handleTeamDeleteButtonClick =
+      this.handleTeamDeleteButtonClick.bind(this);
+    this.handleClubCreateButtonClick =
+      this.handleClubCreateButtonClick.bind(this);
   }
 
   async handleInviteCreateButtonClick() {
@@ -277,7 +290,7 @@ export default class Page_Team extends React.Component {
     }
 
     var inviterows;
-    if (this.props.team.member.role === "owner") {
+    if (this.props.team.member.is_owner) {
       if (Cache.getCurrentTeamData()._state.invites._initial) {
         inviterows = (
           <tr>
@@ -354,7 +367,7 @@ export default class Page_Team extends React.Component {
               </tbody>
 
               <Dashboard.TableButtonFooter
-                show={this.props.team.member.role === "owner"}
+                show={this.props.team.member.is_owner}
                 notopborder={true}
               >
                 <button
@@ -413,7 +426,9 @@ export default class Page_Team extends React.Component {
                   <th>Name</th>
                   <th>Benutzername&nbsp;&amp;&nbsp;E-Mail</th>
                   <th>Rolle</th>
-                  <th style={{ width: "1px" }}></th>
+                  {this.props.team.member.is_owner ? (
+                    <th style={{ width: "1px" }}></th>
+                  ) : null}
                   <th style={{ width: "1px" }}></th>
                   <th className="debug-only">ID</th>
                 </tr>
@@ -422,7 +437,7 @@ export default class Page_Team extends React.Component {
             </Dashboard.Table>
           </Dashboard.Tile>
 
-          {this.props.team.member.role === "owner" ? (
+          {this.props.team.member.is_owner ? (
             <Dashboard.Tile title="Einladungen">
               <Dashboard.Table>
                 <thead>

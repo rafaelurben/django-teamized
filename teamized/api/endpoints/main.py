@@ -181,13 +181,7 @@ def endpoint_members(request, team: Team):
 
         return JsonResponse({
             "members": [
-                {
-                    "id": m.uid,
-                    "role": m.role,
-                    "role_text": m.get_role_display(),
-                    "user": m.user.as_dict(),
-                }
-                for m in members
+                m.as_dict() for m in members
             ]
         })
 
@@ -217,7 +211,7 @@ def endpoint_member(request, team: Team, member: Member):
         if role != member.role and not team.user_is_owner(user):
             # Only owners can change the role of a member
             return NO_PERMISSION
-        if member.role == enums.Roles.OWNER:
+        if member.is_owner():
             # Roles of owners cannot be changed
             return NO_PERMISSION
         if role not in [enums.Roles.MEMBER, enums.Roles.ADMIN]:

@@ -86,6 +86,12 @@ body:not(.debug) .debug-only {
     display: none;
 }
 
+body.debug td.debug-only,
+body.debug th.debug-only {
+    width: 1px;
+    white-space: nowrap;
+}
+
 body.debug .navbar-toggler {
     border-color: #dc3545;
 }

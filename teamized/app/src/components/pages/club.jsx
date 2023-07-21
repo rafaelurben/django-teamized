@@ -48,9 +48,7 @@ class ClubMembersTableRow extends React.Component {
           <span>{member.last_name}</span>
         </td>
         <td>
-          {member.birth_date === null ? (
-            <span>(unbekannt)</span>
-          ) : (
+          {member.birth_date === null ? null : (
             <span>
               {getDateString(new Date(member.birth_date))} (
               {getAge(member.birth_date)})
@@ -62,7 +60,7 @@ class ClubMembersTableRow extends React.Component {
           <a href={"mailto:" + member.email}>{member.email}</a>
         </td>
         {/* Action: Create magic link */}
-        {loggedinmember.role === "owner" ? (
+        {loggedinmember.is_owner ? (
           <td>
             <a
               className="btn btn-outline-primary border-1"
@@ -73,10 +71,10 @@ class ClubMembersTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          null
         )}
         {/* Action: Edit */}
-        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+        {loggedinmember.is_admin ? (
           <td>
             <a
               className="btn btn-outline-dark border-1"
@@ -87,10 +85,10 @@ class ClubMembersTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          null
         )}
         {/* Action: Delete */}
-        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+        {loggedinmember.is_admin ? (
           <td>
             <a
               className="btn btn-outline-danger border-1"
@@ -101,7 +99,7 @@ class ClubMembersTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          null
         )}
         {/* ID */}
         <td className="debug-only">{member.id}</td>
@@ -148,9 +146,15 @@ class ClubMembersTable extends React.Component {
                 icon="fas fa-circle-exclamation text-warning"
               />
             </th>
-            <th style={{ width: "1px" }}></th>
-            <th style={{ width: "1px" }}></th>
-            <th style={{ width: "1px" }}></th>
+            {loggedinmember.is_owner ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
+            {loggedinmember.is_admin ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
+            {loggedinmember.is_admin ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
             <th className="debug-only">ID</th>
           </tr>
         </thead>
@@ -158,7 +162,7 @@ class ClubMembersTable extends React.Component {
 
         <Dashboard.TableButtonFooter
           show={
-            loggedinmember.role === "owner" || loggedinmember.role === "admin"
+            loggedinmember.is_admin
           }
         >
           <button
@@ -207,7 +211,7 @@ class ClubGroupsTableRow extends React.Component {
           <span>{group.description}</span>
         </td>
         {/* Action: Edit */}
-        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+        {loggedinmember.is_admin ? (
           <td>
             <a
               className="btn btn-outline-dark border-1"
@@ -218,10 +222,10 @@ class ClubGroupsTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          null
         )}
         {/* Action: Delete */}
-        {loggedinmember.role === "owner" || loggedinmember.role === "admin" ? (
+        {loggedinmember.is_admin ? (
           <td>
             <a
               className="btn btn-outline-danger border-1"
@@ -232,7 +236,7 @@ class ClubGroupsTableRow extends React.Component {
             </a>
           </td>
         ) : (
-          <td></td>
+          null
         )}
         {/* ID */}
         <td className="debug-only">{group.id}</td>
@@ -271,19 +275,17 @@ class ClubGroupsTable extends React.Component {
           <tr>
             <th>Gruppenname</th>
             <th>Beschreibung</th>
-            <th style={{ width: "1px" }}></th>
-            <th style={{ width: "1px" }}></th>
+            {this.props.team.member.is_admin ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
+            {this.props.team.member.is_admin ? (
+              <th style={{ width: "1px" }}></th>
+            ) : null}
             <th className="debug-only">ID</th>
           </tr>
         </thead>
-        <tbody>
-          {grouprows}
-        </tbody>
-        <Dashboard.TableButtonFooter
-          show={
-            loggedinmember.role === "owner" || loggedinmember.role === "admin"
-          }
-        >
+        <tbody>{grouprows}</tbody>
+        <Dashboard.TableButtonFooter show={loggedinmember.is_admin}>
           <button
             type="button"
             className="btn btn-outline-success border-1"
@@ -448,7 +450,7 @@ export default class Page_Club extends React.Component {
                 </tr>
               </tbody>
               <Dashboard.TableButtonFooter
-                show={this.props.team.member.role === "owner"}
+                show={this.props.team.member.is_owner}
                 notopborder={true}
               >
                 <button

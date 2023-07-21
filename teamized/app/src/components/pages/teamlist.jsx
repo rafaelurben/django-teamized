@@ -74,8 +74,7 @@ class TeamTableRow extends React.Component {
           </td>
         )}
         {/* Action: Edit */}
-        {this.props.team.member.role === "owner" ||
-        this.props.team.member.role === "admin" ? (
+        {this.props.team.member.is_admin ? (
           <td>
             <a
               className="btn btn-outline-dark border-1"
@@ -97,7 +96,7 @@ class TeamTableRow extends React.Component {
           </td>
         )}
         {/* Action: Leave/Delete */}
-        {this.props.team.member.role !== "owner" ? (
+        {!this.props.team.member.is_owner ? (
           <td>
             <a
               className="btn btn-outline-danger border-1"

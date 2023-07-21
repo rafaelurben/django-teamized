@@ -271,6 +271,8 @@ class Member(models.Model):
             # get_..._display() returns the human-readable value of the field
             # https://docs.djangoproject.com/en/4.1/ref/models/instances/#django.db.models.Model.get_FOO_display
             "role_text": self.get_role_display(),
+            "is_admin": self.is_admin(),
+            "is_owner": self.is_owner(),
             "user": self.user.as_dict(),
         }
 
