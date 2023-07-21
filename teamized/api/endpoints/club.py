@@ -268,6 +268,8 @@ def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
                 "showConfirmButton": True,
                 "toast": False,
                 "position": "center",
+                "allowOutsideClick": False,
+                "allowEscapeKey": False,
             }
         })
 

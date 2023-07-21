@@ -240,6 +240,13 @@ export async function deleteClubMember(teamId, memberId) {
       let teamdata = Cache.getTeamData(teamId);
       delete teamdata.club_members[memberId];
       teamdata.team.club.membercount -= 1;
+
+      // Remove member from all groups
+      for (let group of Object.values(teamdata.club_groups)) {
+        if (group.memberids.includes(memberId)) {
+          teamdata.club_groups[group.id].memberids.splice(teamdata.club_groups[group.id].memberids.indexOf(memberId), 1);
+        }
+      }
     }
   )
 }
