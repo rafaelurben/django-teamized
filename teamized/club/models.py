@@ -77,14 +77,14 @@ class Club(models.Model):
                         uid=magicuid,
                         member_id=memberuid,
                         logged_in=True,
-                        disabled=False,
+                        logged_out=False,
                         valid_until__gt=timezone.now(),
                     ).exists():
                         magiclink = ClubMemberMagicLink.objects.get(
                             uid=magicuid,
                             member_id=memberuid,
                             logged_in=True,
-                            disabled=False,
+                            logged_out=False,
                             valid_until__gt=timezone.now(),
                         )
                         members.append(
@@ -212,7 +212,7 @@ class ClubMember(models.Model):
             member=self,
             login_until__gt=timezone.now(),
             logged_in=False,
-            disabled=False,
+            logged_out=False,
         ).exists()
 
     def can_use_magicuid(self, magic_uid):
@@ -223,7 +223,7 @@ class ClubMember(models.Model):
             member=self,
             valid_until__gt=timezone.now(),
             logged_in=True,
-            disabled=False,
+            logged_out=False,
         ).exists()
 
     def session_is_logged_in(self, request):
@@ -248,7 +248,7 @@ class ClubMember(models.Model):
             member=self,
             login_until__gt=timezone.now(),
             logged_in=False,
-            disabled=False,
+            logged_out=False,
         ).mark_logged_in()
 
         if not "teamized_clubmember_sessions" in request.session:
@@ -280,7 +280,7 @@ class ClubMember(models.Model):
                     if len(request.session["teamized_clubmember_sessions"]) == 0:
                         del request.session["teamized_clubmember_sessions"]
                     if ClubMemberMagicLink.objects.filter(uid=magic_uid, member=self).exists():
-                        ClubMemberMagicLink.objects.get(uid=magic_uid, member=self).disable()
+                        ClubMemberMagicLink.objects.get(uid=magic_uid, member=self).mark_logged_out()
         request.session.modified = True
 
     def create_magic_link(self) -> "ClubMemberMagicLink":
@@ -326,8 +326,8 @@ class ClubMemberMagicLink(models.Model):
         related_name="magic_links",
     )
 
-    logged_in = models.BooleanField(verbose_name=_("Verwendet?"), default=False)
-    disabled = models.BooleanField(verbose_name=_("Deaktiviert?"), default=False)
+    logged_in = models.BooleanField(verbose_name=_("Eingeloggt?"), default=False)
+    logged_out = models.BooleanField(verbose_name=_("Wieder ausgeloggt?"), default=False)
 
     login_until = models.DateTimeField(
         verbose_name=_("Login bis"), default=utils.now_plus_1h
@@ -349,18 +349,12 @@ class ClubMemberMagicLink(models.Model):
 
     objects = models.Manager()
 
-    def can_login(self):
-        return (timezone.now() <= self.login_until) and (not self.logged_in)
-
-    def can_be_logged_in(self):
-        return (timezone.now() <= self.valid_until) and (not self.disabled)
-
     def mark_logged_in(self):
         self.logged_in = True
         self.save()
 
-    def disable(self):
-        self.disabled = True
+    def mark_logged_out(self):
+        self.logged_out = True
         self.save()
 
     def get_absolute_url(self, request):

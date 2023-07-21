@@ -56,8 +56,8 @@ class Migration(migrations.Migration):
             name='ClubMemberMagicLink',
             fields=[
                 ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('logged_in', models.BooleanField(default=False, verbose_name='Verwendet?')),
-                ('disabled', models.BooleanField(default=False, verbose_name='Deaktiviert?')),
+                ('logged_in', models.BooleanField(default=False, verbose_name='Eingeloggt?')),
+                ('logged_out', models.BooleanField(default=False, verbose_name='Wieder ausgeloggt?')),
                 ('login_until', models.DateTimeField(default=teamized.utils.now_plus_1h, verbose_name='Login bis')),
                 ('valid_until', models.DateTimeField(default=teamized.utils.now_plus_2w, verbose_name='Verwendbar bis')),
                 ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
