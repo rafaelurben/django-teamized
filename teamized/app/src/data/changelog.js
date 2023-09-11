@@ -2,6 +2,10 @@
 
 export const CHANGELOG = [
     {
+        date: "2023-09-12",
+        changes: ["Dark Mode verbessert"]
+    },
+    {
         date: "2023-07-21",
         changes: ["NEU: Vereinsmodus [BETA]", "[Verein] Mitglieder & Gruppen", "Änderungsprotokoll aktualisiert", "Diverse Fehlerbehebungen"],
         milestone: true

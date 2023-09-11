@@ -235,7 +235,7 @@ class ListSelectorRow extends React.Component {
   render() {
     return (
       <div
-        className="py-1 mb-1 dm-invert dm-invert-children"
+        className="py-1 mb-1"
         style={this.getStyle()}
         onClick={this.handleSelect}
       >
@@ -395,7 +395,7 @@ class ListInfo extends React.Component {
             <td>
               <i
                 style={{ color: todolist.color }}
-                className="fas fa-circle small dm-invert"
+                className="fas fa-circle small"
               ></i>
             </td>
           </tr>
