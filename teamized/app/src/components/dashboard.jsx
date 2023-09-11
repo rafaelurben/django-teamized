@@ -132,7 +132,7 @@ export class Tile extends React.Component {
       );
     }
 
-    this.className = "dashboard-tile row border border-dark rounded rounded-5 mx-2 mb-3 mt-0 flex-column";
+    this.className = "dashboard-tile row border border-dark rounded mx-2 mb-3 mt-0 flex-column";
     if (this.props.hasOwnProperty("grow")) {
       this.className += " flex-grow-1";
     }

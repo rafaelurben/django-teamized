@@ -129,7 +129,7 @@ export default class AppSidebar extends React.Component {
             <strong className="me-2">{this.props.user.username}</strong>
           </a>
           <ul
-            className="dropdown-menu dropdown-menu-dark text-small shadow"
+            className="dropdown-menu text-small shadow"
             aria-labelledby="dropdownUser1"
           >
             <li>

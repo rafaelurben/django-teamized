@@ -58,9 +58,10 @@ export default class AppMenubar extends React.Component {
         <select
           id="teamswitcher"
           value={this.props.selectedTeamId || ""}
-          className="form-select bg-dark text-white-50 border-dark"
+          className="form-select"
           title="Team auswählen"
           onInput={this.handleTeamSelect}
+          style={{ color: "var(--bs-navbar-color)" }}
         >
           {teamlist}
         </select>

@@ -41,7 +41,7 @@
             <i class="fas fa-fw fa-bug"></i>
             <span class="d-lg-none ms-2">DEBUG MENU</span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-dark">
+        <ul class="dropdown-menu">
             <li><a class="dropdown-item text-info" href="#" onclick="window.open('{% url "teamized:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
             <li><a class="dropdown-item text-danger" href="#" onclick="window._App.Utils.toggleDebug()">DEBUG-Modus verlassen (Shift+F6)</a></li>
             <li class="dropdown-divider"></li>
@@ -80,7 +80,7 @@
 {% block contentcontainer %}
     <!-- Main content area (everything below the menubar) -->
     <div id="app-root" class="d-flex">
-        <div id="app-sidebar">
+        <div id="app-sidebar" data-bs-theme="dark">
             <!-- Filled by React -->
         </div>
         <div id="app-maincontent" class="w-100 overflow-auto">
