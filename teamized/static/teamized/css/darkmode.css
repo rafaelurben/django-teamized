@@ -24,9 +24,6 @@
 /* Custom changes */
 
 body[data-bs-theme="dark"] #app-maincontent {
-    border-top: 1px #ffffff55 solid;
-}
-
-body.sidebar-visible[data-bs-theme="dark"] #app-maincontent {
-    border-left: 1px #ffffff55 solid;
+    --bs-body-bg: black;
+    background-color: var(--bs-body-bg);
 }
