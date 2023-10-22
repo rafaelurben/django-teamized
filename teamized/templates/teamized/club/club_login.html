@@ -43,6 +43,6 @@
 
 <hr />
 
-<p class="mt-4">Auf der Suche nach dem Adminbereich? <a href="{% url 'teamized:app' %}">Hier entlang!</a></p>
+<p class="mt-4">Auf der Suche nach dem Adminbereich? <a href="{% url 'teamized:app' %}?p=club&t={{ club.team.uid }}">Hier entlang!</a></p>
 
 {% endblock content %}
