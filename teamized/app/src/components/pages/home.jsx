@@ -38,15 +38,10 @@ export default class Page_Home extends React.Component {
                 <Dashboard.Column sizes={{lg: 8}}>
                     <Dashboard.Tile title="Willkommen">
                         <p className="ms-1 mb-1">
-              <span>
-                Verwende die Menuleiste (rechts) und die Seitenleiste (links),
-                um zu navigieren.
-              </span>
-                            <span className="d-md-none" aria-hidden="true">
-                <br/>
-                <b>Hinweis</b>: Diese Seite wurde zwar auch für mobile Geräte
-                optimiert, funktioniert aber besser auf grösseren Geräten.
-              </span>
+                            <span>
+                                Verwende die Menuleiste (rechts) und die Seitenleiste (links),
+                                um zu navigieren.
+                            </span>
                             <a
                                 onClick={Utils.toggleDebug}
                                 style={{opacity: 0}}
@@ -56,6 +51,10 @@ export default class Page_Home extends React.Component {
                                 DEBUG
                             </a>
                         </p>
+                        <div className="alert alert-warning d-md-none m-1 mt-2" role="alert" aria-hidden="true">
+                            <b>Hinweis</b>: Diese Seite wurde zwar auch für mobile Geräte
+                            optimiert, funktioniert aber besser auf grösseren Geräten.
+                        </div>
                     </Dashboard.Tile>
                     <Dashboard.Tile title="Einstellungen">
                         <div className="mb-2 ms-1">
