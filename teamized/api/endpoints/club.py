@@ -1,16 +1,15 @@
 """Main API endpoints"""
 
-from django.db import models
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from teamized import enums, exceptions
-from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
+from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
 from teamized.api.utils.decorators import require_objects, api_view
 from teamized.decorators import teamized_prep
-from teamized.club.models import Club, ClubMember, ClubMemberMagicLink, ClubMemberGroup
+from teamized.club.models import Club, ClubMember, ClubMemberGroup
 from teamized.models import User, Team
+
 
 @api_view(["post"])
 @csrf_exempt
@@ -40,6 +39,7 @@ def endpoint_create_club(request, team: Team):
                 "text": _("Der Verein wurde erfolgreich erstellt."),
             }
         })
+
 
 @api_view(["get", "post", "delete"])
 @csrf_exempt
@@ -156,7 +156,6 @@ def endpoint_member(request, team: Team, member: ClubMember):
     # Methods
     if request.method == "POST":
         member.update_from_post_data(request.POST)
-        member.save()
         return JsonResponse({
             "success": True,
             "id": member.uid,
@@ -167,7 +166,6 @@ def endpoint_member(request, team: Team, member: ClubMember):
             }
         })
 
-
     if request.method == "DELETE":
         member.delete()
         return JsonResponse({
@@ -175,6 +173,47 @@ def endpoint_member(request, team: Team, member: ClubMember):
             "alert": {
                 "title": _("Mitglied entfernt"),
                 "text": _("Das Mitglied wurde erfolgreich entfernt."),
+            }
+        })
+
+
+@api_view(["get", "post"])
+@csrf_exempt
+@teamized_prep()
+@require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
+def endpoint_member_portfolio(request, team: Team, member: ClubMember):
+    """
+    Endpoint for editing a club member's portfolio
+    """
+
+    user: User = request.teamized_user
+    if not team.user_is_admin(user):
+        return NO_PERMISSION
+
+    if team.linked_club is None:
+        return ENDPOINT_NOT_FOUND
+    club: Club = team.linked_club
+
+    # Check if member corresponds to club
+    if member.club != club:
+        return OBJ_NOT_FOUND
+
+    # Methods
+    if request.method == "GET":
+        return JsonResponse({
+            "id": member.uid,
+            "portfolio": member.portfolio_as_dict(),
+        })
+
+    if request.method == "POST":
+        member.update_portfolio_from_post_data(request.POST)
+        return JsonResponse({
+            "success": True,
+            "id": member.uid,
+            "portfolio": member.portfolio_as_dict(),
+            "alert": {
+                "title": _("Portfolio aktualisiert"),
+                "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
             }
         })
 
@@ -207,7 +246,7 @@ def endpoint_member_groupmembership(request, team: Team, member: ClubMember, gro
     if request.method == "POST":
         if member.groups.filter(uid=group.uid).exists():
             return DATA_INVALID
-        member.groups.add(group)
+        member.groups.add(group, through_defaults={})
         return JsonResponse({
             "success": True,
             "id": member.uid,
@@ -217,7 +256,6 @@ def endpoint_member_groupmembership(request, team: Team, member: ClubMember, gro
                 "text": _("Das Mitglied wurde erfolgreich der Gruppe hinzugefügt."),
             }
         })
-
 
     if request.method == "DELETE":
         if not member.groups.filter(uid=group.uid).exists():

@@ -2,6 +2,7 @@ from django.contrib import admin
 
 import teamized.club.models as models
 
+
 # Register your models here.
 
 
@@ -12,12 +13,14 @@ class ClubAdminMemberInline(admin.TabularInline):
 
     fields = ('first_name', 'last_name', 'email')
 
+
 class ClubAdminMemberGroupInline(admin.TabularInline):
     model = models.ClubMemberGroup
     extra = 0
     show_change_link = True
 
     fields = ('name', 'description')
+
 
 # class ClubAdminPollInline(admin.TabularInline):
 #     model = models.ClubPoll
@@ -35,11 +38,12 @@ class ClubAdmin(admin.ModelAdmin):
     search_fields = ('uid', 'name', 'description')
     prepopulated_fields = {'slug': ('name',)}
 
-    inlines = [ClubAdminMemberInline, ClubAdminMemberGroupInline]#, ClubAdminPollInline]
+    inlines = [ClubAdminMemberInline, ClubAdminMemberGroupInline]  # , ClubAdminPollInline]
 
     fieldsets = [
         ('Infos', {'fields': ('uid', 'name', 'description', 'slug')}),
     ]
+
 
 # class ClubPollAdminPollFieldInline(admin.TabularInline):
 #     model = models.ClubPollField
@@ -98,18 +102,24 @@ class ClubMemberAdmin(admin.ModelAdmin):
     readonly_fields = ('uid',)
 
     fieldsets = [
-        ('Infos', {'fields': ('uid', 'club', )}),
+        ('Infos', {'fields': ('uid', 'club',)}),
         ('Persönliche Infos', {'fields': ('first_name', 'last_name', 'birth_date',)}),
         ('Adresse', {'fields': ('street', 'zip_code', 'city',)}),
         ('Kontakt', {'fields': ('email', 'phone', 'mobile',)}),
+        ('Portfolio', {'fields': (
+            'portfolio_visible', 'portfolio_image1_url', 'portfolio_image2_url', 'portfolio_member_since',
+            'portfolio_hobby_since', 'portfolio_role', 'portfolio_profession', 'portfolio_hobbies',
+            'portfolio_highlights', 'portfolio_biography', 'portfolio_contact_email',)}),
         ('Notizen', {'fields': ('notes',)}),
     ]
+
 
 class ClubMemberGroupAdminGroupMembershipInline(admin.TabularInline):
     model = models.ClubMemberGroupMembership
     extra = 0
 
     fields = ('member',)
+
 
 @admin.register(models.ClubMemberGroup)
 class ClubMemberGroupAdmin(admin.ModelAdmin):
