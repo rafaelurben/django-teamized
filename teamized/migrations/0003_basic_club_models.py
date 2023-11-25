@@ -7,106 +7,315 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('teamized', '0002_renamed_app_to_teamized'),
+        ("teamized", "0002_renamed_app_to_teamized"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Club',
+            name="Club",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('slug', models.SlugField(blank=True, default=None, null=True, unique=True, verbose_name='Slug')),
-                ('name', models.CharField(max_length=50, verbose_name='Name')),
-                ('description', models.TextField(blank=True, default='', help_text='Wird auf der Login-Seite angezeigt.', verbose_name='Beschreibung')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(
+                        blank=True,
+                        default=None,
+                        null=True,
+                        unique=True,
+                        verbose_name="Slug",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="Name")),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True,
+                        default="",
+                        help_text="Wird auf der Login-Seite angezeigt.",
+                        verbose_name="Beschreibung",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Zuletzt geändert am"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Verein',
-                'verbose_name_plural': 'Vereine',
+                "verbose_name": "Verein",
+                "verbose_name_plural": "Vereine",
             },
         ),
         migrations.CreateModel(
-            name='ClubMember',
+            name="ClubMember",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('email', models.EmailField(max_length=254, verbose_name='E-Mail')),
-                ('first_name', models.CharField(max_length=50, verbose_name='Vorname')),
-                ('last_name', models.CharField(max_length=50, verbose_name='Nachname')),
-                ('birth_date', models.DateField(blank=True, default=None, null=True, verbose_name='Geburtsdatum')),
-                ('phone', models.CharField(blank=True, default='', max_length=50, verbose_name='Telefon')),
-                ('mobile', models.CharField(blank=True, default='', max_length=50, verbose_name='Mobil')),
-                ('street', models.CharField(blank=True, default='', max_length=50, verbose_name='Straße')),
-                ('zip_code', models.CharField(blank=True, default='', max_length=50, verbose_name='PLZ')),
-                ('city', models.CharField(blank=True, default='', max_length=50, verbose_name='Ort')),
-                ('notes', models.TextField(blank=True, default='', verbose_name='Notizen')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
-                ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='members', to='teamized.club', verbose_name='Verein')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254, verbose_name="E-Mail")),
+                ("first_name", models.CharField(max_length=50, verbose_name="Vorname")),
+                ("last_name", models.CharField(max_length=50, verbose_name="Nachname")),
+                (
+                    "birth_date",
+                    models.DateField(
+                        blank=True, default=None, null=True, verbose_name="Geburtsdatum"
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True, default="", max_length=50, verbose_name="Telefon"
+                    ),
+                ),
+                (
+                    "mobile",
+                    models.CharField(
+                        blank=True, default="", max_length=50, verbose_name="Mobil"
+                    ),
+                ),
+                (
+                    "street",
+                    models.CharField(
+                        blank=True, default="", max_length=50, verbose_name="Straße"
+                    ),
+                ),
+                (
+                    "zip_code",
+                    models.CharField(
+                        blank=True, default="", max_length=50, verbose_name="PLZ"
+                    ),
+                ),
+                (
+                    "city",
+                    models.CharField(
+                        blank=True, default="", max_length=50, verbose_name="Ort"
+                    ),
+                ),
+                (
+                    "notes",
+                    models.TextField(blank=True, default="", verbose_name="Notizen"),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Zuletzt geändert am"
+                    ),
+                ),
+                (
+                    "club",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="members",
+                        to="teamized.club",
+                        verbose_name="Verein",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Vereinsmitglied',
-                'verbose_name_plural': 'Vereinsmitglieder',
-                'unique_together': {('club', 'email')},
+                "verbose_name": "Vereinsmitglied",
+                "verbose_name_plural": "Vereinsmitglieder",
+                "unique_together": {("club", "email")},
             },
         ),
         migrations.CreateModel(
-            name='ClubMemberMagicLink',
+            name="ClubMemberMagicLink",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('logged_in', models.BooleanField(default=False, verbose_name='Eingeloggt?')),
-                ('logged_out', models.BooleanField(default=False, verbose_name='Wieder ausgeloggt?')),
-                ('login_until', models.DateTimeField(default=teamized.utils.now_plus_1h, verbose_name='Login bis')),
-                ('valid_until', models.DateTimeField(default=teamized.utils.now_plus_2w, verbose_name='Verwendbar bis')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='magic_links', to='teamized.clubmember', verbose_name='Mitglied')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                (
+                    "logged_in",
+                    models.BooleanField(default=False, verbose_name="Eingeloggt?"),
+                ),
+                (
+                    "logged_out",
+                    models.BooleanField(
+                        default=False, verbose_name="Wieder ausgeloggt?"
+                    ),
+                ),
+                (
+                    "login_until",
+                    models.DateTimeField(
+                        default=teamized.utils.now_plus_1h, verbose_name="Login bis"
+                    ),
+                ),
+                (
+                    "valid_until",
+                    models.DateTimeField(
+                        default=teamized.utils.now_plus_2w,
+                        verbose_name="Verwendbar bis",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Zuletzt geändert am"
+                    ),
+                ),
+                (
+                    "member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="magic_links",
+                        to="teamized.clubmember",
+                        verbose_name="Mitglied",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Magischer Link',
-                'verbose_name_plural': 'Magische Links',
+                "verbose_name": "Magischer Link",
+                "verbose_name_plural": "Magische Links",
             },
         ),
         migrations.AddField(
-            model_name='team',
-            name='linked_club',
-            field=models.OneToOneField(blank=True, default=None, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='team', to='teamized.club', verbose_name='Verlinkter Verein'),
+            model_name="team",
+            name="linked_club",
+            field=models.OneToOneField(
+                blank=True,
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="team",
+                to="teamized.club",
+                verbose_name="Verlinkter Verein",
+            ),
         ),
         migrations.CreateModel(
-            name='ClubMemberGroup',
+            name="ClubMemberGroup",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('name', models.CharField(max_length=50, verbose_name='Name')),
-                ('description', models.TextField(blank=True, verbose_name='Beschreibung')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
-                ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='groups', to='teamized.club', verbose_name='Verein')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, verbose_name="Name")),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Beschreibung"),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Zuletzt geändert am"
+                    ),
+                ),
+                (
+                    "club",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="groups",
+                        to="teamized.club",
+                        verbose_name="Verein",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Vereinsmitgliedergruppe',
-                'verbose_name_plural': 'Vereinsmitgliedergruppen',
+                "verbose_name": "Vereinsmitgliedergruppe",
+                "verbose_name_plural": "Vereinsmitgliedergruppen",
             },
         ),
         migrations.CreateModel(
-            name='ClubMemberGroupMembership',
+            name="ClubMemberGroupMembership",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='memberships', to='teamized.clubmembergroup', verbose_name='Gruppe')),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='group_memberships', to='teamized.clubmember', verbose_name='Mitglied')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="memberships",
+                        to="teamized.clubmembergroup",
+                        verbose_name="Gruppe",
+                    ),
+                ),
+                (
+                    "member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="group_memberships",
+                        to="teamized.clubmember",
+                        verbose_name="Mitglied",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Zuletzt geändert am"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Gruppenmitgliedschaft',
-                'verbose_name_plural': 'Gruppenmitgliedschaften',
-                'unique_together': {('group', 'member')},
+                "verbose_name": "Gruppenmitgliedschaft",
+                "verbose_name_plural": "Gruppenmitgliedschaften",
+                "unique_together": {("group", "member")},
             },
         ),
         migrations.AddField(
-            model_name='clubmembergroup',
-            name='members',
-            field=models.ManyToManyField(related_name='groups', through='teamized.ClubMemberGroupMembership', to='teamized.clubmember', verbose_name='Mitglieder'),
+            model_name="clubmembergroup",
+            name="members",
+            field=models.ManyToManyField(
+                related_name="groups",
+                through="teamized.ClubMemberGroupMembership",
+                to="teamized.clubmember",
+                verbose_name="Mitglieder",
+            ),
         ),
     ]

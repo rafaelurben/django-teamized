@@ -7,18 +7,23 @@ from teamized.club.decorators import clubview
 
 # Create your views here.
 
+
 @clubview()
 def member_app(request, club, member):
     """Member app view - shows the member app for a specific member"""
 
     if not member.session_is_logged_in(request):
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
+            reverse(
+                "teamized:club_member_login",
+                kwargs={"clubslug": club.slug, "memberuid": member.uid},
+            )
         )
 
     return render(
         request, "teamized/club/member_app.html", {"member": member, "club": club}
     )
+
 
 @clubview()
 def member_login(request, club, member):
@@ -31,7 +36,10 @@ def member_login(request, club, member):
     if member.session_is_logged_in(request):
         messages.success(request, "Du bist bereits eingeloggt.")
         return redirect(
-            reverse("teamized:club_member_app", kwargs={"clubslug": club.slug, "memberuid": member.uid})
+            reverse(
+                "teamized:club_member_app",
+                kwargs={"clubslug": club.slug, "memberuid": member.uid},
+            )
         )
 
     magicuid = request.GET.get("magicuid", None)
@@ -44,14 +52,20 @@ def member_login(request, club, member):
         )
         # Redirect to remove magicuid from url
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
+            reverse(
+                "teamized:club_member_login",
+                kwargs={"clubslug": club.slug, "memberuid": member.uid},
+            )
         )
 
     if request.method == "POST":
         if can_login:
             member.session_login(request, magicuid)
             return redirect(
-                reverse("teamized:club_member_app", kwargs={"clubslug": club.slug, "memberuid": member.uid})
+                reverse(
+                    "teamized:club_member_app",
+                    kwargs={"clubslug": club.slug, "memberuid": member.uid},
+                )
             )
 
         member.send_magic_link(request)
@@ -60,7 +74,10 @@ def member_login(request, club, member):
         )
         # Redirect to prevent resubmission of form
         return redirect(
-            reverse("teamized:club_member_login", kwargs={"clubslug": club.slug, "memberuid": member.uid})
+            reverse(
+                "teamized:club_member_login",
+                kwargs={"clubslug": club.slug, "memberuid": member.uid},
+            )
         )
 
     return render(
@@ -73,6 +90,7 @@ def member_login(request, club, member):
         },
     )
 
+
 @clubview()
 def member_logout(request, club, member):
     """Member logout view - logs out a specific member"""
@@ -83,9 +101,8 @@ def member_logout(request, club, member):
     else:
         messages.warning(request, "Du warst gar nicht eingeloggt.")
 
-    return redirect(
-        reverse("teamized:club_login", kwargs={"clubslug": club.slug})
-    )
+    return redirect(reverse("teamized:club_login", kwargs={"clubslug": club.slug}))
+
 
 @clubview()
 def club_login(request, club):
@@ -114,7 +131,9 @@ def club_login(request, club):
         {"club": club, "logged_in_members": logged_in_members},
     )
 
+
 ### Error
+
 
 def error(request):
     messages.error(request, "Diese Seite wurde nicht gefunden.")

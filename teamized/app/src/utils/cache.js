@@ -140,7 +140,7 @@ export async function refreshTeamCacheCategory(teamId, category) {
             console.info("[Cache] Team category " + category + " is already being refreshed for team " + teamId + "!");
         } else {
             teamdata._state[category]._refreshing = true;
-            API.GET(`teams/${teamId}/${category.replaceAll('_','/')}`).then(
+            API.GET(`teams/${teamId}/${category.replaceAll('_', '/')}`).then(
                 (data) => {
                     let objects = data[category.split('_')[category.split('_').length - 1]];
                     replaceTeamCacheCategory(teamId, category, objects);

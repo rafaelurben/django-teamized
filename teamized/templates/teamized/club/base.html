@@ -2,7 +2,8 @@
 {% load i18n static %}
 
 {% block menubartitle %}
-    <a id="menubartitle" class="navbar-brand ms-3" href="{% block menubartitleurl %}{% url 'teamized:home' %}{% endblock menubartitleurl %}">
+    <a id="menubartitle" class="navbar-brand ms-3"
+       href="{% block menubartitleurl %}{% url 'teamized:home' %}{% endblock menubartitleurl %}">
         {% block menubartitlecontent %}Teamized: Clubs{% endblock menubartitlecontent %}
     </a>
 {% endblock menubartitle %}
@@ -11,11 +12,12 @@
     {% block menubar_items %}
     {% endblock menubar_items %}
 {% endblock all_menubar_items %}
-        
+
 {% block contentcontainer %}
     <div class="px-4 py-3 container-fluid" id="maincontent">
         {% for message in messages %}
-            <div class="alert alert-dismissible shadow fade show {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}alert-danger{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}alert-info{% endif %}" role="alert">
+            <div class="alert alert-dismissible shadow fade show {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}alert-danger{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}alert-success{% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}alert-info{% endif %}"
+                 role="alert">
                 {{ message | safe }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

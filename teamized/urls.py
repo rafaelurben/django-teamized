@@ -6,40 +6,21 @@ from . import views
 
 ##############
 
-app_name = 'teamized'
+app_name = "teamized"
 
 urlpatterns = [
     # Home page (public)
-    path('',
-         views.home,
-         name="home"),
-
+    path("", views.home, name="home"),
     # App pages (login required)
-    path('app/',
-         views.app,
-         name="app"),
-    path('app/debug',
-         views.app_debug,
-         name="app-debug"),
-
+    path("app/", views.app, name="app"),
+    path("app/debug", views.app_debug, name="app-debug"),
     # Club pages (public)
-    path('clubs/',
-         include('teamized.club.urls')),
-
+    path("clubs/", include("teamized.club.urls")),
     # PWA manifest (public)
-    path('manifest.json',
-         views.manifest,
-         name="manifest"),
-
-    path('api/',
-         include('teamized.api.urls')),
-
+    path("manifest.json", views.manifest, name="manifest"),
+    path("api/", include("teamized.api.urls")),
     # Calendar .ics file (public, but must know uuid token)
-    path('calendar/<uuid:uuid>.ics',
-         views.calendar_ics,
-         name="calendar_ics"),
-
+    path("calendar/<uuid:uuid>.ics", views.calendar_ics, name="calendar_ics"),
     # 404 error page
-    re_path('.*', views.notfound),
-
+    re_path(".*", views.notfound),
 ]

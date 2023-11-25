@@ -4,8 +4,8 @@
 
 /**
  * Check if the given UUID is a valid UUID
- * 
- * @param {String} uuid 
+ *
+ * @param {String} uuid
  * @returns {Boolean}
  */
 export function validateUUID(uuid) {
@@ -14,7 +14,7 @@ export function validateUUID(uuid) {
 
 /**
  * Pad a number with leading zeros
- * 
+ *
  * @param {Number} num the number
  * @param {Number} len length to pad to
  * @returns {String} the padded number
@@ -25,7 +25,7 @@ export function padZero(num, len) {
 
 /**
  * Toggle the secret debug mode
- * 
+ *
  * @param {Boolean} noask do not ask the user for confirmation
  */
 export function toggleDebug(noask) {
@@ -36,5 +36,6 @@ export function toggleDebug(noask) {
             window.appdata.debug_prompt_accepted = true;
             $("body").addClass("debug");
         }
-    };
+    }
+    ;
 }

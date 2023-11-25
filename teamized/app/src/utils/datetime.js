@@ -2,14 +2,14 @@
  * Datetime utils
  */
 
-import { padZero } from "./utils.js";
+import {padZero} from "./utils.js";
 
 // Datetime utils
 
 /**
  * Round a date to the beginnin of the day (+ offset days)
- * 
- * @param {Date} olddate 
+ *
+ * @param {Date} olddate
  * @param {Number} offset in days
  * @returns {Date}
  */
@@ -20,8 +20,8 @@ export function roundDays(olddate, offset) {
 
 /**
  * Round a date to the beginnin of the month (+ offset months)
- * 
- * @param {Date} olddate 
+ *
+ * @param {Date} olddate
  * @param {Number} offset in months
  * @returns {Date}
  */
@@ -32,9 +32,9 @@ export function roundMonths(olddate, offset) {
 
 /**
  * Checks whether two Date objects are on the same day
- * 
- * @param {Date} date1 
- * @param {Date} date2 
+ *
+ * @param {Date} date1
+ * @param {Date} date2
  * @returns {Boolean}
  */
 export function isSameDate(date1, date2) {
@@ -43,7 +43,7 @@ export function isSameDate(date1, date2) {
 
 /**
  * Checks whether a Date object lies between two other Date objects
- * 
+ *
  * @param {Date} date to check
  * @param {Date} start first possible date
  * @param {Date} end last possible date
@@ -55,8 +55,8 @@ export function isInRange(date, start, end) {
 
 /**
  * Get the start of the week (monday 12:00 am) for a given date
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  * @returns {Date}
  */
 export function getMondayOfWeek(date) {
@@ -66,8 +66,8 @@ export function getMondayOfWeek(date) {
 
 /**
  * Get a String representation of a Date object (date only)
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  * @returns {String}
  */
 export function getDateString(date) {
@@ -80,7 +80,7 @@ export function getDateString(date) {
 
 /**
  * Get a String representation of a Date object (date and time)
- * 
+ *
  * @param {Date} datetime
  * @returns {String}
  */
@@ -96,8 +96,8 @@ export function getDateTimeString(datetime) {
 
 /**
  * Get a String representation of a Date object (time only)
- * 
- * @param {Date} datetime 
+ *
+ * @param {Date} datetime
  * @returns {String}
  */
 export function getTimeString(datetime) {
@@ -109,8 +109,8 @@ export function getTimeString(datetime) {
 
 /**
  * Converts a Date object into a ISO format string
- * 
- * @param {Date} value 
+ *
+ * @param {Date} value
  * @returns {String}
  */
 export function isoFormat(value) {
@@ -120,7 +120,7 @@ export function isoFormat(value) {
 
 /**
  * Convert a Date object into the format used in input fields
- * 
+ *
  * @param {Date} value
  * @param {Boolean} dateOnly true for date field, false for datetime-local field
  * @returns {String}
@@ -137,8 +137,8 @@ export function localInputFormat(value, dateOnly) {
 
 /**
  * Convert milliseconds into an object with hours, minutes and seconds
- * 
- * @param {Number} ms count of milliseconds 
+ *
+ * @param {Number} ms count of milliseconds
  * @returns {object}
  */
 export function ms2HoursMinutesSeconds(ms) {
@@ -151,8 +151,8 @@ export function ms2HoursMinutesSeconds(ms) {
 
 /**
  * Convert seconds into an object with hours, minutes and seconds
- * 
- * @param {Number} seconds count of seconds 
+ *
+ * @param {Number} seconds count of seconds
  * @returns {object}
  */
 export function seconds2HoursMinutesSeconds(seconds) {
@@ -160,8 +160,8 @@ export function seconds2HoursMinutesSeconds(seconds) {
 }
 
 /**
- * 
- * @param {String} birthDateString 
+ *
+ * @param {String} birthDateString
  * @returns {Number} age in years
  */
 export function getAge(birthDateString) {

@@ -14,7 +14,7 @@ from teamized.exceptions import ValidationError
 # Base validator class
 
 
-class BaseValidator():
+class BaseValidator:
     "Base class for validating POST request data"
 
     @classmethod
@@ -27,11 +27,14 @@ class BaseValidator():
             return cls._convert(value, **kwargs)
         except Exception as exc:
             raise ValidationError(
-                _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(value)) from exc
+                _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(
+                    value
+                )
+            ) from exc
 
     @classmethod
     def _is_null(cls, value):
-        return value is None or value == ''
+        return value is None or value == ""
 
     @classmethod
     def _before_convert(cls, value, **kwargs):
@@ -42,12 +45,21 @@ class BaseValidator():
         return value
 
     @classmethod
-    def validate(cls, datadict: dict, attr: str, required: bool = True, default: any = None, null=False, **kwargs):
+    def validate(
+        cls,
+        datadict: dict,
+        attr: str,
+        required: bool = True,
+        default: any = None,
+        null=False,
+        **kwargs
+    ):
         # If the attribute is not present in the data dict
         if not attr in datadict:
             if required:
                 raise ValidationError(
-                    _("Das Attribut '{}' darf nicht weggelassen werden!").format(attr))
+                    _("Das Attribut '{}' darf nicht weggelassen werden!").format(attr)
+                )
             if callable(default):
                 return default()
             return default
@@ -58,7 +70,8 @@ class BaseValidator():
         if cls._is_null(value):
             if not null:
                 raise ValidationError(
-                    _("Das Attribut '{}' darf nicht null sein!").format(attr))
+                    _("Das Attribut '{}' darf nicht null sein!").format(attr)
+                )
             return None
 
         # Before convert (for subclasses)
@@ -71,6 +84,7 @@ class BaseValidator():
         value = cls._after_convert(value, **kwargs)
 
         return value
+
 
 # Custom validators
 
@@ -120,36 +134,83 @@ class DateValidator(BaseValidator):
     def _convert(cls, value, fmt="%Y-%m-%d", **kwargs):
         return dt.datetime.strptime(value, fmt).date()
 
+
 class RegexValidator(StringValidator):
     @classmethod
     def _convert(cls, value, regex, **kwargs):
         if not re.match(regex, value):
             raise ValidationError(
-                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value))
+                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(
+                    value
+                )
+            )
         return value
+
 
 # Shortcuts
 
 
-def boolean(datadict: dict, attr: str, required: bool = False, default: bool = True, null=False) -> bool:
+def boolean(
+    datadict: dict, attr: str, required: bool = False, default: bool = True, null=False
+) -> bool:
     return BooleanValidator.validate(datadict, attr, required, default, null)
 
 
-def integer(datadict: dict, attr: str, required: bool = True, default: int = "", null=False) -> int:
+def integer(
+    datadict: dict, attr: str, required: bool = True, default: int = "", null=False
+) -> int:
     return IntegerValidator.validate(datadict, attr, required, default, null)
 
 
-def text(datadict: dict, attr: str, required: bool = True, default: str = "", null=False, max_length: int = None) -> str:
-    return StringValidator.validate(datadict, attr, required, default, null, max_length=max_length)
+def text(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: str = "",
+    null=False,
+    max_length: int = None,
+) -> str:
+    return StringValidator.validate(
+        datadict, attr, required, default, null, max_length=max_length
+    )
 
 
-def datetime(datadict: dict, attr: str, required: bool = True, default: dt.datetime = None, null=False, fmt="%Y-%m-%dT%H:%M:%S.%f%z") -> dt.datetime:
+def datetime(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: dt.datetime = None,
+    null=False,
+    fmt="%Y-%m-%dT%H:%M:%S.%f%z",
+) -> dt.datetime:
     return DateTimeValidator.validate(datadict, attr, required, default, null, fmt=fmt)
 
 
-def date(datadict: dict, attr: str, required: bool = True, default: dt.date = None, null=False, fmt="%Y-%m-%d") -> dt.date:
+def date(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: dt.date = None,
+    null=False,
+    fmt="%Y-%m-%d",
+) -> dt.date:
     return DateValidator.validate(datadict, attr, required, default, null, fmt=fmt)
 
 
-def slug(datadict: dict, attr: str, required: bool = True, default: str = "", null=False, max_length: int = None) -> str:
-    return RegexValidator.validate(datadict, attr, required, default, null, max_length=max_length, regex=r'^[0-9a-z\-_]+$')
+def slug(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: str = "",
+    null=False,
+    max_length: int = None,
+) -> str:
+    return RegexValidator.validate(
+        datadict,
+        attr,
+        required,
+        default,
+        null,
+        max_length=max_length,
+        regex=r"^[0-9a-z\-_]+$",
+    )

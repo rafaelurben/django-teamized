@@ -1,12 +1,12 @@
 /**
  * This file contains presets using the SweetAlert2 library
  * https://sweetalert2.github.io/
-*/
+ */
 
 /**
  * Create a alert based on a failed ajax request
- * 
- * @param {jqXHR} request 
+ *
+ * @param {jqXHR} request
  */
 export function ajaxRequestErrorAlert(request) {
     console.debug("Error: " + request.status + " " + request.statusText, request);
@@ -40,8 +40,8 @@ export function ajaxRequestErrorAlert(request) {
 
 /**
  * Create an alert based on successfull ajax request json data
- * 
- * @param {object} data 
+ *
+ * @param {object} data
  */
 export function requestSuccessAlert(data) {
     Swal.fire({
@@ -59,10 +59,10 @@ export function requestSuccessAlert(data) {
 
 /**
  * Show a simple error alert
- * 
- * @param {String} title 
- * @param {String} message 
- * @param {object} options 
+ *
+ * @param {String} title
+ * @param {String} message
+ * @param {object} options
  */
 export function errorAlert(title, message, options) {
     Swal.fire({
@@ -75,10 +75,10 @@ export function errorAlert(title, message, options) {
 
 /**
  * Show a simple info alert
- * 
- * @param {String} title 
- * @param {String} message 
- * @param {object} options 
+ *
+ * @param {String} title
+ * @param {String} message
+ * @param {object} options
  */
 export function infoAlert(title, message, options) {
     Swal.fire({
@@ -91,9 +91,9 @@ export function infoAlert(title, message, options) {
 
 /**
  * Show a simple waiting alert toast (indicating that something is loading)
- * 
- * @param {String} text 
- * @param {object} options 
+ *
+ * @param {String} text
+ * @param {object} options
  */
 export function waitingAlert(text, options) {
     Swal.fire({
@@ -109,10 +109,10 @@ export function waitingAlert(text, options) {
 
 /**
  * Show a simple success alert toast
- * 
- * @param {String} title 
- * @param {String} message 
- * @param {object} options 
+ *
+ * @param {String} title
+ * @param {String} message
+ * @param {object} options
  */
 export function successAlert(text, title, options) {
     Swal.fire({
@@ -132,15 +132,15 @@ export function successAlert(text, title, options) {
 
 /**
  * Create a confirmation alert (action required)
- * 
+ *
  * @param {*} html content of the alert
  * @param {*} preConfirm function that is called when the user confirms the alert
- * @param {String} title 
- * @param {object} options 
+ * @param {String} title
+ * @param {object} options
  * @returns the result of the preConfirm function if the user confirmed the alert
  */
 export function confirmAlert(html, preConfirm, title, options) {
-    return new Promise((resolve, reject) => {  
+    return new Promise((resolve, reject) => {
         let data = {
             title: title || "Sicher?",
             html: html,
@@ -168,8 +168,8 @@ export function confirmAlert(html, preConfirm, title, options) {
 
 /**
  * Same as confirmAlert, but asks twice for confirmation
- * 
- * @param {*} html 
+ *
+ * @param {*} html
  * @param {*} preConfirm function that is called when the user confirms the alert twice
  * @returns the result of the preConfirm function if the user confirmed both alerts
  */

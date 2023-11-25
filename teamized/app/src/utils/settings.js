@@ -47,7 +47,7 @@ export async function getSettings() {
 
 export async function editSettings(settings) {
     // Apply new settings
-    let newsettings = { ...window.appdata.settings, ...settings };
+    let newsettings = {...window.appdata.settings, ...settings};
     applySettings(newsettings);
     // Save new settings on server
     return await API.POST('settings', settings).then(
@@ -65,7 +65,7 @@ export async function editSettings(settings) {
 
 /**
  * Update the used color scheme
- * 
+ *
  * @param {String} scheme "dark" or "light"
  */
 function setColorScheme(scheme) {

@@ -1,4 +1,4 @@
-/** 
+/**
  * This is the main file for the React app
  * Here the app is initialized and the main logic is started
  */
@@ -20,19 +20,19 @@ import * as WorkingTimeStats from "./utils/workingtimestats.js";
 // Make namespaces available in the console (for debugging)
 
 window._App = {
-  Alerts,
-  API,
-  Cache,
-  Calendars,
-  Club,
-  DateTime,
-  Navigation,
-  Settings,
-  Teams,
-  ToDo,
-  Utils,
-  WorkingTime,
-  WorkingTimeStats,
+    Alerts,
+    API,
+    Cache,
+    Calendars,
+    Club,
+    DateTime,
+    Navigation,
+    Settings,
+    Teams,
+    ToDo,
+    Utils,
+    WorkingTime,
+    WorkingTimeStats,
 };
 
 // Initialize appdata
@@ -40,104 +40,104 @@ window._App = {
 let loadinprogress = true;
 
 window.appdata = {
-  currentPage: "home",
-  defaultTeamId: null,
-  selectedTeamId: null,
-  teamcache: {},
-  user: {
-    id: null,
-    username: "Laden...",
-    avatar_url: "https://www.gravatar.com/avatar/",
-  },
-  initialLoadComplete: false,
+    currentPage: "home",
+    defaultTeamId: null,
+    selectedTeamId: null,
+    teamcache: {},
+    user: {
+        id: null,
+        username: "Laden...",
+        avatar_url: "https://www.gravatar.com/avatar/",
+    },
+    initialLoadComplete: false,
 };
 
 function startLoading() {
-  loadinprogress = true;
-  $("#refreshbutton>a>i").addClass("fa-spin");
+    loadinprogress = true;
+    $("#refreshbutton>a>i").addClass("fa-spin");
 }
 
 function endLoading() {
-  loadinprogress = false;
-  $("#refreshbutton>a>i").removeClass("fa-spin");
+    loadinprogress = false;
+    $("#refreshbutton>a>i").removeClass("fa-spin");
 }
 
 async function initialize() {
-  if (new URL(location).searchParams.has("debug")) Utils.toggleDebug(true);
+    if (new URL(location).searchParams.has("debug")) Utils.toggleDebug(true);
 
-  startLoading();
+    startLoading();
 
-  Navigation.showSidebarOnDesktop();
-  Navigation.importFromURL();
-  Navigation.render();
+    Navigation.showSidebarOnDesktop();
+    Navigation.importFromURL();
+    Navigation.render();
 
-  await Promise.all([
-    Settings.getSettings(),
-    Settings.getProfile().then(Navigation.renderSidebar),
-    Teams.getTeams(),
-  ]);
+    await Promise.all([
+        Settings.getSettings(),
+        Settings.getProfile().then(Navigation.renderSidebar),
+        Teams.getTeams(),
+    ]);
 
-  Navigation.exportToURL();
-  Navigation.render();
+    Navigation.exportToURL();
+    Navigation.render();
 
-  Teams.checkURLInvite();
-  WorkingTime.getTrackingSession();
+    Teams.checkURLInvite();
+    WorkingTime.getTrackingSession();
 
-  endLoading();
-  window.appdata.initialLoadComplete = true;
+    endLoading();
+    window.appdata.initialLoadComplete = true;
 }
 
 async function reinitialize() {
-  startLoading();
+    startLoading();
 
-  const oldTeamId = window.appdata.selectedTeamId;
+    const oldTeamId = window.appdata.selectedTeamId;
 
-  window.appdata = {
-    ...window.appdata,
-    defaultTeamId: null,
-    teamcache: {},
-  };
-  Navigation.render();
+    window.appdata = {
+        ...window.appdata,
+        defaultTeamId: null,
+        teamcache: {},
+    };
+    Navigation.render();
 
-  await Promise.all([
-    Settings.getSettings(),
-    Teams.getTeams(),
-  ]);
+    await Promise.all([
+        Settings.getSettings(),
+        Teams.getTeams(),
+    ]);
 
-  Navigation.render();
+    Navigation.render();
 
-  WorkingTime.getTrackingSession();
+    WorkingTime.getTrackingSession();
 
-  Teams.switchTeam(oldTeamId);
+    Teams.switchTeam(oldTeamId);
 
-  endLoading();
+    endLoading();
 }
 
 // Reload
 
 async function refresh() {
-  if (!loadinprogress) {
-    await reinitialize();
-  }
+    if (!loadinprogress) {
+        await reinitialize();
+    }
 }
 
 function onkeypress(e) {
-  if (e.keyCode == 116) {
-    // F5
-    if (e.shiftKey) {
-      // Shift+F5 normal reload
-      e.preventDefault();
-      window.location.reload(true);
-    } else if (!e.ctrlKey && !e.altKey) {
-      // F5 soft reload
-      e.preventDefault();
-      refresh();
+    if (e.keyCode == 116) {
+        // F5
+        if (e.shiftKey) {
+            // Shift+F5 normal reload
+            e.preventDefault();
+            window.location.reload(true);
+        } else if (!e.ctrlKey && !e.altKey) {
+            // F5 soft reload
+            e.preventDefault();
+            refresh();
+        }
+    } else if (e.keyCode == 117 && e.shiftKey) {
+        // Shift+F6 toggle debug mode
+        e.preventDefault();
+        Utils.toggleDebug();
     }
-  } else if (e.keyCode == 117 && e.shiftKey) {
-    // Shift+F6 toggle debug mode
-    e.preventDefault();
-    Utils.toggleDebug();
-  }
 }
 
 // Add event listeners

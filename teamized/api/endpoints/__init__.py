@@ -8,6 +8,7 @@ from teamized.api.utils.constants import ENDPOINT_NOT_FOUND
 
 # Basic API views
 
+
 @csrf_exempt
 def endpoint_not_found(request):
     """

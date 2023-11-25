@@ -6,10 +6,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
 from teamized import enums, exceptions
-from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, NOT_IMPLEMENTED, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
+from teamized.api.utils.constants import (
+    ENDPOINT_NOT_FOUND,
+    NOT_IMPLEMENTED,
+    DATA_INVALID,
+    NO_PERMISSION,
+    OBJ_NOT_FOUND,
+)
 from teamized.api.utils.decorators import require_objects, api_view
 from teamized.decorators import teamized_prep
 from teamized.models import User, Member, Team, Invite
+
 
 @api_view(["get"])
 @teamized_prep()
@@ -18,9 +25,11 @@ def endpoint_profile(request):
     Endpoint for getting the user's profile.
     """
     user: User = request.teamized_user
-    return JsonResponse({
-        "user": user.as_dict(),
-    })
+    return JsonResponse(
+        {
+            "user": user.as_dict(),
+        }
+    )
 
 
 @api_view(["get", "post"])
@@ -33,15 +42,10 @@ def endpoint_settings(request):
     user: User = request.teamized_user
 
     if request.method == "GET":
-        return JsonResponse({
-            "settings": user.settings_as_dict()
-        })
+        return JsonResponse({"settings": user.settings_as_dict()})
     if request.method == "POST":
         user.update_settings_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "settings": user.settings_as_dict()
-        })
+        return JsonResponse({"success": True, "settings": user.settings_as_dict()})
 
 
 @api_view(["get", "post"])
@@ -54,47 +58,64 @@ def endpoint_teams(request):
     user: User = request.teamized_user
 
     if request.method == "GET":
-        memberinstances = user.member_instances.all().select_related('team', 'user').order_by("team__name").annotate(membercount=models.Count('team__members'))
-        return JsonResponse({
-            "teams": [
-                mi.team.as_dict(member=mi, membercount=mi.membercount)
-                for mi in memberinstances
-            ],
-            "defaultTeamId": memberinstances[0].team.uid,
-        })
+        memberinstances = (
+            user.member_instances.all()
+            .select_related("team", "user")
+            .order_by("team__name")
+            .annotate(membercount=models.Count("team__members"))
+        )
+        return JsonResponse(
+            {
+                "teams": [
+                    mi.team.as_dict(member=mi, membercount=mi.membercount)
+                    for mi in memberinstances
+                ],
+                "defaultTeamId": memberinstances[0].team.uid,
+            }
+        )
     if request.method == "POST":
         if not user.can_create_team():
-            return JsonResponse({
-                "error": "team_limit_reached",
-                "alert": {
-                    "title": _("Teamlimit erreicht"),
-                    "text": _("Du hast das maximale Limit an Teams erreicht, welche du besitzen kannst. Kontaktiere "
-                              "den Administrator, wenn du mehr Teams benötigst."),
-                }
-            }, status=400)
+            return JsonResponse(
+                {
+                    "error": "team_limit_reached",
+                    "alert": {
+                        "title": _("Teamlimit erreicht"),
+                        "text": _(
+                            "Du hast das maximale Limit an Teams erreicht, welche du besitzen kannst. Kontaktiere "
+                            "den Administrator, wenn du mehr Teams benötigst."
+                        ),
+                    },
+                },
+                status=400,
+            )
 
         name = request.POST.get("name", "")[:49]
         description = request.POST.get("description", "")
 
         if not name or not description:
-            return JsonResponse({
-                "error": "data_invalid",
-                "alert": {
-                    "title": _("Daten ungültig"),
-                    "text": _("Bitte fülle alle Felder aus."),
-                }
-            }, status=400)
+            return JsonResponse(
+                {
+                    "error": "data_invalid",
+                    "alert": {
+                        "title": _("Daten ungültig"),
+                        "text": _("Bitte fülle alle Felder aus."),
+                    },
+                },
+                status=400,
+            )
 
         team = user.create_team(name, description)
 
-        return JsonResponse({
-            "success": True,
-            "team": team.as_dict(member=team.get_member(user)),
-            "alert": {
-                "title": _("Team erstellt"),
-                "text": _("Das Team wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "team": team.as_dict(member=team.get_member(user)),
+                "alert": {
+                    "title": _("Team erstellt"),
+                    "text": _("Das Team wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
@@ -112,10 +133,12 @@ def endpoint_team(request, team: Team):
         if not team.user_is_member(user):
             return NO_PERMISSION
 
-        return JsonResponse({
-            "id": team.uid,
-            "team": team.as_dict(member=team.get_member(user)),
-        })
+        return JsonResponse(
+            {
+                "id": team.uid,
+                "team": team.as_dict(member=team.get_member(user)),
+            }
+        )
     if request.method == "POST":
         if not team.user_is_owner(user):
             return NO_PERMISSION
@@ -126,41 +149,49 @@ def endpoint_team(request, team: Team):
         team.name = name
         team.description = description
         team.save()
-        return JsonResponse({
-            "success": True,
-            "id": team.uid,
-            "team": team.as_dict(member=team.get_member(user)),
-            "alert": {
-                "title": _("Team geändert"),
-                "text": _("Das Team wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": team.uid,
+                "team": team.as_dict(member=team.get_member(user)),
+                "alert": {
+                    "title": _("Team geändert"),
+                    "text": _("Das Team wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
         if team.linked_club is not None:
             raise exceptions.AlertException(
-                text=_("Solange der Vereinsmodus aktiv ist, kann das Team nicht gelöscht werden."),
+                text=_(
+                    "Solange der Vereinsmodus aktiv ist, kann das Team nicht gelöscht werden."
+                ),
                 title=_("Vereinsmodus aktiv"),
                 errorname="club-mode-active",
             )
 
         if team.members.count() > 1:
             raise exceptions.AlertException(
-                text=_("Das Team kann nicht gelöscht werden, da es noch Mitglieder enthält."),
+                text=_(
+                    "Das Team kann nicht gelöscht werden, da es noch Mitglieder enthält."
+                ),
                 title=_("Team ist nicht leer"),
                 errorname="team-has-members",
             )
 
         team.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Team gelöscht"),
-                "text": _("Das Team wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Team gelöscht"),
+                    "text": _("Das Team wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get"])
@@ -178,13 +209,11 @@ def endpoint_members(request, team: Team):
         if not team.user_is_member(user):
             return NO_PERMISSION
 
-        members = team.members.select_related('user', 'user__auth_user').order_by("user__auth_user__last_name", "user__auth_user__first_name")
+        members = team.members.select_related("user", "user__auth_user").order_by(
+            "user__auth_user__last_name", "user__auth_user__first_name"
+        )
 
-        return JsonResponse({
-            "members": [
-                m.as_dict() for m in members
-            ]
-        })
+        return JsonResponse({"members": [m.as_dict() for m in members]})
 
 
 @api_view(["post", "delete"])
@@ -221,16 +250,17 @@ def endpoint_member(request, team: Team, member: Member):
 
         member.role = role
         member.save()
-        return JsonResponse({
-            "success": True,
-            "id": member.uid,
-            "member": member.as_dict(),
-            "alert": {
-                "title": _("Mitglied aktualisiert"),
-                "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": member.uid,
+                "member": member.as_dict(),
+                "alert": {
+                    "title": _("Mitglied aktualisiert"),
+                    "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+                },
             }
-        })
-
+        )
 
     if request.method == "DELETE":
         if member.is_admin() and not team.user_is_owner(user):
@@ -238,13 +268,15 @@ def endpoint_member(request, team: Team, member: Member):
             return NO_PERMISSION
 
         member.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Mitglied entfernt"),
-                "text": _("Das Mitglied wurde erfolgreich entfernt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Mitglied entfernt"),
+                    "text": _("Das Mitglied wurde erfolgreich entfernt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post"])
@@ -265,26 +297,24 @@ def endpoint_invites(request, team: Team):
     if request.method == "GET":
         invites = team.invites.all().order_by("valid_until")
 
-        return JsonResponse({
-            "invites": [
-                i.as_dict()
-                for i in invites
-            ]
-        })
+        return JsonResponse({"invites": [i.as_dict() for i in invites]})
     if request.method == "POST":
         inv = Invite.from_post_data(request.POST, team)
-        return JsonResponse({
-            "success": True,
-            "invite": inv.as_dict(),
-            "alert": {
-                "title": _("Einladung erstellt"),
-                "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>" % _("Bitte kopier mich!"),
-                "timer": 0,
-                "showConfirmButton": True,
-                "toast": False,
-                "position": "center",
+        return JsonResponse(
+            {
+                "success": True,
+                "invite": inv.as_dict(),
+                "alert": {
+                    "title": _("Einladung erstellt"),
+                    "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>"
+                    % _("Bitte kopier mich!"),
+                    "timer": 0,
+                    "showConfirmButton": True,
+                    "toast": False,
+                    "position": "center",
+                },
             }
-        })
+        )
 
 
 @api_view(["post", "delete"])
@@ -308,24 +338,28 @@ def endpoint_invite(request, team: Team, invite: Invite):
     # Methods
     if request.method == "POST":
         invite.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": invite.uid,
-            "invite": invite.as_dict(),
-            "alert": {
-                "title": _("Einladung geändert"),
-                "text": _("Die Einladung wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": invite.uid,
+                "invite": invite.as_dict(),
+                "alert": {
+                    "title": _("Einladung geändert"),
+                    "text": _("Die Einladung wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         invite.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Einladung gelöscht"),
-                "text": _("Die Einladung wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Einladung gelöscht"),
+                    "text": _("Die Einladung wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )
 
 
 @api_view(["post"])
@@ -346,26 +380,34 @@ def endpoint_team_leave(request, team: Team):
         member = team.get_member(user)
 
         if member.is_owner():
-            return JsonResponse({
-                "error": "owner-can-not-leave",
-                "alert": {
-                    "title": _("Du bist Besitzer"),
-                    "text": _("Du kannst dein Team nicht verlassen, da du der Eigentümer bist."),
-                }
-            }, status=400)
+            return JsonResponse(
+                {
+                    "error": "owner-can-not-leave",
+                    "alert": {
+                        "title": _("Du bist Besitzer"),
+                        "text": _(
+                            "Du kannst dein Team nicht verlassen, da du der Eigentümer bist."
+                        ),
+                    },
+                },
+                status=400,
+            )
 
         member.delete()
 
-        return JsonResponse({
-            "success": True,
-            "id": team.uid,
-            "alert": {
-                "title": _("Team verlassen"),
-                "text": _("Du hast das Team %s verlassen.") % team.name,
+        return JsonResponse(
+            {
+                "success": True,
+                "id": team.uid,
+                "alert": {
+                    "title": _("Team verlassen"),
+                    "text": _("Du hast das Team %s verlassen.") % team.name,
+                },
             }
-        })
+        )
 
-@api_view(['get'])
+
+@api_view(["get"])
 @csrf_exempt
 @teamized_prep()
 @require_objects([("invite", Invite, "invite", "token")], allow_none=True)
@@ -386,10 +428,8 @@ def endpoint_invite_info(request, invite: Invite):
 
         invite.check_validity_for_user(user)
 
-        return JsonResponse({
-            "status": "invite-valid",
-            "team": invite.team.as_dict()
-        })
+        return JsonResponse({"status": "invite-valid", "team": invite.team.as_dict()})
+
 
 @api_view(["post"])
 @csrf_exempt
@@ -407,11 +447,13 @@ def endpoint_invite_accept(request, invite: Invite):
         member = invite.accept(user)
         team = invite.team
 
-        return JsonResponse({
-            "success": True,
-            "team": team.as_dict(member=member),
-            "alert": {
-                "title": _("Einladung akzeptiert"),
-                "text": _("Du bist dem Team %s beigetreten.") % team.name,
+        return JsonResponse(
+            {
+                "success": True,
+                "team": team.as_dict(member=member),
+                "alert": {
+                    "title": _("Einladung akzeptiert"),
+                    "text": _("Du bist dem Team %s beigetreten.") % team.name,
+                },
             }
-        })
+        )

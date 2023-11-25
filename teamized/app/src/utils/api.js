@@ -2,16 +2,16 @@
  * API utils
  */
 
-import { ajaxRequestErrorAlert } from "./alerts.js";
+import {ajaxRequestErrorAlert} from "./alerts.js";
 
 /**
  * Base request method for all ajax requests
- * 
+ *
  * @param {String} method (GET, POST, PUT, DELETE)
  * @param {String} endpoint URL
- * @param {object} data 
+ * @param {object} data
  * @param  {...any} opts additional options passed to $.ajax
- * @returns 
+ * @returns
  */
 export function request(method, endpoint, data, ...opts) {
     return new Promise((resolve, reject) => {

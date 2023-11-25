@@ -2,7 +2,7 @@
  * Module for navigation, routing and rendering
  */
 
-import { PageLoader, PAGELIST } from "../components/pageloader.js";
+import {PageLoader, PAGELIST} from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
 import AppSidebar from "../components/sidebar.js";
 import * as Teams from './teams.js';
@@ -16,8 +16,8 @@ function ensureExistingPage() {
 
 /**
  * Export changes from the cache to the URL
- * 
- * @param {object} options 
+ *
+ * @param {object} options
  */
 export function exportToURL(options) {
     ensureExistingPage();
@@ -25,7 +25,7 @@ export function exportToURL(options) {
 
     const oldurl = new URL(window.location);
     var newurl = new URL(window.location);
-    
+
     // Export the pagename and teamid to the URL
     newurl.searchParams.set('p', window.appdata.currentPage);
     newurl.searchParams.set('t', window.appdata.selectedTeamId);
@@ -34,13 +34,13 @@ export function exportToURL(options) {
         let additionalParams;
         let removeParams;
 
-        ({additionalParams = {}, removeParams = [] } = options);
+        ({additionalParams = {}, removeParams = []} = options);
 
         // Add the additional parameters
         for (const key in additionalParams) {
             newurl.searchParams.set(key, additionalParams[key]);
         }
-    
+
         // Remove parameters
         for (const index in removeParams) {
             newurl.searchParams.delete(removeParams[index]);
@@ -151,8 +151,8 @@ export function reRender() {
 
 /**
  * Change the current page (and render it)
- * 
- * @param {String} page 
+ *
+ * @param {String} page
  */
 export function selectPage(page) {
     if (PAGELIST.includes(page)) {

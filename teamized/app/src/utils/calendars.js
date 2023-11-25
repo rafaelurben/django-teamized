@@ -2,10 +2,10 @@
  * Functions used in the calendar module
  */
 
-import { requestSuccessAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
+import {requestSuccessAlert, doubleConfirmAlert, confirmAlert} from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
-import { roundDays, isInRange, isoFormat, localInputFormat } from "./datetime.js";
+import {roundDays, isInRange, isoFormat, localInputFormat} from "./datetime.js";
 
 // Reexport so that datetime.js functions can also be imported from calendars.js
 export * from "./datetime.js";
@@ -14,13 +14,14 @@ export * from "./datetime.js";
 
 /**
  * Check wheter a date is during an event
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  * @param {object} evt the event object
  * @returns {Boolean}
  */
 export function isDateInEvent(date, evt) {
-    var evtStart; var evtEnd;
+    var evtStart;
+    var evtEnd;
     if (evt.fullday) {
         // roundDays() for fullday events is used to avoid issues with timezones
         evtStart = roundDays(new Date(evt.dstart));
@@ -35,8 +36,8 @@ export function isDateInEvent(date, evt) {
 /**
  * Flattens an object of calendars into an array of events
  * (e.g. merge events from all calendars into a single array)
- * 
- * @param {object} calendars 
+ *
+ * @param {object} calendars
  * @returns {Array}
  */
 export function flattenCalendarEvents(calendars) {
@@ -54,9 +55,9 @@ export function flattenCalendarEvents(calendars) {
 
 /**
  * Filter an array of events by a date
- * 
- * @param {Array} events 
- * @param {Date} date 
+ *
+ * @param {Array} events
+ * @param {Date} date
  * @returns {Array}
  */
 export function filterCalendarEventsByDate(events, date) {
@@ -336,7 +337,10 @@ export async function editEvent(teamId, calendarId, eventId, name, description, 
 
 export function editEventPopup(team, calendar, event, makeCopy = false) {
     return new Promise((resolve, reject) => {
-        var dstart; var dend; var dtstart; var dtend;
+        var dstart;
+        var dend;
+        var dtstart;
+        var dtend;
 
         if (event.fullday) {
             dstart = localInputFormat(event.dstart, true);

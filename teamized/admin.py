@@ -11,6 +11,7 @@ from teamized import models
 
 # This is required for the club admin views
 import teamized.club.admin
+
 # This is required for the apikey admin view
 import teamized.api.utils.admin
 
@@ -23,31 +24,63 @@ class UserAdminMemberInstanceInline(admin.TabularInline):
     verbose_name = _("Team")
     verbose_name_plural = _("Teams")
 
+
 @admin.register(models.User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'auth_user']
+    list_display = ["uid", "auth_user"]
     list_filter = []
 
-    readonly_fields = ('uid',)
-    search_fields = ('uid', 'auth_user__username', 'auth_user__email', 'auth_user__first_name', 'auth_user__last_name')
-    autocomplete_fields = ('auth_user',)
+    readonly_fields = ("uid",)
+    search_fields = (
+        "uid",
+        "auth_user__username",
+        "auth_user__email",
+        "auth_user__first_name",
+        "auth_user__last_name",
+    )
+    autocomplete_fields = ("auth_user",)
 
     inlines = [UserAdminMemberInstanceInline]
 
     fieldsets = [
-        ('Infos', {'fields': ('uid', 'auth_user',)}),
-        ('Settings', {'fields': ('settings_darkmode',)}),
-        ('Overrides', {'fields': ('max_owned_teams_override',), 'classes': ('collapse',)}),
+        (
+            "Infos",
+            {
+                "fields": (
+                    "uid",
+                    "auth_user",
+                )
+            },
+        ),
+        ("Settings", {"fields": ("settings_darkmode",)}),
+        (
+            "Overrides",
+            {"fields": ("max_owned_teams_override",), "classes": ("collapse",)},
+        ),
     ]
 
-    ordering = ('uid', )
+    ordering = ("uid",)
+
 
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'user', 'team', 'role', 'note']
+    list_display = ["uid", "user", "team", "role", "note"]
 
-    readonly_fields = ('uid',)
-    search_fields = ('uid', 'user__uid', 'user__auth_user__username', 'user__auth_user__email', 'user__auth_user__first_name', 'user__auth_user__last_name', 'team__uid', 'team__name', 'team__description', 'role', 'note')
+    readonly_fields = ("uid",)
+    search_fields = (
+        "uid",
+        "user__uid",
+        "user__auth_user__username",
+        "user__auth_user__email",
+        "user__auth_user__first_name",
+        "user__auth_user__last_name",
+        "team__uid",
+        "team__name",
+        "team__description",
+        "role",
+        "note",
+    )
+
 
 class TeamAdminMemberInline(admin.TabularInline):
     model = models.Member
@@ -55,64 +88,121 @@ class TeamAdminMemberInline(admin.TabularInline):
     verbose_name = _("Mitglied")
     verbose_name_plural = _("Mitglieder")
 
+
 class TeamAdminInviteInline(admin.TabularInline):
     model = models.Invite
     extra = 0
     verbose_name = _("Einladung")
     verbose_name_plural = _("Einladungen")
 
-    readonly_fields = ('token', 'is_valid', 'uses_used')
+    readonly_fields = ("token", "is_valid", "uses_used")
 
-    fields = ('uses_left', 'uses_used', 'is_valid', 'valid_until', 'note', 'token',)
+    fields = (
+        "uses_left",
+        "uses_used",
+        "is_valid",
+        "valid_until",
+        "note",
+        "token",
+    )
+
 
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'name', 'description', 'linked_club']
+    list_display = ["uid", "name", "description", "linked_club"]
     list_filter = []
 
-    readonly_fields = ('uid',)
-    search_fields = ('uid', 'name', 'description',)
-    autocomplete_fields = ('linked_club',)
+    readonly_fields = ("uid",)
+    search_fields = (
+        "uid",
+        "name",
+        "description",
+    )
+    autocomplete_fields = ("linked_club",)
 
     inlines = [TeamAdminMemberInline, TeamAdminInviteInline]
 
     fieldsets = [
-        ('Infos', {'fields': ('uid', 'name', 'description',)}),
-        ('Verbindungen', {'fields': ('linked_club',)}),
+        (
+            "Infos",
+            {
+                "fields": (
+                    "uid",
+                    "name",
+                    "description",
+                )
+            },
+        ),
+        ("Verbindungen", {"fields": ("linked_club",)}),
     ]
 
-    ordering = ('uid', )
+    ordering = ("uid",)
+
 
 @admin.register(models.Invite)
 class InviteAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'team', 'note', 'is_valid', 'uses_left', 'uses_used', 'valid_until']
-    list_filter = ['uses_left']
+    list_display = [
+        "uid",
+        "team",
+        "note",
+        "is_valid",
+        "uses_left",
+        "uses_used",
+        "valid_until",
+    ]
+    list_filter = ["uses_left"]
 
-    readonly_fields = ('uid', 'token', 'uses_used')
+    readonly_fields = ("uid", "token", "uses_used")
 
     fieldsets = [
-        ('Infos', {'fields': ('uid', 'team', 'note',)}),
-        ('Settings', {'fields': (('uses_left', 'uses_used'), 'valid_until')}),
-        ('Token', {'fields': ('token',), "classes": ('collapse',)})
+        (
+            "Infos",
+            {
+                "fields": (
+                    "uid",
+                    "team",
+                    "note",
+                )
+            },
+        ),
+        ("Settings", {"fields": (("uses_left", "uses_used"), "valid_until")}),
+        ("Token", {"fields": ("token",), "classes": ("collapse",)}),
     ]
+
 
 @admin.register(models.WorkSession)
 class WorkSessionAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'time_start', 'time_end', 'duration', 'is_ended', 'is_created_via_tracking']
-
-    readonly_fields = ('uid', 'duration', )
-
-    autocomplete_fields = ('user', 'member', 'team',)
-
-    fieldsets = [
-        (None, {'fields': ('uid',)}),
-        ('Verbindungen', {'fields': ('user', 'member', 'team')}),
-        ('Zeiten', {'fields': ('time_start', 'time_end', 'duration')}),
-        ('Notizen', {'fields': ('note',)}),
-        ('Status', {'fields': ('is_ended', 'is_created_via_tracking')})
+    list_display = [
+        "uid",
+        "time_start",
+        "time_end",
+        "duration",
+        "is_ended",
+        "is_created_via_tracking",
     ]
 
+    readonly_fields = (
+        "uid",
+        "duration",
+    )
+
+    autocomplete_fields = (
+        "user",
+        "member",
+        "team",
+    )
+
+    fieldsets = [
+        (None, {"fields": ("uid",)}),
+        ("Verbindungen", {"fields": ("user", "member", "team")}),
+        ("Zeiten", {"fields": ("time_start", "time_end", "duration")}),
+        ("Notizen", {"fields": ("note",)}),
+        ("Status", {"fields": ("is_ended", "is_created_via_tracking")}),
+    ]
+
+
 # Calendar
+
 
 class CalendarAdminEventInline(admin.TabularInline):
     model = models.CalendarEvent
@@ -120,24 +210,47 @@ class CalendarAdminEventInline(admin.TabularInline):
     verbose_name = _("Ereignis")
     verbose_name_plural = _("Ereignisse")
 
+
 @admin.register(models.Calendar)
 class CalendarAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'name', 'description', 'is_public', 'ics_uid']
+    list_display = ["uid", "name", "description", "is_public", "ics_uid"]
 
-    readonly_fields = ['uid']
+    readonly_fields = ["uid"]
 
-    autocomplete_fields = ['team',]
+    autocomplete_fields = [
+        "team",
+    ]
 
     inlines = [CalendarAdminEventInline]
 
     fieldsets = [
-        (None, {'fields': ('uid',)}),
-        ('Verbindungen', {'fields': ('team',)}),
-        ('Infos', {'fields': ('name', 'description', 'color',)}),
-        ('Veröffentlichung', {'fields': ('is_public', 'ics_uid',), 'classes': ('collapse',)}),
+        (None, {"fields": ("uid",)}),
+        ("Verbindungen", {"fields": ("team",)}),
+        (
+            "Infos",
+            {
+                "fields": (
+                    "name",
+                    "description",
+                    "color",
+                )
+            },
+        ),
+        (
+            "Veröffentlichung",
+            {
+                "fields": (
+                    "is_public",
+                    "ics_uid",
+                ),
+                "classes": ("collapse",),
+            },
+        ),
     ]
 
+
 # Todo
+
 
 class ToDoAdminListInline(admin.TabularInline):
     model = models.ToDoListItem
@@ -148,16 +261,27 @@ class ToDoAdminListInline(admin.TabularInline):
 
 @admin.register(models.ToDoList)
 class ToDoListAdmin(admin.ModelAdmin):
-    list_display = ['uid', 'name', 'description']
+    list_display = ["uid", "name", "description"]
 
-    readonly_fields = ['uid']
+    readonly_fields = ["uid"]
 
-    autocomplete_fields = ['team', ]
+    autocomplete_fields = [
+        "team",
+    ]
 
     inlines = [ToDoAdminListInline]
 
     fieldsets = [
-        (None, {'fields': ('uid',)}),
-        ('Verbindungen', {'fields': ('team',)}),
-        ('Infos', {'fields': ('name', 'description', 'color',)}),
+        (None, {"fields": ("uid",)}),
+        ("Verbindungen", {"fields": ("team",)}),
+        (
+            "Infos",
+            {
+                "fields": (
+                    "name",
+                    "description",
+                    "color",
+                )
+            },
+        ),
     ]

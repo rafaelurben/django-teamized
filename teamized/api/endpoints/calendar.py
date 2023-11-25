@@ -27,23 +27,27 @@ def endpoint_calendars(request, team: Team):
 
         # Get all calendars of the team
         calendars = team.calendars.all()
-        return JsonResponse({
-            "calendars": [calendar.as_dict(request) for calendar in calendars],
-        })
+        return JsonResponse(
+            {
+                "calendars": [calendar.as_dict(request) for calendar in calendars],
+            }
+        )
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         calendar = Calendar.from_post_data(request.POST, team)
-        return JsonResponse({
-            "success": True,
-            "id": calendar.uid,
-            "calendar": calendar.as_dict(request),
-            "alert": {
-                "title": _("Kalender erstellt"),
-                "text": _("Der Kalender wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": calendar.uid,
+                "calendar": calendar.as_dict(request),
+                "alert": {
+                    "title": _("Kalender erstellt"),
+                    "text": _("Der Kalender wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
@@ -65,36 +69,43 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
         if not team.user_is_member(user):
             return NO_PERMISSION
 
-        return JsonResponse({
-            "id": calendar.uid,
-            "calendar": calendar.as_dict(request),
-        })
+        return JsonResponse(
+            {
+                "id": calendar.uid,
+                "calendar": calendar.as_dict(request),
+            }
+        )
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         calendar.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": calendar.uid,
-            "calendar": calendar.as_dict(request),
-            "alert": {
-                "title": _("Kalender geändert"),
-                "text": _("Der Kalender wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": calendar.uid,
+                "calendar": calendar.as_dict(request),
+                "alert": {
+                    "title": _("Kalender geändert"),
+                    "text": _("Der Kalender wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         calendar.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Kalender gelöscht"),
-                "text": _("Der Kalender wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Kalender gelöscht"),
+                    "text": _("Der Kalender wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )
+
 
 @api_view(["get", "post"])
 @csrf_exempt
@@ -117,26 +128,36 @@ def endpoint_events(request, team: Team, calendar: Calendar):
 
     if request.method == "GET":
         events = calendar.events.all()
-        return JsonResponse({
-            "events": [event.as_dict() for event in events],
-        })
+        return JsonResponse(
+            {
+                "events": [event.as_dict() for event in events],
+            }
+        )
     if request.method == "POST":
         event = CalendarEvent.from_post_data(request.POST, calendar)
-        return JsonResponse({
-            "success": True,
-            "id": event.uid,
-            "event": event.as_dict(),
-            "alert": {
-                "title": _("Ereignis erstellt"),
-                "text": _("Das Ereignis wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": event.uid,
+                "event": event.as_dict(),
+                "alert": {
+                    "title": _("Ereignis erstellt"),
+                    "text": _("Das Ereignis wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("calendar", Calendar, "calendar"), ("event", CalendarEvent, "event")])
+@require_objects(
+    [
+        ("team", Team, "team"),
+        ("calendar", Calendar, "calendar"),
+        ("event", CalendarEvent, "event"),
+    ]
+)
 def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent):
     """
     Endpoint for managing or deleting an event.
@@ -155,27 +176,33 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
         return NO_PERMISSION
 
     if request.method == "GET":
-        return JsonResponse({
-            "id": event.uid,
-            "event": event.as_dict(),
-        })
+        return JsonResponse(
+            {
+                "id": event.uid,
+                "event": event.as_dict(),
+            }
+        )
     if request.method == "POST":
         event.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": event.uid,
-            "event": event.as_dict(),
-            "alert": {
-                "title": _("Ereignis geändert"),
-                "text": _("Das Ereignis wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": event.uid,
+                "event": event.as_dict(),
+                "alert": {
+                    "title": _("Ereignis geändert"),
+                    "text": _("Das Ereignis wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         event.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Ereignis gelöscht"),
-                "text": _("Das Ereignis wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Ereignis gelöscht"),
+                    "text": _("Das Ereignis wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )

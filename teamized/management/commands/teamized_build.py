@@ -12,10 +12,13 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    help = ("Run the Teamized app build")
+    help = "Run the Teamized app build"
 
     def add_arguments(self, parser):
-        parser.add_argument('--live', action='store_true',)
+        parser.add_argument(
+            "--live",
+            action="store_true",
+        )
 
     def handle(self, *args, **options):
         oldcwd = os.getcwd()

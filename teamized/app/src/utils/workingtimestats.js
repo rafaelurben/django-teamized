@@ -2,14 +2,14 @@
  * Functions used to create charts in the workingtime module
  */
 
-import { isInRange, roundDays, getDateString } from './datetime.js';
+import {isInRange, roundDays, getDateString} from './datetime.js';
 
 /**
  * Filter sessions for a given date range
- * 
- * @param {Array} sessions 
- * @param {Date} start 
- * @param {Date} end 
+ *
+ * @param {Array} sessions
+ * @param {Date} start
+ * @param {Date} end
  * @returns {Array}
  */
 export function filterByDateRange(sessions, start, end) {
@@ -21,8 +21,8 @@ export function filterByDateRange(sessions, start, end) {
 
 /**
  * Modify an array of sessions to split sessions that span multiple days into multiple sessions
- * 
- * @param {Array} sessions 
+ *
+ * @param {Array} sessions
  * @returns {Array}
  */
 function splitMultiDaySessions(sessions) {
@@ -34,7 +34,7 @@ function splitMultiDaySessions(sessions) {
         let start = new Date(session.time_start);
         let startDay = roundDays(start);
         let end = new Date(session.time_end);
-        let endDay = roundDays(new Date(end-1));
+        let endDay = roundDays(new Date(end - 1));
         if (startDay < endDay) {
             // Start and end are on different days
             // Get the midnight after the first day
@@ -65,10 +65,10 @@ function splitMultiDaySessions(sessions) {
 
 /**
  * Generate chart data for a chart split by day
- * 
- * @param {Array} sessions 
- * @param {Date} start 
- * @param {Date} end 
+ *
+ * @param {Array} sessions
+ * @param {Date} start
+ * @param {Date} end
  * @returns {Array}
  */
 export function chartDataByDays(sessions, start, end) {
@@ -82,7 +82,7 @@ export function chartDataByDays(sessions, start, end) {
             duration_s: 0,
             duration_h: 0,
         };
-        if (day >= roundDays(new Date(end-1))) {
+        if (day >= roundDays(new Date(end - 1))) {
             break;
         }
     }
@@ -100,8 +100,8 @@ export function chartDataByDays(sessions, start, end) {
 
 /**
  * Get the total duration of all sessions in a list
- * 
- * @param {Array} sessions 
+ *
+ * @param {Array} sessions
  * @returns {Number} duration in seconds
  */
 export function totalDuration(sessions) {

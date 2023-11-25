@@ -28,7 +28,12 @@ class Club(models.Model):
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
     )
     slug = models.SlugField(
-        verbose_name=_("Slug"), unique=True, max_length=50, null=True, blank=True, default=None
+        verbose_name=_("Slug"),
+        unique=True,
+        max_length=50,
+        null=True,
+        blank=True,
+        default=None,
     )
 
     name = models.CharField(max_length=50, verbose_name=_("Name"))
@@ -71,14 +76,14 @@ class Club(models.Model):
             sessions = request.session["teamized_clubmember_sessions"]
             if str(self.uid) in sessions:
                 for memberuid, magicuid in deepcopy(
-                        request.session["teamized_clubmember_sessions"][str(self.uid)]
+                    request.session["teamized_clubmember_sessions"][str(self.uid)]
                 ).items():
                     if ClubMemberMagicLink.objects.filter(
-                            uid=magicuid,
-                            member_id=memberuid,
-                            logged_in=True,
-                            logged_out=False,
-                            valid_until__gt=timezone.now(),
+                        uid=magicuid,
+                        member_id=memberuid,
+                        logged_in=True,
+                        logged_out=False,
+                        valid_until__gt=timezone.now(),
                     ).exists():
                         magiclink = ClubMemberMagicLink.objects.get(
                             uid=magicuid,
@@ -95,14 +100,16 @@ class Club(models.Model):
                                         "teamized:club_member_app",
                                         kwargs={
                                             "clubslug": magiclink.member.club.slug,
-                                            "memberuid": magiclink.member.uid
+                                            "memberuid": magiclink.member.uid,
                                         },
                                     )
                                 ),
                             }
                         )
                     else:
-                        del request.session["teamized_clubmember_sessions"][str(self.uid)][memberuid]
+                        del request.session["teamized_clubmember_sessions"][
+                            str(self.uid)
+                        ][memberuid]
                         request.session.modified = True
         return members
 
@@ -120,7 +127,9 @@ class Club(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, default=self.name)
-        self.description = validation.text(data, "description", False, default=self.description)
+        self.description = validation.text(
+            data, "description", False, default=self.description
+        )
         self.save()
 
 
@@ -128,7 +137,9 @@ class ClubMember(models.Model):
     uid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
     )
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="members")
+    club = models.ForeignKey(
+        Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="members"
+    )
 
     email = models.EmailField(verbose_name=_("E-Mail"))
 
@@ -282,9 +293,7 @@ class ClubMember(models.Model):
             sessions = request.session["teamized_clubmember_sessions"]
             if self.clubuid in sessions:
                 if self.memberuid in sessions[self.clubuid]:
-                    if self.can_use_magicuid(
-                            sessions[self.clubuid][self.memberuid]
-                    ):
+                    if self.can_use_magicuid(sessions[self.clubuid][self.memberuid]):
                         return True
                     del sessions[self.clubuid][self.memberuid]
                     request.session.modified = True
@@ -306,9 +315,9 @@ class ClubMember(models.Model):
             request.session["teamized_clubmember_sessions"] = {}
         if self.clubuid not in request.session["teamized_clubmember_sessions"]:
             request.session["teamized_clubmember_sessions"][self.clubuid] = {}
-        request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid] = str(
-            magic_uid
-        )
+        request.session["teamized_clubmember_sessions"][self.clubuid][
+            self.memberuid
+        ] = str(magic_uid)
         request.session.modified = True
 
         return True
@@ -317,21 +326,34 @@ class ClubMember(models.Model):
         if "teamized_clubmember_sessions" in request.session:
             if self.clubuid in request.session["teamized_clubmember_sessions"]:
                 if (
-                        self.memberuid
-                        in request.session["teamized_clubmember_sessions"][self.clubuid]
+                    self.memberuid
+                    in request.session["teamized_clubmember_sessions"][self.clubuid]
                 ):
-                    magic_uid = request.session["teamized_clubmember_sessions"][self.clubuid][
-                        self.memberuid
-                    ]
+                    magic_uid = request.session["teamized_clubmember_sessions"][
+                        self.clubuid
+                    ][self.memberuid]
                     del request.session["teamized_clubmember_sessions"][self.clubuid][
                         self.memberuid
                     ]
-                    if len(request.session["teamized_clubmember_sessions"][self.clubuid]) == 0:
-                        del request.session["teamized_clubmember_sessions"][self.clubuid]
+                    if (
+                        len(
+                            request.session["teamized_clubmember_sessions"][
+                                self.clubuid
+                            ]
+                        )
+                        == 0
+                    ):
+                        del request.session["teamized_clubmember_sessions"][
+                            self.clubuid
+                        ]
                     if len(request.session["teamized_clubmember_sessions"]) == 0:
                         del request.session["teamized_clubmember_sessions"]
-                    if ClubMemberMagicLink.objects.filter(uid=magic_uid, member=self).exists():
-                        ClubMemberMagicLink.objects.get(uid=magic_uid, member=self).mark_logged_out()
+                    if ClubMemberMagicLink.objects.filter(
+                        uid=magic_uid, member=self
+                    ).exists():
+                        ClubMemberMagicLink.objects.get(
+                            uid=magic_uid, member=self
+                        ).mark_logged_out()
         request.session.modified = True
 
     def create_magic_link(self) -> "ClubMemberMagicLink":
@@ -355,41 +377,60 @@ class ClubMember(models.Model):
             first_name=validation.text(data, "first_name", True),
             last_name=validation.text(data, "last_name", True),
             email=validation.text(data, "email", True),
-            birth_date=validation.date(data, "birth_date", False, default=None, null=True),
+            birth_date=validation.date(
+                data, "birth_date", False, default=None, null=True
+            ),
         )
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
-        self.first_name = validation.text(data, "first_name", False, default=self.first_name)
-        self.last_name = validation.text(data, "last_name", False, default=self.last_name)
+        self.first_name = validation.text(
+            data, "first_name", False, default=self.first_name
+        )
+        self.last_name = validation.text(
+            data, "last_name", False, default=self.last_name
+        )
         self.email = validation.text(data, "email", False, default=self.email)
-        self.birth_date = validation.date(data, "birth_date", False, default=self.birth_date, null=True)
+        self.birth_date = validation.date(
+            data, "birth_date", False, default=self.birth_date, null=True
+        )
         self.save()
 
     @decorators.validation_func()
     def update_portfolio_from_post_data(self, data: dict):
-        self.portfolio_visible = validation.boolean(data, "visible", False,
-                                                    default=self.portfolio_visible)
-        self.portfolio_image1_url = validation.text(data, "image1_url", False,
-                                                    default=self.portfolio_image1_url)
-        self.portfolio_image2_url = validation.text(data, "image2_url", False,
-                                                    default=self.portfolio_image2_url)
-        self.portfolio_member_since = validation.integer(data, "member_since", False,
-                                                         default=self.portfolio_member_since)
-        self.portfolio_hobby_since = validation.integer(data, "hobby_since", False,
-                                                        default=self.portfolio_hobby_since)
-        self.portfolio_role = validation.text(data, "role", False,
-                                              default=self.portfolio_role)
-        self.portfolio_profession = validation.text(data, "profession", False,
-                                                    default=self.portfolio_profession)
-        self.portfolio_hobbies = validation.text(data, "hobbies", False,
-                                                 default=self.portfolio_hobbies)
-        self.portfolio_highlights = validation.text(data, "highlights", False,
-                                                    default=self.portfolio_highlights)
-        self.portfolio_biography = validation.text(data, "biography", False,
-                                                   default=self.portfolio_biography)
-        self.portfolio_contact_email = validation.text(data, "contact_email", False,
-                                                       default=self.portfolio_contact_email)
+        self.portfolio_visible = validation.boolean(
+            data, "visible", False, default=self.portfolio_visible
+        )
+        self.portfolio_image1_url = validation.text(
+            data, "image1_url", False, default=self.portfolio_image1_url
+        )
+        self.portfolio_image2_url = validation.text(
+            data, "image2_url", False, default=self.portfolio_image2_url
+        )
+        self.portfolio_member_since = validation.integer(
+            data, "member_since", False, default=self.portfolio_member_since
+        )
+        self.portfolio_hobby_since = validation.integer(
+            data, "hobby_since", False, default=self.portfolio_hobby_since
+        )
+        self.portfolio_role = validation.text(
+            data, "role", False, default=self.portfolio_role
+        )
+        self.portfolio_profession = validation.text(
+            data, "profession", False, default=self.portfolio_profession
+        )
+        self.portfolio_hobbies = validation.text(
+            data, "hobbies", False, default=self.portfolio_hobbies
+        )
+        self.portfolio_highlights = validation.text(
+            data, "highlights", False, default=self.portfolio_highlights
+        )
+        self.portfolio_biography = validation.text(
+            data, "biography", False, default=self.portfolio_biography
+        )
+        self.portfolio_contact_email = validation.text(
+            data, "contact_email", False, default=self.portfolio_contact_email
+        )
         self.save()
 
 
@@ -405,7 +446,9 @@ class ClubMemberMagicLink(models.Model):
     )
 
     logged_in = models.BooleanField(verbose_name=_("Eingeloggt?"), default=False)
-    logged_out = models.BooleanField(verbose_name=_("Wieder ausgeloggt?"), default=False)
+    logged_out = models.BooleanField(
+        verbose_name=_("Wieder ausgeloggt?"), default=False
+    )
 
     login_until = models.DateTimeField(
         verbose_name=_("Login bis"), default=utils.now_plus_1h
@@ -437,12 +480,16 @@ class ClubMemberMagicLink(models.Model):
 
     def get_absolute_url(self, request):
         return (
-                request.build_absolute_uri(
-                    reverse(
-                        "teamized:club_member_login",
-                        kwargs={"clubslug": self.member.club.slug, "memberuid": self.member.uid}
-                    )
-                ) + f"?magicuid={self.uid}"
+            request.build_absolute_uri(
+                reverse(
+                    "teamized:club_member_login",
+                    kwargs={
+                        "clubslug": self.member.club.slug,
+                        "memberuid": self.member.uid,
+                    },
+                )
+            )
+            + f"?magicuid={self.uid}"
         )
 
     def send_email(self, request):
@@ -469,7 +516,9 @@ class ClubMemberGroup(models.Model):
     uid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
     )
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="groups")
+    club = models.ForeignKey(
+        Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="groups"
+    )
 
     name = models.CharField(max_length=50, verbose_name=_("Name"))
     description = models.TextField(verbose_name=_("Beschreibung"), blank=True)
@@ -519,7 +568,9 @@ class ClubMemberGroup(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, default=self.name)
-        self.description = validation.text(data, "description", False, default=self.description)
+        self.description = validation.text(
+            data, "description", False, default=self.description
+        )
         self.save()
 
 
@@ -551,6 +602,7 @@ class ClubMemberGroupMembership(models.Model):
         verbose_name = _("Gruppenmitgliedschaft")
         verbose_name_plural = _("Gruppenmitgliedschaften")
         unique_together = [["group", "member"]]
+
 
 # class ClubPoll(models.Model):
 #     uid = models.UUIDField(

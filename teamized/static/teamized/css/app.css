@@ -16,7 +16,7 @@ body {
     white-space: nowrap;
 }
 
-#app-sidebar .nav-link>i {
+#app-sidebar .nav-link > i {
     /* Sidebar icons */
     margin-right: 0.5rem;
     font-size: 0.8rem;
@@ -42,7 +42,6 @@ body.sidebar-visible .sidebar-toggle .when-closed {
 
 @media (max-width: 991px) {
     /* CSS overrides on smaller screens where the menu is collapsible */
-
     #app-menubar {
         padding-top: 0.6rem;
         padding-bottom: 0.3rem;

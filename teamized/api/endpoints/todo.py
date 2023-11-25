@@ -27,23 +27,27 @@ def endpoint_todolists(request, team: Team):
 
         # Get all ToDoLists of the team
         todolists = team.todolists.all().order_by("name")
-        return JsonResponse({
-            "todolists": [todolist.as_dict() for todolist in todolists],
-        })
+        return JsonResponse(
+            {
+                "todolists": [todolist.as_dict() for todolist in todolists],
+            }
+        )
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         todolist = ToDoList.from_post_data(request.POST, team)
-        return JsonResponse({
-            "success": True,
-            "id": todolist.uid,
-            "todolist": todolist.as_dict(),
-            "alert": {
-                "title": _("To-do-Liste erstellt"),
-                "text": _("Die To-do-Liste wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": todolist.uid,
+                "todolist": todolist.as_dict(),
+                "alert": {
+                    "title": _("To-do-Liste erstellt"),
+                    "text": _("Die To-do-Liste wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
@@ -65,36 +69,43 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
         if not team.user_is_member(user):
             return NO_PERMISSION
 
-        return JsonResponse({
-            "id": todolist.uid,
-            "todolist": todolist.as_dict(),
-        })
+        return JsonResponse(
+            {
+                "id": todolist.uid,
+                "todolist": todolist.as_dict(),
+            }
+        )
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         todolist.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": todolist.uid,
-            "todolist": todolist.as_dict(),
-            "alert": {
-                "title": _("To-do-Lis­te geändert"),
-                "text": _("Die To-do-Lis­te wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": todolist.uid,
+                "todolist": todolist.as_dict(),
+                "alert": {
+                    "title": _("To-do-Lis­te geändert"),
+                    "text": _("Die To-do-Lis­te wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         todolist.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("To-do-Lis­te gelöscht"),
-                "text": _("Die To-do-Lis­te wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("To-do-Lis­te gelöscht"),
+                    "text": _("Die To-do-Lis­te wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )
+
 
 @api_view(["get", "post"])
 @csrf_exempt
@@ -117,26 +128,36 @@ def endpoint_todolistitems(request, team: Team, todolist: ToDoList):
 
     if request.method == "GET":
         items = todolist.items.all().order_by("done", "name")
-        return JsonResponse({
-            "items": [item.as_dict() for item in items],
-        })
+        return JsonResponse(
+            {
+                "items": [item.as_dict() for item in items],
+            }
+        )
     if request.method == "POST":
         item = ToDoListItem.from_post_data(request.POST, user=user, todolist=todolist)
-        return JsonResponse({
-            "success": True,
-            "id": item.uid,
-            "item": item.as_dict(),
-            "alert": {
-                "title": _("Listeneintrag erstellt"),
-                "text": _("Der Listeneintrag wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": item.uid,
+                "item": item.as_dict(),
+                "alert": {
+                    "title": _("Listeneintrag erstellt"),
+                    "text": _("Der Listeneintrag wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("todolist", ToDoList, "todolist"), ("item", ToDoListItem, "item")])
+@require_objects(
+    [
+        ("team", Team, "team"),
+        ("todolist", ToDoList, "todolist"),
+        ("item", ToDoListItem, "item"),
+    ]
+)
 def endpoint_todolistitem(request, team: Team, todolist: ToDoList, item: ToDoListItem):
     """
     Endpoint for managing or deleting a ToDoListItem.
@@ -155,27 +176,33 @@ def endpoint_todolistitem(request, team: Team, todolist: ToDoList, item: ToDoLis
         return NO_PERMISSION
 
     if request.method == "GET":
-        return JsonResponse({
-            "id": item.uid,
-            "item": item.as_dict(),
-        })
+        return JsonResponse(
+            {
+                "id": item.uid,
+                "item": item.as_dict(),
+            }
+        )
     if request.method == "POST":
         item.update_from_post_data(request.POST, user)
-        return JsonResponse({
-            "success": True,
-            "id": item.uid,
-            "item": item.as_dict(),
-            "alert": {
-                "title": _("Listeneintrag geändert"),
-                "text": _("Der Listeneintrag wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": item.uid,
+                "item": item.as_dict(),
+                "alert": {
+                    "title": _("Listeneintrag geändert"),
+                    "text": _("Der Listeneintrag wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         item.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Listeneintrag gelöscht"),
-                "text": _("Der Listeneintrag wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Listeneintrag gelöscht"),
+                    "text": _("Der Listeneintrag wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )

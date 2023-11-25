@@ -1,14 +1,14 @@
 {
-    "name": "Teamized",
-    "short_name": "Teamized",
-    "start_url": "{% url 'teamized:app' %}",
-    "scope": "{% url 'teamized:home' %}",
-    "display": "standalone",
-    "background_color": "#fff",
-    "theme_color": "#212529",
-    "description": "Team- und Zeitplanung auf neuem Level.",
-    "dir": "ltr",
-    "lang": "de",
-    "prefer_related_applications": false,
-    "related_applications": []
+  "name": "Teamized",
+  "short_name": "Teamized",
+  "start_url": "{% url 'teamized:app' %}",
+  "scope": "{% url 'teamized:home' %}",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#212529",
+  "description": "Team- und Zeitplanung auf neuem Level.",
+  "dir": "ltr",
+  "lang": "de",
+  "prefer_related_applications": false,
+  "related_applications": []
 }

@@ -26,90 +26,92 @@ export const PAGELIST = [
 ]
 
 export class PageLoader extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const teamdata = Cache.getCurrentTeamData();
-
-    if (teamdata === null) {
-      return (
-        <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-          <div className="spinner-border mb-3" role="status">
-            <span className="visually-hidden">Laden...</span>
-          </div>
-          <p>Daten werden abgerufen...</p>
-        </div>
-      );
-    };
-
-    if (this.props.page.startsWith("club") && teamdata.team.club === null) {
-      return (
-        <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-          <div className="text-danger mb-3" role="status">
-            <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
-          </div>
-          <p>Die Vereinsfunktionen sind in diesem Team noch nicht aktiviert! Bitte wähle ein anderes Team oder eine andere Seite.</p>
-        </div>
-      );
+    constructor(props) {
+        super(props);
     }
 
-    switch (this.props.page) {
-      case "home":
-        return (
-          <Page_Home 
-            user={window.appdata.user}
-            settings={window.appdata.settings}
-          />
-        );
-      case "teamlist":
-        return (
-          <Page_TeamList
-            teams={Teams.getTeamsList()}
-            selectedTeamId={window.appdata.selectedTeamId}
-          />
-        );
-      case "team":
-        return (
-          <Page_Team
-            team={teamdata.team}
-            members={teamdata.members}
-            invites={teamdata.invites}
-          />
-        );
-      case "workingtime":
-        return (
-          <Page_WorkingTime
-            current_worksession={window.appdata.current_worksession}
-            worksessions={teamdata.me_worksessions}
-            selectedTeamId={window.appdata.selectedTeamId}
-            selectedTeam={teamdata.team}
-          />
-        );
-      case "calendars":
-        return (
-          <Page_Calendars
-            team={teamdata.team}
-            calendars={teamdata.calendars}
-            isAdmin={Teams.isCurrentTeamAdmin()}
-          />
-        );
-      case "todo":
-        return (
-          <Page_ToDo
-            team={teamdata.team}
-            todolists={teamdata.todolists}
-            isAdmin={Teams.isCurrentTeamAdmin()}
-          />
-        );
-      case "club":
-        return (
-          <Page_Club
-            team={teamdata.team}
-            isAdmin={Teams.isCurrentTeamAdmin()}
-          />
-        );
+    render() {
+        const teamdata = Cache.getCurrentTeamData();
+
+        if (teamdata === null) {
+            return (
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                    <div className="spinner-border mb-3" role="status">
+                        <span className="visually-hidden">Laden...</span>
+                    </div>
+                    <p>Daten werden abgerufen...</p>
+                </div>
+            );
+        }
+        ;
+
+        if (this.props.page.startsWith("club") && teamdata.team.club === null) {
+            return (
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                    <div className="text-danger mb-3" role="status">
+                        <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
+                    </div>
+                    <p>Die Vereinsfunktionen sind in diesem Team noch nicht aktiviert! Bitte wähle ein anderes Team oder
+                        eine andere Seite.</p>
+                </div>
+            );
+        }
+
+        switch (this.props.page) {
+            case "home":
+                return (
+                    <Page_Home
+                        user={window.appdata.user}
+                        settings={window.appdata.settings}
+                    />
+                );
+            case "teamlist":
+                return (
+                    <Page_TeamList
+                        teams={Teams.getTeamsList()}
+                        selectedTeamId={window.appdata.selectedTeamId}
+                    />
+                );
+            case "team":
+                return (
+                    <Page_Team
+                        team={teamdata.team}
+                        members={teamdata.members}
+                        invites={teamdata.invites}
+                    />
+                );
+            case "workingtime":
+                return (
+                    <Page_WorkingTime
+                        current_worksession={window.appdata.current_worksession}
+                        worksessions={teamdata.me_worksessions}
+                        selectedTeamId={window.appdata.selectedTeamId}
+                        selectedTeam={teamdata.team}
+                    />
+                );
+            case "calendars":
+                return (
+                    <Page_Calendars
+                        team={teamdata.team}
+                        calendars={teamdata.calendars}
+                        isAdmin={Teams.isCurrentTeamAdmin()}
+                    />
+                );
+            case "todo":
+                return (
+                    <Page_ToDo
+                        team={teamdata.team}
+                        todolists={teamdata.todolists}
+                        isAdmin={Teams.isCurrentTeamAdmin()}
+                    />
+                );
+            case "club":
+                return (
+                    <Page_Club
+                        team={teamdata.team}
+                        isAdmin={Teams.isCurrentTeamAdmin()}
+                    />
+                );
+        }
     }
-  }
 }

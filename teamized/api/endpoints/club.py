@@ -4,7 +4,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
-from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, DATA_INVALID, NO_PERMISSION, OBJ_NOT_FOUND
+from teamized.api.utils.constants import (
+    ENDPOINT_NOT_FOUND,
+    DATA_INVALID,
+    NO_PERMISSION,
+    OBJ_NOT_FOUND,
+)
 from teamized.api.utils.decorators import require_objects, api_view
 from teamized.decorators import teamized_prep
 from teamized.club.models import Club, ClubMember, ClubMemberGroup
@@ -30,15 +35,17 @@ def endpoint_create_club(request, team: Team):
         team.linked_club = club
         team.save()
 
-        return JsonResponse({
-            "success": True,
-            "id": club.uid,
-            "club": club.as_dict(),
-            "alert": {
-                "title": _("Verein erstellt"),
-                "text": _("Der Verein wurde erfolgreich erstellt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": club.uid,
+                "club": club.as_dict(),
+                "alert": {
+                    "title": _("Verein erstellt"),
+                    "text": _("Der Verein wurde erfolgreich erstellt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post", "delete"])
@@ -59,36 +66,42 @@ def endpoint_club(request, team: Team):
     club: Club = team.linked_club
 
     if request.method == "GET":
-        return JsonResponse({
-            "id": club.uid,
-            "club": club.as_dict(),
-        })
+        return JsonResponse(
+            {
+                "id": club.uid,
+                "club": club.as_dict(),
+            }
+        )
     if request.method == "POST":
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
         club.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": club.uid,
-            "club": club.as_dict(),
-            "alert": {
-                "title": _("Verein geändert"),
-                "text": _("Der Verein wurde erfolgreich geändert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": club.uid,
+                "club": club.as_dict(),
+                "alert": {
+                    "title": _("Verein geändert"),
+                    "text": _("Der Verein wurde erfolgreich geändert."),
+                },
             }
-        })
+        )
     if request.method == "DELETE":
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
         club.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Verein gelöscht"),
-                "text": _("Der Verein wurde erfolgreich gelöscht."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Verein gelöscht"),
+                    "text": _("Der Verein wurde erfolgreich gelöscht."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post"])
@@ -111,25 +124,23 @@ def endpoint_members(request, team: Team):
     if request.method == "GET":
         members = club.members.order_by("first_name", "last_name")
 
-        return JsonResponse({
-            "members": [
-                member.as_dict() for member in members
-            ]
-        })
+        return JsonResponse({"members": [member.as_dict() for member in members]})
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         member = ClubMember.from_post_data(request.POST, club=club)
 
-        return JsonResponse({
-            "success": True,
-            "member": member.as_dict(),
-            "alert": {
-                "title": _("Vereinsmitglied erstellt"),
-                "text": _("Das Vereinsmitglied wurde erfolgreich hinzugefügt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "member": member.as_dict(),
+                "alert": {
+                    "title": _("Vereinsmitglied erstellt"),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich hinzugefügt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["post", "delete"])
@@ -156,25 +167,29 @@ def endpoint_member(request, team: Team, member: ClubMember):
     # Methods
     if request.method == "POST":
         member.update_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": member.uid,
-            "member": member.as_dict(),
-            "alert": {
-                "title": _("Mitglied aktualisiert"),
-                "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": member.uid,
+                "member": member.as_dict(),
+                "alert": {
+                    "title": _("Mitglied aktualisiert"),
+                    "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+                },
             }
-        })
+        )
 
     if request.method == "DELETE":
         member.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Mitglied entfernt"),
-                "text": _("Das Mitglied wurde erfolgreich entfernt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Mitglied entfernt"),
+                    "text": _("Das Mitglied wurde erfolgreich entfernt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post"])
@@ -200,29 +215,41 @@ def endpoint_member_portfolio(request, team: Team, member: ClubMember):
 
     # Methods
     if request.method == "GET":
-        return JsonResponse({
-            "id": member.uid,
-            "portfolio": member.portfolio_as_dict(),
-        })
+        return JsonResponse(
+            {
+                "id": member.uid,
+                "portfolio": member.portfolio_as_dict(),
+            }
+        )
 
     if request.method == "POST":
         member.update_portfolio_from_post_data(request.POST)
-        return JsonResponse({
-            "success": True,
-            "id": member.uid,
-            "portfolio": member.portfolio_as_dict(),
-            "alert": {
-                "title": _("Portfolio aktualisiert"),
-                "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": member.uid,
+                "portfolio": member.portfolio_as_dict(),
+                "alert": {
+                    "title": _("Portfolio aktualisiert"),
+                    "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+                },
             }
-        })
+        )
 
 
 @api_view(["post", "delete"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("member", ClubMember, "member"), ("group", ClubMemberGroup, "group")])
-def endpoint_member_groupmembership(request, team: Team, member: ClubMember, group: ClubMemberGroup):
+@require_objects(
+    [
+        ("team", Team, "team"),
+        ("member", ClubMember, "member"),
+        ("group", ClubMemberGroup, "group"),
+    ]
+)
+def endpoint_member_groupmembership(
+    request, team: Team, member: ClubMember, group: ClubMemberGroup
+):
     """
     Endpoint for editing group membership of a club member
     """
@@ -247,27 +274,33 @@ def endpoint_member_groupmembership(request, team: Team, member: ClubMember, gro
         if member.groups.filter(uid=group.uid).exists():
             return DATA_INVALID
         member.groups.add(group, through_defaults={})
-        return JsonResponse({
-            "success": True,
-            "id": member.uid,
-            "member": member.as_dict(),
-            "alert": {
-                "title": _("Gruppe hinzugefügt"),
-                "text": _("Das Mitglied wurde erfolgreich der Gruppe hinzugefügt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": member.uid,
+                "member": member.as_dict(),
+                "alert": {
+                    "title": _("Gruppe hinzugefügt"),
+                    "text": _("Das Mitglied wurde erfolgreich der Gruppe hinzugefügt."),
+                },
             }
-        })
+        )
 
     if request.method == "DELETE":
         if not member.groups.filter(uid=group.uid).exists():
             return DATA_INVALID
         member.groups.remove(group)
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Gruppe entfernt"),
-                "text": _("Das Mitglied wurde erfolgreich aus der Gruppe entfernt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Gruppe entfernt"),
+                    "text": _(
+                        "Das Mitglied wurde erfolgreich aus der Gruppe entfernt."
+                    ),
+                },
             }
-        })
+        )
 
 
 @api_view(["post"])
@@ -296,20 +329,22 @@ def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
         link = member.create_magic_link()
         url = link.get_absolute_url(request)
 
-        return JsonResponse({
-            "success": True,
-            "url": url,
-            "alert": {
-                "title": _("Magischer Link erstellt"),
-                "html": f"URL: <a href='{url}'>%s</a>" % _("Bitte kopier mich!"),
-                "timer": 0,
-                "showConfirmButton": True,
-                "toast": False,
-                "position": "center",
-                "allowOutsideClick": False,
-                "allowEscapeKey": False,
+        return JsonResponse(
+            {
+                "success": True,
+                "url": url,
+                "alert": {
+                    "title": _("Magischer Link erstellt"),
+                    "html": f"URL: <a href='{url}'>%s</a>" % _("Bitte kopier mich!"),
+                    "timer": 0,
+                    "showConfirmButton": True,
+                    "toast": False,
+                    "position": "center",
+                    "allowOutsideClick": False,
+                    "allowEscapeKey": False,
+                },
             }
-        })
+        )
 
 
 @api_view(["get", "post"])
@@ -332,25 +367,23 @@ def endpoint_groups(request, team: Team):
     if request.method == "GET":
         groups = club.groups.order_by("name")
 
-        return JsonResponse({
-            "groups": [
-                group.as_dict() for group in groups
-            ]
-        })
+        return JsonResponse({"groups": [group.as_dict() for group in groups]})
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
         group = ClubMemberGroup.from_post_data(request.POST, club=club)
 
-        return JsonResponse({
-            "success": True,
-            "group": group.as_dict(),
-            "alert": {
-                "title": _("Gruppe erstellt"),
-                "text": _("Die Gruppe wurde erfolgreich hinzugefügt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "group": group.as_dict(),
+                "alert": {
+                    "title": _("Gruppe erstellt"),
+                    "text": _("Die Gruppe wurde erfolgreich hinzugefügt."),
+                },
             }
-        })
+        )
 
 
 @api_view(["post", "delete"])
@@ -378,22 +411,26 @@ def endpoint_group(request, team: Team, group: ClubMemberGroup):
     if request.method == "POST":
         group.update_from_post_data(request.POST)
         group.save()
-        return JsonResponse({
-            "success": True,
-            "id": group.uid,
-            "group": group.as_dict(),
-            "alert": {
-                "title": _("Gruppe aktualisiert"),
-                "text": _("Die Gruppe wurde erfolgreich aktualisiert."),
+        return JsonResponse(
+            {
+                "success": True,
+                "id": group.uid,
+                "group": group.as_dict(),
+                "alert": {
+                    "title": _("Gruppe aktualisiert"),
+                    "text": _("Die Gruppe wurde erfolgreich aktualisiert."),
+                },
             }
-        })
+        )
 
     if request.method == "DELETE":
         group.delete()
-        return JsonResponse({
-            "success": True,
-            "alert": {
-                "title": _("Gruppe entfernt"),
-                "text": _("Die Gruppe wurde erfolgreich entfernt."),
+        return JsonResponse(
+            {
+                "success": True,
+                "alert": {
+                    "title": _("Gruppe entfernt"),
+                    "text": _("Die Gruppe wurde erfolgreich entfernt."),
+                },
             }
-        })
+        )

@@ -51,7 +51,7 @@ class User(models.Model):
         default=None,
         null=True,
         blank=True,
-        verbose_name=_("Maximale Anzahl eigener Teams")
+        verbose_name=_("Maximale Anzahl eigener Teams"),
     )
 
     def __str__(self):
@@ -85,7 +85,9 @@ class User(models.Model):
 
     @decorators.validation_func()
     def update_settings_from_post_data(self, data: dict):
-        self.settings_darkmode = validation.boolean(data, "darkmode", required=True, null=True)
+        self.settings_darkmode = validation.boolean(
+            data, "darkmode", required=True, null=True
+        )
         self.save()
 
     @property
@@ -96,7 +98,7 @@ class User(models.Model):
         More info: https://gravatar.com/site/implement/images/
         """
         mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
-        return "https://www.gravatar.com/avatar/"+mailhash+"?s=80&d=retro"
+        return "https://www.gravatar.com/avatar/" + mailhash + "?s=80&d=retro"
 
     def create_team(self, name, description) -> "Team":
         """
@@ -119,8 +121,8 @@ class User(models.Model):
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
             self.create_team(
                 name=_("Team von %s") % self.auth_user.username,
-                description=_(
-                    "Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
+                description=_("Persönlicher Arbeitsbereich von %s")
+                % self.auth_user.username,
             )
 
     def can_create_team(self) -> bool:
@@ -138,7 +140,9 @@ class User(models.Model):
         Get the active work session for this user, if there is any.
         """
 
-        if self.work_sessions.filter(is_ended=False, is_created_via_tracking=True).exists():
+        if self.work_sessions.filter(
+            is_ended=False, is_created_via_tracking=True
+        ).exists():
             return self.work_sessions.get(is_ended=False, is_created_via_tracking=True)
         return None
 
@@ -208,7 +212,9 @@ class Team(models.Model):
         Check if a user is an admin (or owner) of the team.
         """
 
-        return self.members.filter(user=user, role__in=[enums.Roles.ADMIN, enums.Roles.OWNER]).exists()
+        return self.members.filter(
+            user=user, role__in=[enums.Roles.ADMIN, enums.Roles.OWNER]
+        ).exists()
 
     def user_is_owner(self, user: User) -> bool:
         """
@@ -237,6 +243,7 @@ class Team(models.Model):
 
         return self.members.get(user=user)
 
+
 class Member(models.Model):
     "Connection between User and Team"
 
@@ -252,7 +259,7 @@ class Member(models.Model):
         on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
-        to='User',
+        to="User",
         related_name="member_instances",
         on_delete=models.CASCADE,
     )
@@ -304,11 +311,14 @@ class Member(models.Model):
         """
         return self.role == enums.Roles.OWNER
 
+
 class Invite(models.Model):
     "Invites for teams"
 
     NOT_FOUND_TITLE = _("Einladung ungültig")
-    NOT_FOUND_TEXT = _("Eine Einladung mit dem angegebenen Token konnte nicht gefunden werden.")
+    NOT_FOUND_TEXT = _(
+        "Eine Einladung mit dem angegebenen Token konnte nicht gefunden werden."
+    )
 
     uid = models.UUIDField(
         primary_key=True,
@@ -353,7 +363,9 @@ class Invite(models.Model):
             "is_valid": self.is_valid(),
             "uses_left": self.uses_left,
             "uses_used": self.uses_used,
-            "valid_until": None if self.valid_until is None else self.valid_until.isoformat(),
+            "valid_until": None
+            if self.valid_until is None
+            else self.valid_until.isoformat(),
         }
 
     def get_time_left_days(self) -> float:
@@ -370,7 +382,10 @@ class Invite(models.Model):
         if self.uses_left <= 0:
             # no uses left
             return False
-        if self.valid_until is not None and (self.valid_until - timezone.now()).total_seconds() <= 0:
+        if (
+            self.valid_until is not None
+            and (self.valid_until - timezone.now()).total_seconds() <= 0
+        ):
             # expired
             return False
         return True
@@ -382,16 +397,18 @@ class Invite(models.Model):
             raise exceptions.AlertException(
                 text=_("Du bist bereits in diesem Team."),
                 title=_("Bereits beigetreten"),
-                errorname="invite-already-member")
+                errorname="invite-already-member",
+            )
         if not self.is_valid():
             raise exceptions.AlertException(
                 text=_("Diese Einladung ist nicht mehr gültig."),
                 title=_("Einladung ungültig"),
-                errorname="invite-invalid")
+                errorname="invite-invalid",
+            )
         return True
 
     def accept(self, user: User) -> "Member":
-        """Use the invitation 
+        """Use the invitation
 
         IMPORTANT: This does not check validity! Use check_validity_for_user() first!
         """
@@ -410,22 +427,31 @@ class Invite(models.Model):
         return cls.objects.create(
             team=team,
             note=validation.text(data, "note", True),
-            uses_left=validation.integer(data, "uses_left", False, default=options.DEFAULT_INVITE_USES),
-            valid_until=validation.datetime(data, "valid_until", False, default=None, null=True),
+            uses_left=validation.integer(
+                data, "uses_left", False, default=options.DEFAULT_INVITE_USES
+            ),
+            valid_until=validation.datetime(
+                data, "valid_until", False, default=None, null=True
+            ),
         )
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.note = validation.text(data, "note", False, default=self.note)
-        self.uses_left = validation.integer(data, "uses_left", False, default=self.uses_left)
-        self.valid_until = validation.datetime(data, "valid_until", False, default=self.valid_until, null=True)
+        self.uses_left = validation.integer(
+            data, "uses_left", False, default=self.uses_left
+        )
+        self.valid_until = validation.datetime(
+            data, "valid_until", False, default=self.valid_until, null=True
+        )
         self.save()
 
     @property
     def url(self) -> str:
         """Get the relative URL for the invite"""
 
-        return reverse("teamized:app")+"?invite="+str(self.token)
+        return reverse("teamized:app") + "?invite=" + str(self.token)
+
 
 class WorkSession(models.Model):
     "Model for work sessions"
@@ -507,16 +533,20 @@ class WorkSession(models.Model):
             raise validation.ValidationError(
                 text=_("Das Startdatum liegt nach dem Enddatum."),
                 title=_("Startdatum nach Enddatum"),
-                errorname="start-after-end")
+                errorname="start-after-end",
+            )
         if self.time_end and self.time_end > timezone.now():
             raise validation.ValidationError(
                 text=_("Das Enddatum liegt in der Zukunft."),
                 title=_("Enddatum in der Zukunft"),
-                errorname="end-in-future")
+                errorname="end-in-future",
+            )
 
     @classmethod
     @decorators.validation_func()
-    def from_post_data(cls, data: dict, team: Team, member: Member, user: User) -> "WorkSession":
+    def from_post_data(
+        cls, data: dict, team: Team, member: Member, user: User
+    ) -> "WorkSession":
         """Create a new WorkSession from POST data"""
 
         session = cls(
@@ -536,10 +566,15 @@ class WorkSession(models.Model):
     def update_from_post_data(self, data: dict):
         self.note = validation.text(data, "note", False, default=self.note)
         if not self.is_created_via_tracking:
-            self.time_start = validation.datetime(data, "time_start", False, default=self.time_start)
-            self.time_end = validation.datetime(data, "time_end", False, default=self.time_end)
+            self.time_start = validation.datetime(
+                data, "time_start", False, default=self.time_start
+            )
+            self.time_end = validation.datetime(
+                data, "time_end", False, default=self.time_end
+            )
             self.validate()
         self.save()
+
 
 class Calendar(models.Model):
     """
@@ -610,8 +645,8 @@ class Calendar(models.Model):
 
         morelines = []
         if request is not None:
-            morelines.append("URL:"+self.get_online_url(request))
-            morelines.append("SOURCE;VALUE=URI:"+self.get_ics_url(request))
+            morelines.append("URL:" + self.get_online_url(request))
+            morelines.append("SOURCE;VALUE=URI:" + self.get_ics_url(request))
 
         eventlines = []
         for event in self.events.all():
@@ -636,7 +671,7 @@ class Calendar(models.Model):
             *eventlines,
             "END:VCALENDAR",
         ]
-        return '\r\n'.join(calendarlines)
+        return "\r\n".join(calendarlines)
 
     def as_ics_response(self, request=None) -> HttpResponse:
         """Get the calendar as an ics file response"""
@@ -649,7 +684,7 @@ class Calendar(models.Model):
         "Get the url to the calendar page in the app"
 
         path = reverse("teamized:app")
-        return request.build_absolute_uri(path)+f"?p=calendars&t={self.team_id}"
+        return request.build_absolute_uri(path) + f"?p=calendars&t={self.team_id}"
 
     def get_ics_url(self, request=None):
         "Get the url to the ics file"
@@ -668,7 +703,9 @@ class Calendar(models.Model):
             team=team,
             name=validation.text(data, "name", True, max_length=50),
             description=validation.text(data, "description", False),
-            color=validation.text(data, "color", True, default="#FF0000", max_length=20),
+            color=validation.text(
+                data, "color", True, default="#FF0000", max_length=20
+            ),
         )
 
     @decorators.validation_func()
@@ -677,6 +714,7 @@ class Calendar(models.Model):
         self.description = validation.text(data, "description", False, self.description)
         self.color = validation.text(data, "color", False, self.color, max_length=20)
         self.save()
+
 
 class CalendarEvent(models.Model):
     """
@@ -749,7 +787,9 @@ class CalendarEvent(models.Model):
         if self.fullday:
             start = "DTSTART;VALUE=DATE:" + utils.ical_date(self.dstart)
             # According to the iCalendar standard, the end date is exclusive for all-day events
-            end = "DTEND;VALUE=DATE:" + utils.ical_date(self.dend+utils.timedelta(days=1))
+            end = "DTEND;VALUE=DATE:" + utils.ical_date(
+                self.dend + utils.timedelta(days=1)
+            )
         else:
             start = "DTSTART:" + utils.ical_datetime(self.dtstart)
             end = "DTEND:" + utils.ical_datetime(self.dtend)
@@ -772,16 +812,24 @@ class CalendarEvent(models.Model):
 
         if self.fullday:
             if self.dstart is None or self.dend is None:
-                raise exceptions.ValidationError(_("Ganztägige Ereignisse brauchen ein Start- und Enddatum."))
+                raise exceptions.ValidationError(
+                    _("Ganztägige Ereignisse brauchen ein Start- und Enddatum.")
+                )
             if self.dstart > self.dend:
-                raise exceptions.ValidationError(_("Das Enddatum darf nicht vor dem Startdatum liegen."))
+                raise exceptions.ValidationError(
+                    _("Das Enddatum darf nicht vor dem Startdatum liegen.")
+                )
             self.dtstart = None
             self.dtend = None
         else:
             if self.dtstart is None or self.dtend is None:
-                raise exceptions.ValidationError(_("Ereignisse brauchen einen Start- und Endzeitpunkt"))
+                raise exceptions.ValidationError(
+                    _("Ereignisse brauchen einen Start- und Endzeitpunkt")
+                )
             if self.dtstart > self.dtend:
-                raise exceptions.ValidationError(_("Der Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen."))
+                raise exceptions.ValidationError(
+                    _("Der Endzeitpunkt darf nicht vor dem Startzeitpunkt liegen.")
+                )
             self.dstart = None
             self.dend = None
 
@@ -823,15 +871,21 @@ class CalendarEvent(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.fullday = validation.boolean(data, "fullday", False, default=self.fullday)
-        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
-        self.description = validation.text(data, "description", False, default=self.description)
+        self.name = validation.text(
+            data, "name", False, default=self.name, max_length=50
+        )
+        self.description = validation.text(
+            data, "description", False, default=self.description
+        )
         self.location = validation.text(data, "location", False, default=self.location)
 
         if self.fullday:
             self.dstart = validation.date(data, "dstart", False, default=self.dstart)
             self.dend = validation.date(data, "dend", True, default=self.dend)
         else:
-            self.dtstart = validation.datetime(data, "dtstart", True, default=self.dtstart)
+            self.dtstart = validation.datetime(
+                data, "dtstart", True, default=self.dtstart
+            )
             self.dtend = validation.datetime(data, "dtend", True, default=self.dtend)
 
         self.clean()
@@ -879,7 +933,9 @@ class ToDoList(models.Model):
             "name": self.name,
             "description": self.description,
             "color": self.color,
-            "items": utils.iddict(map(lambda i: i.as_dict(), self.items.all().order_by('done', 'name'))),
+            "items": utils.iddict(
+                map(lambda i: i.as_dict(), self.items.all().order_by("done", "name"))
+            ),
         }
 
     @classmethod
@@ -889,19 +945,24 @@ class ToDoList(models.Model):
 
         return cls.objects.create(
             team=team,
-            name = validation.text(data, "name", True, max_length=50),
-            description = validation.text(data, "description", False),
-            color = validation.text(data, "color", False, default="#FFFFFF"),
+            name=validation.text(data, "name", True, max_length=50),
+            description=validation.text(data, "description", False),
+            color=validation.text(data, "color", False, default="#FFFFFF"),
         )
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         """Update the ToDoList from POST data"""
 
-        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
-        self.description = validation.text(data, "description", False, default=self.description)
+        self.name = validation.text(
+            data, "name", False, default=self.name, max_length=50
+        )
+        self.description = validation.text(
+            data, "description", False, default=self.description
+        )
         self.color = validation.text(data, "color", False, default=self.color)
         self.save()
+
 
 class ToDoListItem(models.Model):
     uid = models.UUIDField(
@@ -917,7 +978,9 @@ class ToDoListItem(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name="+")
+    created_by = models.ForeignKey(
+        "User", on_delete=models.SET_NULL, null=True, related_name="+"
+    )
 
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -925,7 +988,9 @@ class ToDoListItem(models.Model):
     description = models.TextField(blank=True, default="")
 
     done = models.BooleanField(default=False)
-    done_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name="+")
+    done_by = models.ForeignKey(
+        "User", on_delete=models.SET_NULL, null=True, related_name="+"
+    )
     done_at = models.DateTimeField(null=True)
 
     objects = models.Manager()
@@ -950,34 +1015,41 @@ class ToDoListItem(models.Model):
 
     @classmethod
     @decorators.validation_func()
-    def from_post_data(cls, data: dict, user: User, todolist: ToDoList) -> "ToDoListItem":
+    def from_post_data(
+        cls, data: dict, user: User, todolist: ToDoList
+    ) -> "ToDoListItem":
         """Create a new ToDoListItem from POST data"""
 
         return cls.objects.create(
             todolist=todolist,
             created_by=user,
-            name = validation.text(data, "name", True, max_length=50),
-            description = validation.text(data, "description", False),
+            name=validation.text(data, "name", True, max_length=50),
+            description=validation.text(data, "description", False),
         )
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict, user: User):
         """Update a ToDoListItem from POST data"""
 
-        self.name = validation.text(data, "name", False, default=self.name, max_length=50)
-        self.description = validation.text(data, "description", False, default=self.description)
+        self.name = validation.text(
+            data, "name", False, default=self.name, max_length=50
+        )
+        self.description = validation.text(
+            data, "description", False, default=self.description
+        )
 
         done = validation.boolean(data, "done", False, null=True)
-        if done is True and self.done is False: # Mark as done
+        if done is True and self.done is False:  # Mark as done
             self.done = True
             self.done_by = user
             self.done_at = timezone.now()
-        elif done is False and self.done is True: # Mark as undone
+        elif done is False and self.done is True:  # Mark as undone
             self.done = False
             self.done_by = None
             self.done_at = None
 
         self.save()
+
 
 # This model is for future use
 

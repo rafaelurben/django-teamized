@@ -2,10 +2,10 @@
  * Functions used in the todo module
  */
 
-import { requestSuccessAlert, doubleConfirmAlert, confirmAlert } from "./alerts.js";
+import {requestSuccessAlert, doubleConfirmAlert, confirmAlert} from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
-import { getDateString } from "./datetime.js";
+import {getDateString} from "./datetime.js";
 
 // ToDoList list
 
@@ -203,7 +203,7 @@ export async function viewToDoListItemPopup(team, todolist, item) {
             <p style="white-space: pre-line;">${item.description || "<i>Keine zusätzliche Notiz vorhanden</i>"}</p>
             <hr />
             <span class="swal2-label">
-                ${item.done ? "Erledigt am "+getDateString(new Date(item.done_at)) : "Noch nicht erledigt"}
+                ${item.done ? "Erledigt am " + getDateString(new Date(item.done_at)) : "Noch nicht erledigt"}
             </span>
         `,
         focusConfirm: false,

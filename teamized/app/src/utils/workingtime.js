@@ -2,11 +2,11 @@
  * Functions used in the workingtime module
  */
 
-import { successAlert, waitingAlert, requestSuccessAlert, confirmAlert } from "./alerts.js";
+import {successAlert, waitingAlert, requestSuccessAlert, confirmAlert} from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";
 import * as Navigation from "./navigation.js";
-import { isoFormat, localInputFormat } from "./datetime.js";
+import {isoFormat, localInputFormat} from "./datetime.js";
 
 export async function getMyWorkSessionsInTeam(teamId) {
     return await Cache.refreshTeamCacheCategory(teamId, "me_worksessions");
@@ -85,7 +85,7 @@ export async function editWorkSessionPopup(team, session) {
             (
                 session.is_created_via_tracking ?
                     '<hr><p class="swal2-text mt-3 mb-0 small opacity-50 px-3">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
-                :
+                    :
                     `
                     <label class="swal2-input-label" for="swal-input-dtstart">Von:</label>
                     <input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${dtstart}">

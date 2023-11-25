@@ -41,13 +41,21 @@ class ApiKey(models.Model):
 
     @admin.display(description="Api key")
     def __str__(self):
-        perms = "read" if self.read and not self.write else "write" if self.write and not self.read else "read/write" if self.read and self.write else "UNUSABLE"
+        perms = (
+            "read"
+            if self.read and not self.write
+            else "write"
+            if self.write and not self.read
+            else "read/write"
+            if self.read and self.write
+            else "UNUSABLE"
+        )
         return f"{self.name} ({perms}; {self.user.username})"
 
     @admin.display(description="Key preview")
     def key_preview(self) -> str:
         """Get the first and last letters of the key"""
-        return str(self.key)[:3]+"..."+str(self.key)[-3:]
+        return str(self.key)[:3] + "..." + str(self.key)[-3:]
 
     def has_perm(self, *args, **kwargs) -> bool:
         """Shortcut for self.user.has_perm"""

@@ -9,11 +9,17 @@ from django.http import JsonResponse
 from django.utils.translation import gettext as _
 
 from teamized.api.utils.constants import (
-    NO_PERMISSION_APIKEY, APIKEY_INVALID, NO_PERMISSION_SESSION, NOT_AUTHENTICATED,
-    METHOD_NOT_ALLOWED, OBJ_NOT_FOUND, NOT_AN_UUID
+    NO_PERMISSION_APIKEY,
+    APIKEY_INVALID,
+    NO_PERMISSION_SESSION,
+    NOT_AUTHENTICATED,
+    METHOD_NOT_ALLOWED,
+    OBJ_NOT_FOUND,
+    NOT_AN_UUID,
 )
 from teamized.api.utils.models import ApiKey
 from teamized import exceptions
+
 
 def _is_valid_uuid(val):
     try:
@@ -30,14 +36,19 @@ def api_view(allowed_methods=["get"], perms_required=()):
         @wraps(function)
         def wrap(request, *args, **kwargs):
             try:
-                if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
+                if request.method.lower() not in map(
+                    lambda x: x.lower(), allowed_methods
+                ):
                     return METHOD_NOT_ALLOWED
 
                 apikey = request.GET.get("apikey", None)
 
                 # If the user provided an apikey, try to authenticate with it
                 if apikey:
-                    if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
+                    if (
+                        _is_valid_uuid(apikey)
+                        and ApiKey.objects.filter(key=apikey).exists()
+                    ):
                         keyobject = ApiKey.objects.get(key=apikey)
 
                         if request.method.upper() == "GET":
@@ -64,7 +75,9 @@ def api_view(allowed_methods=["get"], perms_required=()):
                 return NOT_AUTHENTICATED
             except exceptions.AlertException as exc:
                 return exc.get_response()
+
         return wrap
+
     return decorator
 
 
@@ -103,24 +116,31 @@ def require_objects(config, allow_none=False):
                 search = {dbfieldname: value}
                 if model.objects.filter(**search).exists():
                     kwargs[field_out] = model.objects.get(**search)
-                    continue # Go to the next object (if present
+                    continue  # Go to the next object (if present
 
                 if allow_none:
                     kwargs[field_out] = None
-                    continue # Go to the next object (if present)
+                    continue  # Go to the next object (if present)
 
                 if hasattr(model, "NOT_FOUND_TEXT"):
-                    return JsonResponse({
-                        "error": "object-not-found",
-                        "message": _("Dieses Objekt konnte nicht gefunden werden."),
-                        "alert": {
-                            "title": getattr(model, "NOT_FOUND_TITLE", _("Objekt nicht gefunden")),
-                            "text": getattr(model, "NOT_FOUND_TEXT")
-                        }
-                    }, status=400)
+                    return JsonResponse(
+                        {
+                            "error": "object-not-found",
+                            "message": _("Dieses Objekt konnte nicht gefunden werden."),
+                            "alert": {
+                                "title": getattr(
+                                    model, "NOT_FOUND_TITLE", _("Objekt nicht gefunden")
+                                ),
+                                "text": getattr(model, "NOT_FOUND_TEXT"),
+                            },
+                        },
+                        status=400,
+                    )
 
                 return OBJ_NOT_FOUND
 
             return function(request, *args, **kwargs)
+
         return wrap
+
     return decorator

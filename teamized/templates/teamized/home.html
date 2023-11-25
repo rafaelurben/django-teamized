@@ -122,16 +122,20 @@
 
             <a href="{% url 'teamized:home' %}"
                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-{#                <svg class="bi me-2" width="40" height="32">#}
-{#                    <use xlink:href="#bootstrap"></use>#}
-{#                </svg>#}
+                {#                <svg class="bi me-2" width="40" height="32">#}
+                {#                    <use xlink:href="#bootstrap"></use>#}
+                {#                </svg>#}
             </a>
 
             <ul class="nav col-md-4 justify-content-end">
-                <li class="nav-item"><a href="{% url 'teamized:app' %}" class="nav-link px-2 text-body-secondary">App</a></li>
-                <li class="nav-item"><a href="{% url 'account:home' %}?next={% url 'teamized:home' %}" class="nav-link px-2 text-body-secondary">Account</a></li>
-                <li class="nav-item"><a href="https://github.com/rafaelurben/django-teamized" class="nav-link px-2 text-body-secondary">Quellcode</a></li>
-                <li class="nav-item"><a href="https://rafaelurben.ch/" class="nav-link px-2 text-body-secondary">Entwickler</a></li>
+                <li class="nav-item"><a href="{% url 'teamized:app' %}"
+                                        class="nav-link px-2 text-body-secondary">App</a></li>
+                <li class="nav-item"><a href="{% url 'account:home' %}?next={% url 'teamized:home' %}"
+                                        class="nav-link px-2 text-body-secondary">Account</a></li>
+                <li class="nav-item"><a href="https://github.com/rafaelurben/django-teamized"
+                                        class="nav-link px-2 text-body-secondary">Quellcode</a></li>
+                <li class="nav-item"><a href="https://rafaelurben.ch/" class="nav-link px-2 text-body-secondary">Entwickler</a>
+                </li>
             </ul>
         </footer>
     </div>
