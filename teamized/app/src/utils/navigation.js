@@ -2,16 +2,23 @@
  * Module for navigation, routing and rendering
  */
 
-import {PageLoader, PAGELIST} from "../components/pageloader.js";
+import {PageLoader, PAGE_LIST, PAGE_NAMES} from "../components/pageloader.js";
 import AppMenubar from "../components/menubar.js";
 import AppSidebar from "../components/sidebar.js";
 import * as Teams from './teams.js';
+import {getCurrentTeamData} from "./cache.js";
 
 
 function ensureExistingPage() {
-    if (!PAGELIST.includes(window.appdata.currentPage)) {
-        window.appdata.currentPage = PAGELIST[0];
+    if (!PAGE_LIST.includes(window.appdata.currentPage)) {
+        window.appdata.currentPage = PAGE_LIST[0];
     }
+}
+
+function updatePageTitle() {
+    let teamName = getCurrentTeamData().team.name;
+    let pageName = PAGE_NAMES[window.appdata.currentPage];
+    document.title = `${pageName} - ${teamName} | Teamized App`;
 }
 
 /**
@@ -67,6 +74,8 @@ export function exportToURL(options) {
             window.history.pushState(...args);
         }
     }
+
+    updatePageTitle();
 }
 
 /**
@@ -155,7 +164,7 @@ export function reRender() {
  * @param {String} page
  */
 export function selectPage(page) {
-    if (PAGELIST.includes(page)) {
+    if (PAGE_LIST.includes(page)) {
         window.appdata.currentPage = page;
         exportToURL();
         render();
@@ -174,4 +183,5 @@ export function handleHistoryNavigation() {
     ensureExistingPage();
     Teams.ensureExistingTeam();
     render();
+    updatePageTitle();
 }

@@ -15,15 +15,17 @@ import * as Cache from "../utils/cache.js";
     This component is used to render the pages.
 */
 
-export const PAGELIST = [
-    "home",
-    "club",
-    "calendars",
-    "team",
-    "teamlist",
-    "workingtime",
-    "todo",
-]
+export const PAGE_NAMES = {
+    "home": "Startseite",
+    "club": "Verein",
+    "calendars": "Kalender",
+    "team": "Team",
+    "teamlist": "Teams",
+    "workingtime": "Arbeitszeit",
+    "todo": "To-do-Listen",
+}
+
+export const PAGE_LIST = Object.keys(PAGE_NAMES);
 
 export class PageLoader extends React.Component {
     constructor(props) {
