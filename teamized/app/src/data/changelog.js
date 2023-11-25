@@ -2,6 +2,10 @@
 
 export const CHANGELOG = [
     {
+        date: "2023-11-25",
+        changes: ["Icon hinzugefügt", "Seitentitel werden nun detaillierter angezeigt"]
+    },
+    {
         date: "2023-11-04",
         changes: ["[Verein] Portfolio zu Vereinsmitgliedern hinzugefügt."]
     },
