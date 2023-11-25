@@ -37,6 +37,7 @@ class UserAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Infos', {'fields': ('uid', 'auth_user',)}),
         ('Settings', {'fields': ('settings_darkmode',)}),
+        ('Overrides', {'fields': ('max_owned_teams_override',), 'classes': ('collapse',)}),
     ]
 
     ordering = ('uid', )

@@ -68,7 +68,8 @@ def endpoint_teams(request):
                 "error": "team_limit_reached",
                 "alert": {
                     "title": _("Teamlimit erreicht"),
-                    "text": _("Du hast das maximale Limit an Teams erreicht, welche du besitzen kannst."),
+                    "text": _("Du hast das maximale Limit an Teams erreicht, welche du besitzen kannst. Kontaktiere "
+                              "den Administrator, wenn du mehr Teams benötigst."),
                 }
             }, status=400)
 

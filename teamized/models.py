@@ -30,15 +30,29 @@ class User(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=_("UID"),
     )
 
     auth_user = models.OneToOneField(
         to=settings.AUTH_USER_MODEL,
         related_name="teamized_user",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
+        verbose_name=_("Django-Benutzer"),
     )
 
-    settings_darkmode = models.BooleanField(default=None, null=True, blank=True)
+    settings_darkmode = models.BooleanField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_("Dunkelmodus"),
+    )
+
+    max_owned_teams_override = models.PositiveIntegerField(
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name=_("Maximale Anzahl eigener Teams")
+    )
 
     def __str__(self):
         return str(self.auth_user)
@@ -115,7 +129,9 @@ class User(models.Model):
         Team creation is limited via options.MAX_OWNED_TEAMS.
         """
 
-        return self.member_instances.filter(role=enums.Roles.OWNER).count() < options.MAX_OWNED_TEAMS
+        current_count = self.member_instances.filter(role=enums.Roles.OWNER).count()
+        max_count = max(options.MAX_OWNED_TEAMS, self.max_owned_teams_override or 0)
+        return current_count < max_count
 
     def get_active_work_session(self) -> typing.Union["WorkSession", None]:
         """
