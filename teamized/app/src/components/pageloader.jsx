@@ -49,12 +49,14 @@ export class PageLoader extends React.Component {
 
         if (this.props.page.startsWith("club") && teamdata.team.club === null) {
             return (
-                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-                    <div className="text-danger mb-3" role="status">
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
+                    <div className="text-danger mb-4" role="status">
                         <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
                     </div>
-                    <p>Die Vereinsfunktionen sind in diesem Team noch nicht aktiviert! Bitte wähle ein anderes Team oder
-                        eine andere Seite.</p>
+                    <p>
+                        Die Vereinsfunktionen sind in diesem Team noch nicht aktiviert!
+                        Bitte wähle ein anderes Team oder eine andere Seite.
+                    </p>
                 </div>
             );
         }
