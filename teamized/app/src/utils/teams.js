@@ -2,7 +2,7 @@
  * Utils for the base team features
  */
 
-import {requestSuccessAlert, confirmAlert, infoAlert, doubleConfirmAlert, waitingAlert} from "./alerts.js";
+import {requestSuccessAlert, confirmAlert, infoAlert, doubleConfirmAlert, errorAlert} from "./alerts.js";
 import * as API from "./api.js";
 import {isoFormat, localInputFormat} from "./datetime.js";
 import * as Navigation from "./navigation.js";
@@ -381,13 +381,13 @@ export async function deleteInvitePopup(team, invite) {
 // Invite check
 
 export async function checkInvite(token) {
-    return await API.GET(`invites/${token}/info`, {}, "no-error-handling").then(
+    return await API.GET(`invites/${token}/info`).then(
         async (data) => {
             return data;
         }
     ).catch(
         (error) => {
-            return {"status": "invite-invalid"}
+            return {"status": "invite-invalid"};
         }
     )
 }
@@ -404,7 +404,7 @@ export async function checkInvitePopup(token) {
 
     const data = await checkInvite(token);
 
-    if (data.status == "invite-valid") {
+    if (data.status === "invite-valid") {
         const team = data.team;
         confirmAlert(
             `Möchtest du folgendem Team beitreten?<br /><br />
@@ -425,10 +425,6 @@ export async function checkInvitePopup(token) {
             }
         )
     } else {
-        infoAlert(
-            "Ungültige Einladung",
-            "Jemand hat versucht, dich einzuladen, jedoch ist die Einladung nicht mehr gültig oder du bist dem Team bereits beigetreten."
-        );
         Navigation.exportToURL({removeParams: ["invite"]});
     }
 }

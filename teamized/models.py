@@ -375,35 +375,46 @@ class Invite(models.Model):
             return float("inf")
         return (self.valid_until - timezone.now()).total_days()
 
+    def is_valid_uses(self) -> bool:
+        "Check if the invite has any uses left"
+
+        return self.uses_left > 0
+
+    def is_valid_time(self) -> bool:
+        "Check if the invite is still valid"
+
+        if self.valid_until is None:
+            return True
+        return (self.valid_until - timezone.now()).total_seconds() > 0
+
     @admin.display(boolean=True)
     def is_valid(self) -> bool:
         "Check if the invitation is still valid"
 
-        if self.uses_left <= 0:
-            # no uses left
-            return False
-        if (
-            self.valid_until is not None
-            and (self.valid_until - timezone.now()).total_seconds() <= 0
-        ):
-            # expired
-            return False
-        return True
+        return self.is_valid_uses() and self.is_valid_time()
 
     def check_validity_for_user(self, user: User) -> bool:
         "Check if an user can use an invite - raise AlertException if not."
 
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
-                text=_("Du bist bereits in diesem Team."),
-                title=_("Bereits beigetreten"),
+                text=_("Du bist bereits Mitglied in diesem Team."),
+                title=_("Einladung ungültig"),
                 errorname="invite-already-member",
             )
-        if not self.is_valid():
+        if not self.is_valid_uses():
             raise exceptions.AlertException(
-                text=_("Diese Einladung ist nicht mehr gültig."),
+                text=_(
+                    "Diese Einladung hat ihre maximale Anzahl Benutzungen erreicht."
+                ),
                 title=_("Einladung ungültig"),
-                errorname="invite-invalid",
+                errorname="invite-max-uses-reached",
+            )
+        if not self.is_valid_time():
+            raise exceptions.AlertException(
+                text=_("Diese Einladung ist abgelaufen."),
+                title=_("Einladung ungültig"),
+                errorname="invite-expired",
             )
         return True
 
