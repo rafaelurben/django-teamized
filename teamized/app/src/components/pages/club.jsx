@@ -4,6 +4,8 @@
  * Club page component
  */
 
+import React from "react";
+
 import {getDateString, getAge} from "../../utils/datetime.js";
 import * as Dashboard from "../dashboard.jsx";
 import * as Cache from "../../utils/cache.js";

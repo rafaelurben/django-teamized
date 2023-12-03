@@ -2,6 +2,8 @@
  * Functions used in the calendar module
  */
 
+import $ from "jquery";
+
 import {requestSuccessAlert, doubleConfirmAlert, confirmAlert} from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";

@@ -1,5 +1,7 @@
 "use strict";
 
+import React from "react";
+
 import Page_Calendars from "./pages/calendars.jsx";
 import Page_Club from "./pages/club.jsx";
 import Page_Home from "./pages/home.jsx";

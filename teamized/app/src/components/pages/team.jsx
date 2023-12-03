@@ -4,6 +4,8 @@
  * Team page component (main component at the end of this file)
  */
 
+import React from "react";
+
 import {successAlert} from "../../utils/alerts.js";
 import * as Cache from "../../utils/cache.js";
 import * as Club from "../../utils/club.js";

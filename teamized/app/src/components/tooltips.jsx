@@ -1,5 +1,8 @@
 "use strict";
 
+import { Tooltip as BSTooltip } from 'bootstrap'
+import React from "react";
+
 /*
     Tooltip components
 */
@@ -10,7 +13,9 @@ export class Tooltip extends React.Component {
     }
 
     componentDidMount() {
-        $('[data-toggle="tooltip"]').tooltip();
+        document.querySelectorAll('[data-toggle="tooltip"]').forEach(function (el) {
+            new BSTooltip(el);
+        });
     }
 
     render() {

@@ -2,6 +2,8 @@
  * Various utility functions
  */
 
+import $ from "jquery";
+
 /**
  * Check if the given UUID is a valid UUID
  *

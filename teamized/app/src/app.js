@@ -3,6 +3,8 @@
  * Here the app is initialized and the main logic is started
  */
 
+import $ from "jquery";
+
 import * as Alerts from "./utils/alerts.js";
 import * as API from "./utils/api.js";
 import * as Cache from "./utils/cache.js";

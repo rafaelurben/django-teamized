@@ -2,6 +2,8 @@
  * API utils
  */
 
+import $ from "jquery";
+
 import {ajaxRequestErrorAlert} from "./alerts.js";
 
 /**

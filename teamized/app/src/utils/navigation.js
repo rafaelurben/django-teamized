@@ -2,12 +2,18 @@
  * Module for navigation, routing and rendering
  */
 
+import { createRoot } from 'react-dom/client';
+import React from 'react';
+
 import {PageLoader, PAGE_LIST, PAGE_NAMES} from "../components/pageloader.jsx";
 import AppMenubar from "../components/menubar.jsx";
 import AppSidebar from "../components/sidebar.jsx";
 import * as Teams from './teams.js';
 import {getCurrentTeamData} from "./cache.js";
 
+let rootSidebar = createRoot(document.getElementById("app-sidebar"));
+let rootMenubar = createRoot(document.getElementById("app-menubar"));
+let rootPage = createRoot(document.getElementById("app-maincontent"));
 
 function ensureExistingPage() {
     if (!PAGE_LIST.includes(window.appdata.currentPage)) {
@@ -106,36 +112,33 @@ export function showSidebarOnDesktop() {
 }
 
 export function renderSidebar() {
-    ReactDOM.render(
+    rootSidebar.render(
         <AppSidebar
             page={window.appdata.currentPage}
             user={window.appdata.user}
             isAdmin={Teams.isCurrentTeamAdmin()}
             isClubEnabled={Teams.hasCurrentTeamLinkedClub()}
             onPageSelect={selectPage}
-        />,
-        document.getElementById("app-sidebar")
+        />
     );
 }
 
 export function renderPage() {
-    ReactDOM.render(
+    rootPage.render(
         <PageLoader
             page={window.appdata.currentPage}
-        />,
-        document.getElementById("app-maincontent")
+        />
     );
 }
 
 export function renderMenubar() {
-    ReactDOM.render(
+    rootMenubar.render(
         <AppMenubar
             teams={Teams.getTeamsList()}
             selectedTeamId={window.appdata.selectedTeamId}
             onTeamSelect={Teams.switchTeam}
             onPageSelect={selectPage}
-        />,
-        document.getElementById("app-menubar")
+        />
     );
 }
 
@@ -146,15 +149,9 @@ export function render() {
 }
 
 export function reRender() {
-    ReactDOM.unmountComponentAtNode(
-        document.getElementById("app-menubar")
-    )
-    ReactDOM.unmountComponentAtNode(
-        document.getElementById("app-maincontent")
-    )
-    ReactDOM.unmountComponentAtNode(
-        document.getElementById("app-sidebar")
-    )
+    rootPage.unmount();
+    rootSidebar.unmount();
+    rootMenubar.unmount();
     render();
 }
 

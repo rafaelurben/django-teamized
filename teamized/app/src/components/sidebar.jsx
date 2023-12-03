@@ -1,5 +1,7 @@
 "use strict";
 
+import React from "react";
+
 /*
     This component is used to render the sidebar.
     Most of it is inspired or copied from https://getbootstrap.com/docs/5.1/examples/sidebars/

@@ -2,6 +2,8 @@
  * Utils for the club features
  */
 
+import $ from "jquery";
+
 import {requestSuccessAlert, confirmAlert, doubleConfirmAlert, successAlert} from "./alerts.js";
 import * as API from "./api.js";
 import * as Cache from "./cache.js";

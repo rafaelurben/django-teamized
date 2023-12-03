@@ -4,6 +4,8 @@
  * Todo page component (main component at the bottom of this file)
  */
 
+import React from "react";
+
 import {errorAlert} from "../../utils/alerts.js";
 import * as Dashboard from "../dashboard.jsx";
 import * as ToDo from "../../utils/todo.js";

@@ -1,5 +1,7 @@
 "use strict";
 
+import React from "react";
+
 /*
     This component is used to render the part of the menubar that is only on the app page.
     I.e. account, home and logout buttons are not created here.

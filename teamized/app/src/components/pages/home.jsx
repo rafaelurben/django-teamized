@@ -4,6 +4,8 @@
  * Home page component
  */
 
+import React from "react";
+
 import {CHANGELOG} from "../../data/changelog.js";
 import {getDateString} from "../../utils/datetime.js";
 import * as Dashboard from "../dashboard.jsx";

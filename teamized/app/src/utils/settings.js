@@ -2,6 +2,8 @@
  * Utils for settings and profile
  */
 
+import $ from "jquery";
+
 import * as API from "./api.js";
 import * as Navigation from "./navigation.js";
 

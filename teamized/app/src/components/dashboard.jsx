@@ -1,5 +1,7 @@
 "use strict";
 
+import React from "react";
+
 import {IconTooltip} from "./tooltips.jsx";
 
 /*

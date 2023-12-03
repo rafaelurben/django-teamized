@@ -4,6 +4,8 @@
  * Teamlist page component (main component at the end of this file)
  */
 
+import React from "react";
+
 import {waitingAlert} from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
