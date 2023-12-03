@@ -787,6 +787,17 @@ export default class Page_Calendars extends React.Component {
                 loading={Cache.getCurrentTeamData()._state.calendars._initial}
             >
                 <Dashboard.Column sizes={{lg: 6}} className="order-lg-2">
+                    <Dashboard.Tile
+                        title="Ereignisübersicht"
+                        help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
+                    >
+                        {/* Calendar overview */}
+                        <CalendarOverview
+                            onDateSelect={this.handleDateSelect}
+                            selectedDate={this.state.selectedDate}
+                            events={Object.values(this.events)}
+                        />
+                    </Dashboard.Tile>
                     <Dashboard.Tile title={"Ereignisse am " + dayDisplay}
                                     help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">
                         {/* Events from the selected day & Create new event button */}
@@ -804,25 +815,15 @@ export default class Page_Calendars extends React.Component {
                             isAdmin={this.props.isAdmin}
                         />
                     </Dashboard.Tile>
+                </Dashboard.Column>
+                <Dashboard.Column sizes={{lg: 6}}>
                     <Dashboard.Tile title="Ausgewähltes Ereignis"
-                                    help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen.">
+                                    help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
+                                    className="order-lg-3">
                         {/* Selected event */}
                         <CalendarEventDisplay
                             event={this.events[this.state.selectedEventId]}
                             team={this.props.team}
-                        />
-                    </Dashboard.Tile>
-                </Dashboard.Column>
-                <Dashboard.Column sizes={{lg: 6}}>
-                    <Dashboard.Tile
-                        title="Ereignisübersicht"
-                        help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
-                    >
-                        {/* Calendar overview */}
-                        <CalendarOverview
-                            onDateSelect={this.handleDateSelect}
-                            selectedDate={this.state.selectedDate}
-                            events={Object.values(this.events)}
                         />
                     </Dashboard.Tile>
                     <Dashboard.Tile
