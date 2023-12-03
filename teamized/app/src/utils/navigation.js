@@ -2,9 +2,9 @@
  * Module for navigation, routing and rendering
  */
 
-import {PageLoader, PAGE_LIST, PAGE_NAMES} from "../components/pageloader.js";
-import AppMenubar from "../components/menubar.js";
-import AppSidebar from "../components/sidebar.js";
+import {PageLoader, PAGE_LIST, PAGE_NAMES} from "../components/pageloader.jsx";
+import AppMenubar from "../components/menubar.jsx";
+import AppSidebar from "../components/sidebar.jsx";
 import * as Teams from './teams.js';
 import {getCurrentTeamData} from "./cache.js";
 

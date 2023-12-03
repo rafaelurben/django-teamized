@@ -5,11 +5,11 @@
  */
 
 import {errorAlert} from "../../utils/alerts.js";
-import * as Dashboard from "../dashboard.js";
+import * as Dashboard from "../dashboard.jsx";
 import * as ToDo from "../../utils/todo.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as Cache from "../../utils/cache.js";
-import {IconTooltip, Tooltip} from "../tooltips.js";
+import {IconTooltip, Tooltip} from "../tooltips.jsx";
 
 class ListViewItem extends React.Component {
     constructor(props) {

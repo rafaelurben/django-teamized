@@ -5,11 +5,11 @@
  */
 
 import {getDateString, getAge} from "../../utils/datetime.js";
-import * as Dashboard from "../dashboard.js";
+import * as Dashboard from "../dashboard.jsx";
 import * as Cache from "../../utils/cache.js";
 import * as Club from "../../utils/club.js";
 import * as Navigation from "../../utils/navigation.js";
-import {IconTooltip} from "../tooltips.js";
+import {IconTooltip} from "../tooltips.jsx";
 
 
 class ClubMembersTableRow extends React.Component {

@@ -1,12 +1,12 @@
 "use strict";
 
-import Page_Calendars from "./pages/calendars.js";
-import Page_Club from "./pages/club.js";
-import Page_Home from "./pages/home.js";
-import Page_TeamList from "./pages/teamlist.js";
-import Page_Team from "./pages/team.js";
-import Page_ToDo from "./pages/todo.js";
-import Page_WorkingTime from "./pages/workingtime.js";
+import Page_Calendars from "./pages/calendars.jsx";
+import Page_Club from "./pages/club.jsx";
+import Page_Home from "./pages/home.jsx";
+import Page_TeamList from "./pages/teamlist.jsx";
+import Page_Team from "./pages/team.jsx";
+import Page_ToDo from "./pages/todo.jsx";
+import Page_WorkingTime from "./pages/workingtime.jsx";
 
 import * as Teams from "../utils/teams.js";
 import * as Cache from "../utils/cache.js";

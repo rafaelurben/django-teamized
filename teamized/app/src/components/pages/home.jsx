@@ -6,11 +6,11 @@
 
 import {CHANGELOG} from "../../data/changelog.js";
 import {getDateString} from "../../utils/datetime.js";
-import * as Dashboard from "../dashboard.js";
+import * as Dashboard from "../dashboard.jsx";
 import * as Utils from "../../utils/utils.js";
 import * as Settings from "../../utils/settings.js";
 import * as Navigation from "../../utils/navigation.js";
-import {IconTooltip} from "../tooltips.js";
+import {IconTooltip} from "../tooltips.jsx";
 
 export default class Page_Home extends React.Component {
     constructor(props) {

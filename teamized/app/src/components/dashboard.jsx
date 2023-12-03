@@ -1,6 +1,6 @@
 "use strict";
 
-import {IconTooltip} from "./tooltips.js";
+import {IconTooltip} from "./tooltips.jsx";
 
 /*
     These components create the basic dashboard layout (and style).

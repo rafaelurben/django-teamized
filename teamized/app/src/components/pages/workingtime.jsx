@@ -8,8 +8,8 @@ import {errorAlert} from "../../utils/alerts.js";
 import * as Navigation from "../../utils/navigation.js";
 import * as WorkingTime from "../../utils/workingtime.js";
 import * as Cache from "../../utils/cache.js";
-import * as Dashboard from "../dashboard.js";
-import {IconTooltip} from "../tooltips.js";
+import * as Dashboard from "../dashboard.jsx";
+import {IconTooltip} from "../tooltips.jsx";
 import * as Stats from "../../utils/workingtimestats.js";
 import {
     roundDays,

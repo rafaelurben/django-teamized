@@ -7,8 +7,8 @@
 import {waitingAlert} from "../../utils/alerts.js";
 import * as Teams from "../../utils/teams.js";
 import * as Navigation from "../../utils/navigation.js";
-import * as Dashboard from "../dashboard.js";
-import {IconTooltip} from "../tooltips.js";
+import * as Dashboard from "../dashboard.jsx";
+import {IconTooltip} from "../tooltips.jsx";
 
 class TeamTableRow extends React.Component {
     constructor(props) {

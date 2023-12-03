@@ -8,8 +8,8 @@ import * as Calendars from "../../utils/calendars.js";
 import * as Cache from "../../utils/cache.js";
 import * as Navigation from "../../utils/navigation.js";
 
-import * as Dashboard from "../dashboard.js";
-import {IconTooltip, Tooltip} from "../tooltips.js";
+import * as Dashboard from "../dashboard.jsx";
+import {IconTooltip, Tooltip} from "../tooltips.jsx";
 
 const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 
