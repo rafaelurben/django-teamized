@@ -227,6 +227,7 @@ class ClubGroupsTableRow extends React.Component {
         super(props);
         this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+        this.handleSharePortfolioButtonClick = this.handleSharePortfolioButtonClick.bind(this);
     }
 
     async handleRemoveButtonClick() {
@@ -237,6 +238,20 @@ class ClubGroupsTableRow extends React.Component {
     async handleEditButtonClick() {
         await Club.editClubGroupPopup(this.props.team, this.props.group);
         Navigation.renderPage();
+    }
+
+    async handleSharePortfolioButtonClick() {
+        Swal.fire({
+            title: "Mitgliederportfolios exportieren",
+            html: `
+                Über folgende URL können die Mitgliederportfolios der Gruppe "${this.props.group.name}"
+                im JSON-Format abgerufen werden:
+                <input class="swal2-input" type="text" readonly value="${this.props.group.shared_url}">
+              `,
+            showCancelButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Schliessen",
+        });
     }
 
     render() {
@@ -253,6 +268,18 @@ class ClubGroupsTableRow extends React.Component {
                 <td>
                     <span>{group.description}</span>
                 </td>
+                {/* Action: Share group portfolios */}
+                {loggedinmember.is_admin ? (
+                    <td>
+                        <a
+                            className="btn btn-outline-primary border-1"
+                            onClick={this.handleSharePortfolioButtonClick}
+                            title="Mitgliederportfolios teilen (API)"
+                        >
+                            <i className="fas fa-fw fa-share"></i>
+                        </a>
+                    </td>
+                ) : null}
                 {/* Action: Edit */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -264,9 +291,7 @@ class ClubGroupsTableRow extends React.Component {
                             <i className="fas fa-fw fa-pen-to-square"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* Action: Delete */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -278,9 +303,7 @@ class ClubGroupsTableRow extends React.Component {
                             <i className="fas fa-fw fa-trash"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* ID */}
                 <td className="debug-only">{group.id}</td>
             </tr>
@@ -318,6 +341,9 @@ class ClubGroupsTable extends React.Component {
                 <tr>
                     <th>Gruppenname</th>
                     <th>Beschreibung</th>
+                    {this.props.team.member.is_admin ? (
+                        <th style={{width: "1px"}}></th>
+                    ) : null}
                     {this.props.team.member.is_admin ? (
                         <th style={{width: "1px"}}></th>
                     ) : null}

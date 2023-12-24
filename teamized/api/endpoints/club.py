@@ -364,12 +364,21 @@ def endpoint_groups(request, team: Team):
         return ENDPOINT_NOT_FOUND
     club: Club = team.linked_club
 
-    if request.method == "GET":
-        groups = club.groups.order_by("name")
+    is_admin: bool = team.user_is_admin(user)
 
-        return JsonResponse({"groups": [group.as_dict() for group in groups]})
+    if request.method == "GET":
+        groups: list[ClubMemberGroup] = club.groups.order_by("name")
+
+        return JsonResponse(
+            {
+                "groups": [
+                    group.as_dict(request, include_shared_url=is_admin)
+                    for group in groups
+                ]
+            }
+        )
     if request.method == "POST":
-        if not team.user_is_admin(user):
+        if not is_admin:
             return NO_PERMISSION
 
         group = ClubMemberGroup.from_post_data(request.POST, club=club)
@@ -377,7 +386,7 @@ def endpoint_groups(request, team: Team):
         return JsonResponse(
             {
                 "success": True,
-                "group": group.as_dict(),
+                "group": group.as_dict(request, include_shared_url=True),
                 "alert": {
                     "title": _("Gruppe erstellt"),
                     "text": _("Die Gruppe wurde erfolgreich hinzugefügt."),
@@ -415,7 +424,7 @@ def endpoint_group(request, team: Team, group: ClubMemberGroup):
             {
                 "success": True,
                 "id": group.uid,
-                "group": group.as_dict(),
+                "group": group.as_dict(request, include_shared_url=True),
                 "alert": {
                     "title": _("Gruppe aktualisiert"),
                     "text": _("Die Gruppe wurde erfolgreich aktualisiert."),

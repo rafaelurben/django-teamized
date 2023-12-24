@@ -7,6 +7,7 @@ import teamized.club.views as views
 ##############
 
 urlpatterns = [
+    path("api/", include("teamized.club.api.urls")),
     path("<slug:clubslug>/<uuid:memberuid>", views.member_app, name="club_member_app"),
     path(
         "<slug:clubslug>/<uuid:memberuid>/login",

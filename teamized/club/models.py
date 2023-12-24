@@ -530,6 +530,11 @@ class ClubMemberGroup(models.Model):
         through="ClubMemberGroupMembership",
     )
 
+    shared_uid = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+    )
+
     date_created = models.DateTimeField(
         verbose_name=_("Erstellt am"), auto_now_add=True
     )
@@ -546,13 +551,22 @@ class ClubMemberGroup(models.Model):
     def __str__(self):
         return self.name
 
-    def as_dict(self):
-        return {
+    def as_dict(self, request=None, include_shared_url=False):
+        data = {
             "id": self.uid,
             "name": self.name,
             "description": self.description or "",
             "memberids": [ms.member_id for ms in self.memberships.all()],
         }
+        if include_shared_url:
+            shared_url = reverse(
+                "teamized:club-api-public-group-portfolios",
+                kwargs={"uuid": self.shared_uid},
+            )
+            if request is not None:
+                shared_url = request.build_absolute_uri(shared_url)
+            data["shared_url"] = shared_url
+        return data
 
     @classmethod
     @decorators.validation_func()
@@ -572,6 +586,24 @@ class ClubMemberGroup(models.Model):
             data, "description", False, default=self.description
         )
         self.save()
+
+    def get_member_portfolios(self):
+        """Get all members portfolios"""
+
+        portfolios = []
+        for member in self.members.filter(portfolio_visible=True):
+            portfolios.append(
+                {
+                    "first_name": member.first_name,
+                    "last_name": member.last_name,
+                    **member.portfolio_as_dict(),
+                }
+            )
+        return {
+            "name": self.name,
+            "description": self.description,
+            "portfolios": portfolios,
+        }
 
 
 class ClubMemberGroupMembership(models.Model):
