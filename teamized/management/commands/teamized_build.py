@@ -29,7 +29,10 @@ class Command(BaseCommand):
         newcwd = os.path.join(folderpath, "app")
         os.chdir(newcwd)
 
-        self.stdout.write(self.style.SUCCESS("Building Teamized app..."))
+        self.stdout.write("Installing Teamized app dependencies...")
+        os.system("npm install")
+
+        self.stdout.write("Building Teamized app...")
 
         try:
             if options["live"]:
