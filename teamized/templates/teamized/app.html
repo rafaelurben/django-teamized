@@ -62,7 +62,7 @@
 {% block scripts %}
     {{ block.super }}
     <script>
-        document.api_base_url = '{% url "teamized:home" %}api/';
+        window.api_base_url = '{% url "teamized:home" %}api/';
     </script>
 
     <!-- Sweetalert -->

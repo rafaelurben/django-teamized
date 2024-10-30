@@ -19,7 +19,7 @@ export function request(method, endpoint, data, ...opts) {
     return new Promise((resolve, reject) => {
         $.ajax({
             type: method,
-            url: document.api_base_url + endpoint,
+            url: window.api_base_url + endpoint,
             data: data,
             success: resolve,
             error: (e) => {
