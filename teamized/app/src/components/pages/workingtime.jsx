@@ -9,7 +9,7 @@ import * as Recharts from 'recharts';
 
 import { errorAlert } from '../../utils/alerts.js';
 import * as Navigation from '../../utils/navigation.js';
-import * as WorkingTime from '../../utils/workingtime.js';
+import * as WorkingTime from '../../utils/workingtime.ts';
 import * as Cache from '../../utils/cache.js';
 import * as Dashboard from '../dashboard.jsx';
 import { IconTooltip } from '../tooltips.jsx';

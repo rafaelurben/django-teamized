@@ -111,7 +111,7 @@ export function infoAlert(title, message, options) {
  * @param {String} text
  * @param {object} options
  */
-export function waitingAlert(text, options) {
+export function waitingAlert(text, options = {}) {
     Swal.fire({
         title: 'In Bearbeitung...',
         text: text,
@@ -126,11 +126,11 @@ export function waitingAlert(text, options) {
 /**
  * Show a simple success alert toast
  *
+ * @param {String} text
  * @param {String} title
- * @param {String} message
  * @param {object} options
  */
-export function successAlert(text, title, options) {
+export function successAlert(text, title, options = {}) {
     Swal.fire({
         toast: true,
         icon: 'success',

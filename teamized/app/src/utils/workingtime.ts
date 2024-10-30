@@ -3,34 +3,40 @@
  */
 
 import {
-    successAlert,
-    waitingAlert,
-    requestSuccessAlert,
     confirmAlert,
+    requestSuccessAlert,
+    successAlert,
     Swal,
+    waitingAlert,
 } from './alerts.js';
-import * as API from './api.js';
+import * as WorkingtimeAPI from '../api/workingtime';
 import * as Cache from './cache.js';
 import * as Navigation from './navigation.js';
-import { isoFormat, localInputFormat } from './datetime.ts';
+import { isoFormat, localInputFormat } from './datetime';
+import { ID } from '../interfaces/common';
+import {
+    Worksession,
+    WorksessionRequestDTO,
+} from '../interfaces/workingtime/worksession';
 
-export async function getMyWorkSessionsInTeam(teamId) {
+export async function getMyWorkSessionsInTeam(teamId: ID) {
     return await Cache.refreshTeamCacheCategory(teamId, 'me_worksessions');
 }
 
 // WorkSession creation
 
-export async function createWorkSession(teamId, note, dtstart, dtend) {
-    return await API.POST(`teams/${teamId}/me/worksessions`, {
-        note,
-        time_start: isoFormat(dtstart),
-        time_end: isoFormat(dtend),
-    }).then((data) => {
-        requestSuccessAlert(data);
-        Cache.getCurrentTeamData().me_worksessions[data.session.id] =
-            data.session;
-        return data.session;
-    });
+export async function createWorkSession(
+    teamId: ID,
+    session: WorksessionRequestDTO
+) {
+    return await WorkingtimeAPI.createWorksession(teamId, session).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getCurrentTeamData().me_worksessions[data.session.id] =
+                data.session;
+            return data.session;
+        }
+    );
 }
 
 export async function createWorkSessionPopup(team) {
@@ -52,10 +58,15 @@ export async function createWorkSessionPopup(team) {
             confirmButtonText: 'Erstellen',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const note = document.getElementById('swal-input-note').value;
-                const dtstart =
-                    document.getElementById('swal-input-dtstart').value;
-                const dtend = document.getElementById('swal-input-dtend').value;
+                const note = (<HTMLInputElement>(
+                    document.getElementById('swal-input-note')
+                )).value;
+                const dtstart = (<HTMLInputElement>(
+                    document.getElementById('swal-input-dtstart')
+                )).value;
+                const dtend = (<HTMLInputElement>(
+                    document.getElementById('swal-input-dtend')
+                )).value;
 
                 if (!dtstart || !dtend) {
                     Swal.showValidationMessage(
@@ -65,7 +76,11 @@ export async function createWorkSessionPopup(team) {
                 }
 
                 Swal.showLoading();
-                return await createWorkSession(team.id, note, dtstart, dtend);
+                return await createWorkSession(team.id, {
+                    note,
+                    time_start: isoFormat(dtstart),
+                    time_end: isoFormat(dtend),
+                });
             },
         })
     ).value;
@@ -73,12 +88,16 @@ export async function createWorkSessionPopup(team) {
 
 // WorkSession edit
 
-export async function editWorkSession(teamId, sessionId, note, dtstart, dtend) {
-    return await API.POST(`teams/${teamId}/me/worksessions/${sessionId}`, {
-        note,
-        time_start: isoFormat(dtstart),
-        time_end: isoFormat(dtend),
-    }).then(async (data) => {
+export async function editWorkSession(
+    teamId: ID,
+    sessionId: ID,
+    session: WorksessionRequestDTO
+) {
+    return await WorkingtimeAPI.updateWorksession(
+        teamId,
+        sessionId,
+        session
+    ).then(async (data) => {
         requestSuccessAlert(data);
         Cache.getCurrentTeamData().me_worksessions[data.session.id] =
             data.session;
@@ -110,12 +129,17 @@ export async function editWorkSessionPopup(team, session) {
             confirmButtonText: 'Speichern',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const note = document.getElementById('swal-input-note').value;
+                const note = (<HTMLInputElement>(
+                    document.getElementById('swal-input-note')
+                )).value;
 
                 if (!session.is_created_via_tracking) {
-                    dtstart =
-                        document.getElementById('swal-input-dtstart').value;
-                    dtend = document.getElementById('swal-input-dtend').value;
+                    dtstart = (<HTMLInputElement>(
+                        document.getElementById('swal-input-dtstart')
+                    )).value;
+                    dtend = (<HTMLInputElement>(
+                        document.getElementById('swal-input-dtend')
+                    )).value;
                     if (!dtstart || !dtend) {
                         Swal.showValidationMessage(
                             'Start- und Endzeit sind Pflichtfelder!'
@@ -125,13 +149,11 @@ export async function editWorkSessionPopup(team, session) {
                 }
 
                 Swal.showLoading();
-                return await editWorkSession(
-                    team.id,
-                    session.id,
+                return await editWorkSession(team.id, session.id, {
                     note,
-                    dtstart,
-                    dtend
-                );
+                    time_start: isoFormat(dtstart),
+                    time_end: isoFormat(dtend),
+                });
             },
         })
     ).value;
@@ -139,16 +161,16 @@ export async function editWorkSessionPopup(team, session) {
 
 // WorkSession deletion
 
-export async function deleteWorkSession(teamId, sessionId) {
-    return await API.DELETE(
-        `teams/${teamId}/me/worksessions/${sessionId}`
-    ).then(async (data) => {
-        requestSuccessAlert(data);
-        delete Cache.getCurrentTeamData().me_worksessions[sessionId];
-    });
+export async function deleteWorkSession(teamId: ID, sessionId: ID) {
+    return await WorkingtimeAPI.deleteWorksession(teamId, sessionId).then(
+        (data) => {
+            requestSuccessAlert(data);
+            delete Cache.getCurrentTeamData().me_worksessions[sessionId];
+        }
+    );
 }
 
-export async function deleteWorkSessionPopup(team, session) {
+export async function deleteWorkSessionPopup(team, session: Worksession) {
     await confirmAlert(
         'Willst du folgende Sitzung wirklich löschen?<br /><br />' +
             `<b>Notiz:</b> ${session.note}`,
@@ -158,45 +180,32 @@ export async function deleteWorkSessionPopup(team, session) {
 
 // Tracking
 
-export async function startTrackingSession(teamId) {
+export async function startTrackingSession(teamId: ID) {
     waitingAlert('Wird gestartet...');
-    return await API.POST(`me/worksessions/tracking/start/t=${teamId}`).then(
-        (data) => {
-            successAlert(
-                'Die Zeitmessung wurde gestartet',
-                'Tracking gestartet'
-            );
-            window.appdata.current_worksession = data.session;
-            return data.session;
-        }
-    );
+    return await WorkingtimeAPI.startTrackingSession(teamId).then((data) => {
+        successAlert('Die Zeitmessung wurde gestartet', 'Tracking gestartet');
+        window.appdata.current_worksession = data.session;
+        return data.session;
+    });
 }
 
 export async function getTrackingSession() {
-    return await API.GET(
-        'me/worksessions/tracking/live',
-        {},
-        'no-error-handling'
-    )
-        .then((data) => {
-            if (data.error === 'no_active_tracking_session_exists') {
-                window.appdata.current_worksession = null;
-                return null;
-            }
-
+    return await WorkingtimeAPI.getTrackingSession().then((data) => {
+        if (data.error) {
+            // 'no_active_tracking_session_exists' comes with a 200 code on purpose
+            window.appdata.current_worksession = null;
+            return null;
+        } else {
             window.appdata.current_worksession = data.session;
             Navigation.renderPage();
             return data.session;
-        })
-        .catch((error) => {
-            window.appdata.current_worksession = null;
-            return null;
-        });
+        }
+    });
 }
 
 export async function stopTrackingSession() {
     waitingAlert('Wird gestoppt...');
-    return await API.POST('me/worksessions/tracking/stop').then((data) => {
+    return await WorkingtimeAPI.stopTrackingSession().then((data) => {
         successAlert('Die Zeitmessung wurde gestoppt', 'Tracking gestoppt');
         window.appdata.current_worksession = null;
         Cache.getTeamData(data.session._team_id).me_worksessions[
@@ -209,9 +218,9 @@ export async function stopTrackingSession() {
 // Rename session without the date options/text
 
 export async function renameWorkSession(teamId, sessionId, note) {
-    return await API.POST(`teams/${teamId}/me/worksessions/${sessionId}`, {
+    return await WorkingtimeAPI.updateWorksession(teamId, sessionId, {
         note,
-    }).then(async (data) => {
+    }).then((data) => {
         requestSuccessAlert(data);
         if (data.session.id in Cache.getCurrentTeamData().me_worksessions) {
             Cache.getCurrentTeamData().me_worksessions[data.session.id] =
@@ -237,7 +246,7 @@ export async function renameWorkSessionPopup(team, session) {
             confirmButtonText: 'Speichern',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const note = document.getElementById('swal-input-note').value;
+                const note = <string>$('#swal-input-note').val();
 
                 Swal.showLoading();
                 return await renameWorkSession(team.id, session.id, note);

@@ -69,7 +69,7 @@ export abstract class API {
      */
     static async post<T>(
         endpoint: string,
-        data: object,
+        data?: object,
         options?: HTTPRequestOptions
     ) {
         return await this.request<T & SuccessfulPostResponse>(
