@@ -8,7 +8,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2/dist/sweetalert2';
 export { Swal, SweetAlertOptions };
 
 /**
- * Create a alert based on a failed ajax request
+ * Create an alert based on a failed ajax request
  *
  * @param {jqXHR} request
  */
@@ -36,13 +36,22 @@ export function ajaxRequestErrorAlert(request) {
         };
     } else {
         alertdata = {
-            title: `Uupsie!`,
-            html: `Es ist ein Fehler aufgetreten:<br><br>${jsondata.message}<br>(error ${jsondata.error})`,
             icon: 'error',
+            title: `Uupsie! Es ist ein Fehler aufgetreten`,
+            text: jsondata.message,
+            footer: `Error-Code: ${jsondata.error}`,
         };
     }
-    Swal.fire(alertdata);
-    // TODO: [BUG] This might show [object Object] instead of the error message - reason unknown
+
+    if (Swal.isVisible() && Swal.isLoading()) {
+        // If a Swal is currently shown, show the error as a validation message
+        // so that no form data gets lost.
+        Swal.showValidationMessage(`${alertdata.title} - ${alertdata.text}`);
+        Swal.hideLoading();
+    } else {
+        // If no Swal is currently shown, fire a Swal modal.
+        Swal.fire(alertdata);
+    }
 }
 
 /**
