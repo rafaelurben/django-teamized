@@ -2,29 +2,33 @@
  * Functions used in the todo module
  */
 
+import Swal from 'sweetalert2';
+
 import {
-    requestSuccessAlert,
-    doubleConfirmAlert,
     confirmAlert,
+    doubleConfirmAlert,
+    requestSuccessAlert,
 } from './alerts.js';
-import * as API from './api.js';
 import * as Cache from './cache.js';
-import { getDateString } from './datetime.ts';
+import { getDateString } from './datetime';
+import { ID } from '../interfaces/common';
+import * as TodolistAPI from '../api/todolist';
+import { Todolist, TodolistRequestDTO } from '../interfaces/todolist/todolist';
+import {
+    TodolistItem,
+    TodolistItemRequestDTO,
+} from '../interfaces/todolist/todolistItem';
 
 // ToDoList list
 
-export async function getToDoLists(teamId) {
+export async function getToDoLists(teamId: ID) {
     return await Cache.refreshTeamCacheCategory(teamId, 'todolists');
 }
 
 // ToDoList creation
 
-export async function createToDoList(teamId, name, description, color) {
-    return await API.POST(`teams/${teamId}/todolists`, {
-        name,
-        description,
-        color,
-    }).then((data) => {
+export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
+    return await TodolistAPI.createTodolist(teamId, todolist).then((data) => {
         requestSuccessAlert(data);
         Cache.getTeamData(teamId).todolists[data.todolist.id] = data.todolist;
         return data.todolist;
@@ -49,11 +53,15 @@ export async function createToDoListPopup(team) {
             confirmButtonText: 'Erstellen',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
-                const color = document.getElementById('swal-input-color').value;
+                const name = (<HTMLInputElement>(
+                    document.getElementById('swal-input-name')
+                )).value;
+                const description = (<HTMLInputElement>(
+                    document.getElementById('swal-input-description')
+                )).value;
+                const color = (<HTMLInputElement>(
+                    document.getElementById('swal-input-color')
+                )).value;
 
                 if (!name) {
                     Swal.showValidationMessage('Bitte gib einen Namen ein!');
@@ -61,7 +69,11 @@ export async function createToDoListPopup(team) {
                 }
 
                 Swal.showLoading();
-                return await createToDoList(team.id, name, description, color);
+                return await createToDoList(team.id, {
+                    name,
+                    description,
+                    color,
+                });
             },
         })
     ).value;
@@ -70,27 +82,24 @@ export async function createToDoListPopup(team) {
 // ToDoList edit
 
 export async function editToDoList(
-    teamId,
-    todolistId,
-    name,
-    description,
-    color
+    teamId: ID,
+    todolistId: ID,
+    todolist: TodolistRequestDTO
 ) {
-    return await API.POST(`teams/${teamId}/todolists/${todolistId}`, {
-        name,
-        description,
-        color,
-    }).then((data) => {
-        requestSuccessAlert(data);
-        Cache.getTeamData(teamId).todolists[data.todolist.id] = data.todolist;
-        return data.todolist;
-    });
+    return await TodolistAPI.updateTodolist(teamId, todolistId, todolist).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).todolists[data.todolist.id] =
+                data.todolist;
+            return data.todolist;
+        }
+    );
 }
 
-export async function editToDoListPopup(team, todolist) {
+export async function editToDoListPopup(team, todolist: Todolist) {
     return (
         await Swal.fire({
-            title: `To-do-Lis­te bearbeiten`,
+            title: `To-do-Liste bearbeiten`,
             html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Name:</label>
@@ -105,11 +114,15 @@ export async function editToDoListPopup(team, todolist) {
             confirmButtonText: 'Speichern',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
-                const color = document.getElementById('swal-input-color').value;
+                const name = (<HTMLInputElement>(
+                    document.getElementById('swal-input-name')
+                )).value;
+                const description = (<HTMLInputElement>(
+                    document.getElementById('swal-input-description')
+                )).value;
+                const color = (<HTMLInputElement>(
+                    document.getElementById('swal-input-color')
+                )).value;
 
                 if (!name) {
                     Swal.showValidationMessage('Bitte gib einen Namen ein!');
@@ -117,13 +130,11 @@ export async function editToDoListPopup(team, todolist) {
                 }
 
                 Swal.showLoading();
-                return await editToDoList(
-                    team.id,
-                    todolist.id,
+                return await editToDoList(team.id, todolist.id, {
                     name,
                     description,
-                    color
-                );
+                    color,
+                });
             },
         })
     ).value;
@@ -131,17 +142,20 @@ export async function editToDoListPopup(team, todolist) {
 
 // ToDoList deletion
 
-export async function deleteToDoList(teamId, todolistId) {
-    await API.DELETE(`teams/${teamId}/todolists/${todolistId}`).then((data) => {
+export async function deleteToDoList(teamId: ID, todolistId: ID) {
+    await TodolistAPI.deleteTodolist(teamId, todolistId).then((data) => {
         requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).todolists[todolistId];
     });
 }
 
-export async function deleteToDoListPopup(team, todolist) {
+export async function deleteToDoListPopup(team, todolist: Todolist) {
     await doubleConfirmAlert(
-        'Willst du folgende To-do-Lis­te wirklich löschen?<br /><br />' +
-            `<b>Name:</b> ${todolist.name} <br /><b>Beschreibung: </b>${todolist.description}`,
+        `Willst du folgende To-do-Liste wirklich löschen?<br /><br />
+            <b>Name:</b> ${todolist.name} <br />
+            <b>Beschreibung: </b>${todolist.description} <br />
+            <b>Anzahl Listeneinträge: </b>${Object.keys(todolist.items).length}
+        `,
         async () => await deleteToDoList(team.id, todolist.id)
     );
 }
@@ -149,39 +163,33 @@ export async function deleteToDoListPopup(team, todolist) {
 // ToDoListItem creation
 
 export async function createToDoListItem(
-    teamId,
-    todolistId,
-    name,
-    description
+    teamId: ID,
+    todolistId: ID,
+    item: TodolistItemRequestDTO
 ) {
-    return await API.POST(`teams/${teamId}/todolists/${todolistId}/items`, {
-        name,
-        description,
-    }).then((data) => {
-        requestSuccessAlert(data);
-        Cache.getTeamData(teamId).todolists[todolistId].items[data.id] =
-            data.item;
-        return data.item;
-    });
+    return await TodolistAPI.createTodolistItem(teamId, todolistId, item).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).todolists[todolistId].items[data.id] =
+                data.item;
+            return data.item;
+        }
+    );
 }
 
 // ToDoListItem edit
 
 export async function editToDoListItem(
-    teamId,
-    todolistId,
-    itemId,
-    name,
-    description,
-    done
+    teamId: ID,
+    todolistId: ID,
+    itemId: ID,
+    item: TodolistItemRequestDTO
 ) {
-    return await API.POST(
-        `teams/${teamId}/todolists/${todolistId}/items/${itemId}`,
-        {
-            name,
-            description,
-            done,
-        }
+    return await TodolistAPI.updateTodolistItem(
+        teamId,
+        todolistId,
+        itemId,
+        item
     ).then((data) => {
         requestSuccessAlert(data);
         Cache.getTeamData(teamId).todolists[todolistId].items[itemId] =
@@ -190,7 +198,11 @@ export async function editToDoListItem(
     });
 }
 
-export async function editToDoListItemPopup(team, todolist, item) {
+export async function editToDoListItemPopup(
+    team,
+    todolist: Todolist,
+    item: TodolistItem
+) {
     return (
         await Swal.fire({
             title: `Listeneintrag bearbeiten`,
@@ -210,11 +222,15 @@ export async function editToDoListItemPopup(team, todolist, item) {
             confirmButtonText: 'Speichern',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
-                const done = document.getElementById('swal-input-done').checked;
+                const name = (<HTMLInputElement>(
+                    document.getElementById('swal-input-name')
+                )).value;
+                const description = (<HTMLInputElement>(
+                    document.getElementById('swal-input-description')
+                )).value;
+                const done = (<HTMLInputElement>(
+                    document.getElementById('swal-input-done')
+                )).checked;
 
                 if (!name) {
                     Swal.showValidationMessage('Du musst einen Titel angeben!');
@@ -222,14 +238,11 @@ export async function editToDoListItemPopup(team, todolist, item) {
                 }
 
                 Swal.showLoading();
-                return await editToDoListItem(
-                    team.id,
-                    todolist.id,
-                    item.id,
+                return await editToDoListItem(team.id, todolist.id, item.id, {
                     name,
                     description,
-                    done
-                );
+                    done,
+                });
             },
         })
     ).value;
@@ -237,7 +250,11 @@ export async function editToDoListItemPopup(team, todolist, item) {
 
 // ToDoListItem view
 
-export async function viewToDoListItemPopup(team, todolist, item) {
+export async function viewToDoListItemPopup(
+    team,
+    todolist: Todolist,
+    item: TodolistItem
+) {
     return await Swal.fire({
         title: item.name,
         html: `
@@ -260,16 +277,26 @@ export async function viewToDoListItemPopup(team, todolist, item) {
 
 // ToDoListItem deletion
 
-export async function deleteToDoListItem(teamId, todolistId, itemId) {
-    return await API.DELETE(
-        `teams/${teamId}/todolists/${todolistId}/items/${itemId}`
+export async function deleteToDoListItem(
+    teamId: ID,
+    todolistId: ID,
+    itemId: ID
+) {
+    return await TodolistAPI.deleteTodolistItem(
+        teamId,
+        todolistId,
+        itemId
     ).then((data) => {
         requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).todolists[todolistId].items[itemId];
     });
 }
 
-export async function deleteToDoListItemPopup(team, todolist, item) {
+export async function deleteToDoListItemPopup(
+    team,
+    todolist: Todolist,
+    item: TodolistItem
+) {
     await confirmAlert(
         'Willst du folgenden Listeneintrag wirklich löschen?<br /><br />' +
             `<b>Name:</b> ${item.name} <br /><b>Beschreibung: </b>${item.description}`,

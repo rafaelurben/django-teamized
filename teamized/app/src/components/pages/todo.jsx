@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
 /**
  * Todo page component (main component at the bottom of this file)
  */
 
-import React from "react";
+import React from 'react';
 
-import {errorAlert} from "../../utils/alerts.js";
-import * as Dashboard from "../dashboard.jsx";
-import * as ToDo from "../../utils/todo.js";
-import * as Navigation from "../../utils/navigation.js";
-import * as Cache from "../../utils/cache.js";
-import {IconTooltip, Tooltip} from "../tooltips.jsx";
+import { errorAlert } from '../../utils/alerts.js';
+import * as Dashboard from '../dashboard.jsx';
+import * as ToDo from '../../utils/todo.ts';
+import * as Navigation from '../../utils/navigation.js';
+import * as Cache from '../../utils/cache.js';
+import { IconTooltip, Tooltip } from '../tooltips.jsx';
 
 class ListViewItem extends React.Component {
     constructor(props) {
@@ -23,15 +23,30 @@ class ListViewItem extends React.Component {
     }
 
     markDone() {
-        ToDo.editToDoListItem(this.props.team.id, this.props.list.id, this.props.item.id, this.props.item.name, this.props.item.description, true).then(Navigation.renderPage);
+        ToDo.editToDoListItem(
+            this.props.team.id,
+            this.props.list.id,
+            this.props.item.id,
+            {
+                done: true,
+            }
+        ).then(Navigation.renderPage);
     }
 
     viewItem() {
-        ToDo.viewToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
+        ToDo.viewToDoListItemPopup(
+            this.props.team,
+            this.props.list,
+            this.props.item
+        ).then(Navigation.renderPage);
     }
 
     deleteItem() {
-        ToDo.deleteToDoListItemPopup(this.props.team, this.props.list, this.props.item).then(Navigation.renderPage);
+        ToDo.deleteToDoListItemPopup(
+            this.props.team,
+            this.props.list,
+            this.props.item
+        ).then(Navigation.renderPage);
     }
 
     render() {
@@ -39,7 +54,10 @@ class ListViewItem extends React.Component {
             <tr>
                 <td>
                     {this.props.item.done ? (
-                        <a className="btn btn-success disabled" title="Erledigt">
+                        <a
+                            className="btn btn-success disabled"
+                            title="Erledigt"
+                        >
                             <i className="fas fa-fw fa-circle-check"></i>
                         </a>
                     ) : (
@@ -89,25 +107,29 @@ class ListView extends React.Component {
         this.state = {
             isCreating: false,
             showDone: false,
-        }
+        };
     }
 
     updateShowDone(e) {
-        this.setState({showDone: e.target.checked});
+        this.setState({ showDone: e.target.checked });
     }
 
     createItem(e) {
         e.preventDefault();
-        let name = document.getElementById("newItemName").value;
+        let name = document.getElementById('newItemName').value;
 
-        if (name === "") {
-            errorAlert("Leeres Feld", "Bitte gib einen Namen ein");
+        if (name === '') {
+            errorAlert('Leeres Feld', 'Bitte gib einen Namen ein');
         } else {
-            this.setState({isCreating: true});
-            ToDo.createToDoListItem(this.props.team.id, this.props.selectedList.id, name).then(() => {
+            this.setState({ isCreating: true });
+            ToDo.createToDoListItem(
+                this.props.team.id,
+                this.props.selectedList.id,
+                { name }
+            ).then(() => {
                 Navigation.renderPage();
-                document.getElementById("newItemName").value = "";
-                this.setState({isCreating: false});
+                document.getElementById('newItemName').value = '';
+                this.setState({ isCreating: false });
             });
         }
     }
@@ -116,7 +138,7 @@ class ListView extends React.Component {
         if (!this.props.selectedList) {
             return (
                 <p className="ms-1 mb-0">
-                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{" "}
+                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{' '}
                     {this.props.isAdmin ? (
                         <IconTooltip
                             key="admin"
@@ -137,7 +159,7 @@ class ListView extends React.Component {
             items = items.filter((item) => !item.done);
         }
 
-        let viewItems = items.map(item => {
+        let viewItems = items.map((item) => {
             return (
                 <ListViewItem
                     key={item.id}
@@ -158,51 +180,54 @@ class ListView extends React.Component {
                         id="flexSwitchCheckDefault"
                         onClick={this.updateShowDone}
                     />
-                    <label className="form-check-label ms-1" htmlFor="flexSwitchCheckDefault">
+                    <label
+                        className="form-check-label ms-1"
+                        htmlFor="flexSwitchCheckDefault"
+                    >
                         Erledigte anzeigen
                     </label>
                 </div>
 
                 <Dashboard.Table className="table-borderless">
                     <thead>
-                    <tr>
-                        <th className="p-0" style={{width: "1px"}}></th>
-                        <th className="p-0"></th>
-                        <th className="p-0" style={{width: "1px"}}></th>
-                        <th className="p-0" style={{width: "1px"}}></th>
-                        <th className="p-0 debug-only"></th>
-                    </tr>
+                        <tr>
+                            <th className="p-0" style={{ width: '1px' }}></th>
+                            <th className="p-0"></th>
+                            <th className="p-0" style={{ width: '1px' }}></th>
+                            <th className="p-0" style={{ width: '1px' }}></th>
+                            <th className="p-0 debug-only"></th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {viewItems}
-                    <tr>
-                        {/* Create item */}
-                        <td>
-                            <a className="btn btn-outline-success border-1 disabled">
-                                <i className="far fa-fw fa-circle-check"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                className="form-control"
-                                disabled={this.state.isCreating}
-                                id="newItemName"
-                                placeholder="Neues Element hinzufügen"
-                                maxLength={50}
-                            />
-                        </td>
-                        <td colSpan="2">
-                            <button
-                                type="submit"
-                                className="btn btn-success"
-                                disabled={this.state.isCreating}
-                                title="Erstellen"
-                            >
-                                <i className="fas fa-fw fa-plus"></i>
-                            </button>
-                        </td>
-                    </tr>
+                        {viewItems}
+                        <tr>
+                            {/* Create item */}
+                            <td>
+                                <a className="btn btn-outline-success border-1 disabled">
+                                    <i className="far fa-fw fa-circle-check"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    disabled={this.state.isCreating}
+                                    id="newItemName"
+                                    placeholder="Neues Element hinzufügen"
+                                    maxLength={50}
+                                />
+                            </td>
+                            <td colSpan="2">
+                                <button
+                                    type="submit"
+                                    className="btn btn-success"
+                                    disabled={this.state.isCreating}
+                                    title="Erstellen"
+                                >
+                                    <i className="fas fa-fw fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </Dashboard.Table>
             </form>
@@ -224,13 +249,13 @@ class ListSelectorRow extends React.Component {
 
     getStyle() {
         return {
-            paddingLeft: this.props.isSelected ? ".5rem" : "calc(.5rem + 3px)",
-            borderLeftWidth: this.props.isSelected ? "8px" : "5px",
+            paddingLeft: this.props.isSelected ? '.5rem' : 'calc(.5rem + 3px)',
+            borderLeftWidth: this.props.isSelected ? '8px' : '5px',
             borderLeftColor: this.props.todolist.color,
-            borderLeftStyle: "solid",
-            cursor: "pointer",
+            borderLeftStyle: 'solid',
+            cursor: 'pointer',
             opacity: this.props.isSelected ? 1 : 0.75,
-            fontWeight: this.props.isSelected ? "bold" : "normal",
+            fontWeight: this.props.isSelected ? 'bold' : 'normal',
         };
     }
 
@@ -241,7 +266,9 @@ class ListSelectorRow extends React.Component {
                 style={this.getStyle()}
                 onClick={this.handleSelect}
             >
-                <span className="d-inline-block w-100">{this.props.todolist.name}</span>
+                <span className="d-inline-block w-100">
+                    {this.props.todolist.name}
+                </span>
             </div>
         );
     }
@@ -323,12 +350,11 @@ class ListInfo extends React.Component {
     }
 
     deleteList() {
-        ToDo.deleteToDoListPopup(
-            this.props.team,
-            this.props.selectedList
-        ).then(() => {
-            this.props.onListSelect(null);
-        });
+        ToDo.deleteToDoListPopup(this.props.team, this.props.selectedList).then(
+            () => {
+                this.props.onListSelect(null);
+            }
+        );
     }
 
     render() {
@@ -336,13 +362,17 @@ class ListInfo extends React.Component {
         if (todolist === undefined) {
             return (
                 <p className="ms-1 mb-0">
-                    Im ausgewählten Team ist noch keine To-do-Lis­te vorhanden.{" "}
+                    Im ausgewählten Team ist noch keine To-do-Lis­te vorhanden.{' '}
                     {this.props.isAdmin ? (
-                        <IconTooltip key="admin"
-                                     title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
+                        <IconTooltip
+                            key="admin"
+                            title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+                        ></IconTooltip>
                     ) : (
-                        <IconTooltip key="noadmin"
-                                     title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></IconTooltip>
+                        <IconTooltip
+                            key="noadmin"
+                            title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."
+                        ></IconTooltip>
                     )}
                 </p>
             );
@@ -384,29 +414,31 @@ class ListInfo extends React.Component {
         return (
             <Dashboard.Table vertical={true}>
                 <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{todolist.name}</td>
-                </tr>
-                <tr>
-                    <th style={{width: "1px"}} className="pe-3">
-                        Beschreibung:
-                    </th>
-                    <td style={{whiteSpace: "pre-line"}}>{todolist.description}</td>
-                </tr>
-                <tr>
-                    <th>Farbe:</th>
-                    <td>
-                        <i
-                            style={{color: todolist.color}}
-                            className="fas fa-circle small"
-                        ></i>
-                    </td>
-                </tr>
-                <tr className="debug-only">
-                    <th>ID:</th>
-                    <td>{todolist.id}</td>
-                </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td>{todolist.name}</td>
+                    </tr>
+                    <tr>
+                        <th style={{ width: '1px' }} className="pe-3">
+                            Beschreibung:
+                        </th>
+                        <td style={{ whiteSpace: 'pre-line' }}>
+                            {todolist.description}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Farbe:</th>
+                        <td>
+                            <i
+                                style={{ color: todolist.color }}
+                                className="fas fa-circle small"
+                            ></i>
+                        </td>
+                    </tr>
+                    <tr className="debug-only">
+                        <th>ID:</th>
+                        <td>{todolist.id}</td>
+                    </tr>
                 </tbody>
                 <Dashboard.TableButtonFooter notopborder={true}>
                     {listPanelButtons}
@@ -425,7 +457,7 @@ export default class Page_ToDo extends React.Component {
     }
 
     handleListSelect(listId) {
-        this.setState({selectedListId: listId});
+        this.setState({ selectedListId: listId });
     }
 
     ensureValidListId() {
@@ -437,10 +469,10 @@ export default class Page_ToDo extends React.Component {
 
         if (!isValid && hasList) {
             // If the current todolist is invalid and there are todolists, select the first one.
-            this.setState({selectedListId: listIds[0]});
+            this.setState({ selectedListId: listIds[0] });
         } else if (!isValid && this.state.selectedListId !== null) {
             // If the current todolist is set but there are no todolists, select null.
-            this.setState({selectedListId: null});
+            this.setState({ selectedListId: null });
         }
     }
 
@@ -454,13 +486,14 @@ export default class Page_ToDo extends React.Component {
 
     render() {
         if (Cache.getCurrentTeamData()._state.todolists._initial) {
-            Cache.refreshTeamCacheCategory(this.props.team.id, "todolists");
+            Cache.refreshTeamCacheCategory(this.props.team.id, 'todolists');
         }
         // if (Cache.getCurrentTeamData()._state.todolists._initial) {
         //   Cache.refreshTeamCacheCategory(this.props.team.id, "members");
         // }
 
-        let selectedList = Cache.getCurrentTeamData().todolists[this.state.selectedListId];
+        let selectedList =
+            Cache.getCurrentTeamData().todolists[this.state.selectedListId];
 
         return (
             <Dashboard.Page
@@ -468,7 +501,7 @@ export default class Page_ToDo extends React.Component {
                 subtitle="Behalte den Überblick über die Aufgaben deines Teams"
                 loading={Cache.getCurrentTeamData()._state.todolists._initial}
             >
-                <Dashboard.Column sizes={{lg: 4}}>
+                <Dashboard.Column sizes={{ lg: 4 }}>
                     <Dashboard.Tile
                         title="Listenübersicht"
                         help="Wechsle zwischen den To-do-Lis­ten deines Teams oder erstelle eine neue."
@@ -495,8 +528,14 @@ export default class Page_ToDo extends React.Component {
                         />
                     </Dashboard.Tile>
                 </Dashboard.Column>
-                <Dashboard.Column sizes={{lg: 8}}>
-                    <Dashboard.Tile title={selectedList ? "To-do-Lis­te: " + selectedList.name : "To-do-Lis­te"}>
+                <Dashboard.Column sizes={{ lg: 8 }}>
+                    <Dashboard.Tile
+                        title={
+                            selectedList
+                                ? 'To-do-Lis­te: ' + selectedList.name
+                                : 'To-do-Lis­te'
+                        }
+                    >
                         <ListView
                             team={this.props.team}
                             selectedListId={this.state.selectedListId}
