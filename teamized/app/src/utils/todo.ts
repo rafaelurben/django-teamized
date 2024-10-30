@@ -2,12 +2,11 @@
  * Functions used in the todo module
  */
 
-import Swal from 'sweetalert2';
-
 import {
     confirmAlert,
     doubleConfirmAlert,
     requestSuccessAlert,
+    Swal,
 } from './alerts.js';
 import * as Cache from './cache.js';
 import { getDateString } from './datetime';

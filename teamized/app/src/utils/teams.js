@@ -7,7 +7,7 @@ import {
     confirmAlert,
     infoAlert,
     doubleConfirmAlert,
-    errorAlert,
+    Swal,
 } from './alerts.js';
 import * as API from './api.js';
 import { isoFormat, localInputFormat } from './datetime.ts';

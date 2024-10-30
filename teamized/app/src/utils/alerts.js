@@ -3,6 +3,10 @@
  * https://sweetalert2.github.io/
  */
 
+import Swal, { SweetAlertOptions } from 'sweetalert2/dist/sweetalert2';
+
+export { Swal, SweetAlertOptions };
+
 /**
  * Create a alert based on a failed ajax request
  *

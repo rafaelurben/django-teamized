@@ -2,9 +2,9 @@
  * API utils
  */
 
-import $ from "jquery";
+import $ from 'jquery';
 
-import {ajaxRequestErrorAlert} from "./alerts.js";
+import { ajaxRequestErrorAlert } from './alerts.js';
 
 /**
  * Base request method for all ajax requests
@@ -23,33 +23,33 @@ export function request(method, endpoint, data, ...opts) {
             data: data,
             success: resolve,
             error: (e) => {
-                if (!opts.includes("no-error-handling")) {
+                if (!opts.includes('no-error-handling')) {
                     ajaxRequestErrorAlert(e);
                 }
                 reject(e);
             },
-            ...opts
+            ...opts,
         });
-    })
+    });
 }
 
 /**
  * Shortcut for request("GET", endpoint, data, ...opts)
  */
 export async function GET(endpoint, data, ...opts) {
-    return await request("GET", endpoint, data, ...opts);
+    return await request('GET', endpoint, data, ...opts);
 }
 
 /**
  * Shortcut for request("POST", endpoint, data, ...opts)
  */
 export async function POST(endpoint, data, ...opts) {
-    return await request("POST", endpoint, data, ...opts);
+    return await request('POST', endpoint, data, ...opts);
 }
 
 /**
  * Shortcut for request("DELETE", endpoint, data, ...opts)
  */
 export async function DELETE(endpoint, data, ...opts) {
-    return await request("DELETE", endpoint, data, ...opts);
+    return await request('DELETE', endpoint, data, ...opts);
 }

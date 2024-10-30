@@ -19,7 +19,8 @@
     "babel-loader": "9.2.1",
     "prettier": "3.3.3",
     "webpack": "5.95.0",
-    "webpack-cli": "5.1.4"
+    "webpack-cli": "5.1.4",
+    "sweetalert2": "11.14.4"
   },
   "dependencies": {
     "@types/react": "18.3.12",
@@ -28,7 +29,6 @@
     "jquery": "3.7.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "recharts": "2.13.0",
-    "sweetalert2": "11.14.4"
+    "recharts": "2.13.0"
   }
 }

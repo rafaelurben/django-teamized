@@ -7,6 +7,7 @@ import {
     waitingAlert,
     requestSuccessAlert,
     confirmAlert,
+    Swal,
 } from './alerts.js';
 import * as API from './api.js';
 import * as Cache from './cache.js';

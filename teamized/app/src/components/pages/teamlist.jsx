@@ -1,21 +1,22 @@
-"use strict";
+'use strict';
 
 /**
  * Teamlist page component (main component at the end of this file)
  */
 
-import React from "react";
+import React from 'react';
 
-import {waitingAlert} from "../../utils/alerts.js";
-import * as Teams from "../../utils/teams.js";
-import * as Navigation from "../../utils/navigation.js";
-import * as Dashboard from "../dashboard.jsx";
-import {IconTooltip} from "../tooltips.jsx";
+import { waitingAlert } from '../../utils/alerts.js';
+import * as Teams from '../../utils/teams.js';
+import * as Navigation from '../../utils/navigation.js';
+import * as Dashboard from '../dashboard.jsx';
+import { IconTooltip } from '../tooltips.jsx';
 
 class TeamTableRow extends React.Component {
     constructor(props) {
         super(props);
-        this.handleSwitchToButtonClick = this.handleSwitchToButtonClick.bind(this);
+        this.handleSwitchToButtonClick =
+            this.handleSwitchToButtonClick.bind(this);
         this.handleManageButtonClick = this.handleManageButtonClick.bind(this);
         this.handleLeaveButtonClick = this.handleLeaveButtonClick.bind(this);
         this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
@@ -27,7 +28,7 @@ class TeamTableRow extends React.Component {
 
     handleManageButtonClick() {
         Teams.switchTeam(this.props.team.id);
-        Navigation.selectPage("team");
+        Navigation.selectPage('team');
     }
 
     handleLeaveButtonClick() {
@@ -48,7 +49,7 @@ class TeamTableRow extends React.Component {
                 {/* Name and description */}
                 <td className="py-2">
                     <span>{this.props.team.name}</span>
-                    <br className="d-none d-lg-inline-block"/>
+                    <br className="d-none d-lg-inline-block" />
                     <i className="d-none d-lg-inline-block">
                         {this.props.team.description}
                     </i>
@@ -70,7 +71,10 @@ class TeamTableRow extends React.Component {
                     </td>
                 ) : (
                     <td>
-                        <a className="btn btn-success disabled" title="Ausgewählt">
+                        <a
+                            className="btn btn-success disabled"
+                            title="Ausgewählt"
+                        >
                             <i className="fas fa-fw fa-circle-check"></i>
                         </a>
                     </td>
@@ -132,19 +136,27 @@ export default class Page_TeamList extends React.Component {
     }
 
     joinTeam() {
-        let tokeninput = document.getElementById("invite-token");
+        let tokeninput = document.getElementById('invite-token');
         let token = tokeninput.value;
 
-        waitingAlert("Einladung wird geprüft...")
+        waitingAlert('Einladung wird geprüft...');
         Teams.checkInvitePopup(token);
     }
 
     render() {
         let rows = this.props.teams.map((team) => {
-            return <TeamTableRow key={team.id} team={team} selectedTeamId={this.props.selectedTeamId}/>;
+            return (
+                <TeamTableRow
+                    key={team.id}
+                    team={team}
+                    selectedTeamId={this.props.selectedTeamId}
+                />
+            );
         });
 
-        const prefilledInviteToken = new URL(window.location.href).searchParams.get("invite", "");
+        const prefilledInviteToken = new URL(
+            window.location.href
+        ).searchParams.get('invite', '');
 
         return (
             <Dashboard.Page
@@ -155,28 +167,40 @@ export default class Page_TeamList extends React.Component {
                     <Dashboard.Tile title="Teamübersicht">
                         <Dashboard.Table>
                             <thead>
-                            <tr>
-                                <th className="text-center" style={{width: "1px"}}>
-                                    <IconTooltip icon="fa-solid fa-fw fa-users" title="Anzahl Mitglieder"/>
-                                </th>
-                                <th>
-                                    <span>Name </span>
-                                    <span className="d-none d-lg-inline-block">&amp; Beschreibung</span>
-                                </th>
-                                <th>Deine Rolle</th>
-                                <th style={{width: "1px"}}></th>
-                                <th style={{width: "1px"}}></th>
-                                <th style={{width: "1px"}}></th>
-                                <th className="debug-only">ID</th>
-                            </tr>
+                                <tr>
+                                    <th
+                                        className="text-center"
+                                        style={{ width: '1px' }}
+                                    >
+                                        <IconTooltip
+                                            icon="fa-solid fa-fw fa-users"
+                                            title="Anzahl Mitglieder"
+                                        />
+                                    </th>
+                                    <th>
+                                        <span>Name </span>
+                                        <span className="d-none d-lg-inline-block">
+                                            &amp; Beschreibung
+                                        </span>
+                                    </th>
+                                    <th>Deine Rolle</th>
+                                    <th style={{ width: '1px' }}></th>
+                                    <th style={{ width: '1px' }}></th>
+                                    <th style={{ width: '1px' }}></th>
+                                    <th className="debug-only">ID</th>
+                                </tr>
                             </thead>
                             <tbody>{rows}</tbody>
                         </Dashboard.Table>
                     </Dashboard.Tile>
 
                     <Dashboard.Tile title="Team erstellen oder beitreten">
-                        <p className="mx-1">Klicke auf "Team erstellen", um ein neues Team zu erstellen oder gib einen
-                            Einladungstoken ein und klicke auf "Team beitreten", um einem Team beizutreten.</p>
+                        <p className="mx-1">
+                            Klicke auf "Team erstellen", um ein neues Team zu
+                            erstellen oder gib einen Einladungstoken ein und
+                            klicke auf "Team beitreten", um einem Team
+                            beizutreten.
+                        </p>
                         <div className="input-group my-2 px-1">
                             <button
                                 type="button"

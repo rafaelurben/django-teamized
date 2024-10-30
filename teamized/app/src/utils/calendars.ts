@@ -3,12 +3,12 @@
  */
 
 import * as $ from 'jquery';
-import Swal from 'sweetalert2';
 
 import {
     requestSuccessAlert,
     doubleConfirmAlert,
     confirmAlert,
+    Swal,
 } from './alerts.js';
 import * as Cache from './cache.js';
 import { roundDays, isInRange, isoFormat, localInputFormat } from './datetime';
