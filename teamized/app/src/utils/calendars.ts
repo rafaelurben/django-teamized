@@ -1,0 +1,621 @@
+/**
+ * Functions used in the calendar module
+ */
+
+import * as $ from 'jquery';
+import Swal from 'sweetalert2';
+
+import {
+    requestSuccessAlert,
+    doubleConfirmAlert,
+    confirmAlert,
+} from './alerts.js';
+import * as Cache from './cache.js';
+import { roundDays, isInRange, isoFormat, localInputFormat } from './datetime';
+import * as CalendarAPI from '../api/calendar';
+import {
+    CalendarEvent,
+    CalendarEventRequestDTO,
+} from '../interfaces/calendar/calendarEvent';
+import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
+import { ID } from '../interfaces/common';
+
+// Reexport so that datetime.js functions can also be imported from calendars.js
+export * from './datetime';
+
+// Calendar utils
+
+/**
+ * Check whether a date is during an event
+ *
+ * @param {Date} date
+ * @param {object} evt the event object
+ * @returns {Boolean}
+ */
+export function isDateInEvent(date: Date, evt: CalendarEvent): boolean {
+    let evtStart: Date;
+    let evtEnd: Date;
+    if (evt.fullday) {
+        // roundDays() for full-day events is used to avoid issues with timezones
+        evtStart = roundDays(new Date(evt.dstart));
+        evtEnd = roundDays(new Date(evt.dend));
+    } else {
+        evtStart = roundDays(new Date(evt.dtstart));
+        evtEnd = new Date(evt.dtend);
+    }
+    return isInRange(date, evtStart, evtEnd);
+}
+
+/**
+ * Flattens an object of calendars into a map of events
+ * (e.g. merge events from all calendars into a single map)
+ *
+ * @param {Array} calendars
+ * @returns {object}
+ */
+export function flattenCalendarEvents(calendars: Calendar[]): {
+    [key: ID]: CalendarEvent;
+} {
+    let events: { [key: ID]: CalendarEvent } = {};
+    Object.values(calendars).forEach((calendar) => {
+        Object.values(calendar.events).forEach((evt) => {
+            events[evt.id] = {
+                ...evt,
+                calendar: calendar,
+            };
+        });
+    });
+    return events;
+}
+
+/**
+ * Filter an array of events by a date
+ *
+ * @param {Array} events
+ * @param {Date} date
+ * @returns {Array}
+ */
+export function filterCalendarEventsByDate(
+    events: CalendarEvent[],
+    date: Date
+): Array<any> {
+    return events.filter((event) => {
+        return isDateInEvent(date, event);
+    });
+}
+
+// Calendar list
+
+export async function getCalendars(teamId: ID) {
+    return await Cache.refreshTeamCacheCategory(teamId, 'calendars');
+}
+
+// Calendar creation
+
+export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
+    return await CalendarAPI.createCalendar(teamId, calendar).then((data) => {
+        requestSuccessAlert(data);
+        Cache.getTeamData(teamId).calendars[data.calendar.id] = data.calendar;
+        return data.calendar;
+    });
+}
+
+export async function createCalendarPopup(team) {
+    return (
+        await Swal.fire({
+            title: `Kalender erstellen`,
+            html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="Kalendername">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="Kalenderbeschreibung"></textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color">
+        `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Erstellen',
+            cancelButtonText: 'Abbrechen',
+            preConfirm: async () => {
+                const name = (<HTMLInputElement>(
+                    document.getElementById('swal-input-name')
+                )).value;
+                const description = (<HTMLInputElement>(
+                    document.getElementById('swal-input-description')
+                )).value;
+                const color = (<HTMLInputElement>(
+                    document.getElementById('swal-input-color')
+                )).value;
+
+                if (!name) {
+                    Swal.showValidationMessage('Bitte gib einen Namen ein');
+                    return false;
+                }
+
+                Swal.showLoading();
+                return await createCalendar(team.id, {
+                    name,
+                    description,
+                    color,
+                });
+            },
+        })
+    ).value;
+}
+
+// Calendar edit
+
+export async function editCalendar(
+    teamId: ID,
+    calendarId: ID,
+    calendar: CalendarRequestDTO
+) {
+    return await CalendarAPI.updateCalendar(teamId, calendarId, calendar).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).calendars[data.calendar.id] =
+                data.calendar;
+            return data.calendar;
+        }
+    );
+}
+
+export async function editCalendarPopup(team, calendar: Calendar) {
+    return (
+        await Swal.fire({
+            title: `Kalender bearbeiten`,
+            html: `
+            <p>Team: ${team.name}</p><hr />
+            <label class="swal2-input-label" for="swal-input-name">Name:</label>
+            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">
+            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>
+            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
+            <input type="color" id="swal-input-color" class="swal2-input form-control-color" value="${calendar.color}">
+        `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Speichern',
+            cancelButtonText: 'Abbrechen',
+            preConfirm: async () => {
+                const name = (<HTMLInputElement>(
+                    document.getElementById('swal-input-name')
+                )).value;
+                const description = (<HTMLInputElement>(
+                    document.getElementById('swal-input-description')
+                )).value;
+                const color = (<HTMLInputElement>(
+                    document.getElementById('swal-input-color')
+                )).value;
+
+                if (!name) {
+                    Swal.showValidationMessage('Bitte gib einen Namen ein!');
+                    return false;
+                }
+
+                Swal.showLoading();
+                return await editCalendar(team.id, calendar.id, {
+                    name,
+                    description,
+                    color,
+                });
+            },
+        })
+    ).value;
+}
+
+// Calendar deletion
+
+export async function deleteCalendar(teamId: ID, calendarId: ID) {
+    await CalendarAPI.deleteCalendar(teamId, calendarId).then((data) => {
+        requestSuccessAlert(data);
+        delete Cache.getTeamData(teamId).calendars[calendarId];
+    });
+}
+
+export async function deleteCalendarPopup(team, calendar: Calendar) {
+    console.log(calendar);
+    await doubleConfirmAlert(
+        `Willst du folgenden Kalender wirklich löschen?<br /><br />
+            <b>Name:</b> ${calendar.name} <br />
+            <b>Beschreibung: </b>${calendar.description} <br />
+            <b>Anzahl Events: </b>${Object.keys(calendar.events).length}
+        `,
+        async () => await deleteCalendar(team.id, calendar.id)
+    );
+}
+
+// Event SWAL utils
+
+function _updateFullDayToggle(noDateUpdate: boolean = false) {
+    const fullDay = <boolean>$('#swal-input-fullday').prop('checked');
+    if (fullDay) {
+        $('.fullday-only').show();
+        $('.partday-only').hide();
+        if (!noDateUpdate) {
+            $('#swal-input-dstart').val(
+                localInputFormat(<string>$('#swal-input-dtstart').val(), true)
+            );
+            $('#swal-input-dend').val(
+                localInputFormat(<string>$('#swal-input-dtend').val(), true)
+            );
+        }
+    } else {
+        $('.fullday-only').hide();
+        $('.partday-only').show();
+        if (!noDateUpdate) {
+            $('#swal-input-dtstart').val(
+                localInputFormat(
+                    isoFormat(<string>$('#swal-input-dstart').val()),
+                    false
+                )
+            );
+            $('#swal-input-dtend').val(
+                localInputFormat(
+                    isoFormat(<string>$('#swal-input-dend').val()),
+                    false
+                )
+            );
+        }
+    }
+}
+
+// Event creation
+
+export async function createEvent(
+    teamId: ID,
+    calendarId: ID,
+    event: CalendarEventRequestDTO
+) {
+    return await CalendarAPI.createEvent(teamId, calendarId, event).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).calendars[calendarId].events[data.id] =
+                data.event;
+            return data.event;
+        }
+    );
+}
+
+export function createEventPopup(
+    team,
+    date: Date,
+    calendars: Calendar[],
+    selectedCalendarId: ID
+) {
+    return new Promise((resolve, reject) => {
+        let _dt = localInputFormat(date);
+        let _d = localInputFormat(date, true);
+        Swal.fire({
+            title: `Ereignis erstellen`,
+            html: `
+                <p>Team: ${team.name}</p><hr />
+                <label class="swal2-input-label" for="swal-input-calendar">Kalender:</label>
+                <select id="swal-input-calendar" class="swal2-input swal2-select"></select><hr />
+                <label class="swal2-input-label" for="swal-input-name">Name:</label>
+                <input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">
+                <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+                <textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>
+                <label class="swal2-input-label" for="swal-input-location">Ort:</label>
+                <input type="text" id="swal-input-location" class="swal2-input" placeholder="Ort">
+                <label for="swal-input-fullday" class="swal2-checkbox d-flex">
+                    <input type="checkbox" value="0" id="swal-input-fullday">
+                    <span class="swal2-label">Ganztägig</span>
+                </label><hr />
+                <label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>
+                <input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${_d}">
+                <label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>
+                <input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${_d}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>
+                <input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${_dt}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>
+                <input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${_dt}">
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Erstellen',
+            cancelButtonText: 'Abbrechen',
+            didOpen: () => {
+                _updateFullDayToggle(true);
+                $('#swal-input-fullday').on('change', () =>
+                    _updateFullDayToggle()
+                );
+                $('#swal-input-calendar').html(
+                    Object.entries(calendars)
+                        .map(
+                            ([calId, calendar]) => `
+                            <option value="${calId}">
+                                ${calendar.name}
+                            </option>
+                        `
+                        )
+                        .join('')
+                );
+                $('#swal-input-calendar').val(selectedCalendarId);
+            },
+            preConfirm: async () => {
+                let calendarId = <ID>$('#swal-input-calendar').val();
+                let name = <string>$('#swal-input-name').val();
+                let description = <string>$('#swal-input-description').val();
+                let location = <string>$('#swal-input-location').val();
+                let fullday = <boolean>$('#swal-input-fullday').prop('checked');
+
+                if (!name) {
+                    Swal.showValidationMessage('Es wird ein Name benötigt!');
+                    return false;
+                }
+
+                if (fullday) {
+                    let dstart = <string>$('#swal-input-dstart').val();
+                    let dend = <string>$('#swal-input-dend').val();
+
+                    if (!dstart || !dend) {
+                        Swal.showValidationMessage(
+                            'Start- und Enddatum sind Pflichtfelder!'
+                        );
+                        return false;
+                    }
+                    if (new Date(dstart) > new Date(dend)) {
+                        Swal.showValidationMessage(
+                            'Startdatum muss vor dem Enddatum liegen!'
+                        );
+                        return false;
+                    }
+
+                    let newEvent: CalendarEventRequestDTO = {
+                        name,
+                        description,
+                        location,
+                        fullday: true,
+                        dstart,
+                        dend,
+                        dtstart: null,
+                        dtend: null,
+                    };
+
+                    Swal.showLoading();
+                    await createEvent(team.id, calendarId, newEvent).then(
+                        resolve,
+                        reject
+                    );
+                } else {
+                    let dtstart = <string>$('#swal-input-dtstart').val();
+                    let dtend = <string>$('#swal-input-dtend').val();
+
+                    if (!dtstart || !dtend) {
+                        Swal.showValidationMessage(
+                            'Start- und Endzeit sind Pflichtfelder!'
+                        );
+                        return false;
+                    }
+                    if (new Date(dtstart) > new Date(dtend)) {
+                        Swal.showValidationMessage(
+                            'Startdatum muss vor dem Enddatum liegen!'
+                        );
+                        return false;
+                    }
+
+                    let newEvent: CalendarEventRequestDTO = {
+                        name,
+                        description,
+                        location,
+                        fullday: false,
+                        dstart: null,
+                        dend: null,
+                        dtstart: isoFormat(dtstart),
+                        dtend: isoFormat(dtend),
+                    };
+
+                    Swal.showLoading();
+                    await createEvent(team.id, calendarId, newEvent).then(
+                        resolve,
+                        reject
+                    );
+                }
+            },
+        });
+    });
+}
+
+// Event edit
+
+export async function editEvent(
+    teamId: ID,
+    calendarId: ID,
+    eventId: ID,
+    event: CalendarEventRequestDTO
+) {
+    return await CalendarAPI.updateEvent(
+        teamId,
+        calendarId,
+        eventId,
+        event
+    ).then((data) => {
+        requestSuccessAlert(data);
+        Cache.getTeamData(teamId).calendars[calendarId].events[eventId] =
+            data.event;
+        return data.event;
+    });
+}
+
+export function editEventPopup(
+    team,
+    calendar: Calendar,
+    event: CalendarEvent,
+    makeCopy = false
+) {
+    console.log(team, calendar, event);
+    return new Promise((resolve, reject) => {
+        let dstart: string;
+        let dend: string;
+        let dtstart: string;
+        let dtend: string;
+
+        if (event.fullday) {
+            dstart = localInputFormat(event.dstart, true);
+            dend = localInputFormat(event.dend, true);
+        } else {
+            dtstart = localInputFormat(event.dtstart);
+            dtend = localInputFormat(event.dtend);
+        }
+
+        Swal.fire({
+            title: makeCopy ? 'Ereignis kopieren' : 'Ereignis bearbeiten',
+            html: `
+                <p>Team: ${team.name}</p>
+                <p>Kalender: ${calendar.name}</p><hr />
+                <label class="swal2-input-label" for="swal-input-name">Name:</label>
+                <input type="text" id="swal-input-name" class="swal2-input" placeholder="${event.name}" value="${event.name}">
+                <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+                <textarea id="swal-input-description" class="swal2-textarea" placeholder="${event.description}">${event.description}</textarea>
+                <label class="swal2-input-label" for="swal-input-location">Ort:</label>
+                <input type="text" id="swal-input-location" class="swal2-input" placeholder="${event.location}" value="${event.location}">
+                <label for="swal-input-fullday" class="swal2-checkbox d-flex">
+                    <input type="checkbox" ${event.fullday ? 'checked' : ''} id="swal-input-fullday">
+                    <span class="swal2-label">Ganztägig</span>
+                </label><hr />
+                <label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>
+                <input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${dstart}">
+                <label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>
+                <input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${dend}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>
+                <input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${dtstart}">
+                <label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>
+                <input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: makeCopy ? 'Kopie erstellen' : 'Speichern',
+            cancelButtonText: 'Abbrechen',
+            didOpen: () => {
+                _updateFullDayToggle(true);
+                $('#swal-input-fullday').on('change', () =>
+                    _updateFullDayToggle()
+                );
+            },
+            preConfirm: async () => {
+                let name = <string>$('#swal-input-name').val();
+                let description = <string>$('#swal-input-description').val();
+                let location = <string>$('#swal-input-location').val();
+                let fullday = <boolean>$('#swal-input-fullday').prop('checked');
+
+                if (!name) {
+                    Swal.showValidationMessage('Es wird ein Name benötigt!');
+                    return false;
+                }
+
+                if (fullday) {
+                    let dstart = <string>$('#swal-input-dstart').val();
+                    let dend = <string>$('#swal-input-dend').val();
+
+                    if (!dstart || !dend) {
+                        Swal.showValidationMessage(
+                            'Start- und Enddatum sind Pflichtfelder!'
+                        );
+                        return false;
+                    }
+                    if (new Date(dstart) > new Date(dend)) {
+                        Swal.showValidationMessage(
+                            'Startdatum muss vor dem Enddatum liegen!'
+                        );
+                        return false;
+                    }
+
+                    let newEvent: CalendarEventRequestDTO = {
+                        name,
+                        description,
+                        location,
+                        fullday: true,
+                        dstart,
+                        dend,
+                        dtstart: null,
+                        dtend: null,
+                    };
+
+                    Swal.showLoading();
+                    if (makeCopy) {
+                        await createEvent(team.id, calendar.id, newEvent).then(
+                            resolve,
+                            reject
+                        );
+                    } else {
+                        await editEvent(
+                            team.id,
+                            calendar.id,
+                            event.id,
+                            newEvent
+                        ).then(resolve, reject);
+                    }
+                } else {
+                    let dtstart = <string>$('#swal-input-dtstart').val();
+                    let dtend = <string>$('#swal-input-dtend').val();
+
+                    if (!dtstart || !dtend) {
+                        Swal.showValidationMessage(
+                            'Start- und Endzeit sind Pflichtfelder!'
+                        );
+                        return false;
+                    }
+                    if (new Date(dtstart) > new Date(dtend)) {
+                        Swal.showValidationMessage(
+                            'Startdatum muss vor dem Enddatum liegen!'
+                        );
+                        return false;
+                    }
+
+                    let newEvent: CalendarEventRequestDTO = {
+                        name,
+                        description,
+                        location,
+                        fullday: false,
+                        dstart: null,
+                        dend: null,
+                        dtstart: isoFormat(dtstart),
+                        dtend: isoFormat(dtend),
+                    };
+
+                    Swal.showLoading();
+                    if (makeCopy) {
+                        await createEvent(team.id, calendar.id, newEvent).then(
+                            resolve,
+                            reject
+                        );
+                    } else {
+                        await editEvent(
+                            team.id,
+                            calendar.id,
+                            event.id,
+                            newEvent
+                        ).then(resolve, reject);
+                    }
+                }
+            },
+        });
+    });
+}
+
+// Event deletion
+
+export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
+    return await CalendarAPI.deleteEvent(teamId, calendarId, eventId).then(
+        (data) => {
+            requestSuccessAlert(data);
+            delete Cache.getTeamData(teamId).calendars[calendarId].events[
+                eventId
+            ];
+        }
+    );
+}
+
+export async function deleteEventPopup(
+    team,
+    calendar: Calendar,
+    event: CalendarEvent
+) {
+    await confirmAlert(
+        'Willst du folgendes Ereignis wirklich löschen?<br /><br />' +
+            `<b>Name:</b> ${event.name} <br /><b>Beschreibung: </b>${event.description}`,
+        async () => await deleteEvent(team.id, calendar.id, event.id)
+    );
+}

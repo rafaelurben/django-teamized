@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
 /**
  * Calendar page component (main component at the end of this file)
  */
 
-import React from "react";
+import React from 'react';
 
-import * as Calendars from "../../utils/calendars.js";
-import * as Cache from "../../utils/cache.js";
-import * as Navigation from "../../utils/navigation.js";
+import * as Calendars from '../../utils/calendars.ts';
+import * as Cache from '../../utils/cache.js';
+import * as Navigation from '../../utils/navigation.js';
 
-import * as Dashboard from "../dashboard.jsx";
-import {IconTooltip, Tooltip} from "../tooltips.jsx";
+import * as Dashboard from '../dashboard.jsx';
+import { IconTooltip, Tooltip } from '../tooltips.jsx';
 
-const WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 
 class CalendarSelectorRow extends React.Component {
     constructor(props) {
@@ -29,13 +29,13 @@ class CalendarSelectorRow extends React.Component {
 
     getStyle() {
         return {
-            paddingLeft: this.props.isSelected ? ".5rem" : "calc(.5rem + 3px)",
-            borderLeftWidth: this.props.isSelected ? "8px" : "5px",
+            paddingLeft: this.props.isSelected ? '.5rem' : 'calc(.5rem + 3px)',
+            borderLeftWidth: this.props.isSelected ? '8px' : '5px',
             borderLeftColor: this.props.calendar.color,
-            borderLeftStyle: "solid",
-            cursor: "pointer",
+            borderLeftStyle: 'solid',
+            cursor: 'pointer',
             opacity: this.props.isSelected ? 1 : 0.75,
-            fontWeight: this.props.isSelected ? "bold" : "normal",
+            fontWeight: this.props.isSelected ? 'bold' : 'normal',
         };
     }
 
@@ -46,12 +46,13 @@ class CalendarSelectorRow extends React.Component {
                 style={this.getStyle()}
                 onClick={this.handleSelect}
             >
-                <span className="d-inline-block w-100">{this.props.calendar.name}</span>
+                <span className="d-inline-block w-100">
+                    {this.props.calendar.name}
+                </span>
             </div>
         );
     }
 }
-
 
 class CalendarSelector extends React.Component {
     constructor(props) {
@@ -125,23 +126,27 @@ class CalendarInfo extends React.Component {
     }
 
     editCalendar() {
-        Calendars.editCalendarPopup(this.props.team, this.props.selectedCalendar).then(
-            Navigation.renderPage
-        );
+        Calendars.editCalendarPopup(
+            this.props.team,
+            this.props.selectedCalendar
+        ).then(Navigation.renderPage);
     }
 
     deleteCalendar() {
-        Calendars.deleteCalendarPopup(this.props.team, this.props.selectedCalendar).then(() => {
+        Calendars.deleteCalendarPopup(
+            this.props.team,
+            this.props.selectedCalendar
+        ).then(() => {
             this.props.onCalendarSelect(null);
         });
     }
 
     subscriptionPopup() {
         const httpurl = this.props.selectedCalendar.ics_url;
-        const webcalurl = "webcal://" + httpurl.split("//")[1];
+        const webcalurl = 'webcal://' + httpurl.split('//')[1];
 
         Swal.fire({
-            title: "Kalender abonnieren",
+            title: 'Kalender abonnieren',
             html: `
         Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
         <hr><h5>1) Webcal-Link</h5>
@@ -156,7 +161,7 @@ class CalendarInfo extends React.Component {
       `,
             showCancelButton: true,
             showConfirmButton: false,
-            cancelButtonText: "Schliessen",
+            cancelButtonText: 'Schliessen',
         });
     }
 
@@ -165,7 +170,7 @@ class CalendarInfo extends React.Component {
         if (calendar === undefined) {
             return (
                 <p className="ms-1 mb-0">
-                    Im ausgewählten Team ist noch kein Kalender vorhanden.{" "}
+                    Im ausgewählten Team ist noch kein Kalender vorhanden.{' '}
                     {this.props.isAdmin ? (
                         <IconTooltip
                             key="admin"
@@ -205,7 +210,10 @@ class CalendarInfo extends React.Component {
             }
         } else {
             calendarPanelButtons.push(
-                <Tooltip key="noadmin" title="Diese Aktionen stehen nur Admins zur Verfügung">
+                <Tooltip
+                    key="noadmin"
+                    title="Diese Aktionen stehen nur Admins zur Verfügung"
+                >
                     <button className="btn btn-outline-dark disabled">
                         Bearbeiten/Löschen
                     </button>
@@ -225,27 +233,31 @@ class CalendarInfo extends React.Component {
         return (
             <Dashboard.Table>
                 <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{calendar.name}</td>
-                </tr>
-                <tr>
-                    <th style={{width: "1px"}} className="pe-3">Beschreibung:</th>
-                    <td style={{whiteSpace: "pre-line"}}>{calendar.description}</td>
-                </tr>
-                <tr>
-                    <th>Farbe:</th>
-                    <td>
-                        <i
-                            style={{color: calendar.color}}
-                            className="fas fa-circle small"
-                        ></i>
-                    </td>
-                </tr>
-                <tr className="debug-only">
-                    <th>ID:</th>
-                    <td>{calendar.id}</td>
-                </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td>{calendar.name}</td>
+                    </tr>
+                    <tr>
+                        <th style={{ width: '1px' }} className="pe-3">
+                            Beschreibung:
+                        </th>
+                        <td style={{ whiteSpace: 'pre-line' }}>
+                            {calendar.description}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Farbe:</th>
+                        <td>
+                            <i
+                                style={{ color: calendar.color }}
+                                className="fas fa-circle small"
+                            ></i>
+                        </td>
+                    </tr>
+                    <tr className="debug-only">
+                        <th>ID:</th>
+                        <td>{calendar.id}</td>
+                    </tr>
                 </tbody>
                 <Dashboard.TableButtonFooter notopborder={true}>
                     {calendarPanelButtons}
@@ -271,10 +283,10 @@ class CalendarEventPickerRow extends React.Component {
 
     getStyle() {
         return {
-            borderLeftWidth: "5px",
-            borderLeftStyle: this.props.event.fullday ? "solid" : "dotted",
+            borderLeftWidth: '5px',
+            borderLeftStyle: this.props.event.fullday ? 'solid' : 'dotted',
             borderLeftColor: this.props.event.calendar.color,
-            cursor: "pointer",
+            cursor: 'pointer',
             opacity: this.props.isSelected ? 0.75 : 1,
         };
     }
@@ -290,9 +302,14 @@ class CalendarEventPickerRow extends React.Component {
             const samedayend = Calendars.isSameDate(daystart, evtend);
 
             if (samedaystart && samedayend) {
-                return "Ganztägig";
+                return 'Ganztägig';
             } else {
-                return "Vom " + Calendars.getDateString(evtstart) + " bis am " + Calendars.getDateString(evtend);
+                return (
+                    'Vom ' +
+                    Calendars.getDateString(evtstart) +
+                    ' bis am ' +
+                    Calendars.getDateString(evtend)
+                );
             }
         } else {
             const evtstart = new Date(this.props.event.dtstart);
@@ -301,24 +318,38 @@ class CalendarEventPickerRow extends React.Component {
             const samedayend = evtend.getTime() < dayend.getTime();
 
             if (samedaystart && samedayend) {
-                return "Von " + Calendars.getTimeString(evtstart) + " bis " + Calendars.getTimeString(evtend) + " Uhr";
+                return (
+                    'Von ' +
+                    Calendars.getTimeString(evtstart) +
+                    ' bis ' +
+                    Calendars.getTimeString(evtend) +
+                    ' Uhr'
+                );
             } else if (samedaystart) {
-                return "Ab " + Calendars.getTimeString(evtstart) + " Uhr";
+                return 'Ab ' + Calendars.getTimeString(evtstart) + ' Uhr';
             } else if (samedayend) {
-                return "Bis " + Calendars.getTimeString(evtend) + " Uhr";
+                return 'Bis ' + Calendars.getTimeString(evtend) + ' Uhr';
             } else {
-                return "Ganztägig";
+                return 'Ganztägig';
             }
         }
     }
 
     render() {
         return (
-            <div className="ps-2 mb-1" style={this.getStyle()} onClick={this.handleSelect}>
+            <div
+                className="ps-2 mb-1"
+                style={this.getStyle()}
+                onClick={this.handleSelect}
+            >
                 <b className="d-inline-block w-100">{this.props.event.name}</b>
-                <span className="d-inline-block w-100">{this.getDateDisplay()}</span>
-                {this.props.event.location !== "" ? (
-                    <i className="d-inline-block w-100">{this.props.event.location}</i>
+                <span className="d-inline-block w-100">
+                    {this.getDateDisplay()}
+                </span>
+                {this.props.event.location !== '' ? (
+                    <i className="d-inline-block w-100">
+                        {this.props.event.location}
+                    </i>
                 ) : null}
             </div>
         );
@@ -333,17 +364,25 @@ class CalendarEventPicker extends React.Component {
 
     createEvent() {
         Calendars.createEventPopup(
-            this.props.team, this.props.selectedDate, this.props.calendars, this.props.selectedCalendar.id
-        ).then(Navigation.renderPage)
+            this.props.team,
+            this.props.selectedDate,
+            this.props.calendars,
+            this.props.selectedCalendar.id
+        ).then(Navigation.renderPage);
     }
 
     render() {
         let events = [...this.props.events];
         events.sort((a, b) => {
             if (a.fullday && b.fullday) {
-                return new Date(a.dstart).getTime() - new Date(b.dstart).getTime();
+                return (
+                    new Date(a.dstart).getTime() - new Date(b.dstart).getTime()
+                );
             } else if (!a.fullday && !b.fullday) {
-                return new Date(a.dtstart).getTime() - new Date(b.dtstart).getTime();
+                return (
+                    new Date(a.dtstart).getTime() -
+                    new Date(b.dtstart).getTime()
+                );
             } else if (a.fullday) {
                 return -1;
             } else {
@@ -351,20 +390,24 @@ class CalendarEventPicker extends React.Component {
             }
         });
 
-        const calendarExists = this.props.selectedCalendar !== undefined && this.props.selectedCalendar !== null;
+        const calendarExists =
+            this.props.selectedCalendar !== undefined &&
+            this.props.selectedCalendar !== null;
         const eventExists = this.props.events.length > 0;
 
         let rows;
         if (calendarExists) {
             if (eventExists) {
                 rows = events.map((event) => {
-                    return <CalendarEventPickerRow
-                        key={event.id}
-                        event={event}
-                        selectedDate={this.props.selectedDate}
-                        onSelect={this.props.onEventSelect}
-                        isSelected={this.props.selectedEventId === event.id}
-                    />;
+                    return (
+                        <CalendarEventPickerRow
+                            key={event.id}
+                            event={event}
+                            selectedDate={this.props.selectedDate}
+                            onSelect={this.props.onEventSelect}
+                            isSelected={this.props.selectedEventId === event.id}
+                        />
+                    );
                 });
             } else {
                 rows = [
@@ -385,13 +428,11 @@ class CalendarEventPicker extends React.Component {
         } else {
             rows = (
                 <p className="ms-1 mb-0" key="empty">
-                    Im ausgewählten Team ist noch kein Kalender vorhanden.{" "}
+                    Im ausgewählten Team ist noch kein Kalender vorhanden.{' '}
                     {this.props.isAdmin ? (
-                        <IconTooltip
-                            title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></IconTooltip>
+                        <IconTooltip title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></IconTooltip>
                     ) : (
-                        <IconTooltip
-                            title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
+                        <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
                     )}
                 </p>
             );
@@ -413,19 +454,20 @@ class CalendarOverviewDay extends React.Component {
     }
 
     getDateClassName() {
-        let className = "d-flex justify-content-center align-items-center flex-column rounded-circle dm-noinvert";
+        let className =
+            'd-flex justify-content-center align-items-center flex-column rounded-circle dm-noinvert';
         if (this.props.isSelected && this.props.isToday) {
-            className += " bg-danger fw-bold ";
+            className += ' bg-danger fw-bold ';
         } else if (this.props.isSelected) {
-            className += " bg-primary ";
+            className += ' bg-primary ';
         } else if (this.props.isToday) {
-            className += " text-danger fw-bold";
+            className += ' text-danger fw-bold';
         } else {
-            className += " ";
+            className += ' ';
         }
 
         if (!this.props.isInSelectedMonth) {
-            className += " opacity-50";
+            className += ' opacity-50';
         }
         return className;
     }
@@ -440,18 +482,21 @@ class CalendarOverviewDay extends React.Component {
 
         return (
             <div onClick={this.handleSelect}>
-                <div className={this.getDateClassName()} style={{width: "3em", height: "3em", cursor: "pointer"}}>
-          <span>
-            {this.props.date.getDate()}
-          </span>
+                <div
+                    className={this.getDateClassName()}
+                    style={{ width: '3em', height: '3em', cursor: 'pointer' }}
+                >
+                    <span>{this.props.date.getDate()}</span>
                     {this.props.isSelected ? null : (
-                        <span style={{fontSize: "0.4rem", height: "0.4rem"}}>
-              {
-                  colors.map((color) => {
-                      return <span key={color} style={{color: color}}><i className="fas fa-circle"></i></span>;
-                  })
-              }
-            </span>
+                        <span style={{ fontSize: '0.4rem', height: '0.4rem' }}>
+                            {colors.map((color) => {
+                                return (
+                                    <span key={color} style={{ color: color }}>
+                                        <i className="fas fa-circle"></i>
+                                    </span>
+                                );
+                            })}
+                        </span>
                     )}
                 </div>
             </div>
@@ -475,19 +520,26 @@ class CalendarOverviewWeek extends React.Component {
                 <CalendarOverviewDay
                     key={i}
                     date={date}
-                    events={Calendars.filterCalendarEventsByDate(this.props.events, date)}
+                    events={Calendars.filterCalendarEventsByDate(
+                        this.props.events,
+                        date
+                    )}
                     isToday={Calendars.isSameDate(date, new Date())}
-                    isSelected={Calendars.isSameDate(this.props.selectedDate, date)}
-                    isInSelectedMonth={Calendars.isSameDate(this.props.selectedMonth, Calendars.roundMonths(date))}
+                    isSelected={Calendars.isSameDate(
+                        this.props.selectedDate,
+                        date
+                    )}
+                    isInSelectedMonth={Calendars.isSameDate(
+                        this.props.selectedMonth,
+                        Calendars.roundMonths(date)
+                    )}
                     onSelect={this.props.onDateSelect}
                 />
-            )
+            );
         });
 
         return (
-            <div className="d-flex justify-content-around my-3">
-                {dayElems}
-            </div>
+            <div className="d-flex justify-content-around my-3">{dayElems}</div>
         );
     }
 }
@@ -526,15 +578,19 @@ class CalendarOverview extends React.Component {
 
     render() {
         const today = new Date();
-        const todaySelectedInCurrentMonth = (
+        const todaySelectedInCurrentMonth =
             Calendars.isSameDate(this.props.selectedDate, today) &&
-            Calendars.isSameDate(this.state.selectedMonth, Calendars.roundMonths(today))
+            Calendars.isSameDate(
+                this.state.selectedMonth,
+                Calendars.roundMonths(today)
+            );
+        const firstDayShown = Calendars.getMondayOfWeek(
+            this.state.selectedMonth
         );
-        const firstDayShown = Calendars.getMondayOfWeek(this.state.selectedMonth);
 
         let monthDisplay = this.state.selectedMonth.toLocaleString(undefined, {
-            month: "long",
-            year: "numeric",
+            month: 'long',
+            year: 'numeric',
         });
 
         let weekElems = [];
@@ -561,14 +617,14 @@ class CalendarOverview extends React.Component {
                             className="btn btn-outline-dark"
                             onClick={this.go2prevMonth}
                         >
-                            <i className="fas fa-arrow-left"/>
+                            <i className="fas fa-arrow-left" />
                         </button>
                         <button
                             type="button"
                             className={
                                 todaySelectedInCurrentMonth
-                                    ? "btn btn-outline-dark disabled"
-                                    : "btn btn-outline-dark"
+                                    ? 'btn btn-outline-dark disabled'
+                                    : 'btn btn-outline-dark'
                             }
                             onClick={this.go2today}
                         >
@@ -579,26 +635,24 @@ class CalendarOverview extends React.Component {
                             className="btn btn-outline-dark"
                             onClick={this.go2nextMonth}
                         >
-                            <i className="fas fa-arrow-right"/>
+                            <i className="fas fa-arrow-right" />
                         </button>
                     </div>
                 </div>
                 <div className="mt-3">
                     <div className="d-flex justify-content-around my-3">
-                        {
-                            WEEKDAYS.map((day) => {
-                                return (
-                                    <div key={day}>
-                                        <div
-                                            className="d-flex justify-content-center align-items-center flex-column"
-                                            style={{width: "3em", height: "2em"}}
-                                        >
-                                            <b>{day}</b>
-                                        </div>
+                        {WEEKDAYS.map((day) => {
+                            return (
+                                <div key={day}>
+                                    <div
+                                        className="d-flex justify-content-center align-items-center flex-column"
+                                        style={{ width: '3em', height: '2em' }}
+                                    >
+                                        <b>{day}</b>
                                     </div>
-                                );
-                            })
-                        }
+                                </div>
+                            );
+                        })}
                     </div>
                     {weekElems}
                 </div>
@@ -616,20 +670,33 @@ class CalendarEventDisplay extends React.Component {
     }
 
     editEvent() {
-        Calendars.editEventPopup(this.props.team, this.props.event.calendar, this.props.event).then(Navigation.renderPage);
+        Calendars.editEventPopup(
+            this.props.team,
+            this.props.event.calendar,
+            this.props.event
+        ).then(Navigation.renderPage);
     }
 
     cloneEvent() {
-        Calendars.editEventPopup(this.props.team, this.props.event.calendar, this.props.event, true).then(Navigation.renderPage);
+        Calendars.editEventPopup(
+            this.props.team,
+            this.props.event.calendar,
+            this.props.event,
+            true
+        ).then(Navigation.renderPage);
     }
 
     deleteEvent() {
-        Calendars.deleteEventPopup(this.props.team, this.props.event.calendar, this.props.event).then(Navigation.renderPage)
+        Calendars.deleteEventPopup(
+            this.props.team,
+            this.props.event.calendar,
+            this.props.event
+        ).then(Navigation.renderPage);
     }
 
     render() {
         if (this.props.event === undefined) {
-            return <p className="ms-1 mb-1">Kein Ereignis ausgewählt</p>
+            return <p className="ms-1 mb-1">Kein Ereignis ausgewählt</p>;
         }
 
         const event = this.props.event;
@@ -638,62 +705,81 @@ class CalendarEventDisplay extends React.Component {
         let evtenddsp;
 
         if (this.props.event.fullday) {
-            evtstartdsp = Calendars.getDateString(new Date(this.props.event.dstart));
-            evtenddsp = Calendars.getDateString(new Date(this.props.event.dend));
+            evtstartdsp = Calendars.getDateString(
+                new Date(this.props.event.dstart)
+            );
+            evtenddsp = Calendars.getDateString(
+                new Date(this.props.event.dend)
+            );
         } else {
-            evtstartdsp = Calendars.getDateTimeString(new Date(this.props.event.dtstart));
-            evtenddsp = Calendars.getDateTimeString(new Date(this.props.event.dtend));
+            evtstartdsp = Calendars.getDateTimeString(
+                new Date(this.props.event.dtstart)
+            );
+            evtenddsp = Calendars.getDateTimeString(
+                new Date(this.props.event.dtend)
+            );
         }
 
         return (
             <Dashboard.Table vertical={true}>
                 <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{event.name}</td>
-                </tr>
-                {event.description ? (
                     <tr>
-                        <th style={{width: "1px"}} className="pe-3">
-                            Beschreibung:
-                        </th>
-                        <td style={{whiteSpace: "pre-line"}}>{event.description}</td>
+                        <th>Name:</th>
+                        <td>{event.name}</td>
                     </tr>
-                ) : null}
-                {event.location ? (
+                    {event.description ? (
+                        <tr>
+                            <th style={{ width: '1px' }} className="pe-3">
+                                Beschreibung:
+                            </th>
+                            <td style={{ whiteSpace: 'pre-line' }}>
+                                {event.description}
+                            </td>
+                        </tr>
+                    ) : null}
+                    {event.location ? (
+                        <tr>
+                            <th>Ort:</th>
+                            <td>{event.location}</td>
+                        </tr>
+                    ) : null}
                     <tr>
-                        <th>Ort:</th>
-                        <td>{event.location}</td>
+                        <th>Start:</th>
+                        <td>{evtstartdsp}</td>
                     </tr>
-                ) : null}
-                <tr>
-                    <th>Start:</th>
-                    <td>{evtstartdsp}</td>
-                </tr>
-                <tr>
-                    <th>Ende:</th>
-                    <td>{evtenddsp}</td>
-                </tr>
-                <tr className="debug-only">
-                    <th>ID:</th>
-                    <td>{event.id}</td>
-                </tr>
+                    <tr>
+                        <th>Ende:</th>
+                        <td>{evtenddsp}</td>
+                    </tr>
+                    <tr className="debug-only">
+                        <th>ID:</th>
+                        <td>{event.id}</td>
+                    </tr>
                 </tbody>
 
                 <Dashboard.TableButtonFooter notopborder={true}>
-                    <button className="btn btn-outline-dark" onClick={this.editEvent}>
+                    <button
+                        className="btn btn-outline-dark"
+                        onClick={this.editEvent}
+                    >
                         Bearbeiten
                     </button>
-                    <button className="btn btn-outline-dark" onClick={this.cloneEvent}>
+                    <button
+                        className="btn btn-outline-dark"
+                        onClick={this.cloneEvent}
+                    >
                         Duplizieren
                     </button>
-                    <button className="btn btn-outline-danger" onClick={this.deleteEvent}>
+                    <button
+                        className="btn btn-outline-danger"
+                        onClick={this.deleteEvent}
+                    >
                         Löschen
                     </button>
                 </Dashboard.TableButtonFooter>
             </Dashboard.Table>
         );
-    };
+    }
 }
 
 export default class Page_Calendars extends React.Component {
@@ -711,20 +797,20 @@ export default class Page_Calendars extends React.Component {
     }
 
     handleCalendarSelect(calendarId) {
-        this.setState({selectedCalendarId: calendarId});
+        this.setState({ selectedCalendarId: calendarId });
     }
 
     handleDateSelect(date) {
-        this.setState({selectedDate: Calendars.roundDays(date)});
+        this.setState({ selectedDate: Calendars.roundDays(date) });
         // If the current selected event is no at in the new selected date, deselect it
         let evt = this.events[this.state.selectedEventId];
         if (evt && !Calendars.isDateInEvent(date, evt)) {
-            this.setState({selectedEventId: null});
+            this.setState({ selectedEventId: null });
         }
     }
 
     handleEventSelect(data) {
-        this.setState({selectedEventId: data ? data.id : null});
+        this.setState({ selectedEventId: data ? data.id : null });
     }
 
     ensureValidCalendarId() {
@@ -736,10 +822,10 @@ export default class Page_Calendars extends React.Component {
 
         if (!isValid && hasCalendar) {
             // If the current calendar is invalid and there are calendars, select the first one.
-            this.setState({selectedCalendarId: calendarIds[0]});
+            this.setState({ selectedCalendarId: calendarIds[0] });
         } else if (!isValid && this.state.selectedCalendarId !== null) {
             // If the current calendar is set but there are no calendars, select null.
-            this.setState({selectedCalendarId: null});
+            this.setState({ selectedCalendarId: null });
         }
     }
 
@@ -753,7 +839,7 @@ export default class Page_Calendars extends React.Component {
         const isValid = this.events.hasOwnProperty(this.state.selectedEventId);
 
         if (!isValid) {
-            this.setState({selectedEventId: null});
+            this.setState({ selectedEventId: null });
         }
     }
 
@@ -780,7 +866,8 @@ export default class Page_Calendars extends React.Component {
 
         let dayDisplay = Calendars.getDateString(this.state.selectedDate);
 
-        let selectedCalendar = Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
+        let selectedCalendar =
+            Cache.getCurrentTeamData().calendars[this.state.selectedCalendarId];
 
         return (
             <Dashboard.Page
@@ -788,7 +875,7 @@ export default class Page_Calendars extends React.Component {
                 subtitle="Kalender für dich und dein Team"
                 loading={Cache.getCurrentTeamData()._state.calendars._initial}
             >
-                <Dashboard.Column sizes={{lg: 6}} className="order-lg-2">
+                <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
                     <Dashboard.Tile
                         title="Ereignisübersicht"
                         help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
@@ -800,8 +887,10 @@ export default class Page_Calendars extends React.Component {
                             events={Object.values(this.events)}
                         />
                     </Dashboard.Tile>
-                    <Dashboard.Tile title={"Ereignisse am " + dayDisplay}
-                                    help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln.">
+                    <Dashboard.Tile
+                        title={'Ereignisse am ' + dayDisplay}
+                        help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln."
+                    >
                         {/* Events from the selected day & Create new event button */}
                         <CalendarEventPicker
                             onEventSelect={this.handleEventSelect}
@@ -818,10 +907,12 @@ export default class Page_Calendars extends React.Component {
                         />
                     </Dashboard.Tile>
                 </Dashboard.Column>
-                <Dashboard.Column sizes={{lg: 6}}>
-                    <Dashboard.Tile title="Ausgewähltes Ereignis"
-                                    help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
-                                    className="order-lg-3">
+                <Dashboard.Column sizes={{ lg: 6 }}>
+                    <Dashboard.Tile
+                        title="Ausgewähltes Ereignis"
+                        help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
+                        className="order-lg-3"
+                    >
                         {/* Selected event */}
                         <CalendarEventDisplay
                             event={this.events[this.state.selectedEventId]}

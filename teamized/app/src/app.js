@@ -3,21 +3,21 @@
  * Here the app is initialized and the main logic is started
  */
 
-import $ from "jquery";
+import $ from 'jquery';
 
-import * as Alerts from "./utils/alerts.js";
-import * as API from "./utils/api.js";
-import * as Cache from "./utils/cache.js";
-import * as Calendars from "./utils/calendars.js";
-import * as Club from "./utils/club.js";
-import * as DateTime from "./utils/datetime.js";
-import * as Navigation from "./utils/navigation.js";
-import * as Settings from "./utils/settings.js";
-import * as Teams from "./utils/teams.js";
-import * as ToDo from "./utils/todo.js";
-import * as Utils from "./utils/utils.js";
-import * as WorkingTime from "./utils/workingtime.js";
-import * as WorkingTimeStats from "./utils/workingtimestats.js";
+import * as Alerts from './utils/alerts.js';
+import * as API from './utils/api.js';
+import * as Cache from './utils/cache.js';
+import * as Calendars from './utils/calendars.ts';
+import * as Club from './utils/club.js';
+import * as DateTime from './utils/datetime.ts';
+import * as Navigation from './utils/navigation.js';
+import * as Settings from './utils/settings.js';
+import * as Teams from './utils/teams.js';
+import * as ToDo from './utils/todo.js';
+import * as Utils from './utils/utils.js';
+import * as WorkingTime from './utils/workingtime.js';
+import * as WorkingTimeStats from './utils/workingtimestats.js';
 
 // Make namespaces available in the console (for debugging)
 
@@ -42,30 +42,30 @@ window._App = {
 let loadinprogress = true;
 
 window.appdata = {
-    currentPage: "home",
+    currentPage: 'home',
     defaultTeamId: null,
     selectedTeamId: null,
     teamcache: {},
     user: {
         id: null,
-        username: "Laden...",
-        avatar_url: "https://www.gravatar.com/avatar/",
+        username: 'Laden...',
+        avatar_url: 'https://www.gravatar.com/avatar/',
     },
     initialLoadComplete: false,
 };
 
 function startLoading() {
     loadinprogress = true;
-    $("#refreshbutton>a>i").addClass("fa-spin");
+    $('#refreshbutton>a>i').addClass('fa-spin');
 }
 
 function endLoading() {
     loadinprogress = false;
-    $("#refreshbutton>a>i").removeClass("fa-spin");
+    $('#refreshbutton>a>i').removeClass('fa-spin');
 }
 
 async function initialize() {
-    if (new URL(location).searchParams.has("debug")) Utils.toggleDebug(true);
+    if (new URL(location).searchParams.has('debug')) Utils.toggleDebug(true);
 
     startLoading();
 
@@ -101,10 +101,7 @@ async function reinitialize() {
     };
     Navigation.render();
 
-    await Promise.all([
-        Settings.getSettings(),
-        Teams.getTeams(),
-    ]);
+    await Promise.all([Settings.getSettings(), Teams.getTeams()]);
 
     Navigation.render();
 
@@ -145,12 +142,12 @@ function onkeypress(e) {
 // Add event listeners
 
 // Listen for page load -> initialize
-$("document").ready(initialize);
+$('document').ready(initialize);
 // Listen for navigation in the history (browser back/forward)
-$(window).bind("popstate", Navigation.handleHistoryNavigation);
+$(window).bind('popstate', Navigation.handleHistoryNavigation);
 // Listen for click on the sidebar toggler
-$("#menubartitle").click(Navigation.toggleSidebar);
+$('#menubartitle').click(Navigation.toggleSidebar);
 // Listen for click on the refresh button
-$("#refreshbutton").click(refresh);
+$('#refreshbutton').click(refresh);
 // Listen for F5 keypress
 $(document).keydown(onkeypress);

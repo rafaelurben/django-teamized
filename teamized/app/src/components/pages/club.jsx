@@ -1,27 +1,29 @@
-"use strict";
+'use strict';
 
 /**
  * Club page component
  */
 
-import React from "react";
+import React from 'react';
 
-import {getDateString, getAge} from "../../utils/datetime.js";
-import * as Dashboard from "../dashboard.jsx";
-import * as Cache from "../../utils/cache.js";
-import * as Club from "../../utils/club.js";
-import * as Navigation from "../../utils/navigation.js";
-import {IconTooltip} from "../tooltips.jsx";
-
+import { getDateString, getAge } from '../../utils/datetime.ts';
+import * as Dashboard from '../dashboard.jsx';
+import * as Cache from '../../utils/cache.js';
+import * as Club from '../../utils/club.js';
+import * as Navigation from '../../utils/navigation.js';
+import { IconTooltip } from '../tooltips.jsx';
 
 class ClubMembersTableRow extends React.Component {
     constructor(props) {
         super(props);
         this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
-        this.handlePortfolioEditButtonClick = this.handlePortfolioEditButtonClick.bind(this);
-        this.handleGroupEditButtonClick = this.handleGroupEditButtonClick.bind(this);
-        this.handleCreateMagicLinkButtonClick = this.handleCreateMagicLinkButtonClick.bind(this);
+        this.handlePortfolioEditButtonClick =
+            this.handlePortfolioEditButtonClick.bind(this);
+        this.handleGroupEditButtonClick =
+            this.handleGroupEditButtonClick.bind(this);
+        this.handleCreateMagicLinkButtonClick =
+            this.handleCreateMagicLinkButtonClick.bind(this);
     }
 
     async handleRemoveButtonClick() {
@@ -35,16 +37,25 @@ class ClubMembersTableRow extends React.Component {
     }
 
     async handlePortfolioEditButtonClick() {
-        await Club.editClubMemberPortfolioPopup(this.props.team, this.props.member);
+        await Club.editClubMemberPortfolioPopup(
+            this.props.team,
+            this.props.member
+        );
     }
 
     async handleGroupEditButtonClick() {
-        await Club.updateClubMemberGroupsPopup(this.props.team, this.props.member);
+        await Club.updateClubMemberGroupsPopup(
+            this.props.team,
+            this.props.member
+        );
         Navigation.renderPage();
     }
 
     async handleCreateMagicLinkButtonClick() {
-        await Club.createClubMemberMagicLink(this.props.team.id, this.props.member.id);
+        await Club.createClubMemberMagicLink(
+            this.props.team.id,
+            this.props.member.id
+        );
     }
 
     render() {
@@ -63,14 +74,14 @@ class ClubMembersTableRow extends React.Component {
                 <td>
                     {member.birth_date === null ? null : (
                         <span>
-              {getDateString(new Date(member.birth_date))} (
+                            {getDateString(new Date(member.birth_date))} (
                             {getAge(member.birth_date)})
-            </span>
+                        </span>
                     )}
                 </td>
                 {/* Email */}
                 <td>
-                    <a href={"mailto:" + member.email}>{member.email}</a>
+                    <a href={'mailto:' + member.email}>{member.email}</a>
                 </td>
                 {/* Action: Create magic link */}
                 {loggedinmember.is_owner ? (
@@ -83,9 +94,7 @@ class ClubMembersTableRow extends React.Component {
                             <i className="fas fa-fw fa-key"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* Action: Edit */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -97,9 +106,7 @@ class ClubMembersTableRow extends React.Component {
                             <i className="fas fa-fw fa-user-pen"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* Action: Portfolio Edit */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -111,9 +118,7 @@ class ClubMembersTableRow extends React.Component {
                             <i className="fas fa-fw fa-file-pen"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* Action: Manage groups */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -125,9 +130,7 @@ class ClubMembersTableRow extends React.Component {
                             <i className="fas fa-fw fa-users-rectangle"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* Action: Delete */}
                 {loggedinmember.is_admin ? (
                     <td>
@@ -139,9 +142,7 @@ class ClubMembersTableRow extends React.Component {
                             <i className="fas fa-fw fa-trash"></i>
                         </a>
                     </td>
-                ) : (
-                    null
-                )}
+                ) : null}
                 {/* ID */}
                 <td className="debug-only">{member.id}</td>
             </tr>
@@ -176,34 +177,34 @@ class ClubMembersTable extends React.Component {
         return (
             <Dashboard.Table>
                 <thead>
-                <tr>
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th>Geburtsdatum</th>
-                    <th style={{minWidth: "15rem"}}>
-                        E-Mail-Adresse{" "}
-                        <IconTooltip
-                            title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
-                            icon="fas fa-circle-exclamation text-warning"
-                        />
-                    </th>
-                    {loggedinmember.is_owner ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {loggedinmember.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {loggedinmember.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {loggedinmember.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {loggedinmember.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    <th className="debug-only">ID</th>
-                </tr>
+                    <tr>
+                        <th>Vorname</th>
+                        <th>Nachname</th>
+                        <th>Geburtsdatum</th>
+                        <th style={{ minWidth: '15rem' }}>
+                            E-Mail-Adresse{' '}
+                            <IconTooltip
+                                title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
+                                icon="fas fa-circle-exclamation text-warning"
+                            />
+                        </th>
+                        {loggedinmember.is_owner ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {loggedinmember.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {loggedinmember.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {loggedinmember.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {loggedinmember.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        <th className="debug-only">ID</th>
+                    </tr>
                 </thead>
                 <tbody>{memberrows}</tbody>
 
@@ -221,13 +222,13 @@ class ClubMembersTable extends React.Component {
     }
 }
 
-
 class ClubGroupsTableRow extends React.Component {
     constructor(props) {
         super(props);
         this.handleRemoveButtonClick = this.handleRemoveButtonClick.bind(this);
         this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
-        this.handleSharePortfolioButtonClick = this.handleSharePortfolioButtonClick.bind(this);
+        this.handleSharePortfolioButtonClick =
+            this.handleSharePortfolioButtonClick.bind(this);
     }
 
     async handleRemoveButtonClick() {
@@ -242,7 +243,7 @@ class ClubGroupsTableRow extends React.Component {
 
     async handleSharePortfolioButtonClick() {
         Swal.fire({
-            title: "Mitgliederportfolios exportieren",
+            title: 'Mitgliederportfolios exportieren',
             html: `
                 Über folgende URL können die Mitgliederportfolios der Gruppe "${this.props.group.name}"
                 im JSON-Format abgerufen werden:
@@ -250,7 +251,7 @@ class ClubGroupsTableRow extends React.Component {
               `,
             showCancelButton: true,
             showConfirmButton: false,
-            cancelButtonText: "Schliessen",
+            cancelButtonText: 'Schliessen',
         });
     }
 
@@ -338,20 +339,20 @@ class ClubGroupsTable extends React.Component {
         return (
             <Dashboard.Table>
                 <thead>
-                <tr>
-                    <th>Gruppenname</th>
-                    <th>Beschreibung</th>
-                    {this.props.team.member.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {this.props.team.member.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    {this.props.team.member.is_admin ? (
-                        <th style={{width: "1px"}}></th>
-                    ) : null}
-                    <th className="debug-only">ID</th>
-                </tr>
+                    <tr>
+                        <th>Gruppenname</th>
+                        <th>Beschreibung</th>
+                        {this.props.team.member.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {this.props.team.member.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        {this.props.team.member.is_admin ? (
+                            <th style={{ width: '1px' }}></th>
+                        ) : null}
+                        <th className="debug-only">ID</th>
+                    </tr>
                 </thead>
                 <tbody>{grouprows}</tbody>
                 <Dashboard.TableButtonFooter show={loggedinmember.is_admin}>
@@ -368,19 +369,20 @@ class ClubGroupsTable extends React.Component {
     }
 }
 
-
 export default class Page_Club extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {selectedTab: "all"};
+        this.state = { selectedTab: 'all' };
 
         this.selectTab = this.selectTab.bind(this);
-        this.handleClubEditButtonClick = this.handleClubEditButtonClick.bind(this);
-        this.handleClubDeleteButtonClick = this.handleClubDeleteButtonClick.bind(this);
+        this.handleClubEditButtonClick =
+            this.handleClubEditButtonClick.bind(this);
+        this.handleClubDeleteButtonClick =
+            this.handleClubDeleteButtonClick.bind(this);
     }
 
     selectTab = (tab) => (e) => {
-        this.setState({selectedTab: tab});
+        this.setState({ selectedTab: tab });
     };
 
     async handleClubEditButtonClick() {
@@ -390,7 +392,7 @@ export default class Page_Club extends React.Component {
 
     async handleClubDeleteButtonClick() {
         await Club.deleteClubPopup(this.props.team);
-        Navigation.selectPage("team");
+        Navigation.selectPage('team');
     }
 
     render() {
@@ -401,8 +403,10 @@ export default class Page_Club extends React.Component {
             teamdata._state.club_members._initial ||
             teamdata._state.club_groups._initial
         ) {
-            if (teamdata._state.club_members._initial) Club.getClubMembers(this.props.team.id);
-            if (teamdata._state.club_groups._initial) Club.getClubGroups(this.props.team.id);
+            if (teamdata._state.club_members._initial)
+                Club.getClubMembers(this.props.team.id);
+            if (teamdata._state.club_groups._initial)
+                Club.getClubGroups(this.props.team.id);
             membertilecontent = <p className="ms-2">Wird geladen...</p>;
         } else {
             let nav = (
@@ -410,30 +414,47 @@ export default class Page_Club extends React.Component {
                     <ul key="ul" className="nav nav-tabs">
                         <li key="all" className="nav-item">
                             <button
-                                className={this.state.selectedTab === "all" ? "nav-link active" : "nav-link"}
+                                className={
+                                    this.state.selectedTab === 'all'
+                                        ? 'nav-link active'
+                                        : 'nav-link'
+                                }
                                 onClick={this.selectTab('all')}
                             >
-                                Alle ({Object.keys(teamdata.club_members).length})
+                                Alle (
+                                {Object.keys(teamdata.club_members).length})
                             </button>
                         </li>
                         {Object.values(teamdata.club_groups).map((group) => {
                             return (
                                 <li key={group.id} className="nav-item">
                                     <button
-                                        className={this.state.selectedTab === group.id ? "nav-link active" : "nav-link"}
-                                        onClick={this.selectTab(group.id)}>
+                                        className={
+                                            this.state.selectedTab === group.id
+                                                ? 'nav-link active'
+                                                : 'nav-link'
+                                        }
+                                        onClick={this.selectTab(group.id)}
+                                    >
                                         {group.name} ({group.memberids.length})
                                         {group.description ? (
-                                            <IconTooltip className="ms-1" title={group.description}/>
+                                            <IconTooltip
+                                                className="ms-1"
+                                                title={group.description}
+                                            />
                                         ) : null}
                                     </button>
                                 </li>
-                            )
+                            );
                         })}
                         <li key="edit" className="nav-item ms-auto">
                             <button
-                                className={this.state.selectedTab === "edit" ? "nav-link active" : "nav-link"}
-                                onClick={this.selectTab("edit")}
+                                className={
+                                    this.state.selectedTab === 'edit'
+                                        ? 'nav-link active'
+                                        : 'nav-link'
+                                }
+                                onClick={this.selectTab('edit')}
                             >
                                 <i className="fa-solid fa-pen-to-square"></i>
                             </button>
@@ -443,17 +464,17 @@ export default class Page_Club extends React.Component {
             );
 
             switch (this.state.selectedTab) {
-                case "all": // all members
+                case 'all': // all members
                     membertilecontent = [
                         nav,
                         <ClubMembersTable
                             key="table"
                             team={this.props.team}
                             members={Object.values(teamdata.club_members)}
-                        />
+                        />,
                     ];
                     break;
-                case "edit": // edit groups
+                case 'edit': // edit groups
                     membertilecontent = [
                         nav,
                         <ClubGroupsTable
@@ -465,7 +486,9 @@ export default class Page_Club extends React.Component {
                     break;
                 default: // filtered members by group
                     let group = teamdata.club_groups[this.state.selectedTab];
-                    let groupmembers = Object.values(teamdata.club_members).filter((member) => {
+                    let groupmembers = Object.values(
+                        teamdata.club_members
+                    ).filter((member) => {
                         return group.memberids.includes(member.id);
                     });
 
@@ -491,34 +514,40 @@ export default class Page_Club extends React.Component {
                     <Dashboard.Tile title="Vereinsinfos">
                         <Dashboard.Table vertical={true}>
                             <tbody>
-                            <tr key="name">
-                                <th>Name:</th>
-                                <td>{this.props.team.club.name}</td>
-                            </tr>
-                            <tr key="url">
-                                <th>Login URL:</th>
-                                <td>
-                                    <a target="_blank" href={this.props.team.club.url}>
-                                        {this.props.team.club.slug}
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr key="description">
-                                <th style={{width: "1px"}} className="pe-3">
-                                    Beschreibung:
-                                </th>
-                                <td style={{whiteSpace: "pre-line"}}>
-                                    {this.props.team.club.description}
-                                </td>
-                            </tr>
-                            <tr key="membercount">
-                                <th>Mitglieder:</th>
-                                <td>{this.props.team.club.membercount}</td>
-                            </tr>
-                            <tr key="id" className="debug-only">
-                                <th>ID:</th>
-                                <td>{this.props.team.club.id}</td>
-                            </tr>
+                                <tr key="name">
+                                    <th>Name:</th>
+                                    <td>{this.props.team.club.name}</td>
+                                </tr>
+                                <tr key="url">
+                                    <th>Login URL:</th>
+                                    <td>
+                                        <a
+                                            target="_blank"
+                                            href={this.props.team.club.url}
+                                        >
+                                            {this.props.team.club.slug}
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr key="description">
+                                    <th
+                                        style={{ width: '1px' }}
+                                        className="pe-3"
+                                    >
+                                        Beschreibung:
+                                    </th>
+                                    <td style={{ whiteSpace: 'pre-line' }}>
+                                        {this.props.team.club.description}
+                                    </td>
+                                </tr>
+                                <tr key="membercount">
+                                    <th>Mitglieder:</th>
+                                    <td>{this.props.team.club.membercount}</td>
+                                </tr>
+                                <tr key="id" className="debug-only">
+                                    <th>ID:</th>
+                                    <td>{this.props.team.club.id}</td>
+                                </tr>
                             </tbody>
                             <Dashboard.TableButtonFooter
                                 show={this.props.team.member.is_owner}
