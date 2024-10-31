@@ -3,29 +3,30 @@
  * https://sweetalert2.github.io/
  */
 
-import Swal, { SweetAlertOptions } from 'sweetalert2/dist/sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2';
+import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
+import { ErrorResponse } from '../interfaces/responses/errorResponse';
+import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
 
 export { Swal, SweetAlertOptions };
 
 /**
  * Create an alert based on a failed ajax request
- *
- * @param {jqXHR} request
  */
-export function ajaxRequestErrorAlert(request) {
+export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
     console.debug(
         'Error: ' + request.status + ' ' + request.statusText,
         request
     );
-    let jsondata;
-    let alertdata;
+    let jsondata: ErrorResponse;
+    let alertdata: Partial<SweetAlertOptions>;
 
     if (request.hasOwnProperty('responseJSON')) {
         jsondata = request.responseJSON;
     } else {
         jsondata = {
+            error: request.status.toString(),
             message: request.statusText,
-            error: request.status,
         };
     }
 
@@ -59,7 +60,7 @@ export function ajaxRequestErrorAlert(request) {
  *
  * @param {object} data
  */
-export function requestSuccessAlert(data) {
+export function requestSuccessAlert(data: SuccessfulResponse) {
     Swal.fire({
         toast: true,
         icon: 'success',
@@ -80,7 +81,11 @@ export function requestSuccessAlert(data) {
  * @param {String} message
  * @param {object} options
  */
-export function errorAlert(title, message, options) {
+export function errorAlert(
+    title: string,
+    message: string,
+    options: Partial<SweetAlertOptions> = {}
+) {
     Swal.fire({
         title: title,
         html: message,
@@ -96,7 +101,11 @@ export function errorAlert(title, message, options) {
  * @param {String} message
  * @param {object} options
  */
-export function infoAlert(title, message, options) {
+export function infoAlert(
+    title: string,
+    message: string,
+    options: Partial<SweetAlertOptions> = {}
+) {
     Swal.fire({
         title: title,
         html: message,
@@ -111,7 +120,10 @@ export function infoAlert(title, message, options) {
  * @param {String} text
  * @param {object} options
  */
-export function waitingAlert(text, options = {}) {
+export function waitingAlert(
+    text: string,
+    options: Partial<SweetAlertOptions> = {}
+) {
     Swal.fire({
         title: 'In Bearbeitung...',
         text: text,
@@ -130,7 +142,11 @@ export function waitingAlert(text, options = {}) {
  * @param {String} title
  * @param {object} options
  */
-export function successAlert(text, title, options = {}) {
+export function successAlert(
+    text: string,
+    title: string,
+    options: Partial<SweetAlertOptions> = {}
+) {
     Swal.fire({
         toast: true,
         icon: 'success',
@@ -155,9 +171,14 @@ export function successAlert(text, title, options = {}) {
  * @param {object} options
  * @returns the result of the preConfirm function if the user confirmed the alert
  */
-export function confirmAlert(html, preConfirm, title = '', options = {}) {
+export function confirmAlert(
+    html: string,
+    preConfirm: () => any,
+    title: string = '',
+    options: Partial<SweetAlertOptions> = {}
+) {
     return new Promise((resolve, reject) => {
-        let data = {
+        let data: Partial<SweetAlertOptions> = {
             title: title || 'Sicher?',
             html: html,
             icon: 'warning',
@@ -174,7 +195,7 @@ export function confirmAlert(html, preConfirm, title = '', options = {}) {
         }
 
         Swal.fire(data)
-            .then((result) => {
+            .then((result: SweetAlertResult) => {
                 if (result.isConfirmed) {
                     resolve(result.value);
                 }
@@ -191,7 +212,7 @@ export function confirmAlert(html, preConfirm, title = '', options = {}) {
  * @param {*} preConfirm function that is called when the user confirms the alert twice
  * @returns the result of the preConfirm function if the user confirmed both alerts
  */
-export function doubleConfirmAlert(html, preConfirm) {
+export function doubleConfirmAlert(html: string, preConfirm: () => any) {
     return new Promise((resolve, reject) => {
         confirmAlert(html, undefined, 'Sicher?').then(() => {
             confirmAlert(

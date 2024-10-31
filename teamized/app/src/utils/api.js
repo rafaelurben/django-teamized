@@ -4,7 +4,7 @@
 
 import $ from 'jquery';
 
-import { ajaxRequestErrorAlert } from './alerts.js';
+import { ajaxRequestErrorAlert } from './alerts.ts';
 
 /**
  * Base request method for all ajax requests

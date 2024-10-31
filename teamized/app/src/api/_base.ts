@@ -4,15 +4,17 @@
 
 import * as $ from 'jquery';
 
-import { ajaxRequestErrorAlert } from '../utils/alerts.js';
-import { SuccessfulPostResponse } from '../interfaces/responses/successfulPostResponse';
-import { SuccessfulDeleteResponse } from '../interfaces/responses/successfulDeleteResponse';
-import { SuccessfulPutResponse } from '../interfaces/responses/successfulPutResponse';
+import { ajaxRequestErrorAlert } from '../utils/alerts';
+import {
+    SuccessfulDeleteResponse,
+    SuccessfulPostResponse,
+    SuccessfulPutResponse,
+} from '../interfaces/responses/successfulResponse';
 
 type HTTPRequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 type HTTPRequestOptions = {
-    disableErrorHandling?: boolean;
-    ajaxOptions?: object;
+    disableErrorAlert?: boolean;
+    ajaxOptions?: JQuery.AjaxSettings;
 };
 
 declare global {
@@ -45,9 +47,11 @@ export abstract class API {
                 type: method,
                 url: window.api_base_url + endpoint,
                 data: data,
-                success: (data) => resolve(data as T),
-                error: (e) => {
-                    if (!options?.disableErrorHandling) {
+                success: (data) => {
+                    resolve(data as T);
+                },
+                error: (e: JQuery.jqXHR) => {
+                    if (!options?.disableErrorAlert) {
                         ajaxRequestErrorAlert(e);
                     }
                     reject(e);

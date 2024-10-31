@@ -8,7 +8,7 @@ import {
     successAlert,
     Swal,
     waitingAlert,
-} from './alerts.js';
+} from './alerts';
 import * as WorkingtimeAPI from '../api/workingtime';
 import * as Cache from './cache.js';
 import * as Navigation from './navigation.js';

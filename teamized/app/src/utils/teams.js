@@ -8,7 +8,7 @@ import {
     infoAlert,
     doubleConfirmAlert,
     Swal,
-} from './alerts.js';
+} from './alerts.ts';
 import * as API from './api.js';
 import { isoFormat, localInputFormat } from './datetime.ts';
 import * as Navigation from './navigation.js';

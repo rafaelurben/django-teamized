@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { waitingAlert } from '../../utils/alerts.js';
+import { waitingAlert } from '../../utils/alerts.ts';
 import * as Teams from '../../utils/teams.js';
 import * as Navigation from '../../utils/navigation.js';
 import * as Dashboard from '../dashboard.jsx';

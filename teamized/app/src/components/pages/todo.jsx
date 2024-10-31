@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { errorAlert } from '../../utils/alerts.js';
+import { errorAlert } from '../../utils/alerts.ts';
 import * as Dashboard from '../dashboard.jsx';
 import * as ToDo from '../../utils/todo.ts';
 import * as Navigation from '../../utils/navigation.js';

@@ -10,7 +10,7 @@ import {
     doubleConfirmAlert,
     successAlert,
     Swal,
-} from './alerts.js';
+} from './alerts.ts';
 import * as API from './api.js';
 import * as Cache from './cache.js';
 

@@ -48,7 +48,7 @@ export async function getTrackingSession() {
     return await API.get<
         | { session: Worksession; error: undefined }
         | { session: undefined; error: 'no_active_tracking_session_exists' }
-    >(`me/worksessions/tracking/live`, { disableErrorHandling: true });
+    >(`me/worksessions/tracking/live`, { disableErrorAlert: true });
 }
 
 export async function stopTrackingSession() {

@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { successAlert } from '../../utils/alerts.js';
+import { successAlert } from '../../utils/alerts.ts';
 import * as Cache from '../../utils/cache.js';
 import * as Club from '../../utils/club.js';
 import * as Teams from '../../utils/teams.js';

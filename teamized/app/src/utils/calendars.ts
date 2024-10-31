@@ -9,7 +9,7 @@ import {
     doubleConfirmAlert,
     confirmAlert,
     Swal,
-} from './alerts.js';
+} from './alerts';
 import * as Cache from './cache.js';
 import { roundDays, isInRange, isoFormat, localInputFormat } from './datetime';
 import * as CalendarAPI from '../api/calendar';

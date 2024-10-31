@@ -7,7 +7,7 @@ import {
     doubleConfirmAlert,
     requestSuccessAlert,
     Swal,
-} from './alerts.js';
+} from './alerts';
 import * as Cache from './cache.js';
 import { getDateString } from './datetime';
 import { ID } from '../interfaces/common';
