@@ -16,7 +16,7 @@
     "@babel/preset-react": "7.25.9",
     "@babel/preset-typescript": "7.26.0",
     "babel-loader": "9.2.1",
-    "webpack": "5.95.0",
+    "webpack": "5.96.1",
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
