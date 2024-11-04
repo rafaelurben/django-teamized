@@ -226,6 +226,33 @@ export async function deleteCalendarPopup(team, calendar: Calendar) {
     );
 }
 
+// Calendar subscription
+
+export async function showCalendarSubscriptionPopup(calendar: Calendar) {
+    const urlHTTP = calendar.ics_url;
+    const urlWebcal = 'webcal://' + urlHTTP.split('//')[1];
+
+    Swal.fire({
+        title: 'Kalender abonnieren',
+        html: `
+    Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
+    <hr>
+    <h5>1) Webcal-Link</h5>
+    <p>Auf allen Apple-Geräten sowie weiteren unterstützten Geräten kannst du Webcal-Links direkt in deiner Kalender-App
+    öffnen. Bei manchen anderen Apps (z. B. Google Calendar) musst du den Link kopieren und manuell einfügen.</p>
+    <a href="${urlWebcal}" target="_blank" class="btn btn-outline-info">Webcal-URL</a>
+    <hr>
+    <h5>2) HTTP(S)-Link</h5>
+    <p>Falls dein Gerät oder deine App Webcal-Links nicht unterstützt, kannst du auch folgenden Link verwenden. Füge
+    diesen im "Kalender abonnieren"-Dialog (o. ä.) deiner Kalenderapp ein.</p>
+    <input class="swal2-input" type="url" readonly value="${urlHTTP}">
+  `,
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonText: 'Schliessen',
+    });
+}
+
 // Event SWAL utils
 
 function _updateFullDayToggle(noDateUpdate: boolean = false) {
