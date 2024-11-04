@@ -115,7 +115,7 @@ export function getTimeString(datetime: Date): string {
  * @returns {String}
  */
 export function isoFormat(value: Date | string): string {
-    if (value === undefined || value === null || value === '') return null;
+    if (value === undefined || value === null || value === '') return '';
     return new Date(value).toISOString();
 }
 
@@ -130,7 +130,7 @@ export function localInputFormat(
     value: Date | string,
     dateOnly: boolean = false
 ): string {
-    if (value === undefined || value === null || value === '') return null;
+    if (value === undefined || value === null || value === '') return '';
     let datetime = new Date(value);
     datetime.setMinutes(datetime.getMinutes() - datetime.getTimezoneOffset());
     let result = datetime.toISOString().substring(0, 16);

@@ -2,7 +2,7 @@
  * API utils
  */
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 import { ajaxRequestErrorAlert } from '../utils/alerts';
 import {

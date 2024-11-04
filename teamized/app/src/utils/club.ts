@@ -2,7 +2,7 @@
  * Utils for the club features
  */
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 import {
     confirmAlert,
@@ -575,7 +575,7 @@ export async function updateClubMemberGroupsPopup(team, member: ClubMember) {
         <IDIndexedObjectList<ClubGroup>>teamdata.club_groups
     );
 
-    var currentgroupids = [];
+    let currentgroupids: ID[] = [];
     for (let group of Object.values(groups)) {
         if (group.memberids.includes(member.id)) {
             currentgroupids.push(group.id);
@@ -612,7 +612,7 @@ export async function updateClubMemberGroupsPopup(team, member: ClubMember) {
                 let selectedgroupids = <ID[]>$('#swal-input-groups').val();
 
                 Swal.showLoading();
-                let requests = [];
+                let requests: Promise<void>[] = [];
                 for (let groupId of selectedgroupids) {
                     if (!currentgroupids.includes(groupId)) {
                         requests.push(

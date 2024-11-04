@@ -214,7 +214,7 @@ export function confirmAlert(
  */
 export function doubleConfirmAlert(html: string, preConfirm: () => any) {
     return new Promise((resolve, reject) => {
-        confirmAlert(html, undefined, 'Sicher?').then(() => {
+        confirmAlert(html, () => {}, 'Sicher?').then(() => {
             confirmAlert(
                 html +
                     "<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>",

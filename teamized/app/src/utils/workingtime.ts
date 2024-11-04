@@ -105,9 +105,10 @@ export async function editWorkSession(
     });
 }
 
-export async function editWorkSessionPopup(team, session) {
+export async function editWorkSessionPopup(team, session: Worksession) {
     let dtstart = localInputFormat(session.time_start);
-    let dtend = localInputFormat(session.time_end);
+    let dtend =
+        session.time_end !== null ? localInputFormat(session.time_end) : '';
     return (
         await Swal.fire({
             title: `Sitzung bearbeiten`,
@@ -217,7 +218,11 @@ export async function stopTrackingSession() {
 
 // Rename session without the date options/text
 
-export async function renameWorkSession(teamId, sessionId, note) {
+export async function renameWorkSession(
+    teamId: ID,
+    sessionId: ID,
+    note: string
+) {
     return await WorkingtimeAPI.updateWorksession(teamId, sessionId, {
         note,
     }).then((data) => {
@@ -236,7 +241,7 @@ export async function renameWorkSession(teamId, sessionId, note) {
     });
 }
 
-export async function renameWorkSessionPopup(team, session) {
+export async function renameWorkSessionPopup(team, session: Worksession) {
     return (
         await Swal.fire({
             title: `Sitzung umbenennen`,

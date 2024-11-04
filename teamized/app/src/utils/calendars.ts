@@ -2,7 +2,7 @@
  * Functions used in the calendar module
  */
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 import {
     requestSuccessAlert,
@@ -474,10 +474,10 @@ export function editEventPopup(
 ) {
     console.log(team, calendar, event);
     return new Promise((resolve, reject) => {
-        let dstart: string;
-        let dend: string;
-        let dtstart: string;
-        let dtend: string;
+        let dstart: string = '';
+        let dend: string = '';
+        let dtstart: string = '';
+        let dtend: string = '';
 
         if (event.fullday) {
             dstart = localInputFormat(event.dstart, true);
