@@ -1,12 +1,15 @@
 {
   "name": "teamized-reactapp",
   "version": "1.0.0",
-  "description": "This can also be run via 'python manage.py teamized_build [--live]'",
+  "description": "The build commands can also be run via 'python manage.py teamized_build [--live]'",
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "build-live": "webpack --mode development --watch --devtool eval-source-map"
+    "build-live": "webpack --mode development --watch --devtool eval-source-map",
+    "prettier-check": "prettier src --check",
+    "prettier-run": "prettier src --write",
+    "typescript-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Rafael Urben",
@@ -18,9 +21,10 @@
     "@types/jquery": "3.5.32",
     "babel-loader": "9.2.1",
     "prettier": "3.3.3",
+    "sweetalert2": "11.14.4",
+    "typescript": "5.6.3",
     "webpack": "5.95.0",
-    "webpack-cli": "5.1.4",
-    "sweetalert2": "11.14.4"
+    "webpack-cli": "5.1.4"
   },
   "dependencies": {
     "@types/react": "18.3.12",
