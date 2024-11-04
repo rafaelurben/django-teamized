@@ -9,7 +9,7 @@ import * as Alerts from './utils/alerts.ts';
 import * as API from './utils/api.js';
 import * as Cache from './utils/cache.js';
 import * as Calendars from './utils/calendars.ts';
-import * as Club from './utils/club.js';
+import * as Club from './utils/club.ts';
 import * as DateTime from './utils/datetime.ts';
 import * as Navigation from './utils/navigation.js';
 import * as Settings from './utils/settings.ts';

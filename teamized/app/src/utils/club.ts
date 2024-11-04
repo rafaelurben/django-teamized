@@ -2,17 +2,25 @@
  * Utils for the club features
  */
 
-import $ from 'jquery';
+import * as $ from 'jquery';
 
 import {
-    requestSuccessAlert,
     confirmAlert,
     doubleConfirmAlert,
+    requestSuccessAlert,
     successAlert,
     Swal,
-} from './alerts.ts';
-import * as API from './api.js';
+} from './alerts';
+import * as ClubAPI from '../api/club';
 import * as Cache from './cache.js';
+import { ID, IDIndexedObjectList } from '../interfaces/common';
+import {
+    ClubMember,
+    ClubMemberRequestDTO,
+} from '../interfaces/club/clubMember';
+import { ClubRequestDTO } from '../interfaces/club/club';
+import { ClubMemberPortfolioRequestDTO } from '../interfaces/club/clubMemberPortfolio';
+import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
 
 export function getCurrentClubData() {
     const teamdata = Cache.getCurrentTeamData();
@@ -26,14 +34,12 @@ export function getCurrentClubData() {
 
 // Club creation
 
-export async function createClub(teamId, data) {
-    return await API.POST(`teams/${teamId}/create-club`, data).then(
-        async (data) => {
-            requestSuccessAlert(data);
-            Cache.getTeamData(teamId).team.club = data.club;
-            return data.team;
-        }
-    );
+export async function createClub(teamId: ID, club: ClubRequestDTO) {
+    return await ClubAPI.createClub(teamId, club).then(async (data) => {
+        requestSuccessAlert(data);
+        Cache.getTeamData(teamId).team.club = data.club;
+        return data.club;
+    });
 }
 
 export async function createClubPopup(team) {
@@ -53,11 +59,9 @@ export async function createClubPopup(team) {
             confirmButtonText: 'Erstellen',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
-                const slug = document.getElementById('swal-input-slug').value;
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
+                const slug = <string>$('#swal-input-slug').val();
 
                 if (!name || !description || !slug) {
                     Swal.showValidationMessage('Bitte fülle alle Felder aus!');
@@ -79,11 +83,11 @@ export async function createClubPopup(team) {
 
 // Club edit
 
-export async function editClub(teamId, data) {
-    return await API.POST(`teams/${teamId}/club`, data).then(async (data) => {
+export async function editClub(teamId: ID, club: Partial<ClubRequestDTO>) {
+    return await ClubAPI.updateClub(teamId, club).then(async (data) => {
         requestSuccessAlert(data);
         Cache.getTeamData(teamId).team.club = data.club;
-        return data.team;
+        return data.club;
     });
 }
 
@@ -103,10 +107,8 @@ export async function editClubPopup(team) {
             confirmButtonText: 'Aktualisieren',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
 
                 if (!name || !description) {
                     Swal.showValidationMessage('Bitte fülle alle Felder aus!');
@@ -122,13 +124,12 @@ export async function editClubPopup(team) {
 
 // Club delete
 
-export async function deleteClub(teamId) {
-    return await API.DELETE(`teams/${teamId}/club`).then(async (data) => {
+export async function deleteClub(teamId: ID) {
+    return await ClubAPI.deleteClub(teamId).then(async (data) => {
         requestSuccessAlert(data);
         let teamdata = Cache.getTeamData(teamId);
         teamdata.team.club = null;
         teamdata.club_members = {};
-        return data.team;
     });
 }
 
@@ -141,7 +142,7 @@ export async function deleteClubPopup(team) {
 
 // Member list
 
-export async function getClubMembers(teamId) {
+export async function getClubMembers(teamId: ID) {
     let members = await Cache.refreshTeamCacheCategory(teamId, 'club_members');
     Cache.getTeamData(teamId).team.club.membercount = members.length;
     return members;
@@ -149,16 +150,17 @@ export async function getClubMembers(teamId) {
 
 // Member creation
 
-export async function createClubMember(teamId, data) {
-    return await API.POST(`teams/${teamId}/club/members`, data).then(
-        async (data) => {
-            requestSuccessAlert(data);
-            let teamdata = Cache.getTeamData(teamId);
-            teamdata.club_members[data.member.id] = data.member;
-            teamdata.team.club.membercount += 1;
-            return data.member;
-        }
-    );
+export async function createClubMember(
+    teamId: ID,
+    member: ClubMemberRequestDTO
+) {
+    return await ClubAPI.createClubMember(teamId, member).then(async (data) => {
+        requestSuccessAlert(data);
+        let teamdata = Cache.getTeamData(teamId);
+        teamdata.club_members[data.member.id] = data.member;
+        teamdata.team.club.membercount += 1;
+        return data.member;
+    });
 }
 
 export async function createClubMemberPopup(team) {
@@ -180,16 +182,10 @@ export async function createClubMemberPopup(team) {
             confirmButtonText: 'Hinzufügen',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const first_name = document.getElementById(
-                    'swal-input-first_name'
-                ).value;
-                const last_name = document.getElementById(
-                    'swal-input-last_name'
-                ).value;
-                const email = document.getElementById('swal-input-email').value;
-                const birth_date = document.getElementById(
-                    'swal-input-birth_date'
-                ).value;
+                const first_name = <string>$('#swal-input-first_name').val();
+                const last_name = <string>$('#swal-input-last_name').val();
+                const email = <string>$('#swal-input-email').val();
+                const birth_date = <string>$('#swal-input-birth_date').val();
 
                 if (!first_name || !last_name || !email) {
                     Swal.showValidationMessage(
@@ -212,18 +208,21 @@ export async function createClubMemberPopup(team) {
 
 // Member edit
 
-export async function editClubMember(teamId, memberId, data) {
-    return await API.POST(
-        `teams/${teamId}/club/members/${memberId}`,
-        data
-    ).then((data) => {
-        requestSuccessAlert(data);
-        Cache.getTeamData(teamId).club_members[memberId] = data.member;
-        return data.member;
-    });
+export async function editClubMember(
+    teamId: ID,
+    memberId: ID,
+    member: Partial<ClubMemberRequestDTO>
+) {
+    return await ClubAPI.updateClubMember(teamId, memberId, member).then(
+        (data) => {
+            requestSuccessAlert(data);
+            Cache.getTeamData(teamId).club_members[memberId] = data.member;
+            return data.member;
+        }
+    );
 }
 
-export async function editClubMemberPopup(team, member) {
+export async function editClubMemberPopup(team, member: ClubMember) {
     return (
         await Swal.fire({
             title: 'Vereinsmitglied bearbeiten',
@@ -242,16 +241,10 @@ export async function editClubMemberPopup(team, member) {
             confirmButtonText: 'Aktualisieren',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const first_name = document.getElementById(
-                    'swal-input-first_name'
-                ).value;
-                const last_name = document.getElementById(
-                    'swal-input-last_name'
-                ).value;
-                const email = document.getElementById('swal-input-email').value;
-                const birth_date = document.getElementById(
-                    'swal-input-birth_date'
-                ).value;
+                const first_name = <string>$('#swal-input-first_name').val();
+                const last_name = <string>$('#swal-input-last_name').val();
+                const email = <string>$('#swal-input-email').val();
+                const birth_date = <string>$('#swal-input-birth_date').val();
 
                 if (!first_name || !last_name || !email) {
                     Swal.showValidationMessage(
@@ -274,8 +267,8 @@ export async function editClubMemberPopup(team, member) {
 
 // Member deletion
 
-export async function deleteClubMember(teamId, memberId) {
-    return await API.DELETE(`teams/${teamId}/club/members/${memberId}`).then(
+export async function deleteClubMember(teamId: ID, memberId: ID) {
+    return await ClubAPI.deleteClubMember(teamId, memberId).then(
         async (data) => {
             requestSuccessAlert(data);
             let teamdata = Cache.getTeamData(teamId);
@@ -283,7 +276,9 @@ export async function deleteClubMember(teamId, memberId) {
             teamdata.team.club.membercount -= 1;
 
             // Remove member from all groups
-            for (let group of Object.values(teamdata.club_groups)) {
+            for (let group of Object.values(
+                <IDIndexedObjectList<ClubGroup>>teamdata.club_groups
+            )) {
                 if (group.memberids.includes(memberId)) {
                     teamdata.club_groups[group.id].memberids.splice(
                         teamdata.club_groups[group.id].memberids.indexOf(
@@ -297,7 +292,7 @@ export async function deleteClubMember(teamId, memberId) {
     );
 }
 
-export async function deleteClubMemberPopup(team, member) {
+export async function deleteClubMemberPopup(team, member: ClubMember) {
     return await confirmAlert(
         `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club.name}' entfernen?`,
         async () => await deleteClubMember(team.id, member.id)
@@ -306,25 +301,30 @@ export async function deleteClubMemberPopup(team, member) {
 
 // Member portfolio
 
-export async function getClubMemberPortfolio(teamId, memberId) {
-    return await API.GET(
-        `teams/${teamId}/club/members/${memberId}/portfolio`
-    ).then((data) => {
-        return data.portfolio;
-    });
+export async function getClubMemberPortfolio(teamId: ID, memberId: ID) {
+    return await ClubAPI.getClubMemberPortfolio(teamId, memberId).then(
+        (data) => {
+            return data.portfolio;
+        }
+    );
 }
 
-export async function editClubMemberPortfolio(teamId, memberId, data) {
-    return await API.POST(
-        `teams/${teamId}/club/members/${memberId}/portfolio`,
-        data
+export async function editClubMemberPortfolio(
+    teamId: ID,
+    memberId: ID,
+    portfolio: Partial<ClubMemberPortfolioRequestDTO>
+) {
+    return await ClubAPI.updateClubMemberPortfolio(
+        teamId,
+        memberId,
+        portfolio
     ).then((data) => {
         requestSuccessAlert(data);
         return data.portfolio;
     });
 }
 
-export async function editClubMemberPortfolioPopup(team, member) {
+export async function editClubMemberPortfolioPopup(team, member: ClubMember) {
     return (
         await Swal.fire({
             title: `${member.first_name} ${member.last_name}: Portfolio bearbeiten`,
@@ -370,35 +370,23 @@ export async function editClubMemberPortfolioPopup(team, member) {
                 });
             },
             preConfirm: async () => {
-                const visible =
-                    document.getElementById('swal-input-visible').checked;
-                const image1_url = document.getElementById(
-                    'swal-input-image1_url'
-                ).value;
-                const image2_url = document.getElementById(
-                    'swal-input-image2_url'
-                ).value;
-                const member_since = document.getElementById(
-                    'swal-input-member_since'
-                ).value;
-                const hobby_since = document.getElementById(
-                    'swal-input-hobby_since'
-                ).value;
-                const role = document.getElementById('swal-input-role').value;
-                const profession = document.getElementById(
-                    'swal-input-profession'
-                ).value;
-                const hobbies =
-                    document.getElementById('swal-input-hobbies').textContent;
-                const highlights = document.getElementById(
-                    'swal-input-highlights'
-                ).textContent;
-                const biography = document.getElementById(
-                    'swal-input-biography'
-                ).textContent;
-                const contact_email = document.getElementById(
-                    'swal-input-contact_email'
-                ).value;
+                const visible = <boolean>(
+                    $('#swal-input-visible').prop('checked')
+                );
+                const image1_url = <string>$('#swal-input-image1_url').val();
+                const image2_url = <string>$('#swal-input-image2_url').val();
+                const member_since = <number>(
+                    $('#swal-input-member_since').val()
+                );
+                const hobby_since = <number>$('#swal-input-hobby_since').val();
+                const role = <string>$('#swal-input-role').val();
+                const profession = <string>$('#swal-input-profession').val();
+                const hobbies = <string>$('#swal-input-hobbies').val();
+                const highlights = <string>$('#swal-input-highlights').val();
+                const biography = <string>$('#swal-input-biography').val();
+                const contact_email = <string>(
+                    $('#swal-input-contact_email').val()
+                );
 
                 Swal.showLoading();
                 return await editClubMemberPortfolio(team.id, member.id, {
@@ -421,33 +409,30 @@ export async function editClubMemberPortfolioPopup(team, member) {
 
 // Member magic link
 
-export async function createClubMemberMagicLink(teamId, memberId) {
-    return await API.POST(
-        `teams/${teamId}/club/members/${memberId}/create-magic-link`
-    ).then(async (data) => {
-        requestSuccessAlert(data);
-        return data.url;
-    });
+export async function createClubMemberMagicLink(teamId: ID, memberId: ID) {
+    return await ClubAPI.createClubMemberMagicLink(teamId, memberId).then(
+        async (data) => {
+            requestSuccessAlert(data);
+            return data.url;
+        }
+    );
 }
 
 // Group list
 
-export async function getClubGroups(teamId) {
-    let groups = await Cache.refreshTeamCacheCategory(teamId, 'club_groups');
-    return groups;
+export async function getClubGroups(teamId: ID) {
+    return await Cache.refreshTeamCacheCategory(teamId, 'club_groups');
 }
 
 // Group creation
 
-export async function createClubGroup(teamId, data) {
-    return await API.POST(`teams/${teamId}/club/groups`, data).then(
-        async (data) => {
-            requestSuccessAlert(data);
-            let teamdata = Cache.getTeamData(teamId);
-            teamdata.club_groups[data.group.id] = data.group;
-            return data.group;
-        }
-    );
+export async function createClubGroup(teamId: ID, group: ClubGroupRequestDTO) {
+    return await ClubAPI.createClubGroup(teamId, group).then(async (data) => {
+        requestSuccessAlert(data);
+        let teamdata = Cache.getTeamData(teamId);
+        teamdata.club_groups[data.group.id] = data.group;
+        return data.group;
+    });
 }
 
 export async function createClubGroupPopup(team) {
@@ -466,10 +451,8 @@ export async function createClubGroupPopup(team) {
             confirmButtonText: 'Erstellen',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
 
                 if (!name) {
                     Swal.showValidationMessage('Bitte gib einen Namen ein!');
@@ -485,8 +468,12 @@ export async function createClubGroupPopup(team) {
 
 // Group edit
 
-export async function editClubGroup(teamId, groupId, data) {
-    return await API.POST(`teams/${teamId}/club/groups/${groupId}`, data).then(
+export async function editClubGroup(
+    teamId: ID,
+    groupId: ID,
+    group: Partial<ClubGroupRequestDTO>
+) {
+    return await ClubAPI.updateClubGroup(teamId, groupId, group).then(
         (data) => {
             requestSuccessAlert(data);
             Cache.getTeamData(teamId).club_groups[groupId] = data.group;
@@ -495,7 +482,7 @@ export async function editClubGroup(teamId, groupId, data) {
     );
 }
 
-export async function editClubGroupPopup(team, group) {
+export async function editClubGroupPopup(team, group: ClubGroup) {
     return (
         await Swal.fire({
             title: 'Gruppe bearbeiten',
@@ -511,10 +498,8 @@ export async function editClubGroupPopup(team, group) {
             confirmButtonText: 'Aktualisieren',
             cancelButtonText: 'Abbrechen',
             preConfirm: async () => {
-                const name = document.getElementById('swal-input-name').value;
-                const description = document.getElementById(
-                    'swal-input-description'
-                ).value;
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
 
                 if (!name) {
                     Swal.showValidationMessage('Bitte gib einen Namen ein!');
@@ -533,17 +518,15 @@ export async function editClubGroupPopup(team, group) {
 
 // Group deletion
 
-export async function deleteClubGroup(teamId, groupId) {
-    return await API.DELETE(`teams/${teamId}/club/groups/${groupId}`).then(
-        async (data) => {
-            requestSuccessAlert(data);
-            let teamdata = Cache.getTeamData(teamId);
-            delete teamdata.club_groups[groupId];
-        }
-    );
+export async function deleteClubGroup(teamId: ID, groupId: ID) {
+    return await ClubAPI.deleteClubGroup(teamId, groupId).then(async (data) => {
+        requestSuccessAlert(data);
+        let teamdata = Cache.getTeamData(teamId);
+        delete teamdata.club_groups[groupId];
+    });
 }
 
-export async function deleteClubGroupPopup(team, group) {
+export async function deleteClubGroupPopup(team, group: ClubGroup) {
     return await confirmAlert(
         `Willst du die Gruppe '${group.name}' wirklich löschen?`,
         async () => await deleteClubGroup(team.id, group.id)
@@ -552,19 +535,29 @@ export async function deleteClubGroupPopup(team, group) {
 
 // Add/remove member to/from group
 
-export async function addClubMemberToGroup(teamId, memberId, groupId) {
-    return await API.POST(
-        `teams/${teamId}/club/members/${memberId}/membership/${groupId}`
-    ).then(async (data) => {
-        requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        teamdata.club_groups[groupId].memberids.push(memberId);
-    });
+export async function addClubMemberToGroup(
+    teamId: ID,
+    memberId: ID,
+    groupId: ID
+) {
+    return await ClubAPI.addClubMemberToGroup(teamId, memberId, groupId).then(
+        async (data) => {
+            requestSuccessAlert(data);
+            let teamdata = Cache.getTeamData(teamId);
+            teamdata.club_groups[groupId].memberids.push(memberId);
+        }
+    );
 }
 
-export async function removeClubMemberFromGroup(teamId, memberId, groupId) {
-    return await API.DELETE(
-        `teams/${teamId}/club/members/${memberId}/membership/${groupId}`
+export async function removeClubMemberFromGroup(
+    teamId: ID,
+    memberId: ID,
+    groupId: ID
+) {
+    return await ClubAPI.removeClubMemberFromGroup(
+        teamId,
+        memberId,
+        groupId
     ).then(async (data) => {
         requestSuccessAlert(data);
         let teamdata = Cache.getTeamData(teamId);
@@ -575,10 +568,12 @@ export async function removeClubMemberFromGroup(teamId, memberId, groupId) {
     });
 }
 
-export async function updateClubMemberGroupsPopup(team, member) {
+export async function updateClubMemberGroupsPopup(team, member: ClubMember) {
     // Show a sweetalert with a multi-select of all groups; on submit, make add/remove requests for each group respectively
     let teamdata = Cache.getTeamData(team.id);
-    let groups = Object.values(teamdata.club_groups);
+    let groups = Object.values(
+        <IDIndexedObjectList<ClubGroup>>teamdata.club_groups
+    );
 
     var currentgroupids = [];
     for (let group of Object.values(groups)) {
@@ -614,7 +609,7 @@ export async function updateClubMemberGroupsPopup(team, member) {
                 $('#swal-input-groups').val(currentgroupids);
             },
             preConfirm: async () => {
-                let selectedgroupids = $('#swal-input-groups').val();
+                let selectedgroupids = <ID[]>$('#swal-input-groups').val();
 
                 Swal.showLoading();
                 let requests = [];
@@ -637,9 +632,28 @@ export async function updateClubMemberGroupsPopup(team, member) {
                     }
                 }
                 await Promise.all(requests);
-                successAlert('Gruppenzuordnung aktualisiert!');
+                successAlert(
+                    'Die Gruppenzuordnung wurde aktualisiert.',
+                    'Gruppenzuordnung aktualisiert'
+                );
                 return true;
             },
         })
     ).value;
+}
+
+// Group portfolios
+
+export async function showClubGroupPortfolioExportPopup(group: ClubGroup) {
+    return await Swal.fire({
+        title: 'Mitgliederportfolios exportieren',
+        html: `
+            Über folgende URL können die Mitgliederportfolios der Gruppe "${group.name}"
+            im JSON-Format abgerufen werden:
+            <input class="swal2-input" type="text" readonly value="${group.shared_url}">
+          `,
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonText: 'Schliessen',
+    }).value;
 }

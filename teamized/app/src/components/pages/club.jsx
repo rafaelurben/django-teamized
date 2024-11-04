@@ -6,10 +6,10 @@
 
 import React from 'react';
 
-import { getDateString, getAge } from '../../utils/datetime.ts';
+import { getAge, getDateString } from '../../utils/datetime.ts';
 import * as Dashboard from '../dashboard.jsx';
 import * as Cache from '../../utils/cache.js';
-import * as Club from '../../utils/club.js';
+import * as Club from '../../utils/club.ts';
 import * as Navigation from '../../utils/navigation.js';
 import { IconTooltip } from '../tooltips.jsx';
 
@@ -242,17 +242,7 @@ class ClubGroupsTableRow extends React.Component {
     }
 
     async handleSharePortfolioButtonClick() {
-        Swal.fire({
-            title: 'Mitgliederportfolios exportieren',
-            html: `
-                Über folgende URL können die Mitgliederportfolios der Gruppe "${this.props.group.name}"
-                im JSON-Format abgerufen werden:
-                <input class="swal2-input" type="text" readonly value="${this.props.group.shared_url}">
-              `,
-            showCancelButton: true,
-            showConfirmButton: false,
-            cancelButtonText: 'Schliessen',
-        });
+        await Club.showClubGroupPortfolioExportPopup(this.props.group);
     }
 
     render() {
