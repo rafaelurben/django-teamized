@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import React from "react";
+import React from 'react';
 
 /*
     This component is used to render the part of the menubar that is only on the app page.
@@ -48,7 +48,7 @@ export default class AppMenubar extends React.Component {
                 <li className="nav-item border-secondary border-end">
                     <a
                         className="nav-link mx-1 px-2"
-                        onClick={this.selectPage("teamlist")}
+                        onClick={this.selectPage('teamlist')}
                         title="Zur Teamliste"
                         href="#"
                     >
@@ -59,11 +59,11 @@ export default class AppMenubar extends React.Component {
                 {/* Team switcher */}
                 <select
                     id="teamswitcher"
-                    value={this.props.selectedTeamId || ""}
+                    value={this.props.selectedTeamId || ''}
                     className="form-select"
                     title="Team auswählen"
                     onInput={this.handleTeamSelect}
-                    style={{color: "var(--bs-navbar-color)"}}
+                    style={{ color: 'var(--bs-navbar-color)' }}
                 >
                     {teamlist}
                 </select>
@@ -72,7 +72,7 @@ export default class AppMenubar extends React.Component {
                 <li className="nav-item border-secondary border-start">
                     <a
                         className="nav-link mx-1 px-2"
-                        onClick={this.selectPage("team")}
+                        onClick={this.selectPage('team')}
                         title="Zur Teamseite"
                         href="#"
                     >

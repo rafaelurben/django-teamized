@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-import React from "react";
+import React from 'react';
 
-import {IconTooltip} from "./tooltips.jsx";
+import { IconTooltip } from './tooltips.jsx';
 
 /*
     These components create the basic dashboard layout (and style).
@@ -24,28 +24,32 @@ export class Page extends React.Component {
                     </div>
                     <p>Seite wird geladen...</p>
                 </div>
-            )
+            );
         } else {
             content = (
                 <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">
                     {this.props.children}
                 </div>
-            )
+            );
         }
 
         let header = [];
 
-        if (this.props.hasOwnProperty("title")) {
+        if (this.props.hasOwnProperty('title')) {
             header.push(
-                <h4 key="title" className="dashboard-title pt-3 mx-3 text-bold">{this.props.title}</h4>
+                <h4 key="title" className="dashboard-title pt-3 mx-3 text-bold">
+                    {this.props.title}
+                </h4>
             );
         }
-        if (this.props.hasOwnProperty("subtitle")) {
+        if (this.props.hasOwnProperty('subtitle')) {
             header.push(
-                <h5 key="subtitle" className="dashboard-subtitle mt-2 mx-3">{this.props.subtitle}</h5>
-            )
+                <h5 key="subtitle" className="dashboard-subtitle mt-2 mx-3">
+                    {this.props.subtitle}
+                </h5>
+            );
         }
-        if (this.props.hasOwnProperty("text")) {
+        if (this.props.hasOwnProperty('text')) {
             header.push(
                 <p key="text" className="dashboard-text mt-2 mx-3">
                     {this.props.text}
@@ -73,20 +77,16 @@ export class Column extends React.Component {
         for (let breakpoint of Object.keys(sizes)) {
             this.className += ` col-${breakpoint}-${sizes[breakpoint]}`;
         }
-        if (this.props.hasOwnProperty("grow")) {
-            this.className += " flex-grow-1";
+        if (this.props.hasOwnProperty('grow')) {
+            this.className += ' flex-grow-1';
         }
-        if (this.props.hasOwnProperty("className")) {
+        if (this.props.hasOwnProperty('className')) {
             this.className += ` ${this.props.className}`;
         }
     }
 
     render() {
-        return (
-            <div className={this.className}>
-                {this.props.children}
-            </div>
-        );
+        return <div className={this.className}>{this.props.children}</div>;
     }
 }
 
@@ -95,20 +95,16 @@ export class Row extends React.Component {
         super(props);
 
         this.className = `dashboard-row row w-100 g-0`;
-        if (this.props.hasOwnProperty("grow")) {
-            this.className += " flex-grow-1";
+        if (this.props.hasOwnProperty('grow')) {
+            this.className += ' flex-grow-1';
         }
-        if (this.props.hasOwnProperty("className")) {
+        if (this.props.hasOwnProperty('className')) {
             this.className += ` ${this.props.className}`;
         }
     }
 
     render() {
-        return (
-            <div className={this.className}>
-                {this.props.children}
-            </div>
-        );
+        return <div className={this.className}>{this.props.children}</div>;
     }
 }
 
@@ -120,25 +116,33 @@ export class Tile extends React.Component {
     render() {
         let header = [];
 
-        if (this.props.hasOwnProperty("title")) {
+        if (this.props.hasOwnProperty('title')) {
             header.push(
-                <h5 key="title" className="dashboard-tile-title pt-2 text-bold" style={{flexBasis: 0}}>
+                <h5
+                    key="title"
+                    className="dashboard-tile-title pt-2 text-bold"
+                    style={{ flexBasis: 0 }}
+                >
                     {this.props.title}
-                    {this.props.help ? <IconTooltip className="ms-2 small" title={this.props.help}/> : null}
+                    {this.props.help ? (
+                        <IconTooltip
+                            className="ms-2 small"
+                            title={this.props.help}
+                        />
+                    ) : null}
                 </h5>
             );
         }
-        if (this.props.hasOwnProperty("title")) {
-            header.push(
-                <hr key="hr" className="m-0"/>
-            );
+        if (this.props.hasOwnProperty('title')) {
+            header.push(<hr key="hr" className="m-0" />);
         }
 
-        this.className = "dashboard-tile row border border-dark rounded mx-2 mb-3 mt-0 flex-column";
-        if (this.props.hasOwnProperty("grow")) {
-            this.className += " flex-grow-1";
+        this.className =
+            'dashboard-tile row border border-dark rounded mx-2 mb-3 mt-0 flex-column';
+        if (this.props.hasOwnProperty('grow')) {
+            this.className += ' flex-grow-1';
         }
-        if (this.props.hasOwnProperty("className")) {
+        if (this.props.hasOwnProperty('className')) {
             this.className += ` ${this.props.className}`;
         }
 
@@ -156,19 +160,17 @@ export class Tile extends React.Component {
 export class Table extends React.Component {
     constructor(props) {
         super(props);
-        this.className = "table mb-0" + (this.props.className ? ` ${this.props.className}` : "");
+        this.className =
+            'table mb-0' +
+            (this.props.className ? ` ${this.props.className}` : '');
 
         if (!this.props.vertical) {
-            this.className += " align-middle"
+            this.className += ' align-middle';
         }
     }
 
     render() {
-        return (
-            <table className={this.className}>
-                {this.props.children}
-            </table>
-        )
+        return <table className={this.className}>{this.props.children}</table>;
     }
 }
 
@@ -178,19 +180,19 @@ export class TableButtonFooter extends React.Component {
     }
 
     render() {
-        if ("show" in this.props && !this.props.show) {
+        if ('show' in this.props && !this.props.show) {
             return null;
         }
 
         return (
-            <tfoot className={this.props.notopborder ? "border-top-0" : ""}>
-            <tr>
-                <td colSpan="1000" className="border-bottom-0">
-                    <div className="w-100 d-inline-flex justify-content-end gap-2">
-                        {this.props.children}
-                    </div>
-                </td>
-            </tr>
+            <tfoot className={this.props.notopborder ? 'border-top-0' : ''}>
+                <tr>
+                    <td colSpan="1000" className="border-bottom-0">
+                        <div className="w-100 d-inline-flex justify-content-end gap-2">
+                            {this.props.children}
+                        </div>
+                    </td>
+                </tr>
             </tfoot>
         );
     }

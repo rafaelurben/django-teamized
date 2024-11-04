@@ -2,10 +2,9 @@
  * Utils for the local team cache
  */
 
-import * as API from "./api.js";
-import * as Navigation from "./navigation.js";
-import * as Teams from "./teams.js";
-
+import * as API from './api.js';
+import * as Navigation from './navigation.js';
+import * as Teams from './teams.js';
 
 // Lookups
 
@@ -40,9 +39,9 @@ export function getMemberInTeam(teamId, memberId) {
 // Add and remove teams from cache
 
 function updateTeam(team) {
-    for (let category of ["members", "invites", "calendars", "todolists"]) {
+    for (let category of ['members', 'invites', 'calendars', 'todolists']) {
         if (team.hasOwnProperty(category)) {
-            window.appdata.teamcache[team.id][category] = {}
+            window.appdata.teamcache[team.id][category] = {};
             replaceTeamCacheCategory(team.id, category, team[category]);
             delete team[category];
             // Delete the category from the team object itself to avoid data redundancy
@@ -53,22 +52,22 @@ function updateTeam(team) {
 
 export function addTeam(team) {
     window.appdata.teamcache[team.id] = {
-        "team": {},
-        "calendars": {},
-        "invites": {},
-        "members": {},
-        "todolists": {},
-        "me_worksessions": {},
-        "club_members": {},
-        "club_groups": {},
-        "_state": {
-            calendars: {_initial: true, _refreshing: false},
-            invites: {_initial: true, _refreshing: false},
-            members: {_initial: true, _refreshing: false},
-            todolists: {_initial: true, _refreshing: false},
-            me_worksessions: {_initial: true, _refreshing: false},
-            club_members: {_initial: true, _refreshing: false},
-            club_groups: {_initial: true, _refreshing: false},
+        team: {},
+        calendars: {},
+        invites: {},
+        members: {},
+        todolists: {},
+        me_worksessions: {},
+        club_members: {},
+        club_groups: {},
+        _state: {
+            calendars: { _initial: true, _refreshing: false },
+            invites: { _initial: true, _refreshing: false },
+            members: { _initial: true, _refreshing: false },
+            todolists: { _initial: true, _refreshing: false },
+            me_worksessions: { _initial: true, _refreshing: false },
+            club_members: { _initial: true, _refreshing: false },
+            club_groups: { _initial: true, _refreshing: false },
         },
     };
     updateTeam(team);
@@ -107,7 +106,7 @@ export function updateTeamsCache(teams, defaultTeamId) {
         if (team.id in window.appdata.teamcache) {
             updateTeam(team);
         } else {
-            addTeam(team)
+            addTeam(team);
         }
     }
 
@@ -122,7 +121,11 @@ export function updateTeamsCache(teams, defaultTeamId) {
 export function replaceTeamCacheCategory(teamId, category, objects) {
     let teamdata = getTeamData(teamId);
     if (teamdata === null) {
-        console.warn("[Cache] Team " + teamId + " not found in cache. This usually happens when the page is soft reloaded twice in short succession and should not be a problem.");
+        console.warn(
+            '[Cache] Team ' +
+                teamId +
+                ' not found in cache. This usually happens when the page is soft reloaded twice in short succession and should not be a problem.'
+        );
     } else {
         teamdata[category] = {};
         for (let obj of objects) {
@@ -137,12 +140,21 @@ export async function refreshTeamCacheCategory(teamId, category) {
         if (teamdata._state[category]._refreshing === true) {
             // If the category is already being refreshed, we don't need to do anything
             // This will not resolve nor reject the promise
-            console.info("[Cache] Team category " + category + " is already being refreshed for team " + teamId + "!");
+            console.info(
+                '[Cache] Team category ' +
+                    category +
+                    ' is already being refreshed for team ' +
+                    teamId +
+                    '!'
+            );
         } else {
             teamdata._state[category]._refreshing = true;
-            API.GET(`teams/${teamId}/${category.replaceAll('_', '/')}`).then(
-                (data) => {
-                    let objects = data[category.split('_')[category.split('_').length - 1]];
+            API.GET(`teams/${teamId}/${category.replaceAll('_', '/')}`)
+                .then((data) => {
+                    let objects =
+                        data[
+                            category.split('_')[category.split('_').length - 1]
+                        ];
                     replaceTeamCacheCategory(teamId, category, objects);
 
                     teamdata._state[category]._initial = false;
@@ -150,13 +162,11 @@ export async function refreshTeamCacheCategory(teamId, category) {
                     Navigation.renderPage();
 
                     resolve(objects);
-                }
-            ).catch(
-                (error) => {
+                })
+                .catch((error) => {
                     teamdata._state[category]._refreshing = false;
                     reject(error);
-                }
-            );
+                });
         }
     });
 }

@@ -1,31 +1,31 @@
-"use strict";
+'use strict';
 
-import React from "react";
+import React from 'react';
 
-import Page_Calendars from "./pages/calendars.jsx";
-import Page_Club from "./pages/club.jsx";
-import Page_Home from "./pages/home.jsx";
-import Page_TeamList from "./pages/teamlist.jsx";
-import Page_Team from "./pages/team.jsx";
-import Page_ToDo from "./pages/todo.jsx";
-import Page_WorkingTime from "./pages/workingtime.jsx";
+import Page_Calendars from './pages/calendars.jsx';
+import Page_Club from './pages/club.jsx';
+import Page_Home from './pages/home.jsx';
+import Page_TeamList from './pages/teamlist.jsx';
+import Page_Team from './pages/team.jsx';
+import Page_ToDo from './pages/todo.jsx';
+import Page_WorkingTime from './pages/workingtime.jsx';
 
-import * as Teams from "../utils/teams.js";
-import * as Cache from "../utils/cache.js";
+import * as Teams from '../utils/teams.js';
+import * as Cache from '../utils/cache.js';
 
 /*
     This component is used to render the pages.
 */
 
 export const PAGE_NAMES = {
-    "home": "Startseite",
-    "club": "Verein",
-    "calendars": "Kalender",
-    "team": "Team",
-    "teamlist": "Teams",
-    "workingtime": "Arbeitszeit",
-    "todo": "To-do-Listen",
-}
+    home: 'Startseite',
+    club: 'Verein',
+    calendars: 'Kalender',
+    team: 'Team',
+    teamlist: 'Teams',
+    workingtime: 'Arbeitszeit',
+    todo: 'To-do-Listen',
+};
 
 export const PAGE_LIST = Object.keys(PAGE_NAMES);
 
@@ -47,38 +47,37 @@ export class PageLoader extends React.Component {
                 </div>
             );
         }
-        ;
-
-        if (this.props.page.startsWith("club") && teamdata.team.club === null) {
+        if (this.props.page.startsWith('club') && teamdata.team.club === null) {
             return (
                 <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
                     <div className="text-danger mb-4" role="status">
                         <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
                     </div>
                     <p>
-                        Die Vereinsfunktionen sind in diesem Team noch nicht aktiviert!
-                        Bitte wähle ein anderes Team oder eine andere Seite.
+                        Die Vereinsfunktionen sind in diesem Team noch nicht
+                        aktiviert! Bitte wähle ein anderes Team oder eine andere
+                        Seite.
                     </p>
                 </div>
             );
         }
 
         switch (this.props.page) {
-            case "home":
+            case 'home':
                 return (
                     <Page_Home
                         user={window.appdata.user}
                         settings={window.appdata.settings}
                     />
                 );
-            case "teamlist":
+            case 'teamlist':
                 return (
                     <Page_TeamList
                         teams={Teams.getTeamsList()}
                         selectedTeamId={window.appdata.selectedTeamId}
                     />
                 );
-            case "team":
+            case 'team':
                 return (
                     <Page_Team
                         team={teamdata.team}
@@ -86,7 +85,7 @@ export class PageLoader extends React.Component {
                         invites={teamdata.invites}
                     />
                 );
-            case "workingtime":
+            case 'workingtime':
                 return (
                     <Page_WorkingTime
                         current_worksession={window.appdata.current_worksession}
@@ -95,7 +94,7 @@ export class PageLoader extends React.Component {
                         selectedTeam={teamdata.team}
                     />
                 );
-            case "calendars":
+            case 'calendars':
                 return (
                     <Page_Calendars
                         team={teamdata.team}
@@ -103,7 +102,7 @@ export class PageLoader extends React.Component {
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
                 );
-            case "todo":
+            case 'todo':
                 return (
                     <Page_ToDo
                         team={teamdata.team}
@@ -111,7 +110,7 @@ export class PageLoader extends React.Component {
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
                 );
-            case "club":
+            case 'club':
                 return (
                     <Page_Club
                         team={teamdata.team}

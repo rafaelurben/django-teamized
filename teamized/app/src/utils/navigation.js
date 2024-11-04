@@ -5,15 +5,19 @@
 import { createRoot } from 'react-dom/client';
 import React from 'react';
 
-import {PageLoader, PAGE_LIST, PAGE_NAMES} from "../components/pageloader.jsx";
-import AppMenubar from "../components/menubar.jsx";
-import AppSidebar from "../components/sidebar.jsx";
+import {
+    PageLoader,
+    PAGE_LIST,
+    PAGE_NAMES,
+} from '../components/pageloader.jsx';
+import AppMenubar from '../components/menubar.jsx';
+import AppSidebar from '../components/sidebar.jsx';
 import * as Teams from './teams.js';
-import {getCurrentTeamData} from "./cache.js";
+import { getCurrentTeamData } from './cache.js';
 
-let rootSidebar = createRoot(document.getElementById("app-sidebar"));
-let rootMenubar = createRoot(document.getElementById("app-menubar"));
-let rootPage = createRoot(document.getElementById("app-maincontent"));
+let rootSidebar = createRoot(document.getElementById('app-sidebar'));
+let rootMenubar = createRoot(document.getElementById('app-menubar'));
+let rootPage = createRoot(document.getElementById('app-maincontent'));
 
 function ensureExistingPage() {
     if (!PAGE_LIST.includes(window.appdata.currentPage)) {
@@ -47,7 +51,7 @@ export function exportToURL(options) {
         let additionalParams;
         let removeParams;
 
-        ({additionalParams = {}, removeParams = []} = options);
+        ({ additionalParams = {}, removeParams = [] } = options);
 
         // Add the additional parameters
         for (const key in additionalParams) {
@@ -67,9 +71,9 @@ export function exportToURL(options) {
                 page: window.appdata.currentPage,
                 selectedTeamId: window.appdata.selectedTeamId,
             },
-            "",
+            '',
             newurl.href,
-        ]
+        ];
 
         if (!window.appdata.initialLoadComplete) {
             // Replace the current history entry with the new options (keeps the last page in the history for the back button)
@@ -124,11 +128,7 @@ export function renderSidebar() {
 }
 
 export function renderPage() {
-    rootPage.render(
-        <PageLoader
-            page={window.appdata.currentPage}
-        />
-    );
+    rootPage.render(<PageLoader page={window.appdata.currentPage} />);
 }
 
 export function renderMenubar() {
@@ -167,7 +167,7 @@ export function selectPage(page) {
         render();
         hideSidebarOnMobile();
     } else {
-        console.error("Invalid page: " + page);
+        console.error('Invalid page: ' + page);
     }
 }
 
@@ -175,7 +175,7 @@ export function selectPage(page) {
  * Handle the browser back and forward buttons
  */
 export function handleHistoryNavigation() {
-    console.log("Navigated in history! Switching page...");
+    console.log('Navigated in history! Switching page...');
     importFromURL();
     ensureExistingPage();
     Teams.ensureExistingTeam();

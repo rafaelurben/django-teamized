@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import React from "react";
+import React from 'react';
 
 /*
     This component is used to render the sidebar.
@@ -22,9 +22,9 @@ export default class AppSidebar extends React.Component {
 
     getLinkClass(page) {
         if (page === this.props.page) {
-            return "nav-link active";
+            return 'nav-link active';
         } else {
-            return "nav-link text-white";
+            return 'nav-link text-white';
         }
     }
 
@@ -32,14 +32,14 @@ export default class AppSidebar extends React.Component {
         let clubPages = null;
         if (this.props.isClubEnabled) {
             clubPages = [
-                <hr className="my-1" key="hr-club"/>,
+                <hr className="my-1" key="hr-club" />,
                 <li key="page-club">
                     <a
                         href="#"
-                        className={this.getLinkClass("club")}
-                        onClick={this.selectPage("club")}
+                        className={this.getLinkClass('club')}
+                        onClick={this.selectPage('club')}
                     >
-                        <i className="fas fa-fw fa-people-group"/>
+                        <i className="fas fa-fw fa-people-group" />
                         Verein
                     </a>
                 </li>,
@@ -52,67 +52,67 @@ export default class AppSidebar extends React.Component {
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("home")}
-                            onClick={this.selectPage("home")}
+                            className={this.getLinkClass('home')}
+                            onClick={this.selectPage('home')}
                         >
-                            <i className="fas fa-fw fa-home"/>
+                            <i className="fas fa-fw fa-home" />
                             Startseite
                         </a>
                     </li>
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("teamlist")}
-                            onClick={this.selectPage("teamlist")}
+                            className={this.getLinkClass('teamlist')}
+                            onClick={this.selectPage('teamlist')}
                         >
-                            <i className="fas fa-fw fa-user-group"/>
+                            <i className="fas fa-fw fa-user-group" />
                             Teams
                         </a>
                     </li>
-                    <hr className="my-1"/>
+                    <hr className="my-1" />
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("team")}
-                            onClick={this.selectPage("team")}
+                            className={this.getLinkClass('team')}
+                            onClick={this.selectPage('team')}
                         >
-                            <i className="fas fa-fw fa-users-viewfinder"/>
+                            <i className="fas fa-fw fa-users-viewfinder" />
                             Team
                         </a>
                     </li>
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("workingtime")}
-                            onClick={this.selectPage("workingtime")}
+                            className={this.getLinkClass('workingtime')}
+                            onClick={this.selectPage('workingtime')}
                         >
-                            <i className="fas fa-fw fa-business-time"/>
+                            <i className="fas fa-fw fa-business-time" />
                             Arbeitszeit
                         </a>
                     </li>
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("calendars")}
-                            onClick={this.selectPage("calendars")}
+                            className={this.getLinkClass('calendars')}
+                            onClick={this.selectPage('calendars')}
                         >
-                            <i className="fas fa-fw fa-calendar-days"/>
+                            <i className="fas fa-fw fa-calendar-days" />
                             Kalender
                         </a>
                     </li>
                     <li>
                         <a
                             href="#"
-                            className={this.getLinkClass("todo")}
-                            onClick={this.selectPage("todo")}
+                            className={this.getLinkClass('todo')}
+                            onClick={this.selectPage('todo')}
                         >
-                            <i className="fas fa-fw fa-tasks"/>
+                            <i className="fas fa-fw fa-tasks" />
                             To-do-Listen
                         </a>
                     </li>
                     {clubPages}
                 </ul>
-                <hr/>
+                <hr />
                 <div className="dropup">
                     <a
                         href="#"
@@ -128,14 +128,19 @@ export default class AppSidebar extends React.Component {
                             height="32"
                             className="rounded-circle me-2"
                         />
-                        <strong className="me-2">{this.props.user.username}</strong>
+                        <strong className="me-2">
+                            {this.props.user.username}
+                        </strong>
                     </a>
                     <ul
                         className="dropdown-menu text-small shadow"
                         aria-labelledby="dropdownUser1"
                     >
                         <li>
-                            <a className="dropdown-item" href="/account/?next=/teamized/app/">
+                            <a
+                                className="dropdown-item"
+                                href="/account/?next=/teamized/app/"
+                            >
                                 <i className="me-2 fas fa-fw fa-user"></i>
                                 Account
                             </a>
@@ -151,7 +156,7 @@ export default class AppSidebar extends React.Component {
                             </a>
                         </li>
                         <li>
-                            <hr className="dropdown-divider"/>
+                            <hr className="dropdown-divider" />
                         </li>
                         <li>
                             <a

@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import { Tooltip as BSTooltip } from 'bootstrap'
-import React from "react";
+import { Tooltip as BSTooltip } from 'bootstrap';
+import React from 'react';
 
 /*
     Tooltip components
@@ -13,14 +13,20 @@ export class Tooltip extends React.Component {
     }
 
     componentDidMount() {
-        document.querySelectorAll('[data-toggle="tooltip"]').forEach(function (el) {
-            new BSTooltip(el);
-        });
+        document
+            .querySelectorAll('[data-toggle="tooltip"]')
+            .forEach(function (el) {
+                new BSTooltip(el);
+            });
     }
 
     render() {
         return (
-            <abbr className={this.props.className} title={this.props.title} data-toggle="tooltip">
+            <abbr
+                className={this.props.className}
+                title={this.props.title}
+                data-toggle="tooltip"
+            >
                 {this.props.children}
             </abbr>
         );
@@ -30,13 +36,13 @@ export class Tooltip extends React.Component {
 export class IconTooltip extends React.Component {
     constructor(props) {
         super(props);
-        this.icon = this.props.icon || "fas fa-info-circle";
+        this.icon = this.props.icon || 'fas fa-info-circle';
     }
 
     render() {
         return (
             <Tooltip className={this.props.className} title={this.props.title}>
-                <i className={"fa-fw " + this.icon}></i>
+                <i className={'fa-fw ' + this.icon}></i>
             </Tooltip>
         );
     }
