@@ -9,7 +9,7 @@ import React from 'react';
 import { errorAlert } from '../../utils/alerts.ts';
 import * as Dashboard from '../dashboard.jsx';
 import * as ToDo from '../../utils/todo.ts';
-import * as Navigation from '../../utils/navigation.js';
+import * as Navigation from '../../utils/navigation.tsx';
 import * as Cache from '../../utils/cache.js';
 import { IconTooltip, Tooltip } from '../tooltips.jsx';
 

@@ -11,7 +11,7 @@ import {
 } from './alerts';
 import * as WorkingtimeAPI from '../api/workingtime';
 import * as Cache from './cache.js';
-import * as Navigation from './navigation.js';
+import * as Navigation from './navigation';
 import { isoFormat, localInputFormat } from './datetime';
 import { ID } from '../interfaces/common';
 import {

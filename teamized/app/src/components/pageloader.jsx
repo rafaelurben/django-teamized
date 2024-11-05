@@ -10,7 +10,7 @@ import Page_Team from './pages/team.jsx';
 import Page_ToDo from './pages/todo.jsx';
 import Page_WorkingTime from './pages/workingtime.jsx';
 
-import * as Teams from '../utils/teams.ts';
+import * as Teams from '../utils/teams';
 import * as Cache from '../utils/cache.js';
 
 /*

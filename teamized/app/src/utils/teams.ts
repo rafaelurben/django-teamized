@@ -11,7 +11,7 @@ import {
 } from './alerts';
 import * as TeamsAPI from '../api/teams';
 import { isoFormat, localInputFormat } from './datetime';
-import * as Navigation from './navigation.js';
+import * as Navigation from './navigation';
 import * as Cache from './cache.js';
 import * as Utils from './utils';
 import { Team, TeamRequestDTO } from '../interfaces/teams/team';

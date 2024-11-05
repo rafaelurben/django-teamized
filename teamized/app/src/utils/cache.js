@@ -3,8 +3,8 @@
  */
 
 import * as TeamsAPI from '../api/teams';
-import * as Navigation from './navigation.js';
-import * as Teams from './teams.ts';
+import * as Navigation from './navigation.tsx';
+import * as Teams from './teams';
 
 // Lookups
 

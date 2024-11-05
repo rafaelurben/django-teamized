@@ -12,12 +12,12 @@ import {
 } from '../components/pageloader.jsx';
 import AppMenubar from '../components/menubar.jsx';
 import AppSidebar from '../components/sidebar.jsx';
-import * as Teams from './teams.ts';
+import * as Teams from './teams';
 import { getCurrentTeamData } from './cache.js';
 
-let rootSidebar = createRoot(document.getElementById('app-sidebar'));
-let rootMenubar = createRoot(document.getElementById('app-menubar'));
-let rootPage = createRoot(document.getElementById('app-maincontent'));
+let rootSidebar = createRoot(document.getElementById('app-sidebar')!);
+let rootMenubar = createRoot(document.getElementById('app-menubar')!);
+let rootPage = createRoot(document.getElementById('app-maincontent')!);
 
 function ensureExistingPage() {
     if (!PAGE_LIST.includes(window.appdata.currentPage)) {
@@ -33,23 +33,24 @@ function updatePageTitle() {
 
 /**
  * Export changes from the cache to the URL
- *
- * @param {object} options
  */
-export function exportToURL(options) {
+export function exportToURL(options?: {
+    additionalParams?: { [key: string]: any };
+    removeParams?: string[];
+}) {
     ensureExistingPage();
     Teams.ensureExistingTeam();
 
-    const oldurl = new URL(window.location);
-    var newurl = new URL(window.location);
+    const oldurl = new URL(window.location.href);
+    let newurl = new URL(window.location.href);
 
     // Export the pagename and teamid to the URL
     newurl.searchParams.set('p', window.appdata.currentPage);
     newurl.searchParams.set('t', window.appdata.selectedTeamId);
 
     if (options) {
-        let additionalParams;
-        let removeParams;
+        let additionalParams: object;
+        let removeParams: string[];
 
         ({ additionalParams = {}, removeParams = [] } = options);
 
@@ -66,7 +67,7 @@ export function exportToURL(options) {
 
     // If the URL has changed, update the URL
     if (oldurl.href !== newurl.href) {
-        let args = [
+        let args: [object, string, string] = [
             {
                 page: window.appdata.currentPage,
                 selectedTeamId: window.appdata.selectedTeamId,
@@ -89,12 +90,10 @@ export function exportToURL(options) {
 }
 
 /**
- * Import changes from the URL to the cache
+ * Import the pagename and teamid from the URL
  */
 export function importFromURL() {
-    // Import the pagename and teamid from the URL
-
-    const url = new URL(window.location);
+    const url = new URL(window.location.href);
     window.appdata.currentPage = url.searchParams.get('p');
     window.appdata.selectedTeamId = url.searchParams.get('t');
 }
@@ -157,10 +156,8 @@ export function reRender() {
 
 /**
  * Change the current page (and render it)
- *
- * @param {String} page
  */
-export function selectPage(page) {
+export function selectPage(page: string) {
     if (PAGE_LIST.includes(page)) {
         window.appdata.currentPage = page;
         exportToURL();

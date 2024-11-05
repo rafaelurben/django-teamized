@@ -7,8 +7,8 @@
 import React from 'react';
 
 import { waitingAlert } from '../../utils/alerts.ts';
-import * as Teams from '../../utils/teams.ts';
-import * as Navigation from '../../utils/navigation.js';
+import * as Teams from '../../utils/teams';
+import * as Navigation from '../../utils/navigation.tsx';
 import * as Dashboard from '../dashboard.jsx';
 import { IconTooltip } from '../tooltips.jsx';
 

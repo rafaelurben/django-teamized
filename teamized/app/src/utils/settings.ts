@@ -5,7 +5,7 @@
 import $ from 'jquery';
 
 import * as GeneralAPI from '../api/general';
-import * as Navigation from './navigation.js';
+import * as Navigation from './navigation';
 import { Settings } from '../interfaces/settings';
 
 declare global {

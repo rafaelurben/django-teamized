@@ -8,7 +8,7 @@ import React from 'react';
 import * as Recharts from 'recharts';
 
 import { errorAlert } from '../../utils/alerts.ts';
-import * as Navigation from '../../utils/navigation.js';
+import * as Navigation from '../../utils/navigation.tsx';
 import * as WorkingTime from '../../utils/workingtime.ts';
 import * as Cache from '../../utils/cache.js';
 import * as Dashboard from '../dashboard.jsx';
