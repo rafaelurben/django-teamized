@@ -13,7 +13,7 @@ import * as WorkingTime from '../../utils/workingtime.ts';
 import * as Cache from '../../utils/cache.js';
 import * as Dashboard from '../dashboard.jsx';
 import { IconTooltip } from '../tooltips.jsx';
-import * as Stats from '../../utils/workingtimestats.js';
+import * as Stats from '../../utils/workingtimestats.ts';
 import {
     roundDays,
     localInputFormat,

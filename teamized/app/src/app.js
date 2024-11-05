@@ -17,7 +17,7 @@ import * as Teams from './utils/teams.js';
 import * as ToDo from './utils/todo.ts';
 import * as Utils from './utils/utils.js';
 import * as WorkingTime from './utils/workingtime.ts';
-import * as WorkingTimeStats from './utils/workingtimestats.js';
+import * as WorkingTimeStats from './utils/workingtimestats.ts';
 
 // Make namespaces available in the console (for debugging)
 
