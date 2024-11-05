@@ -6,7 +6,7 @@
 import $ from 'jquery';
 
 import * as Alerts from './utils/alerts.ts';
-import * as API from './utils/api.js';
+import * as BaseAPI from './api/_base.ts';
 import * as Cache from './utils/cache.js';
 import * as Calendars from './utils/calendars.ts';
 import * as Club from './utils/club.ts';
@@ -23,7 +23,7 @@ import * as WorkingTimeStats from './utils/workingtimestats.ts';
 
 window._App = {
     Alerts,
-    API,
+    BaseAPI,
     Cache,
     Calendars,
     Club,

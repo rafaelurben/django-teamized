@@ -2,7 +2,7 @@
  * Utils for the local team cache
  */
 
-import * as API from './api.js';
+import * as TeamsAPI from '../api/teams';
 import * as Navigation from './navigation.js';
 import * as Teams from './teams.ts';
 
@@ -149,7 +149,7 @@ export async function refreshTeamCacheCategory(teamId, category) {
             );
         } else {
             teamdata._state[category]._refreshing = true;
-            API.GET(`teams/${teamId}/${category.replaceAll('_', '/')}`)
+            TeamsAPI.getItemsOfCategory(teamId, category)
                 .then((data) => {
                     let objects =
                         data[
