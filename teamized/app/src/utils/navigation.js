@@ -12,7 +12,7 @@ import {
 } from '../components/pageloader.jsx';
 import AppMenubar from '../components/menubar.jsx';
 import AppSidebar from '../components/sidebar.jsx';
-import * as Teams from './teams.js';
+import * as Teams from './teams.ts';
 import { getCurrentTeamData } from './cache.js';
 
 let rootSidebar = createRoot(document.getElementById('app-sidebar'));

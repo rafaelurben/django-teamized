@@ -9,7 +9,7 @@ import React from 'react';
 import { successAlert } from '../../utils/alerts.ts';
 import * as Cache from '../../utils/cache.js';
 import * as Club from '../../utils/club.ts';
-import * as Teams from '../../utils/teams.js';
+import * as Teams from '../../utils/teams.ts';
 import * as Navigation from '../../utils/navigation.js';
 import * as Dashboard from '../dashboard.jsx';
 import { IconTooltip, Tooltip } from '../tooltips.jsx';

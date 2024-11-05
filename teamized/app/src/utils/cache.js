@@ -4,7 +4,7 @@
 
 import * as API from './api.js';
 import * as Navigation from './navigation.js';
-import * as Teams from './teams.js';
+import * as Teams from './teams.ts';
 
 // Lookups
 

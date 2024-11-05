@@ -127,7 +127,7 @@ export function isoFormat(value: Date | string): string {
  * @returns {String}
  */
 export function localInputFormat(
-    value: Date | string,
+    value: Date | string | null | undefined,
     dateOnly: boolean = false
 ): string {
     if (value === undefined || value === null || value === '') return '';

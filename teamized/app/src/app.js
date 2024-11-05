@@ -13,7 +13,7 @@ import * as Club from './utils/club.ts';
 import * as DateTime from './utils/datetime.ts';
 import * as Navigation from './utils/navigation.js';
 import * as Settings from './utils/settings.ts';
-import * as Teams from './utils/teams.js';
+import * as Teams from './utils/teams.ts';
 import * as ToDo from './utils/todo.ts';
 import * as Utils from './utils/utils.ts';
 import * as WorkingTime from './utils/workingtime.ts';
