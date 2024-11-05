@@ -2,7 +2,7 @@
  * Datetime utils
  */
 
-import { padZero } from './utils.js';
+import { padZero } from './utils';
 
 // Datetime utils
 

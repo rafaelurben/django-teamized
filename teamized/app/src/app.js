@@ -15,7 +15,7 @@ import * as Navigation from './utils/navigation.js';
 import * as Settings from './utils/settings.ts';
 import * as Teams from './utils/teams.js';
 import * as ToDo from './utils/todo.ts';
-import * as Utils from './utils/utils.js';
+import * as Utils from './utils/utils.ts';
 import * as WorkingTime from './utils/workingtime.ts';
 import * as WorkingTimeStats from './utils/workingtimestats.ts';
 

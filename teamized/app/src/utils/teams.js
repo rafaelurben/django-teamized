@@ -13,7 +13,7 @@ import * as API from './api.js';
 import { isoFormat, localInputFormat } from './datetime.ts';
 import * as Navigation from './navigation.js';
 import * as Cache from './cache.js';
-import * as Utils from './utils.js';
+import * as Utils from './utils.ts';
 
 export { getTeamsList } from './cache.js';
 
