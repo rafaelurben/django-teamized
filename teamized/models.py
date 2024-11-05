@@ -243,6 +243,12 @@ class Team(models.Model):
 
         return self.members.get(user=user)
 
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.name = validation.text(data, "name", False, self.name, max_length=50)
+        self.description = validation.text(data, "description", False, self.description)
+        self.save()
+
 
 class Member(models.Model):
     "Connection between User and Team"

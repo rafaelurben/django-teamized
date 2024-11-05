@@ -143,12 +143,8 @@ def endpoint_team(request, team: Team):
         if not team.user_is_owner(user):
             return NO_PERMISSION
 
-        name = request.POST.get("name", "")[:49]
-        description = request.POST.get("description", "")
+        team.update_from_post_data(request.POST)
 
-        team.name = name
-        team.description = description
-        team.save()
         return JsonResponse(
             {
                 "success": True,
