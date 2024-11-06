@@ -4,13 +4,7 @@
 
 import $ from 'jquery';
 
-import {
-    confirmAlert,
-    doubleConfirmAlert,
-    requestSuccessAlert,
-    successAlert,
-    Swal,
-} from './alerts';
+import { confirmAlert, doubleConfirmAlert, successAlert, Swal } from './alerts';
 import * as ClubAPI from '../api/club';
 import * as Cache from './cache';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
@@ -38,7 +32,6 @@ export function getCurrentClubData() {
 
 export async function createClub(teamId: ID, club: ClubRequestDTO) {
     return await ClubAPI.createClub(teamId, club).then(async (data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).team.club = data.club;
         return data.club;
     });
@@ -87,7 +80,6 @@ export async function createClubPopup(team: Team) {
 
 export async function editClub(teamId: ID, club: Partial<ClubRequestDTO>) {
     return await ClubAPI.updateClub(teamId, club).then(async (data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).team.club = data.club;
         return data.club;
     });
@@ -128,7 +120,6 @@ export async function editClubPopup(team: Team) {
 
 export async function deleteClub(teamId: ID) {
     return await ClubAPI.deleteClub(teamId).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         teamData.team.club = null;
         teamData.club_members = {};
@@ -160,7 +151,6 @@ export async function createClubMember(
     member: ClubMemberRequestDTO
 ) {
     return await ClubAPI.createClubMember(teamId, member).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         teamData.club_members[data.member.id] = data.member;
         teamData.team.club!.membercount += 1;
@@ -220,7 +210,6 @@ export async function editClubMember(
 ) {
     return await ClubAPI.updateClubMember(teamId, memberId, member).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).club_members[memberId] = data.member;
             return data.member;
         }
@@ -275,7 +264,6 @@ export async function editClubMemberPopup(team: Team, member: ClubMember) {
 export async function deleteClubMember(teamId: ID, memberId: ID) {
     return await ClubAPI.deleteClubMember(teamId, memberId).then(
         async (data) => {
-            requestSuccessAlert(data);
             let teamData = Cache.getTeamData(teamId);
             delete teamData.club_members[memberId];
             teamData.team.club!.membercount -= 1;
@@ -324,7 +312,6 @@ export async function editClubMemberPortfolio(
         memberId,
         portfolio
     ).then((data) => {
-        requestSuccessAlert(data);
         return data.portfolio;
     });
 }
@@ -422,7 +409,6 @@ export async function editClubMemberPortfolioPopup(
 export async function createClubMemberMagicLink(teamId: ID, memberId: ID) {
     return await ClubAPI.createClubMemberMagicLink(teamId, memberId).then(
         async (data) => {
-            requestSuccessAlert(data);
             return data.url;
         }
     );
@@ -441,7 +427,6 @@ export async function getClubGroups(teamId: ID) {
 
 export async function createClubGroup(teamId: ID, group: ClubGroupRequestDTO) {
     return await ClubAPI.createClubGroup(teamId, group).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         teamData.club_groups[data.group.id] = data.group;
         return data.group;
@@ -488,7 +473,6 @@ export async function editClubGroup(
 ) {
     return await ClubAPI.updateClubGroup(teamId, groupId, group).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).club_groups[groupId] = data.group;
             return data.group;
         }
@@ -533,7 +517,6 @@ export async function editClubGroupPopup(team: Team, group: ClubGroup) {
 
 export async function deleteClubGroup(teamId: ID, groupId: ID) {
     return await ClubAPI.deleteClubGroup(teamId, groupId).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         delete teamData.club_groups[groupId];
     });
@@ -555,7 +538,6 @@ export async function addClubMemberToGroup(
 ) {
     return await ClubAPI.addClubMemberToGroup(teamId, memberId, groupId).then(
         async (data) => {
-            requestSuccessAlert(data);
             let teamData = Cache.getTeamData(teamId);
             teamData.club_groups[groupId].memberids.push(memberId);
         }
@@ -572,7 +554,6 @@ export async function removeClubMemberFromGroup(
         memberId,
         groupId
     ).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         teamData.club_groups[groupId].memberids.splice(
             teamData.club_groups[groupId].memberids.indexOf(memberId),

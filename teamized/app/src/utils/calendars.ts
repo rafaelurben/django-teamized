@@ -4,12 +4,7 @@
 
 import $ from 'jquery';
 
-import {
-    confirmAlert,
-    doubleConfirmAlert,
-    requestSuccessAlert,
-    Swal,
-} from './alerts';
+import { confirmAlert, doubleConfirmAlert, Swal } from './alerts';
 import * as Cache from './cache';
 import { isInRange, isoFormat, localInputFormat, roundDays } from './datetime';
 import * as CalendarAPI from '../api/calendar';
@@ -99,7 +94,6 @@ export async function getCalendars(teamId: ID) {
 
 export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
     return await CalendarAPI.createCalendar(teamId, calendar).then((data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).calendars[data.calendar.id] = data.calendar;
         return data.calendar;
     });
@@ -158,7 +152,6 @@ export async function editCalendar(
 ) {
     return await CalendarAPI.updateCalendar(teamId, calendarId, calendar).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).calendars[data.calendar.id] =
                 data.calendar;
             return data.calendar;
@@ -214,7 +207,6 @@ export async function editCalendarPopup(team: Team, calendar: Calendar) {
 
 export async function deleteCalendar(teamId: ID, calendarId: ID) {
     await CalendarAPI.deleteCalendar(teamId, calendarId).then((data) => {
-        requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).calendars[calendarId];
     });
 }
@@ -301,7 +293,6 @@ export async function createEvent(
 ) {
     return await CalendarAPI.createEvent(teamId, calendarId, event).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).calendars[calendarId].events[data.id] =
                 data.event;
             return data.event;
@@ -463,7 +454,6 @@ export async function editEvent(
         eventId,
         event
     ).then((data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).calendars[calendarId].events[eventId] =
             data.event;
         return data.event;
@@ -630,7 +620,6 @@ export function editEventPopup(
 export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
     return await CalendarAPI.deleteEvent(teamId, calendarId, eventId).then(
         (data) => {
-            requestSuccessAlert(data);
             delete Cache.getTeamData(teamId).calendars[calendarId].events[
                 eventId
             ];

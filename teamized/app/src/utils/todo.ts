@@ -5,7 +5,6 @@
 import {
     confirmAlert,
     doubleConfirmAlert,
-    requestSuccessAlert,
     Swal,
     SweetAlertResult,
 } from './alerts';
@@ -34,7 +33,6 @@ export async function getToDoLists(teamId: ID) {
 
 export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
     return await TodolistAPI.createTodolist(teamId, todolist).then((data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).todolists[data.todolist.id] = data.todolist;
         return data.todolist;
     });
@@ -93,7 +91,6 @@ export async function editToDoList(
 ) {
     return await TodolistAPI.updateTodolist(teamId, todolistId, todolist).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).todolists[data.todolist.id] =
                 data.todolist;
             return data.todolist;
@@ -149,7 +146,6 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
 
 export async function deleteToDoList(teamId: ID, todolistId: ID) {
     await TodolistAPI.deleteTodolist(teamId, todolistId).then((data) => {
-        requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).todolists[todolistId];
     });
 }
@@ -174,7 +170,6 @@ export async function createToDoListItem(
 ) {
     return await TodolistAPI.createTodolistItem(teamId, todolistId, item).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).todolists[todolistId].items[data.id] =
                 data.item;
             return data.item;
@@ -196,7 +191,6 @@ export async function editToDoListItem(
         itemId,
         item
     ).then((data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).todolists[todolistId].items[itemId] =
             data.item;
         return data.item;
@@ -292,7 +286,6 @@ export async function deleteToDoListItem(
         todolistId,
         itemId
     ).then((data) => {
-        requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).todolists[todolistId].items[itemId];
     });
 }

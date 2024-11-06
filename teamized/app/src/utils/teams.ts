@@ -4,13 +4,7 @@
 
 import $ from 'jquery';
 
-import {
-    confirmAlert,
-    doubleConfirmAlert,
-    infoAlert,
-    requestSuccessAlert,
-    Swal,
-} from './alerts';
+import { confirmAlert, doubleConfirmAlert, infoAlert, Swal } from './alerts';
 import * as TeamsAPI from '../api/teams';
 import { isoFormat, localInputFormat } from './datetime';
 import * as Navigation from './navigation';
@@ -84,8 +78,6 @@ export async function getTeams() {
 
 export async function createTeam(team: TeamRequestDTO) {
     return await TeamsAPI.createTeam(team).then(async (data) => {
-        requestSuccessAlert(data);
-
         Cache.addTeam(data.team);
         switchTeam(data.team.id);
 
@@ -129,7 +121,6 @@ export async function createTeamPopup() {
 
 export async function editTeam(teamId: ID, team: Partial<TeamRequestDTO>) {
     return await TeamsAPI.updateTeam(teamId, team).then(async (data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).team = data.team;
         return data.team;
     });
@@ -170,7 +161,6 @@ export async function editTeamPopup(team: Team) {
 
 export async function deleteTeam(teamId: ID) {
     await TeamsAPI.deleteTeam(teamId).then(async (data) => {
-        requestSuccessAlert(data);
         await Cache.deleteTeam(teamId);
         ensureExistingTeam();
         Navigation.selectPage('teamlist');
@@ -189,7 +179,6 @@ export async function deleteTeamPopup(team: Team) {
 
 export async function leaveTeam(teamId: ID) {
     await TeamsAPI.leaveTeam(teamId).then(async (data) => {
-        requestSuccessAlert(data);
         await Cache.deleteTeam(teamId);
         ensureExistingTeam();
         Navigation.selectPage('teamlist');
@@ -224,7 +213,6 @@ export async function editMember(
 ) {
     return await TeamsAPI.updateMember(teamId, memberId, member).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).members[memberId] = data.member;
             return data.id;
         }
@@ -249,7 +237,6 @@ export async function demoteMemberPopup(team: Team, member: Member) {
 
 export async function deleteMember(teamId: ID, memberId: ID) {
     return await TeamsAPI.deleteMember(teamId, memberId).then(async (data) => {
-        requestSuccessAlert(data);
         let teamData = Cache.getTeamData(teamId);
         delete teamData.members[memberId];
         teamData.team.membercount -= 1;
@@ -276,7 +263,6 @@ export async function getInvites(teamId: ID) {
 
 export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
     return await TeamsAPI.createInvite(teamId, invite).then((data) => {
-        requestSuccessAlert(data);
         Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
         return data.invite;
     });
@@ -331,7 +317,6 @@ export async function editInvite(
 ) {
     return await TeamsAPI.updateInvite(teamId, inviteId, invite).then(
         (data) => {
-            requestSuccessAlert(data);
             Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
             return data.invite;
         }
@@ -382,7 +367,6 @@ export async function editInvitePopup(team: Team, invite: Invite) {
 
 export async function deleteInvite(teamId: ID, inviteId: ID) {
     await TeamsAPI.deleteInvite(teamId, inviteId).then(async (data) => {
-        requestSuccessAlert(data);
         delete Cache.getTeamData(teamId).invites[inviteId];
     });
 }
@@ -399,8 +383,6 @@ export async function deleteInvitePopup(team: Team, invite: Invite) {
 
 export async function acceptInvite(token: string) {
     return await TeamsAPI.acceptInvite(token).then(async (data) => {
-        requestSuccessAlert(data);
-
         Cache.addTeam(data.team);
         switchTeam(data.team.id);
         Navigation.exportToURL({ removeParams: ['invite'] });

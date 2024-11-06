@@ -13,14 +13,10 @@ export { Swal, SweetAlertOptions, SweetAlertResult };
 /**
  * Create an alert based on a failed ajax request
  */
-export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
-    console.debug(
-        'Error: ' + request.status + ' ' + request.statusText,
-        request
-    );
-    let jsonData: ErrorResponse;
-    let alertData: Partial<SweetAlertOptions>;
+export function apiRequestErrorAlert(request: JQuery.jqXHR) {
+    console.debug(`Error: ${request.status} ${request.statusText}`, request);
 
+    let jsonData: ErrorResponse;
     if (request.hasOwnProperty('responseJSON')) {
         jsonData = request.responseJSON;
     } else {
@@ -30,6 +26,7 @@ export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
         };
     }
 
+    let alertData: Partial<SweetAlertOptions>;
     if (jsonData.alert) {
         alertData = {
             icon: 'error',
@@ -60,7 +57,7 @@ export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
  *
  * @param {object} data
  */
-export function requestSuccessAlert(data: SuccessfulResponse) {
+export function apiRequestSuccessAlert(data: SuccessfulResponse) {
     return Swal.fire({
         toast: true,
         icon: 'success',
@@ -106,7 +103,7 @@ export function infoAlert(
     message: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    Swal.fire({
+    return Swal.fire({
         title: title,
         html: message,
         icon: 'info',
@@ -124,7 +121,7 @@ export function waitingAlert(
     text: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    Swal.fire({
+    return Swal.fire({
         title: 'In Bearbeitung...',
         text: text,
         toast: true,
@@ -147,7 +144,7 @@ export function successAlert(
     title: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    Swal.fire({
+    return Swal.fire({
         toast: true,
         icon: 'success',
         position: 'top-right',

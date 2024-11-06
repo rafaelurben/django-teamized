@@ -4,16 +4,19 @@
 
 import $ from 'jquery';
 
-import { ajaxRequestErrorAlert } from '../utils/alerts';
+import { apiRequestErrorAlert, apiRequestSuccessAlert } from '../utils/alerts';
 import {
     SuccessfulDeleteResponse,
+    SuccessfulGetResponse,
     SuccessfulPostResponse,
     SuccessfulPutResponse,
+    SuccessfulResponse,
 } from '../interfaces/responses/successfulResponse';
 
 type HTTPRequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 type HTTPRequestOptions = {
     disableErrorAlert?: boolean;
+    disableSuccessAlert?: boolean;
     ajaxOptions?: JQuery.AjaxSettings;
 };
 
@@ -30,7 +33,7 @@ export abstract class API {
      * @param {HTTPRequestOptions} options additional options
      * @returns
      */
-    static request<T>(
+    static request<T extends SuccessfulResponse>(
         method: HTTPRequestMethod,
         endpoint: string,
         data?: object,
@@ -41,14 +44,17 @@ export abstract class API {
                 type: method,
                 url: window.api_base_url + endpoint,
                 data: data,
-                success: (data) => {
-                    resolve(data as T);
-                },
-                error: (e: JQuery.jqXHR) => {
-                    if (!options?.disableErrorAlert) {
-                        ajaxRequestErrorAlert(e);
+                success: (data: T) => {
+                    if (!options?.disableSuccessAlert && data.alert) {
+                        apiRequestSuccessAlert(data);
                     }
-                    reject(e);
+                    resolve(data);
+                },
+                error: (err: JQuery.jqXHR) => {
+                    if (!options?.disableErrorAlert) {
+                        apiRequestErrorAlert(err);
+                    }
+                    reject(err);
                 },
                 ...options?.ajaxOptions,
             });
@@ -59,7 +65,12 @@ export abstract class API {
      * Shortcut for request("GET", ...)
      */
     static async get<T>(endpoint: string, options?: HTTPRequestOptions) {
-        return await this.request<T>('GET', endpoint, undefined, options);
+        return await this.request<T & SuccessfulGetResponse>(
+            'GET',
+            endpoint,
+            undefined,
+            options
+        );
     }
 
     /**
