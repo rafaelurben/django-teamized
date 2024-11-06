@@ -12,7 +12,8 @@ import * as Dashboard from '../common/dashboard.tsx';
 import * as Utils from '../../utils/utils.ts';
 import * as Settings from '../../utils/settings.ts';
 import * as Navigation from '../../utils/navigation.tsx';
-import { IconTooltip } from '../tooltips.jsx';
+
+import { IconTooltip } from '../common/tooltips/iconTooltip';
 
 export default class Page_Home extends React.Component {
     constructor(props) {

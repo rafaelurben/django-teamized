@@ -12,7 +12,6 @@ import * as Navigation from '../../utils/navigation.tsx';
 import * as WorkingTime from '../../utils/workingtime.ts';
 import * as Cache from '../../utils/cache.ts';
 import * as Dashboard from '../common/dashboard.tsx';
-import { IconTooltip } from '../tooltips.jsx';
 import * as Stats from '../../utils/workingtimestats.ts';
 import {
     roundDays,
@@ -20,6 +19,7 @@ import {
     ms2HoursMinutesSeconds,
     seconds2HoursMinutesSeconds,
 } from '../../utils/datetime.ts';
+import { IconTooltip } from '../common/tooltips/iconTooltip';
 
 class WorkSessionTableRow extends React.Component {
     constructor(props) {

@@ -1,0 +1,29 @@
+import React, { useEffect, useRef } from 'react';
+import { Tooltip as BSTooltip } from 'bootstrap';
+
+interface Props {
+    title: string;
+    className: string;
+    children: React.ReactNode;
+}
+
+export function Tooltip({ title, className = '', children }: Partial<Props>) {
+    const tooltipRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const tooltip = new BSTooltip(tooltipRef.current as HTMLElement);
+
+        return () => tooltip.dispose();
+    }, []);
+
+    return (
+        <abbr
+            className={className}
+            title={title}
+            data-bs-toggle="tooltip"
+            ref={tooltipRef}
+        >
+            {children}
+        </abbr>
+    );
+}

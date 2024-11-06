@@ -12,7 +12,8 @@ import * as Club from '../../utils/club.ts';
 import * as Teams from '../../utils/teams';
 import * as Navigation from '../../utils/navigation.tsx';
 import * as Dashboard from '../common/dashboard.tsx';
-import { IconTooltip, Tooltip } from '../tooltips.jsx';
+import { IconTooltip } from '../common/tooltips/iconTooltip';
+import { Tooltip } from '../common/tooltips/tooltip';
 
 class TeamMembersTableRow extends React.Component {
     constructor(props) {

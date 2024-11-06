@@ -11,7 +11,8 @@ import * as Dashboard from '../common/dashboard.tsx';
 import * as Cache from '../../utils/cache.ts';
 import * as Club from '../../utils/club.ts';
 import * as Navigation from '../../utils/navigation.tsx';
-import { IconTooltip } from '../tooltips.jsx';
+
+import { IconTooltip } from '../common/tooltips/iconTooltip';
 
 class ClubMembersTableRow extends React.Component {
     constructor(props) {

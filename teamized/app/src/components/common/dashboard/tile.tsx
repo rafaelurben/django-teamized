@@ -1,5 +1,6 @@
 import React from 'react';
-import { IconTooltip } from '../../tooltips.jsx';
+
+import { IconTooltip } from '../tooltips/iconTooltip';
 
 interface Props {
     title: string | null;
