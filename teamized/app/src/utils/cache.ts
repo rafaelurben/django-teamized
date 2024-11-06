@@ -15,8 +15,8 @@ import { TeamCache } from '../interfaces/cache/teamCache';
 
 export function getTeamsList() {
     let teams: Team[] = [];
-    for (let teamdata of Object.values(window.appdata.teamCache)) {
-        teams.push(teamdata.team);
+    for (let teamData of Object.values(window.appdata.teamCache)) {
+        teams.push(teamData.team);
     }
     return teams;
 }
@@ -43,7 +43,7 @@ export function getMemberInTeam(teamId: ID, memberId: ID) {
 
 // Add and remove teams from cache
 
-function updateTeam(team: Team) {
+function updateTeam(team: Team & { [key in CacheCategory]?: any }) {
     for (let category of Object.values(CacheCategory)) {
         if (team.hasOwnProperty(category)) {
             window.appdata.teamCache[team.id][category] = {};
@@ -56,7 +56,7 @@ function updateTeam(team: Team) {
 }
 
 export function addTeam(team: Team) {
-    let newTeamCache = { team: team, _state: {} };
+    let newTeamCache: any = { team: team, _state: {} };
     for (const category of Object.values(CacheCategory)) {
         newTeamCache[category] = {};
         newTeamCache._state[category] = { _initial: true, _refreshing: false };
@@ -135,8 +135,8 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
     category: CacheCategory
 ) {
     return new Promise<T[]>((resolve, reject) => {
-        let teamdata = getTeamData(teamId);
-        if (teamdata._state[category]._refreshing === true) {
+        let teamData = getTeamData(teamId);
+        if (teamData._state[category]._refreshing === true) {
             // If the category is already being refreshed, we don't need to do anything
             // This will neither resolve nor reject the promise
             console.info(
@@ -147,7 +147,7 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
                     '!'
             );
         } else {
-            teamdata._state[category]._refreshing = true;
+            teamData._state[category]._refreshing = true;
             TeamsAPI.getItemsOfCategory<{ [key: string]: T[] }>(
                 teamId,
                 category
@@ -156,14 +156,14 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
                     let objects: T[] = data[category.split('_').at(-1)!];
                     replaceTeamCacheCategory<T>(teamId, category, objects);
 
-                    teamdata._state[category]._initial = false;
-                    teamdata._state[category]._refreshing = false;
+                    teamData._state[category]._initial = false;
+                    teamData._state[category]._refreshing = false;
                     Navigation.renderPage();
 
                     resolve(objects);
                 })
                 .catch((error) => {
-                    teamdata._state[category]._refreshing = false;
+                    teamData._state[category]._refreshing = false;
                     reject(error);
                 });
         }

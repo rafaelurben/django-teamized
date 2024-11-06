@@ -22,11 +22,12 @@ import { ClubRequestDTO } from '../interfaces/club/club';
 import { ClubMemberPortfolioRequestDTO } from '../interfaces/club/clubMemberPortfolio';
 import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { Team } from '../interfaces/teams/team';
 
 export function getCurrentClubData() {
-    const teamdata = Cache.getCurrentTeamData();
-    if (teamdata) {
-        return teamdata.team.club;
+    const teamData = Cache.getCurrentTeamData();
+    if (teamData) {
+        return teamData.team.club;
     }
     return undefined;
 }
@@ -43,7 +44,7 @@ export async function createClub(teamId: ID, club: ClubRequestDTO) {
     });
 }
 
-export async function createClubPopup(team) {
+export async function createClubPopup(team: Team) {
     return (
         await Swal.fire({
             title: 'Verein erstellen',
@@ -92,16 +93,16 @@ export async function editClub(teamId: ID, club: Partial<ClubRequestDTO>) {
     });
 }
 
-export async function editClubPopup(team) {
+export async function editClubPopup(team: Team) {
     return (
         await Swal.fire({
             title: 'Verein bearbeiten',
             html: `
-      <p>Verein: ${team.club.name}</p><hr />
+      <p>Verein: ${team.club!.name}</p><hr />
       <label class="swal2-input-label" for="swal-input-name">Name:</label>
-      <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.club.name}" value="${team.club.name}">
+      <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.club!.name}" value="${team.club!.name}">
       <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-      <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.club.description}">${team.club.description}</textarea>
+      <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.club!.description}">${team.club!.description}</textarea>
     `,
             focusConfirm: false,
             showCancelButton: true,
@@ -128,15 +129,15 @@ export async function editClubPopup(team) {
 export async function deleteClub(teamId: ID) {
     return await ClubAPI.deleteClub(teamId).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        teamdata.team.club = null;
-        teamdata.club_members = {};
+        let teamData = Cache.getTeamData(teamId);
+        teamData.team.club = null;
+        teamData.club_members = {};
     });
 }
 
-export async function deleteClubPopup(team) {
+export async function deleteClubPopup(team: Team) {
     return await doubleConfirmAlert(
-        `Willst du den Verein '${team.club.name}' wirklich löschen und somit den Vereinsmodus im Team '${team.name}' deaktivieren?`,
+        `Willst du den Verein '${team.club!.name}' wirklich löschen und somit den Vereinsmodus im Team '${team.name}' deaktivieren?`,
         async () => await deleteClub(team.id)
     );
 }
@@ -160,14 +161,14 @@ export async function createClubMember(
 ) {
     return await ClubAPI.createClubMember(teamId, member).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        teamdata.club_members[data.member.id] = data.member;
-        teamdata.team.club!.membercount += 1;
+        let teamData = Cache.getTeamData(teamId);
+        teamData.club_members[data.member.id] = data.member;
+        teamData.team.club!.membercount += 1;
         return data.member;
     });
 }
 
-export async function createClubMemberPopup(team) {
+export async function createClubMemberPopup(team: Team) {
     return (
         await Swal.fire({
             title: 'Vereinsmitglied hinzufügen',
@@ -226,7 +227,7 @@ export async function editClubMember(
     );
 }
 
-export async function editClubMemberPopup(team, member: ClubMember) {
+export async function editClubMemberPopup(team: Team, member: ClubMember) {
     return (
         await Swal.fire({
             title: 'Vereinsmitglied bearbeiten',
@@ -275,17 +276,17 @@ export async function deleteClubMember(teamId: ID, memberId: ID) {
     return await ClubAPI.deleteClubMember(teamId, memberId).then(
         async (data) => {
             requestSuccessAlert(data);
-            let teamdata = Cache.getTeamData(teamId);
-            delete teamdata.club_members[memberId];
-            teamdata.team.club!.membercount -= 1;
+            let teamData = Cache.getTeamData(teamId);
+            delete teamData.club_members[memberId];
+            teamData.team.club!.membercount -= 1;
 
             // Remove member from all groups
             for (let group of Object.values(
-                <IDIndexedObjectList<ClubGroup>>teamdata.club_groups
+                <IDIndexedObjectList<ClubGroup>>teamData.club_groups
             )) {
                 if (group.memberids.includes(memberId)) {
-                    teamdata.club_groups[group.id].memberids.splice(
-                        teamdata.club_groups[group.id].memberids.indexOf(
+                    teamData.club_groups[group.id].memberids.splice(
+                        teamData.club_groups[group.id].memberids.indexOf(
                             memberId
                         ),
                         1
@@ -296,9 +297,9 @@ export async function deleteClubMember(teamId: ID, memberId: ID) {
     );
 }
 
-export async function deleteClubMemberPopup(team, member: ClubMember) {
+export async function deleteClubMemberPopup(team: Team, member: ClubMember) {
     return await confirmAlert(
-        `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club.name}' entfernen?`,
+        `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club!.name}' entfernen?`,
         async () => await deleteClubMember(team.id, member.id)
     );
 }
@@ -328,7 +329,10 @@ export async function editClubMemberPortfolio(
     });
 }
 
-export async function editClubMemberPortfolioPopup(team, member: ClubMember) {
+export async function editClubMemberPortfolioPopup(
+    team: Team,
+    member: ClubMember
+) {
     return (
         await Swal.fire({
             title: `${member.first_name} ${member.last_name}: Portfolio bearbeiten`,
@@ -436,18 +440,18 @@ export async function getClubGroups(teamId: ID) {
 export async function createClubGroup(teamId: ID, group: ClubGroupRequestDTO) {
     return await ClubAPI.createClubGroup(teamId, group).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        teamdata.club_groups[data.group.id] = data.group;
+        let teamData = Cache.getTeamData(teamId);
+        teamData.club_groups[data.group.id] = data.group;
         return data.group;
     });
 }
 
-export async function createClubGroupPopup(team) {
+export async function createClubGroupPopup(team: Team) {
     return (
         await Swal.fire({
             title: 'Gruppe erstellen',
             html: `
-      <p>Verein: ${team.club.name}</p><hr />
+      <p>Verein: ${team.club!.name}</p><hr />
       <label class="swal2-input-label" for="swal-input-name">Name:</label>
       <input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">
       <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
@@ -489,7 +493,7 @@ export async function editClubGroup(
     );
 }
 
-export async function editClubGroupPopup(team, group: ClubGroup) {
+export async function editClubGroupPopup(team: Team, group: ClubGroup) {
     return (
         await Swal.fire({
             title: 'Gruppe bearbeiten',
@@ -528,12 +532,12 @@ export async function editClubGroupPopup(team, group: ClubGroup) {
 export async function deleteClubGroup(teamId: ID, groupId: ID) {
     return await ClubAPI.deleteClubGroup(teamId, groupId).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        delete teamdata.club_groups[groupId];
+        let teamData = Cache.getTeamData(teamId);
+        delete teamData.club_groups[groupId];
     });
 }
 
-export async function deleteClubGroupPopup(team, group: ClubGroup) {
+export async function deleteClubGroupPopup(team: Team, group: ClubGroup) {
     return await confirmAlert(
         `Willst du die Gruppe '${group.name}' wirklich löschen?`,
         async () => await deleteClubGroup(team.id, group.id)
@@ -550,8 +554,8 @@ export async function addClubMemberToGroup(
     return await ClubAPI.addClubMemberToGroup(teamId, memberId, groupId).then(
         async (data) => {
             requestSuccessAlert(data);
-            let teamdata = Cache.getTeamData(teamId);
-            teamdata.club_groups[groupId].memberids.push(memberId);
+            let teamData = Cache.getTeamData(teamId);
+            teamData.club_groups[groupId].memberids.push(memberId);
         }
     );
 }
@@ -567,27 +571,27 @@ export async function removeClubMemberFromGroup(
         groupId
     ).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        teamdata.club_groups[groupId].memberids.splice(
-            teamdata.club_groups[groupId].memberids.indexOf(memberId),
+        let teamData = Cache.getTeamData(teamId);
+        teamData.club_groups[groupId].memberids.splice(
+            teamData.club_groups[groupId].memberids.indexOf(memberId),
             1
         );
     });
 }
 
-export async function updateClubMemberGroupsPopup(team, member: ClubMember) {
+export async function updateClubMemberGroupsPopup(
+    team: Team,
+    member: ClubMember
+) {
     // Show a sweetalert with a multi-select of all groups; on submit, make add/remove requests for each group respectively
-    let teamdata = Cache.getTeamData(team.id);
+    let teamData = Cache.getTeamData(team.id);
     let groups = Object.values(
-        <IDIndexedObjectList<ClubGroup>>teamdata.club_groups
+        <IDIndexedObjectList<ClubGroup>>teamData.club_groups
     );
 
-    let currentgroupids: ID[] = [];
-    for (let group of Object.values(groups)) {
-        if (group.memberids.includes(member.id)) {
-            currentgroupids.push(group.id);
-        }
-    }
+    let currentGroupIds: ID[] = Object.values(groups)
+        .filter((group) => group.memberids.includes(member.id))
+        .map((group) => group.id);
 
     return (
         await Swal.fire({
@@ -602,33 +606,32 @@ export async function updateClubMemberGroupsPopup(team, member: ClubMember) {
             confirmButtonText: 'Aktualisieren',
             cancelButtonText: 'Abbrechen',
             didOpen: () => {
-                $('#swal-input-groups').html(
+                let $groupsInput = $('#swal-input-groups');
+
+                $groupsInput.html(
                     groups
                         .map(
-                            (group) => `
-            <option value="${group.id}">
-                ${group.name}
-            </option>
-          `
+                            (group) =>
+                                `<option value="${group.id}">${group.name}</option>`
                         )
                         .join('')
                 );
-                $('#swal-input-groups').val(currentgroupids);
+                $groupsInput.val(currentGroupIds);
             },
             preConfirm: async () => {
-                let selectedgroupids = <ID[]>$('#swal-input-groups').val();
+                let selectedGroupIds = <ID[]>$('#swal-input-groups').val();
 
                 Swal.showLoading();
                 let requests: Promise<void>[] = [];
-                for (let groupId of selectedgroupids) {
-                    if (!currentgroupids.includes(groupId)) {
+                for (let groupId of selectedGroupIds) {
+                    if (!currentGroupIds.includes(groupId)) {
                         requests.push(
                             addClubMemberToGroup(team.id, member.id, groupId)
                         );
                     }
                 }
-                for (let groupId of currentgroupids) {
-                    if (!selectedgroupids.includes(groupId)) {
+                for (let groupId of currentGroupIds) {
+                    if (!selectedGroupIds.includes(groupId)) {
                         requests.push(
                             removeClubMemberFromGroup(
                                 team.id,

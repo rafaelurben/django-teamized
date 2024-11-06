@@ -7,6 +7,7 @@ import {
     doubleConfirmAlert,
     requestSuccessAlert,
     Swal,
+    SweetAlertResult,
 } from './alerts';
 import * as Cache from './cache';
 import { getDateString } from './datetime';
@@ -18,6 +19,7 @@ import {
     TodolistItemRequestDTO,
 } from '../interfaces/todolist/todolistItem';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { Team } from '../interfaces/teams/team';
 
 // ToDoList list
 
@@ -38,7 +40,7 @@ export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
     });
 }
 
-export async function createToDoListPopup(team) {
+export async function createToDoListPopup(team: Team) {
     return (
         await Swal.fire({
             title: `To-do-Liste erstellen`,
@@ -99,7 +101,7 @@ export async function editToDoList(
     );
 }
 
-export async function editToDoListPopup(team, todolist: Todolist) {
+export async function editToDoListPopup(team: Team, todolist: Todolist) {
     return (
         await Swal.fire({
             title: `To-do-Liste bearbeiten`,
@@ -152,7 +154,7 @@ export async function deleteToDoList(teamId: ID, todolistId: ID) {
     });
 }
 
-export async function deleteToDoListPopup(team, todolist: Todolist) {
+export async function deleteToDoListPopup(team: Team, todolist: Todolist) {
     await doubleConfirmAlert(
         `Willst du folgende To-do-Liste wirklich löschen?<br /><br />
             <b>Name:</b> ${todolist.name} <br />
@@ -202,7 +204,7 @@ export async function editToDoListItem(
 }
 
 export async function editToDoListItemPopup(
-    team,
+    team: Team,
     todolist: Todolist,
     item: TodolistItem
 ) {
@@ -254,7 +256,7 @@ export async function editToDoListItemPopup(
 // ToDoListItem view
 
 export async function viewToDoListItemPopup(
-    team,
+    team: Team,
     todolist: Todolist,
     item: TodolistItem
 ) {
@@ -271,8 +273,8 @@ export async function viewToDoListItemPopup(
         showCancelButton: true,
         confirmButtonText: 'Bearbeiten',
         cancelButtonText: 'Schliessen',
-    }).then(async (value) => {
-        if (value.isConfirmed) {
+    }).then(async (result: SweetAlertResult) => {
+        if (result.isConfirmed) {
             return await editToDoListItemPopup(team, todolist, item);
         }
     });
@@ -296,7 +298,7 @@ export async function deleteToDoListItem(
 }
 
 export async function deleteToDoListItemPopup(
-    team,
+    team: Team,
     todolist: Todolist,
     item: TodolistItem
 ) {

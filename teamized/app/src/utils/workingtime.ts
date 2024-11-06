@@ -19,6 +19,7 @@ import {
     WorksessionRequestDTO,
 } from '../interfaces/workingtime/worksession';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { Team } from '../interfaces/teams/team';
 
 export async function getMyWorkSessionsInTeam(teamId: ID) {
     return await Cache.refreshTeamCacheCategory<Worksession>(
@@ -43,7 +44,7 @@ export async function createWorkSession(
     );
 }
 
-export async function createWorkSessionPopup(team) {
+export async function createWorkSessionPopup(team: Team) {
     const _dt = localInputFormat(new Date());
     return (
         await Swal.fire({
@@ -109,7 +110,7 @@ export async function editWorkSession(
     });
 }
 
-export async function editWorkSessionPopup(team, session: Worksession) {
+export async function editWorkSessionPopup(team: Team, session: Worksession) {
     let dtstart = localInputFormat(session.time_start);
     let dtend =
         session.time_end !== null ? localInputFormat(session.time_end) : '';
@@ -175,7 +176,7 @@ export async function deleteWorkSession(teamId: ID, sessionId: ID) {
     );
 }
 
-export async function deleteWorkSessionPopup(team, session: Worksession) {
+export async function deleteWorkSessionPopup(team: Team, session: Worksession) {
     await confirmAlert(
         'Willst du folgende Sitzung wirklich löschen?<br /><br />' +
             `<b>Notiz:</b> ${session.note}`,
@@ -245,7 +246,7 @@ export async function renameWorkSession(
     });
 }
 
-export async function renameWorkSessionPopup(team, session: Worksession) {
+export async function renameWorkSessionPopup(team: Team, session: Worksession) {
     return (
         await Swal.fire({
             title: `Sitzung umbenennen`,

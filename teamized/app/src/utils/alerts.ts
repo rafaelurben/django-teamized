@@ -8,7 +8,7 @@ import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import { ErrorResponse } from '../interfaces/responses/errorResponse';
 import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
 
-export { Swal, SweetAlertOptions };
+export { Swal, SweetAlertOptions, SweetAlertResult };
 
 /**
  * Create an alert based on a failed ajax request

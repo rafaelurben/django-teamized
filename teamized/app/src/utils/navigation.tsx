@@ -49,7 +49,7 @@ export function exportToURL(options?: {
     newurl.searchParams.set('t', window.appdata.selectedTeamId);
 
     if (options) {
-        let additionalParams: object;
+        let additionalParams: { [key: string]: any };
         let removeParams: string[];
 
         ({ additionalParams = {}, removeParams = [] } = options);

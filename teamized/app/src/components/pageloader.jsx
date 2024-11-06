@@ -35,9 +35,9 @@ export class PageLoader extends React.Component {
     }
 
     render() {
-        const teamdata = Cache.getCurrentTeamData();
+        const teamData = Cache.getCurrentTeamData();
 
-        if (teamdata === null) {
+        if (teamData === null) {
             return (
                 <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
                     <div className="spinner-border mb-3" role="status">
@@ -47,7 +47,7 @@ export class PageLoader extends React.Component {
                 </div>
             );
         }
-        if (this.props.page.startsWith('club') && teamdata.team.club === null) {
+        if (this.props.page.startsWith('club') && teamData.team.club === null) {
             return (
                 <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
                     <div className="text-danger mb-4" role="status">
@@ -80,40 +80,40 @@ export class PageLoader extends React.Component {
             case 'team':
                 return (
                     <Page_Team
-                        team={teamdata.team}
-                        members={teamdata.members}
-                        invites={teamdata.invites}
+                        team={teamData.team}
+                        members={teamData.members}
+                        invites={teamData.invites}
                     />
                 );
             case 'workingtime':
                 return (
                     <Page_WorkingTime
                         current_worksession={window.appdata.current_worksession}
-                        worksessions={teamdata.me_worksessions}
+                        worksessions={teamData.me_worksessions}
                         selectedTeamId={window.appdata.selectedTeamId}
-                        selectedTeam={teamdata.team}
+                        selectedTeam={teamData.team}
                     />
                 );
             case 'calendars':
                 return (
                     <Page_Calendars
-                        team={teamdata.team}
-                        calendars={teamdata.calendars}
+                        team={teamData.team}
+                        calendars={teamData.calendars}
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
                 );
             case 'todo':
                 return (
                     <Page_ToDo
-                        team={teamdata.team}
-                        todolists={teamdata.todolists}
+                        team={teamData.team}
+                        todolists={teamData.todolists}
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
                 );
             case 'club':
                 return (
                     <Page_Club
-                        team={teamdata.team}
+                        team={teamData.team}
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
                 );

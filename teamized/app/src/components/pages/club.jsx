@@ -386,16 +386,16 @@ export default class Page_Club extends React.Component {
     }
 
     render() {
-        let teamdata = Cache.getCurrentTeamData();
+        let teamData = Cache.getCurrentTeamData();
         var membertilecontent;
 
         if (
-            teamdata._state.club_members._initial ||
-            teamdata._state.club_groups._initial
+            teamData._state.club_members._initial ||
+            teamData._state.club_groups._initial
         ) {
-            if (teamdata._state.club_members._initial)
+            if (teamData._state.club_members._initial)
                 Club.getClubMembers(this.props.team.id);
-            if (teamdata._state.club_groups._initial)
+            if (teamData._state.club_groups._initial)
                 Club.getClubGroups(this.props.team.id);
             membertilecontent = <p className="ms-2">Wird geladen...</p>;
         } else {
@@ -412,10 +412,10 @@ export default class Page_Club extends React.Component {
                                 onClick={this.selectTab('all')}
                             >
                                 Alle (
-                                {Object.keys(teamdata.club_members).length})
+                                {Object.keys(teamData.club_members).length})
                             </button>
                         </li>
-                        {Object.values(teamdata.club_groups).map((group) => {
+                        {Object.values(teamData.club_groups).map((group) => {
                             return (
                                 <li key={group.id} className="nav-item">
                                     <button
@@ -460,7 +460,7 @@ export default class Page_Club extends React.Component {
                         <ClubMembersTable
                             key="table"
                             team={this.props.team}
-                            members={Object.values(teamdata.club_members)}
+                            members={Object.values(teamData.club_members)}
                         />,
                     ];
                     break;
@@ -470,14 +470,14 @@ export default class Page_Club extends React.Component {
                         <ClubGroupsTable
                             key="table"
                             team={this.props.team}
-                            groups={Object.values(teamdata.club_groups)}
+                            groups={Object.values(teamData.club_groups)}
                         />,
                     ];
                     break;
                 default: // filtered members by group
-                    let group = teamdata.club_groups[this.state.selectedTab];
+                    let group = teamData.club_groups[this.state.selectedTab];
                     let groupmembers = Object.values(
-                        teamdata.club_members
+                        teamData.club_members
                     ).filter((member) => {
                         return group.memberids.includes(member.id);
                     });

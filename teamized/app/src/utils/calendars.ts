@@ -20,6 +20,7 @@ import {
 import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
 import { ID } from '../interfaces/common';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { Team } from '../interfaces/teams/team';
 
 // Reexport so that datetime.js functions can also be imported from calendars.js
 export * from './datetime';
@@ -104,7 +105,7 @@ export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
     });
 }
 
-export async function createCalendarPopup(team) {
+export async function createCalendarPopup(team: Team) {
     return (
         await Swal.fire({
             title: `Kalender erstellen`,
@@ -165,7 +166,7 @@ export async function editCalendar(
     );
 }
 
-export async function editCalendarPopup(team, calendar: Calendar) {
+export async function editCalendarPopup(team: Team, calendar: Calendar) {
     return (
         await Swal.fire({
             title: `Kalender bearbeiten`,
@@ -218,7 +219,7 @@ export async function deleteCalendar(teamId: ID, calendarId: ID) {
     });
 }
 
-export async function deleteCalendarPopup(team, calendar: Calendar) {
+export async function deleteCalendarPopup(team: Team, calendar: Calendar) {
     console.log(calendar);
     await doubleConfirmAlert(
         `Willst du folgenden Kalender wirklich löschen?<br /><br />
@@ -310,7 +311,7 @@ export async function createEvent(
 }
 
 export function createEventPopup(
-    team,
+    team: Team,
     date: Date,
     calendars: Calendar[],
     selectedCalendarId: ID
@@ -471,7 +472,7 @@ export async function editEvent(
 }
 
 export function editEventPopup(
-    team,
+    team: Team,
     calendar: Calendar,
     event: CalendarEvent,
     makeCopy = false
@@ -640,7 +641,7 @@ export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
 }
 
 export async function deleteEventPopup(
-    team,
+    team: Team,
     calendar: Calendar,
     event: CalendarEvent
 ) {

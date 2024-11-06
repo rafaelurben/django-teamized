@@ -25,17 +25,17 @@ import { CacheCategory } from '../interfaces/cache/cacheCategory';
 export { getTeamsList } from './cache';
 
 export function isCurrentTeamAdmin() {
-    const teamdata = Cache.getCurrentTeamData();
-    if (teamdata) {
-        return ['owner', 'admin'].includes(teamdata.team.member?.role || '');
+    const teamData = Cache.getCurrentTeamData();
+    if (teamData) {
+        return ['owner', 'admin'].includes(teamData.team.member?.role || '');
     }
     return false;
 }
 
 export function hasCurrentTeamLinkedClub() {
-    const teamdata = Cache.getCurrentTeamData();
-    if (teamdata) {
-        return teamdata.team.club !== null;
+    const teamData = Cache.getCurrentTeamData();
+    if (teamData) {
+        return teamData.team.club !== null;
     }
     return false;
 }
@@ -56,7 +56,7 @@ export function ensureExistingTeam() {
     switchTeam(window.appdata.defaultTeamId);
 }
 
-export function switchTeam(teamId) {
+export function switchTeam(teamId: ID) {
     if (window.appdata.selectedTeamId === teamId) {
         // Already selected; no action needed
         return;
@@ -250,9 +250,9 @@ export async function demoteMemberPopup(team: Team, member: Member) {
 export async function deleteMember(teamId: ID, memberId: ID) {
     return await TeamsAPI.deleteMember(teamId, memberId).then(async (data) => {
         requestSuccessAlert(data);
-        let teamdata = Cache.getTeamData(teamId);
-        delete teamdata.members[memberId];
-        teamdata.team.membercount -= 1;
+        let teamData = Cache.getTeamData(teamId);
+        delete teamData.members[memberId];
+        teamData.team.membercount -= 1;
     });
 }
 

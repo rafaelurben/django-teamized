@@ -70,7 +70,9 @@ export function chartDataByDays(
     end: Date
 ) {
     // Create a dictionary of all days in the range
-    const days = {};
+    const days: {
+        [key: number]: { name: string; duration_s: number; duration_h: number };
+    } = {};
     let i = 0;
     while (true) {
         let dayObj = roundDays(start, i++);
