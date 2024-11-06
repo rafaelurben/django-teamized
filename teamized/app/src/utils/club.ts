@@ -344,38 +344,40 @@ export async function editClubMemberPortfolioPopup(
             didOpen: async () => {
                 Swal.showLoading();
                 Swal.disableButtons();
-                const container = Swal.getHtmlContainer();
-                getClubMemberPortfolio(team.id, member.id).then((portfolio) => {
-                    Swal.hideLoading();
-                    Swal.enableButtons();
-                    console.log(portfolio);
-                    container.innerHTML = `
-            <label class="swal2-checkbox d-flex" for="swal-input-visible">
-                <input type="checkbox" id="swal-input-visible" ${portfolio.visible ? 'checked' : ''}>
-                <span>Portfolio sichtbar?</span>
-            </label>
-            <label class="swal2-input-label" for="swal-input-image1_url">Bild 1:</label>
-            <input type="text" id="swal-input-image1_url" class="swal2-input" placeholder="https://example.com/image1.jpg" value="${portfolio.image1_url}">
-            <label class="swal2-input-label" for="swal-input-image2_url">Bild 2:</label>
-            <input type="text" id="swal-input-image2_url" class="swal2-input" placeholder="https://example.com/image2.jpg" value="${portfolio.image2_url}">
-            <label class="swal2-input-label" for="swal-input-member_since">Mitglied seit:</label>
-            <input type="number" id="swal-input-member_since" class="swal2-input" placeholder="1994" value="${portfolio.member_since}">
-            <label class="swal2-input-label" for="swal-input-hobby_since">Hobby seit:</label>
-            <input type="number" id="swal-input-hobby_since" class="swal2-input" placeholder="1994" value="${portfolio.hobby_since}">
-            <label class="swal2-input-label" for="swal-input-role">Rolle:</label>
-            <input type="text" id="swal-input-role" class="swal2-input" placeholder="Vorstand" value="${portfolio.role}">
-            <label class="swal2-input-label" for="swal-input-profession">Beruf:</label>
-            <input type="text" id="swal-input-profession" class="swal2-input" placeholder="Softwareentwickler" value="${portfolio.profession}">
-            <label class="swal2-input-label" for="swal-input-hobbies">Hobbies:</label>
-            <textarea id="swal-input-hobbies" class="swal2-textarea">${portfolio.hobbies}</textarea>
-            <label class="swal2-input-label" for="swal-input-highlights">Highlights:</label>
-            <textarea id="swal-input-highlights" class="swal2-textarea">${portfolio.highlights}</textarea>
-            <label class="swal2-input-label" for="swal-input-biography">Biografie:</label>
-            <textarea id="swal-input-biography" class="swal2-textarea">${portfolio.biography}</textarea>
-            <label class="swal2-input-label" for="swal-input-contact_email">Kontakt-E-Mail:</label>
-            <input type="email" id="swal-input-contact_email" class="swal2-input" placeholder="example@tpto.ch" value="${portfolio.contact_email}">
-        `;
-                });
+                const container = Swal.getHtmlContainer()!;
+                const portfolio = await getClubMemberPortfolio(
+                    team.id,
+                    member.id
+                );
+
+                Swal.hideLoading();
+                Swal.enableButtons();
+                container.innerHTML = `
+                    <label class="swal2-checkbox d-flex" for="swal-input-visible">
+                        <input type="checkbox" id="swal-input-visible" ${portfolio.visible ? 'checked' : ''}>
+                        <span>Portfolio sichtbar?</span>
+                    </label>
+                    <label class="swal2-input-label" for="swal-input-image1_url">Bild 1:</label>
+                    <input type="text" id="swal-input-image1_url" class="swal2-input" placeholder="https://example.com/image1.jpg" value="${portfolio.image1_url}">
+                    <label class="swal2-input-label" for="swal-input-image2_url">Bild 2:</label>
+                    <input type="text" id="swal-input-image2_url" class="swal2-input" placeholder="https://example.com/image2.jpg" value="${portfolio.image2_url}">
+                    <label class="swal2-input-label" for="swal-input-member_since">Mitglied seit:</label>
+                    <input type="number" id="swal-input-member_since" class="swal2-input" placeholder="1994" value="${portfolio.member_since}">
+                    <label class="swal2-input-label" for="swal-input-hobby_since">Hobby seit:</label>
+                    <input type="number" id="swal-input-hobby_since" class="swal2-input" placeholder="1994" value="${portfolio.hobby_since}">
+                    <label class="swal2-input-label" for="swal-input-role">Rolle:</label>
+                    <input type="text" id="swal-input-role" class="swal2-input" placeholder="Vorstand" value="${portfolio.role}">
+                    <label class="swal2-input-label" for="swal-input-profession">Beruf:</label>
+                    <input type="text" id="swal-input-profession" class="swal2-input" placeholder="Softwareentwickler" value="${portfolio.profession}">
+                    <label class="swal2-input-label" for="swal-input-hobbies">Hobbies:</label>
+                    <textarea id="swal-input-hobbies" class="swal2-textarea">${portfolio.hobbies}</textarea>
+                    <label class="swal2-input-label" for="swal-input-highlights">Highlights:</label>
+                    <textarea id="swal-input-highlights" class="swal2-textarea">${portfolio.highlights}</textarea>
+                    <label class="swal2-input-label" for="swal-input-biography">Biografie:</label>
+                    <textarea id="swal-input-biography" class="swal2-textarea">${portfolio.biography}</textarea>
+                    <label class="swal2-input-label" for="swal-input-contact_email">Kontakt-E-Mail:</label>
+                    <input type="email" id="swal-input-contact_email" class="swal2-input" placeholder="example@tpto.ch" value="${portfolio.contact_email}">
+                `;
             },
             preConfirm: async () => {
                 const visible = <boolean>(
@@ -665,5 +667,5 @@ export async function showClubGroupPortfolioExportPopup(group: ClubGroup) {
         showCancelButton: true,
         showConfirmButton: false,
         cancelButtonText: 'Schliessen',
-    }).value;
+    });
 }

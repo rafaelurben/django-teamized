@@ -3,7 +3,7 @@
  * https://sweetalert2.github.io/
  */
 
-import Swal from 'sweetalert2/dist/sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import { ErrorResponse } from '../interfaces/responses/errorResponse';
 import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
@@ -18,40 +18,40 @@ export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
         'Error: ' + request.status + ' ' + request.statusText,
         request
     );
-    let jsondata: ErrorResponse;
-    let alertdata: Partial<SweetAlertOptions>;
+    let jsonData: ErrorResponse;
+    let alertData: Partial<SweetAlertOptions>;
 
     if (request.hasOwnProperty('responseJSON')) {
-        jsondata = request.responseJSON;
+        jsonData = request.responseJSON;
     } else {
-        jsondata = {
+        jsonData = {
             error: request.status.toString(),
             message: request.statusText,
         };
     }
 
-    if (jsondata.alert) {
-        alertdata = {
+    if (jsonData.alert) {
+        alertData = {
             icon: 'error',
-            ...jsondata.alert,
+            ...jsonData.alert,
         };
     } else {
-        alertdata = {
+        alertData = {
             icon: 'error',
             title: `Uupsie! Es ist ein Fehler aufgetreten`,
-            text: jsondata.message,
-            footer: `Error-Code: ${jsondata.error}`,
+            text: jsonData.message,
+            footer: `Error-Code: ${jsonData.error}`,
         };
     }
 
     if (Swal.isVisible() && Swal.isLoading()) {
         // If a Swal is currently shown, show the error as a validation message
         // so that no form data gets lost.
-        Swal.showValidationMessage(`${alertdata.title} - ${alertdata.text}`);
+        Swal.showValidationMessage(`${alertData.title} - ${alertData.text}`);
         Swal.hideLoading();
     } else {
         // If no Swal is currently shown, fire a Swal modal.
-        Swal.fire(alertdata);
+        return Swal.fire(alertData as SweetAlertOptions);
     }
 }
 
@@ -61,7 +61,7 @@ export function ajaxRequestErrorAlert(request: JQuery.jqXHR) {
  * @param {object} data
  */
 export function requestSuccessAlert(data: SuccessfulResponse) {
-    Swal.fire({
+    return Swal.fire({
         toast: true,
         icon: 'success',
         position: 'top-right',
@@ -69,7 +69,7 @@ export function requestSuccessAlert(data: SuccessfulResponse) {
         timer: 3000,
         timerProgressBar: true,
         ...data.alert,
-    });
+    } as SweetAlertOptions);
 }
 
 // Informational alerts
@@ -86,12 +86,12 @@ export function errorAlert(
     message: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    Swal.fire({
+    return Swal.fire({
         title: title,
         html: message,
         icon: 'error',
         ...options,
-    });
+    } as SweetAlertOptions);
 }
 
 /**
@@ -111,7 +111,7 @@ export function infoAlert(
         html: message,
         icon: 'info',
         ...options,
-    });
+    } as SweetAlertOptions);
 }
 
 /**
@@ -132,7 +132,7 @@ export function waitingAlert(
         position: 'top-right',
         showConfirmButton: false,
         ...options,
-    });
+    } as SweetAlertOptions);
 }
 
 /**
@@ -157,7 +157,7 @@ export function successAlert(
         title: title || 'Aktion erfolgreich!',
         text: text,
         ...options,
-    });
+    } as SweetAlertOptions);
 }
 
 // Interactive alerts
@@ -178,7 +178,7 @@ export function confirmAlert(
     options: Partial<SweetAlertOptions> = {}
 ) {
     return new Promise((resolve, reject) => {
-        let data: Partial<SweetAlertOptions> = {
+        let data: SweetAlertOptions = {
             title: title || 'Sicher?',
             html: html,
             icon: 'warning',
@@ -187,7 +187,7 @@ export function confirmAlert(
             confirmButtonText: 'Ja',
             cancelButtonText: 'Nein, abbrechen',
             ...options,
-        };
+        } as SweetAlertOptions;
 
         if (preConfirm !== undefined) {
             data.preConfirm = preConfirm;
@@ -195,7 +195,7 @@ export function confirmAlert(
         }
 
         Swal.fire(data)
-            .then((result: SweetAlertResult) => {
+            .then((result) => {
                 if (result.isConfirmed) {
                     resolve(result.value);
                 }

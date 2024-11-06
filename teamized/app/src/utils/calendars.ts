@@ -220,7 +220,6 @@ export async function deleteCalendar(teamId: ID, calendarId: ID) {
 }
 
 export async function deleteCalendarPopup(team: Team, calendar: Calendar) {
-    console.log(calendar);
     await doubleConfirmAlert(
         `Willst du folgenden Kalender wirklich löschen?<br /><br />
             <b>Name:</b> ${calendar.name} <br />
@@ -477,7 +476,6 @@ export function editEventPopup(
     event: CalendarEvent,
     makeCopy = false
 ) {
-    console.log(team, calendar, event);
     return new Promise((resolve, reject) => {
         let dstart: string = '';
         let dend: string = '';
