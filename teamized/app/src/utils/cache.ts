@@ -1,0 +1,171 @@
+/**
+ * Utils for the local team cache
+ */
+
+import * as TeamsAPI from '../api/teams';
+import * as Navigation from './navigation';
+import * as Teams from './teams';
+import { Team } from '../interfaces/teams/team';
+import { ID } from '../interfaces/common';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { CacheCategoryType } from '../interfaces/cache/cacheCategoryType';
+import { TeamCache } from '../interfaces/cache/teamCache';
+
+// Lookups
+
+export function getTeamsList() {
+    let teams: Team[] = [];
+    for (let teamdata of Object.values(window.appdata.teamCache)) {
+        teams.push(teamdata.team);
+    }
+    return teams;
+}
+
+export function getTeamData(teamId: ID) {
+    return window.appdata.teamCache[teamId] || null;
+}
+
+export function getCurrentTeamData() {
+    return getTeamData(window.appdata.selectedTeamId!);
+}
+
+export function getMeInTeam(teamId: ID) {
+    return getTeamData(teamId).team.member;
+}
+
+export function getMeInCurrentTeam() {
+    return getMeInTeam(window.appdata.selectedTeamId!);
+}
+
+export function getMemberInTeam(teamId: ID, memberId: ID) {
+    return getTeamData(teamId).members[memberId];
+}
+
+// Add and remove teams from cache
+
+function updateTeam(team: Team) {
+    for (let category of Object.values(CacheCategory)) {
+        if (team.hasOwnProperty(category)) {
+            window.appdata.teamCache[team.id][category] = {};
+            replaceTeamCacheCategory(team.id, category, team[category]);
+            delete team[category];
+            // Delete the category from the team object itself to avoid data redundancy
+        }
+    }
+    window.appdata.teamCache[team.id].team = team;
+}
+
+export function addTeam(team: Team) {
+    let newTeamCache = { team: team, _state: {} };
+    for (const category of Object.values(CacheCategory)) {
+        newTeamCache[category] = {};
+        newTeamCache._state[category] = { _initial: true, _refreshing: false };
+    }
+    window.appdata.teamCache[team.id] = <TeamCache>newTeamCache;
+    updateTeam(team);
+}
+
+export async function deleteTeam(teamId: ID) {
+    // Delete the team from the team cache
+    delete window.appdata.teamCache[teamId];
+    // Update the defaultTeamId
+    let teamIds = Object.keys(window.appdata.teamCache);
+    if (teamIds.length === 0) {
+        // When no team is left, the backend automatically creates a new one
+        // We need to re-fetch all teams in order to get the new one
+        // This also sets the defaultTeamId
+        await Teams.getTeams();
+    } else if (window.appdata.defaultTeamId === teamId) {
+        // When the default team is deleted, we need to switch to another team
+        window.appdata.defaultTeamId = teamIds[0];
+    }
+}
+
+// Bulk update teams cache
+
+export function updateTeamsCache(teams: Team[], defaultTeamId: ID) {
+    window.appdata.defaultTeamId = defaultTeamId;
+
+    let oldIds = Object.keys(window.appdata.teamCache);
+
+    for (let team of teams) {
+        // Remove team from oldIds if it was there
+        if (oldIds.includes(team.id)) {
+            oldIds.splice(oldIds.indexOf(team.id), 1);
+        }
+
+        // Update in cache if team is already there, else add
+        if (team.id in window.appdata.teamCache) {
+            updateTeam(team);
+        } else {
+            addTeam(team);
+        }
+    }
+
+    // Remove teams that are no longer in the list
+    for (let teamId of oldIds) {
+        delete window.appdata.teamCache[teamId];
+    }
+}
+
+// Team cache categories (members, invites, ...)
+
+export function replaceTeamCacheCategory<T extends CacheCategoryType>(
+    teamId: ID,
+    category: CacheCategory,
+    objects: T[]
+) {
+    let teamData = getTeamData(teamId);
+    if (teamData === null) {
+        console.warn(
+            '[Cache] Team ' +
+                teamId +
+                ' not found in cache. This usually happens when the page is soft reloaded twice in short succession and should not be a problem.'
+        );
+    } else {
+        teamData[category] = {};
+        for (let obj of objects) {
+            teamData[category][obj.id] = obj;
+        }
+    }
+}
+
+export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
+    teamId: ID,
+    category: CacheCategory
+) {
+    return new Promise<T[]>((resolve, reject) => {
+        let teamdata = getTeamData(teamId);
+        if (teamdata._state[category]._refreshing === true) {
+            // If the category is already being refreshed, we don't need to do anything
+            // This will neither resolve nor reject the promise
+            console.info(
+                '[Cache] Team category ' +
+                    category +
+                    ' is already being refreshed for team ' +
+                    teamId +
+                    '!'
+            );
+        } else {
+            teamdata._state[category]._refreshing = true;
+            TeamsAPI.getItemsOfCategory<{ [key: string]: T[] }>(
+                teamId,
+                category
+            )
+                .then((data) => {
+                    let objects: T[] = data[category.split('_').at(-1)!];
+                    replaceTeamCacheCategory<T>(teamId, category, objects);
+
+                    teamdata._state[category]._initial = false;
+                    teamdata._state[category]._refreshing = false;
+                    Navigation.renderPage();
+
+                    resolve(objects);
+                })
+                .catch((error) => {
+                    teamdata._state[category]._refreshing = false;
+                    reject(error);
+                });
+        }
+    });
+}

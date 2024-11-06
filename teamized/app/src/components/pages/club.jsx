@@ -8,7 +8,7 @@ import React from 'react';
 
 import { getAge, getDateString } from '../../utils/datetime.ts';
 import * as Dashboard from '../dashboard.jsx';
-import * as Cache from '../../utils/cache.js';
+import * as Cache from '../../utils/cache.ts';
 import * as Club from '../../utils/club.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 import { IconTooltip } from '../tooltips.jsx';

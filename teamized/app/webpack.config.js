@@ -4,7 +4,7 @@ module.exports = [
     {
         name: 'mainapp',
         // mode: "development" || "production",
-        entry: './src/app.js',
+        entry: './src/app.ts',
         output: {
             path: path.resolve(__dirname, '../static/teamized/app/'),
             filename: 'mainapp.js',

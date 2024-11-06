@@ -10,7 +10,7 @@ import { errorAlert } from '../../utils/alerts.ts';
 import * as Dashboard from '../dashboard.jsx';
 import * as ToDo from '../../utils/todo.ts';
 import * as Navigation from '../../utils/navigation.tsx';
-import * as Cache from '../../utils/cache.js';
+import * as Cache from '../../utils/cache.ts';
 import { IconTooltip, Tooltip } from '../tooltips.jsx';
 
 class ListViewItem extends React.Component {

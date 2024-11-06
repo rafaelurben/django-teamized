@@ -10,7 +10,7 @@ import {
     waitingAlert,
 } from './alerts';
 import * as WorkingtimeAPI from '../api/workingtime';
-import * as Cache from './cache.js';
+import * as Cache from './cache';
 import * as Navigation from './navigation';
 import { isoFormat, localInputFormat } from './datetime';
 import { ID } from '../interfaces/common';
@@ -18,9 +18,13 @@ import {
     Worksession,
     WorksessionRequestDTO,
 } from '../interfaces/workingtime/worksession';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
 export async function getMyWorkSessionsInTeam(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(teamId, 'me_worksessions');
+    return await Cache.refreshTeamCacheCategory<Worksession>(
+        teamId,
+        CacheCategory.ME_WORKSESSIONS
+    );
 }
 
 // WorkSession creation

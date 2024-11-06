@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { successAlert } from '../../utils/alerts.ts';
-import * as Cache from '../../utils/cache.js';
+import * as Cache from '../../utils/cache.ts';
 import * as Club from '../../utils/club.ts';
 import * as Teams from '../../utils/teams';
 import * as Navigation from '../../utils/navigation.tsx';

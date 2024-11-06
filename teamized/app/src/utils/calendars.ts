@@ -5,13 +5,13 @@
 import $ from 'jquery';
 
 import {
-    requestSuccessAlert,
-    doubleConfirmAlert,
     confirmAlert,
+    doubleConfirmAlert,
+    requestSuccessAlert,
     Swal,
 } from './alerts';
-import * as Cache from './cache.js';
-import { roundDays, isInRange, isoFormat, localInputFormat } from './datetime';
+import * as Cache from './cache';
+import { isInRange, isoFormat, localInputFormat, roundDays } from './datetime';
 import * as CalendarAPI from '../api/calendar';
 import {
     CalendarEvent,
@@ -19,6 +19,7 @@ import {
 } from '../interfaces/calendar/calendarEvent';
 import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
 import { ID } from '../interfaces/common';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
 // Reexport so that datetime.js functions can also be imported from calendars.js
 export * from './datetime';
@@ -87,7 +88,10 @@ export function filterCalendarEventsByDate(
 // Calendar list
 
 export async function getCalendars(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(teamId, 'calendars');
+    return await Cache.refreshTeamCacheCategory(
+        teamId,
+        CacheCategory.CALENDARS
+    );
 }
 
 // Calendar creation

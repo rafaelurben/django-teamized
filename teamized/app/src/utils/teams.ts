@@ -2,6 +2,8 @@
  * Utils for the base team features
  */
 
+import $ from 'jquery';
+
 import {
     confirmAlert,
     doubleConfirmAlert,
@@ -12,19 +14,20 @@ import {
 import * as TeamsAPI from '../api/teams';
 import { isoFormat, localInputFormat } from './datetime';
 import * as Navigation from './navigation';
-import * as Cache from './cache.js';
+import * as Cache from './cache';
 import * as Utils from './utils';
 import { Team, TeamRequestDTO } from '../interfaces/teams/team';
 import { ID } from '../interfaces/common';
 import { Member, MemberRequestDTO } from '../interfaces/teams/member';
 import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
-export { getTeamsList } from './cache.js';
+export { getTeamsList } from './cache';
 
 export function isCurrentTeamAdmin() {
     const teamdata = Cache.getCurrentTeamData();
     if (teamdata) {
-        return ['owner', 'admin'].includes(teamdata.team.member.role);
+        return ['owner', 'admin'].includes(teamdata.team.member?.role || '');
     }
     return false;
 }
@@ -40,7 +43,7 @@ export function hasCurrentTeamLinkedClub() {
 export function ensureExistingTeam() {
     if (window.appdata.selectedTeamId) {
         // Team selected; check if it is valid
-        if (window.appdata.selectedTeamId in window.appdata.teamcache) {
+        if (window.appdata.selectedTeamId in window.appdata.teamCache) {
             // Team is in cache, so it must be a valid team id
             return;
         }
@@ -204,7 +207,10 @@ export async function leaveTeamPopup(team: Team) {
 // Member list
 
 export async function getMembers(teamId: ID) {
-    let members = await Cache.refreshTeamCacheCategory(teamId, 'members');
+    let members = await Cache.refreshTeamCacheCategory<Member>(
+        teamId,
+        CacheCategory.MEMBERS
+    );
     Cache.getTeamData(teamId).team.membercount = members.length;
     return members;
 }
@@ -260,7 +266,10 @@ export async function deleteMemberPopup(team: Team, member: Member) {
 // Invite list
 
 export async function getInvites(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(teamId, 'invites');
+    return await Cache.refreshTeamCacheCategory<Invite>(
+        teamId,
+        CacheCategory.INVITES
+    );
 }
 
 // Invite creation

@@ -17,12 +17,6 @@ type HTTPRequestOptions = {
     ajaxOptions?: JQuery.AjaxSettings;
 };
 
-declare global {
-    interface Window {
-        api_base_url: string;
-    }
-}
-
 /**
  * API base class
  */

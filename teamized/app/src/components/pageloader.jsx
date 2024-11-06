@@ -11,7 +11,7 @@ import Page_ToDo from './pages/todo.jsx';
 import Page_WorkingTime from './pages/workingtime.jsx';
 
 import * as Teams from '../utils/teams';
-import * as Cache from '../utils/cache.js';
+import * as Cache from '../utils/cache.ts';
 
 /*
     This component is used to render the pages.

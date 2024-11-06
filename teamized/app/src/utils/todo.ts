@@ -8,7 +8,7 @@ import {
     requestSuccessAlert,
     Swal,
 } from './alerts';
-import * as Cache from './cache.js';
+import * as Cache from './cache';
 import { getDateString } from './datetime';
 import { ID } from '../interfaces/common';
 import * as TodolistAPI from '../api/todolist';
@@ -17,11 +17,15 @@ import {
     TodolistItem,
     TodolistItemRequestDTO,
 } from '../interfaces/todolist/todolistItem';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
 // ToDoList list
 
 export async function getToDoLists(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(teamId, 'todolists');
+    return await Cache.refreshTeamCacheCategory<Todolist>(
+        teamId,
+        CacheCategory.TODOLISTS
+    );
 }
 
 // ToDoList creation

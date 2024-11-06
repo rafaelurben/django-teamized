@@ -35,7 +35,7 @@ export function toggleDebug(bypassConfirmation: boolean = false) {
         $body.removeClass('debug');
     } else if (
         bypassConfirmation ||
-        window.appdata.debug_prompt_accepted === true ||
+        window.appdata.debug_prompt_accepted ||
         confirm('Möchtest du den DEBUG-Modus aktivieren?')
     ) {
         window.appdata.debug_prompt_accepted = true;

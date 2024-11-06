@@ -7,7 +7,7 @@
 import React from 'react';
 
 import * as Calendars from '../../utils/calendars.ts';
-import * as Cache from '../../utils/cache.js';
+import * as Cache from '../../utils/cache.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 
 import * as Dashboard from '../dashboard.jsx';

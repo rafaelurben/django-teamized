@@ -8,12 +8,6 @@ import * as GeneralAPI from '../api/general';
 import * as Navigation from './navigation';
 import { Settings } from '../interfaces/settings';
 
-declare global {
-    interface Window {
-        appdata: any;
-    }
-}
-
 // User profile
 
 export async function getProfile() {

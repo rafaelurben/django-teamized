@@ -13,7 +13,7 @@ import {
 import AppMenubar from '../components/menubar.jsx';
 import AppSidebar from '../components/sidebar.jsx';
 import * as Teams from './teams';
-import { getCurrentTeamData } from './cache.js';
+import { getCurrentTeamData } from './cache';
 
 let rootSidebar = createRoot(document.getElementById('app-sidebar')!);
 let rootMenubar = createRoot(document.getElementById('app-menubar')!);
@@ -94,8 +94,8 @@ export function exportToURL(options?: {
  */
 export function importFromURL() {
     const url = new URL(window.location.href);
-    window.appdata.currentPage = url.searchParams.get('p');
-    window.appdata.selectedTeamId = url.searchParams.get('t');
+    window.appdata.currentPage = url.searchParams.get('p') || '';
+    window.appdata.selectedTeamId = url.searchParams.get('t') || '';
 }
 
 export function toggleSidebar() {

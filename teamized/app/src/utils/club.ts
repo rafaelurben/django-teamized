@@ -12,7 +12,7 @@ import {
     Swal,
 } from './alerts';
 import * as ClubAPI from '../api/club';
-import * as Cache from './cache.js';
+import * as Cache from './cache';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
 import {
     ClubMember,
@@ -21,6 +21,7 @@ import {
 import { ClubRequestDTO } from '../interfaces/club/club';
 import { ClubMemberPortfolioRequestDTO } from '../interfaces/club/clubMemberPortfolio';
 import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
 export function getCurrentClubData() {
     const teamdata = Cache.getCurrentTeamData();
@@ -143,8 +144,11 @@ export async function deleteClubPopup(team) {
 // Member list
 
 export async function getClubMembers(teamId: ID) {
-    let members = await Cache.refreshTeamCacheCategory(teamId, 'club_members');
-    Cache.getTeamData(teamId).team.club.membercount = members.length;
+    let members = await Cache.refreshTeamCacheCategory<ClubMember>(
+        teamId,
+        CacheCategory.CLUB_MEMBERS
+    );
+    Cache.getTeamData(teamId).team.club!.membercount = members.length;
     return members;
 }
 
@@ -158,7 +162,7 @@ export async function createClubMember(
         requestSuccessAlert(data);
         let teamdata = Cache.getTeamData(teamId);
         teamdata.club_members[data.member.id] = data.member;
-        teamdata.team.club.membercount += 1;
+        teamdata.team.club!.membercount += 1;
         return data.member;
     });
 }
@@ -273,7 +277,7 @@ export async function deleteClubMember(teamId: ID, memberId: ID) {
             requestSuccessAlert(data);
             let teamdata = Cache.getTeamData(teamId);
             delete teamdata.club_members[memberId];
-            teamdata.team.club.membercount -= 1;
+            teamdata.team.club!.membercount -= 1;
 
             // Remove member from all groups
             for (let group of Object.values(
@@ -421,7 +425,10 @@ export async function createClubMemberMagicLink(teamId: ID, memberId: ID) {
 // Group list
 
 export async function getClubGroups(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(teamId, 'club_groups');
+    return await Cache.refreshTeamCacheCategory<ClubGroup>(
+        teamId,
+        CacheCategory.CLUB_GROUPS
+    );
 }
 
 // Group creation
