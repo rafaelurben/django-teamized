@@ -8,7 +8,7 @@ import React from 'react';
 
 import { CHANGELOG } from '../../data/changelog.js';
 import { getDateString } from '../../utils/datetime.ts';
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import * as Utils from '../../utils/utils.ts';
 import * as Settings from '../../utils/settings.ts';
 import * as Navigation from '../../utils/navigation.tsx';

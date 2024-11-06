@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { errorAlert } from '../../utils/alerts.ts';
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import * as ToDo from '../../utils/todo.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 import * as Cache from '../../utils/cache.ts';
@@ -440,7 +440,7 @@ class ListInfo extends React.Component {
                         <td>{todolist.id}</td>
                     </tr>
                 </tbody>
-                <Dashboard.TableButtonFooter notopborder={true}>
+                <Dashboard.TableButtonFooter noTopBorder={true}>
                     {listPanelButtons}
                 </Dashboard.TableButtonFooter>
             </Dashboard.Table>

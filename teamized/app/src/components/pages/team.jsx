@@ -11,7 +11,7 @@ import * as Cache from '../../utils/cache.ts';
 import * as Club from '../../utils/club.ts';
 import * as Teams from '../../utils/teams';
 import * as Navigation from '../../utils/navigation.tsx';
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import { IconTooltip, Tooltip } from '../tooltips.jsx';
 
 class TeamMembersTableRow extends React.Component {
@@ -383,7 +383,7 @@ export default class Page_Team extends React.Component {
 
                             <Dashboard.TableButtonFooter
                                 show={this.props.team.member.is_owner}
-                                notopborder={true}
+                                noTopBorder={true}
                             >
                                 <button
                                     className="btn btn-outline-dark border-1"

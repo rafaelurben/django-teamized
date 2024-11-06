@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { getAge, getDateString } from '../../utils/datetime.ts';
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import * as Cache from '../../utils/cache.ts';
 import * as Club from '../../utils/club.ts';
 import * as Navigation from '../../utils/navigation.tsx';
@@ -541,7 +541,7 @@ export default class Page_Club extends React.Component {
                             </tbody>
                             <Dashboard.TableButtonFooter
                                 show={this.props.team.member.is_owner}
-                                notopborder={true}
+                                noTopBorder={true}
                             >
                                 <button
                                     className="btn btn-outline-dark border-1 me-2"

@@ -10,7 +10,7 @@ import * as Calendars from '../../utils/calendars.ts';
 import * as Cache from '../../utils/cache.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import { IconTooltip, Tooltip } from '../tooltips.jsx';
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
@@ -241,7 +241,7 @@ class CalendarInfo extends React.Component {
                         <td>{calendar.id}</td>
                     </tr>
                 </tbody>
-                <Dashboard.TableButtonFooter notopborder={true}>
+                <Dashboard.TableButtonFooter noTopBorder={true}>
                     {calendarPanelButtons}
                 </Dashboard.TableButtonFooter>
             </Dashboard.Table>
@@ -739,7 +739,7 @@ class CalendarEventDisplay extends React.Component {
                     </tr>
                 </tbody>
 
-                <Dashboard.TableButtonFooter notopborder={true}>
+                <Dashboard.TableButtonFooter noTopBorder={true}>
                     <button
                         className="btn btn-outline-dark"
                         onClick={this.editEvent}

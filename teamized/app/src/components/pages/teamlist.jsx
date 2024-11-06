@@ -9,7 +9,7 @@ import React from 'react';
 import { waitingAlert } from '../../utils/alerts.ts';
 import * as Teams from '../../utils/teams';
 import * as Navigation from '../../utils/navigation.tsx';
-import * as Dashboard from '../dashboard.jsx';
+import * as Dashboard from '../common/dashboard.tsx';
 import { IconTooltip } from '../tooltips.jsx';
 
 class TeamTableRow extends React.Component {
