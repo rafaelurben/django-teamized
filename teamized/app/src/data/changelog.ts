@@ -1,6 +1,12 @@
-// Teamized changelog
+import { DateString } from '../interfaces/common';
 
-export const CHANGELOG = [
+export interface ChangelogItem {
+    date: DateString;
+    changes: string[];
+    milestone?: boolean;
+}
+
+export const CHANGELOG: ChangelogItem[] = [
     {
         date: '2023-11-25',
         changes: [

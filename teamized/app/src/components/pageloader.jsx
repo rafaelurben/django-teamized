@@ -4,7 +4,7 @@ import React from 'react';
 
 import Page_Calendars from './pages/calendars.jsx';
 import Page_Club from './pages/club.jsx';
-import Page_Home from './pages/home.jsx';
+import HomePage from './pages/home/homePage.tsx';
 import Page_TeamList from './pages/teamlist.jsx';
 import Page_Team from './pages/team.jsx';
 import Page_ToDo from './pages/todo.jsx';
@@ -65,7 +65,7 @@ export class PageLoader extends React.Component {
         switch (this.props.page) {
             case 'home':
                 return (
-                    <Page_Home
+                    <HomePage
                         user={window.appdata.user}
                         settings={window.appdata.settings}
                     />
