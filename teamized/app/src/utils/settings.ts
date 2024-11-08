@@ -44,6 +44,10 @@ export async function getSettings() {
     });
 }
 
+/**
+ * Set, apply and save new settings
+ * @param settings
+ */
 export async function editSettings(settings: Partial<Settings>) {
     // Apply new settings
     let newSettings = { ...window.appdata.settings, ...settings };
