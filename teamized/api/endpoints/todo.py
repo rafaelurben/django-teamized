@@ -86,8 +86,8 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
                 "id": todolist.uid,
                 "todolist": todolist.as_dict(),
                 "alert": {
-                    "title": _("To-do-Lis­te geändert"),
-                    "text": _("Die To-do-Lis­te wurde erfolgreich geändert."),
+                    "title": _("To-do-Liste geändert"),
+                    "text": _("Die To-do-Liste wurde erfolgreich geändert."),
                 },
             }
         )
@@ -100,8 +100,8 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
             {
                 "success": True,
                 "alert": {
-                    "title": _("To-do-Lis­te gelöscht"),
-                    "text": _("Die To-do-Lis­te wurde erfolgreich gelöscht."),
+                    "title": _("To-do-Liste gelöscht"),
+                    "text": _("Die To-do-Liste wurde erfolgreich gelöscht."),
                 },
             }
         )

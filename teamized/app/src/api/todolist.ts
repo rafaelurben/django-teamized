@@ -22,7 +22,7 @@ export async function createTodolist(teamId: ID, todolist: TodolistRequestDTO) {
 export async function updateTodolist(
     teamId: ID,
     todolistId: ID,
-    todolist: TodolistRequestDTO
+    todolist: Partial<TodolistRequestDTO>
 ) {
     return await API.put<{ todolist: Todolist }>(
         `teams/${teamId}/todolists/${todolistId}`,
@@ -51,7 +51,7 @@ export async function updateTodolistItem(
     teamId: ID,
     todolistId: ID,
     itemId: ID,
-    item: TodolistItemRequestDTO
+    item: Partial<TodolistItemRequestDTO>
 ) {
     return await API.put<{ item: TodolistItem }>(
         `teams/${teamId}/todolists/${todolistId}/items/${itemId}`,

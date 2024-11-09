@@ -87,7 +87,7 @@ export async function createToDoListPopup(team: Team) {
 export async function editToDoList(
     teamId: ID,
     todolistId: ID,
-    todolist: TodolistRequestDTO
+    todolist: Partial<TodolistRequestDTO>
 ) {
     return await TodolistAPI.updateTodolist(teamId, todolistId, todolist).then(
         (data) => {
@@ -183,7 +183,7 @@ export async function editToDoListItem(
     teamId: ID,
     todolistId: ID,
     itemId: ID,
-    item: TodolistItemRequestDTO
+    item: Partial<TodolistItemRequestDTO>
 ) {
     return await TodolistAPI.updateTodolistItem(
         teamId,
