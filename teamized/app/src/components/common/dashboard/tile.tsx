@@ -3,7 +3,7 @@ import React from 'react';
 import { IconTooltip } from '../tooltips/iconTooltip';
 
 interface Props {
-    title: string | null;
+    title: string | React.ReactNode | null;
     help: string | null;
     grow: boolean;
     className: string;
