@@ -13,7 +13,7 @@ interface Props {
     team: Team;
 }
 
-export default function Page_ToDo({ team }: Props) {
+export default function TodoPage({ team }: Props) {
     const [selectedListId, setSelectedListId] = useState<ID | null>(null);
 
     const todolistMap = Cache.getTeamData(team.id).todolists;

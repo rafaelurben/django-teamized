@@ -7,7 +7,7 @@ import ClubPage from './pages/club/clubPage.tsx';
 import HomePage from './pages/home/homePage.tsx';
 import TeamlistPage from './pages/teamlist/teamlistPage.tsx';
 import Page_Team from './pages/team/teamPage.tsx';
-import Page_ToDo from './pages/todo/todo.tsx';
+import TodoPage from './pages/todo/todoPage.tsx';
 import Page_WorkingTime from './pages/workingtime.jsx';
 
 import * as Teams from '../utils/teams';
@@ -97,7 +97,7 @@ export class PageLoader extends React.Component {
                     />
                 );
             case 'todo':
-                return <Page_ToDo team={teamData.team} />;
+                return <TodoPage team={teamData.team} />;
             case 'club':
                 return (
                     <ClubPage
