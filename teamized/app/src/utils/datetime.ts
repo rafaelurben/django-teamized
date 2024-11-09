@@ -143,9 +143,8 @@ export function localInputFormat(
  * Convert milliseconds into an object with hours, minutes and seconds
  *
  * @param {Number} ms count of milliseconds
- * @returns {object}
  */
-export function ms2HoursMinutesSeconds(ms: number): object {
+export function ms2HoursMinutesSeconds(ms: number) {
     return {
         hours: padZero(Math.floor(ms / 1000 / 60 / 60), 2),
         minutes: padZero(Math.floor(ms / 1000 / 60) % 60, 2),
@@ -157,9 +156,8 @@ export function ms2HoursMinutesSeconds(ms: number): object {
  * Convert seconds into an object with hours, minutes and seconds
  *
  * @param {Number} seconds count of seconds
- * @returns {object}
  */
-export function seconds2HoursMinutesSeconds(seconds: number): object {
+export function seconds2HoursMinutesSeconds(seconds: number) {
     return ms2HoursMinutesSeconds(seconds * 1000);
 }
 

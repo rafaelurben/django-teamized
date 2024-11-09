@@ -8,7 +8,7 @@ import HomePage from './pages/home/homePage.tsx';
 import TeamlistPage from './pages/teamlist/teamlistPage.tsx';
 import Page_Team from './pages/team/teamPage.tsx';
 import TodoPage from './pages/todo/todoPage.tsx';
-import Page_WorkingTime from './pages/workingtime.jsx';
+import WorkingtimePage from './pages/workingtime/workingtimePage.tsx';
 
 import * as Teams from '../utils/teams';
 import * as Cache from '../utils/cache.ts';
@@ -80,14 +80,7 @@ export class PageLoader extends React.Component {
             case 'team':
                 return <Page_Team team={teamData.team} />;
             case 'workingtime':
-                return (
-                    <Page_WorkingTime
-                        current_worksession={window.appdata.current_worksession}
-                        worksessions={teamData.me_worksessions}
-                        selectedTeamId={window.appdata.selectedTeamId}
-                        selectedTeam={teamData.team}
-                    />
-                );
+                return <WorkingtimePage team={teamData.team} />;
             case 'calendars':
                 return (
                     <Page_Calendars

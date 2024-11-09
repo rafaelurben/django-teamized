@@ -2,6 +2,8 @@
  * Functions used in the workingtime module
  */
 
+import $ from 'jquery';
+
 import { confirmAlert, successAlert, Swal, waitingAlert } from './alerts';
 import * as WorkingtimeAPI from '../api/workingtime';
 import * as Cache from './cache';
