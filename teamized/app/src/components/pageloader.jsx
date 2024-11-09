@@ -3,7 +3,7 @@
 import React from 'react';
 
 import Page_Calendars from './pages/calendars.jsx';
-import Page_Club from './pages/club.jsx';
+import ClubPage from './pages/club/clubPage.tsx';
 import HomePage from './pages/home/homePage.tsx';
 import TeamlistPage from './pages/teamlist/teamlistPage.tsx';
 import Page_Team from './pages/team/teamPage.tsx';
@@ -106,7 +106,7 @@ export class PageLoader extends React.Component {
                 );
             case 'club':
                 return (
-                    <Page_Club
+                    <ClubPage
                         team={teamData.team}
                         isAdmin={Teams.isCurrentTeamAdmin()}
                     />
