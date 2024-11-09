@@ -5,7 +5,7 @@ import React from 'react';
 import Page_Calendars from './pages/calendars.jsx';
 import Page_Club from './pages/club.jsx';
 import HomePage from './pages/home/homePage.tsx';
-import Page_TeamList from './pages/teamlist.jsx';
+import TeamlistPage from './pages/teamlist/teamlistPage.tsx';
 import Page_Team from './pages/team.jsx';
 import Page_ToDo from './pages/todo.jsx';
 import Page_WorkingTime from './pages/workingtime.jsx';
@@ -72,7 +72,7 @@ export class PageLoader extends React.Component {
                 );
             case 'teamlist':
                 return (
-                    <Page_TeamList
+                    <TeamlistPage
                         teams={Teams.getTeamsList()}
                         selectedTeamId={window.appdata.selectedTeamId}
                     />
