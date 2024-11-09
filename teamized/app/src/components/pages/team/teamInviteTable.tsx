@@ -18,7 +18,7 @@ export default function TeamInviteTable({ team }: Props) {
 
     useEffect(() => {
         if (loading) Teams.getInvites(team.id); // will re-render page
-    }, []);
+    });
 
     const handleInviteCreateButtonClick = async () => {
         await Teams.createInvitePopup(team);

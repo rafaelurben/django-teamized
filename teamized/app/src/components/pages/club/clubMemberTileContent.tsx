@@ -30,7 +30,7 @@ export default function ClubMemberTileContent({
     useEffect(() => {
         if (clubMembersLoading) Club.getClubMembers(team.id); // will re-render page
         if (clubGroupsLoading) Club.getClubGroups(team.id); // will re-render page
-    }, []);
+    });
 
     if (clubMembersLoading || clubGroupsLoading) {
         return <p className="ms-2">Wird geladen...</p>;

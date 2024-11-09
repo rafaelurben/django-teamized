@@ -19,7 +19,7 @@ export default function TeamMemberTable({ team, loggedInMember }: Props) {
 
     useEffect(() => {
         if (loading) Teams.getMembers(team.id); // will re-render page
-    }, []);
+    });
 
     return (
         <Dashboard.Table>
