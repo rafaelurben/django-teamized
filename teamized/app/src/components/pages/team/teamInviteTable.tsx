@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import * as Dashboard from '../../common/dashboard';
-import { IconTooltip } from '../../common/tooltips/iconTooltip';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 import * as Cache from '../../../utils/cache';
 import * as Teams from '../../../utils/teams';
 import { Team } from '../../../interfaces/teams/team';

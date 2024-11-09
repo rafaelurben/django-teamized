@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Member } from '../../../interfaces/teams/member';
 import * as Dashboard from '../../common/dashboard';
-import { IconTooltip } from '../../common/tooltips/iconTooltip';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 import * as Cache from '../../../utils/cache';
 import * as Teams from '../../../utils/teams';
 import TeamMembersTableRow from './teamMemberTableRow';

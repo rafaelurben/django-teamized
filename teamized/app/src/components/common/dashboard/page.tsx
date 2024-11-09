@@ -8,7 +8,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Page({
+export default function Page({
     loading = false,
     title = null,
     subtitle = null,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Team } from '../../../interfaces/teams/team';
 import { ID } from '../../../interfaces/common';
-import { IconTooltip } from '../../common/tooltips/iconTooltip';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 import * as Dashboard from '../../common/dashboard';
 import TeamTableRow from './teamTableRow';
 

@@ -11,8 +11,8 @@ import * as Dashboard from '../common/dashboard.tsx';
 import * as ToDo from '../../utils/todo.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 import * as Cache from '../../utils/cache.ts';
-import { IconTooltip } from '../common/tooltips/iconTooltip';
-import { Tooltip } from '../common/tooltips/tooltip';
+import IconTooltip from '../common/tooltips/iconTooltip';
+import Tooltip from '../common/tooltips/tooltip';
 
 class ListViewItem extends React.Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip } from './tooltip';
+import Tooltip from './tooltip';
 
 interface Props {
     title: string;
@@ -7,7 +7,7 @@ interface Props {
     className: string;
 }
 
-export function IconTooltip({
+export default function IconTooltip({
     title,
     icon = 'fas fa-info-circle',
     className = '',

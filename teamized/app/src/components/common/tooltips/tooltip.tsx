@@ -7,7 +7,11 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Tooltip({ title, className = '', children }: Partial<Props>) {
+export default function Tooltip({
+    title,
+    className = '',
+    children,
+}: Partial<Props>) {
     const tooltipRef = useRef<HTMLElement>(null);
 
     useEffect(() => {

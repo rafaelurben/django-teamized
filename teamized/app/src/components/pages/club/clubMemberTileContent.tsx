@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { IconTooltip } from '../../common/tooltips/iconTooltip';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 import * as Cache from '../../../utils/cache';
 import { Team } from '../../../interfaces/teams/team';
 import * as Club from '../../../utils/club';

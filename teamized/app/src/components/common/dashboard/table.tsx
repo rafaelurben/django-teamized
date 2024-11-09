@@ -6,7 +6,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Table({
+export default function Table({
     className = '',
     vertical = false,
     children,

@@ -19,7 +19,7 @@ import {
     ms2HoursMinutesSeconds,
     seconds2HoursMinutesSeconds,
 } from '../../utils/datetime.ts';
-import { IconTooltip } from '../common/tooltips/iconTooltip';
+import IconTooltip from '../common/tooltips/iconTooltip';
 
 class WorkSessionTableRow extends React.Component {
     constructor(props) {

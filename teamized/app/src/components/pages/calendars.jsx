@@ -11,8 +11,8 @@ import * as Cache from '../../utils/cache.ts';
 import * as Navigation from '../../utils/navigation.tsx';
 
 import * as Dashboard from '../common/dashboard.tsx';
-import { IconTooltip } from '../common/tooltips/iconTooltip';
-import { Tooltip } from '../common/tooltips/tooltip';
+import IconTooltip from '../common/tooltips/iconTooltip';
+import Tooltip from '../common/tooltips/tooltip';
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 

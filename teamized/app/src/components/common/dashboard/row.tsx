@@ -6,7 +6,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Row({
+export default function Row({
     className = '',
     grow = false,
     children,

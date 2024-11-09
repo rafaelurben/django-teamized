@@ -8,7 +8,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Column({
+export default function Column({
     className = '',
     size = 12,
     sizes = {},

@@ -6,7 +6,7 @@ import * as Dashboard from '../../common/dashboard';
 import * as Utils from '../../../utils/utils';
 import * as SettingsUtils from '../../../utils/settings';
 import * as Navigation from '../../../utils/navigation';
-import { IconTooltip } from '../../common/tooltips/iconTooltip';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 import { User } from '../../../interfaces/user';
 import { Settings } from '../../../interfaces/settings';
 

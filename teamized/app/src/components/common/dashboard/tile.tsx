@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IconTooltip } from '../tooltips/iconTooltip';
+import IconTooltip from '../tooltips/iconTooltip';
 
 interface Props {
     title: string | React.ReactNode | null;
@@ -10,7 +10,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function Tile({
+export default function Tile({
     title = null,
     help = null,
     grow = false,
