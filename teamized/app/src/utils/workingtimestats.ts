@@ -2,8 +2,8 @@
  * Functions used to create charts in the workingtime module
  */
 
-import { getDateString, isInRange, roundDays } from './datetime';
 import { Worksession } from '../interfaces/workingtime/worksession';
+import { getDateString, isInRange, roundDays } from './datetime';
 
 /**
  * Filter sessions for a given date range

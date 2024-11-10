@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 
+import { Team } from '../../../interfaces/teams/team';
+import * as Cache from '../../../utils/cache';
+import * as Navigation from '../../../utils/navigation';
+import * as Teams from '../../../utils/teams';
 import * as Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
-import * as Cache from '../../../utils/cache';
-import * as Teams from '../../../utils/teams';
-import { Team } from '../../../interfaces/teams/team';
 import TeamInviteTableRow from './teamInviteTableRow';
-import * as Navigation from '../../../utils/navigation';
 
 interface Props {
     team: Team;

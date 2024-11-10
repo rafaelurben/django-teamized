@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { Calendar } from '../../../interfaces/calendar/calendar';
+import { Team } from '../../../interfaces/teams/team';
 import * as Calendars from '../../../utils/calendars';
 import * as Navigation from '../../../utils/navigation';
+import * as Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
-import * as Dashboard from '../../common/dashboard';
-import { Team } from '../../../interfaces/teams/team';
-import { Calendar } from '../../../interfaces/calendar/calendar';
 
 interface Props {
     team: Team;

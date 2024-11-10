@@ -4,17 +4,17 @@
 
 import $ from 'jquery';
 
-import { confirmAlert, doubleConfirmAlert, infoAlert, Swal } from './alerts';
 import * as TeamsAPI from '../api/teams';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { ID } from '../interfaces/common';
+import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
+import { Member, MemberRequestDTO } from '../interfaces/teams/member';
+import { Team, TeamRequestDTO } from '../interfaces/teams/team';
+import { confirmAlert, doubleConfirmAlert, infoAlert, Swal } from './alerts';
+import * as Cache from './cache';
 import { isoFormat, localInputFormat } from './datetime';
 import * as Navigation from './navigation';
-import * as Cache from './cache';
 import * as Utils from './utils';
-import { Team, TeamRequestDTO } from '../interfaces/teams/team';
-import { ID } from '../interfaces/common';
-import { Member, MemberRequestDTO } from '../interfaces/teams/member';
-import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
 
 export { getTeamsList } from './cache';
 

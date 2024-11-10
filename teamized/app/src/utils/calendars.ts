@@ -4,18 +4,18 @@
 
 import $ from 'jquery';
 
-import { confirmAlert, doubleConfirmAlert, Swal } from './alerts';
-import * as Cache from './cache';
-import { isInRange, isoFormat, localInputFormat, roundDays } from './datetime';
 import * as CalendarAPI from '../api/calendar';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
 import {
     CalendarEvent,
     CalendarEventRequestDTO,
 } from '../interfaces/calendar/calendarEvent';
-import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import { Team } from '../interfaces/teams/team';
+import { confirmAlert, doubleConfirmAlert, Swal } from './alerts';
+import * as Cache from './cache';
+import { isInRange, isoFormat, localInputFormat, roundDays } from './datetime';
 
 // Reexport so that datetime.js functions can also be imported from calendars.js
 export * from './datetime';

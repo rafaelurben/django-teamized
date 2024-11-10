@@ -2,6 +2,15 @@
  * Functions used in the todo module
  */
 
+import * as TodolistAPI from '../api/todolist';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { ID } from '../interfaces/common';
+import { Team } from '../interfaces/teams/team';
+import { Todolist, TodolistRequestDTO } from '../interfaces/todolist/todolist';
+import {
+    TodolistItem,
+    TodolistItemRequestDTO,
+} from '../interfaces/todolist/todolistItem';
 import {
     confirmAlert,
     doubleConfirmAlert,
@@ -10,15 +19,6 @@ import {
 } from './alerts';
 import * as Cache from './cache';
 import { getDateString } from './datetime';
-import { ID } from '../interfaces/common';
-import * as TodolistAPI from '../api/todolist';
-import { Todolist, TodolistRequestDTO } from '../interfaces/todolist/todolist';
-import {
-    TodolistItem,
-    TodolistItemRequestDTO,
-} from '../interfaces/todolist/todolistItem';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { Team } from '../interfaces/teams/team';
 
 // ToDoList list
 

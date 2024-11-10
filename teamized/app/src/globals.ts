@@ -1,7 +1,7 @@
-import { Worksession } from './interfaces/workingtime/worksession';
-import { Settings } from './interfaces/settings';
 import { TeamsCache } from './interfaces/cache/teamsCache';
+import { Settings } from './interfaces/settings';
 import { User } from './interfaces/user';
+import { Worksession } from './interfaces/workingtime/worksession';
 
 declare global {
     // noinspection JSUnusedGlobalSymbols

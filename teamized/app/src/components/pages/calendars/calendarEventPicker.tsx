@@ -1,13 +1,13 @@
 import React from 'react';
 
-import CalendarEventPickerRow from './calendarEventPickerRow';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import { Team } from '../../../interfaces/teams/team';
 import { Calendar } from '../../../interfaces/calendar/calendar';
+import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
+import { Team } from '../../../interfaces/teams/team';
 import * as Calendars from '../../../utils/calendars';
 import * as Navigation from '../../../utils/navigation';
-import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
+import IconTooltip from '../../common/tooltips/iconTooltip';
+import CalendarEventPickerRow from './calendarEventPickerRow';
 
 interface Props {
     team: Team;

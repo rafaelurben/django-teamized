@@ -4,19 +4,19 @@
 
 import $ from 'jquery';
 
-import { confirmAlert, doubleConfirmAlert, successAlert, Swal } from './alerts';
 import * as ClubAPI from '../api/club';
-import * as Cache from './cache';
-import { ID, IDIndexedObjectList } from '../interfaces/common';
+import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { ClubRequestDTO } from '../interfaces/club/club';
+import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
 import {
     ClubMember,
     ClubMemberRequestDTO,
 } from '../interfaces/club/clubMember';
-import { ClubRequestDTO } from '../interfaces/club/club';
 import { ClubMemberPortfolioRequestDTO } from '../interfaces/club/clubMemberPortfolio';
-import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import { ID, IDIndexedObjectList } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
+import { confirmAlert, doubleConfirmAlert, successAlert, Swal } from './alerts';
+import * as Cache from './cache';
 
 //// API calls ////
 

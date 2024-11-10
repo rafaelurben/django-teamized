@@ -1,9 +1,10 @@
-import globals from 'globals';
 import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import pluginPrettierConfigRecommended from 'eslint-plugin-prettier/recommended';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import pluginPrettierConfigRecommended from 'eslint-plugin-prettier/recommended';
+import pluginSimpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -15,10 +16,13 @@ export default [
     {
         plugins: {
             'react-hooks': pluginReactHooks,
+            'simple-import-sort': pluginSimpleImportSort,
         },
         rules: {
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'warn',
+            'simple-import-sort/imports': 'error',
+            'simple-import-sort/exports': 'warn',
         },
     },
     pluginPrettierConfigRecommended,

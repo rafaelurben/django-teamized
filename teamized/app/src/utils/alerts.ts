@@ -3,8 +3,9 @@
  * https://sweetalert2.github.io/
  */
 
-import Swal from 'sweetalert2/dist/sweetalert2.js';
 import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
 import { ErrorResponse } from '../interfaces/responses/errorResponse';
 import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
 

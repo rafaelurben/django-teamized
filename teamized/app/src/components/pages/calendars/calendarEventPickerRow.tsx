@@ -1,8 +1,8 @@
 import React from 'react';
 
-import * as Calendars from '../../../utils/calendars';
-import { ID } from '../../../interfaces/common';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
+import { ID } from '../../../interfaces/common';
+import * as Calendars from '../../../utils/calendars';
 
 interface Props {
     isSelected: boolean;

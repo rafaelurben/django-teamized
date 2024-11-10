@@ -1,13 +1,13 @@
 import React, { useId, useState } from 'react';
 
-import { errorAlert } from '../../../utils/alerts';
-import * as ToDo from '../../../utils/todo';
-import * as Navigation from '../../../utils/navigation';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import ListViewItem from './listViewItem';
-import * as Dashboard from '../../common/dashboard';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
+import { errorAlert } from '../../../utils/alerts';
+import * as Navigation from '../../../utils/navigation';
+import * as ToDo from '../../../utils/todo';
+import * as Dashboard from '../../common/dashboard';
+import IconTooltip from '../../common/tooltips/iconTooltip';
+import ListViewItem from './listViewItem';
 
 interface Props {
     team: Team;

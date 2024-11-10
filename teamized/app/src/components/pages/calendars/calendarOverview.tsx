@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
+import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import * as Calendars from '../../../utils/calendars';
 import CalendarOverviewWeek from './calendarOverviewWeek';
-import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 const WEEKDAY_INDEXES = [0, 1, 2, 3, 4, 5, 6];

@@ -5,8 +5,8 @@
 import $ from 'jquery';
 
 import * as GeneralAPI from '../api/general';
-import * as Navigation from './navigation';
 import { Settings } from '../interfaces/settings';
+import * as Navigation from './navigation';
 
 // User profile
 

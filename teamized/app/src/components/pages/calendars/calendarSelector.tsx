@@ -1,11 +1,11 @@
 import React from 'react';
 
-import CalendarSelectorRow from './calendarSelectorRow';
-import Tooltip from '../../common/tooltips/tooltip';
-import * as Calendars from '../../../utils/calendars';
-import { Team } from '../../../interfaces/teams/team';
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
+import { Team } from '../../../interfaces/teams/team';
+import * as Calendars from '../../../utils/calendars';
+import Tooltip from '../../common/tooltips/tooltip';
+import CalendarSelectorRow from './calendarSelectorRow';
 
 interface Props {
     team: Team;

@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+
 import { User } from '../interfaces/user';
 
 interface Props {

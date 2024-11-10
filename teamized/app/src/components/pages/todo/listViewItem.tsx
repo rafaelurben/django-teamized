@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as ToDo from '../../../utils/todo';
-import * as Navigation from '../../../utils/navigation';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import { TodolistItem } from '../../../interfaces/todolist/todolistItem';
+import * as Navigation from '../../../utils/navigation';
+import * as ToDo from '../../../utils/todo';
 
 interface Props {
     team: Team;

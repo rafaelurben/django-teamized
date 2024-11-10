@@ -1,11 +1,11 @@
 import React from 'react';
 
-import * as WorkingTime from '../../../utils/workingtime';
-import * as Navigation from '../../../utils/navigation';
-import { seconds2HoursMinutesSeconds } from '../../../utils/datetime';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
 import { Team } from '../../../interfaces/teams/team';
+import { Worksession } from '../../../interfaces/workingtime/worksession';
+import { seconds2HoursMinutesSeconds } from '../../../utils/datetime';
+import * as Navigation from '../../../utils/navigation';
+import * as WorkingTime from '../../../utils/workingtime';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
     team: Team;

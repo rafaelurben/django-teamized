@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
-import { getAge, getDateString } from '../../../utils/datetime';
-import { Team } from '../../../interfaces/teams/team';
 import { ClubMember } from '../../../interfaces/club/clubMember';
+import { Team } from '../../../interfaces/teams/team';
+import * as Club from '../../../utils/club';
+import { getAge, getDateString } from '../../../utils/datetime';
+import * as Navigation from '../../../utils/navigation';
 
 interface Props {
     team: Team;

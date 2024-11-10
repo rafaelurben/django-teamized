@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import * as Dashboard from '../../common/dashboard';
-import * as Cache from '../../../utils/cache';
-import ListView from './listView';
-import ListSelector from './listSelector';
-import ListInfo from './listInfo';
-import { Team } from '../../../interfaces/teams/team';
-import * as Todo from '../../../utils/todo';
+
 import { ID } from '../../../interfaces/common';
+import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
+import * as Cache from '../../../utils/cache';
+import * as Todo from '../../../utils/todo';
+import * as Dashboard from '../../common/dashboard';
+import ListInfo from './listInfo';
+import ListSelector from './listSelector';
+import ListView from './listView';
 
 interface Props {
     team: Team;

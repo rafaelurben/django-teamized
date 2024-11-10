@@ -2,12 +2,12 @@
  * Teamized Workingtime API
  */
 
-import { API } from './_base';
 import { ID } from '../interfaces/common';
 import {
     Worksession,
     WorksessionRequestDTO,
 } from '../interfaces/workingtime/worksession';
+import { API } from './_base';
 
 // Worksessions
 

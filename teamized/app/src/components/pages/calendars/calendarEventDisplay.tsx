@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as Calendars from '../../../utils/calendars';
-import * as Dashboard from '../../common/dashboard';
-import { Team } from '../../../interfaces/teams/team';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
+import { Team } from '../../../interfaces/teams/team';
+import * as Calendars from '../../../utils/calendars';
 import * as Navigation from '../../../utils/navigation';
+import * as Dashboard from '../../common/dashboard';
 
 interface Props {
     team: Team;

@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { ClubMember } from '../../../interfaces/club/clubMember';
+import { Team } from '../../../interfaces/teams/team';
 import * as Club from '../../../utils/club';
 import * as Navigation from '../../../utils/navigation';
-import ClubMembersTableRow from './clubMembersTableRow';
 import * as Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
-import { Team } from '../../../interfaces/teams/team';
-import { ClubMember } from '../../../interfaces/club/clubMember';
+import ClubMembersTableRow from './clubMembersTableRow';
 
 interface Props {
     team: Team;

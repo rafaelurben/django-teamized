@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
 import { CHANGELOG } from '../../../data/changelog';
-import { getDateString } from '../../../utils/datetime';
-import * as Dashboard from '../../common/dashboard';
-import * as Utils from '../../../utils/utils';
-import * as SettingsUtils from '../../../utils/settings';
-import * as Navigation from '../../../utils/navigation';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import { User } from '../../../interfaces/user';
 import { Settings } from '../../../interfaces/settings';
+import { User } from '../../../interfaces/user';
+import { getDateString } from '../../../utils/datetime';
+import * as Navigation from '../../../utils/navigation';
+import * as SettingsUtils from '../../../utils/settings';
+import * as Utils from '../../../utils/utils';
+import * as Dashboard from '../../common/dashboard';
+import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
     user: User;

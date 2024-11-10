@@ -1,11 +1,11 @@
 import React from 'react';
 
-import * as ToDo from '../../../utils/todo';
-import ListSelectorRow from './listSelectorRow';
-import Tooltip from '../../common/tooltips/tooltip';
+import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import { ID } from '../../../interfaces/common';
+import * as ToDo from '../../../utils/todo';
+import Tooltip from '../../common/tooltips/tooltip';
+import ListSelectorRow from './listSelectorRow';
 
 interface Props {
     team: Team;

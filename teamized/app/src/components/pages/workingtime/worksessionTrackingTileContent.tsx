@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import * as WorkingTime from '../../../utils/workingtime';
-import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
+
 import { Team } from '../../../interfaces/teams/team';
+import { Worksession } from '../../../interfaces/workingtime/worksession';
+import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
+import * as WorkingTime from '../../../utils/workingtime';
 
 function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
     if (currentWorksession) {

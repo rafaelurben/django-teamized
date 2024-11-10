@@ -1,8 +1,9 @@
 import React from 'react';
-import * as Dashboard from '../../common/dashboard';
+
+import { Team } from '../../../interfaces/teams/team';
 import * as Club from '../../../utils/club';
 import * as Navigation from '../../../utils/navigation';
-import { Team } from '../../../interfaces/teams/team';
+import * as Dashboard from '../../common/dashboard';
 import ClubMemberTileContent from './clubMemberTileContent';
 
 interface Props {

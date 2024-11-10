@@ -1,6 +1,7 @@
 import React from 'react';
-import { Todolist } from '../../../interfaces/todolist/todolist';
+
 import { ID } from '../../../interfaces/common';
+import { Todolist } from '../../../interfaces/todolist/todolist';
 
 interface Props {
     list: Todolist;

@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { ClubGroup } from '../../../interfaces/club/clubGroup';
+import { Team } from '../../../interfaces/teams/team';
 import * as Club from '../../../utils/club';
 import * as Navigation from '../../../utils/navigation';
-import { Team } from '../../../interfaces/teams/team';
-import { ClubGroup } from '../../../interfaces/club/clubGroup';
 
 interface Props {
     team: Team;

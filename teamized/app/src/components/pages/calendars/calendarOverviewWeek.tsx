@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import * as Calendars from '../../../utils/calendars';
 import CalendarOverviewDay from './calendarOverviewDay';
-import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 
 interface Props {
     firstDay: Date;

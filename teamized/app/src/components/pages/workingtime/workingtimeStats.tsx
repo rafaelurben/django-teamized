@@ -1,8 +1,8 @@
 import React from 'react';
 import * as Recharts from 'recharts';
 
-import * as Stats from '../../../utils/workingtimestats';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
+import * as Stats from '../../../utils/workingtimestats';
 
 interface Props {
     sessions: Worksession[];

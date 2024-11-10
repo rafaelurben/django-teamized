@@ -2,9 +2,9 @@
  * Teamized General API
  */
 
-import { API } from './_base';
-import { User } from '../interfaces/user';
 import { Settings } from '../interfaces/settings';
+import { User } from '../interfaces/user';
+import { API } from './_base';
 
 // User
 

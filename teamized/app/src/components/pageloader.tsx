@@ -4,16 +4,15 @@
 
 import React from 'react';
 
+import * as Cache from '../utils/cache';
+import * as Teams from '../utils/teams';
 import CalendarsPage from './pages/calendars/calendarsPage';
 import ClubPage from './pages/club/clubPage';
 import HomePage from './pages/home/homePage';
-import TeamlistPage from './pages/teamlist/teamlistPage';
 import Page_Team from './pages/team/teamPage';
+import TeamlistPage from './pages/teamlist/teamlistPage';
 import TodoPage from './pages/todo/todoPage';
 import WorkingtimePage from './pages/workingtime/workingtimePage';
-
-import * as Teams from '../utils/teams';
-import * as Cache from '../utils/cache';
 
 export const PAGE_NAMES = {
     home: 'Startseite',

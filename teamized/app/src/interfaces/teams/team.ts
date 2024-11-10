@@ -1,5 +1,5 @@
-import { ID } from '../common';
 import { Club } from '../club/club';
+import { ID } from '../common';
 import { Member } from './member';
 
 export interface Team {

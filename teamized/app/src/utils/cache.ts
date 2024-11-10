@@ -3,13 +3,13 @@
  */
 
 import * as TeamsAPI from '../api/teams';
-import * as Navigation from './navigation';
-import * as Teams from './teams';
-import { Team } from '../interfaces/teams/team';
-import { ID } from '../interfaces/common';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import { CacheCategoryType } from '../interfaces/cache/cacheCategoryType';
 import { TeamCache } from '../interfaces/cache/teamCache';
+import { ID } from '../interfaces/common';
+import { Team } from '../interfaces/teams/team';
+import * as Navigation from './navigation';
+import * as Teams from './teams';
 
 // Lookups
 

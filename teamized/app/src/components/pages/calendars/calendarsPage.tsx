@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import * as Calendars from '../../../utils/calendars';
-import * as Cache from '../../../utils/cache';
-
-import * as Dashboard from '../../common/dashboard';
-import CalendarSelector from './calendarSelector';
-import CalendarInfo from './calendarInfo';
-import CalendarEventPicker from './calendarEventPicker';
-import CalendarOverview from './calendarOverview';
-import CalendarEventDisplay from './calendarEventDisplay';
-import { Team } from '../../../interfaces/teams/team';
 import { ID } from '../../../interfaces/common';
+import { Team } from '../../../interfaces/teams/team';
+import * as Cache from '../../../utils/cache';
+import * as Calendars from '../../../utils/calendars';
+import * as Dashboard from '../../common/dashboard';
+import CalendarEventDisplay from './calendarEventDisplay';
+import CalendarEventPicker from './calendarEventPicker';
+import CalendarInfo from './calendarInfo';
+import CalendarOverview from './calendarOverview';
+import CalendarSelector from './calendarSelector';
 
 interface Props {
     team: Team;

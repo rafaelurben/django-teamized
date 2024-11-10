@@ -4,7 +4,6 @@
 
 import $ from 'jquery';
 
-import { apiRequestErrorAlert, apiRequestSuccessAlert } from '../utils/alerts';
 import {
     SuccessfulDeleteResponse,
     SuccessfulGetResponse,
@@ -12,6 +11,7 @@ import {
     SuccessfulPutResponse,
     SuccessfulResponse,
 } from '../interfaces/responses/successfulResponse';
+import { apiRequestErrorAlert, apiRequestSuccessAlert } from '../utils/alerts';
 
 type HTTPRequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 type HTTPRequestOptions = {

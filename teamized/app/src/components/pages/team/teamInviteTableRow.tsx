@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as Teams from '../../../utils/teams';
-import * as Navigation from '../../../utils/navigation';
-import { successAlert } from '../../../utils/alerts';
-import { Team } from '../../../interfaces/teams/team';
 import { Invite } from '../../../interfaces/teams/invite';
+import { Team } from '../../../interfaces/teams/team';
+import { successAlert } from '../../../utils/alerts';
+import * as Navigation from '../../../utils/navigation';
+import * as Teams from '../../../utils/teams';
 
 interface Props {
     team: Team;

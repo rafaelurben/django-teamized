@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { Tooltip as BSTooltip } from 'bootstrap';
+import React, { useEffect, useRef } from 'react';
 
 interface Props {
     title: string;

@@ -1,14 +1,14 @@
 import React from 'react';
 
+import { Team } from '../../../interfaces/teams/team';
 import * as Club from '../../../utils/club';
-import * as Teams from '../../../utils/teams';
 import * as Navigation from '../../../utils/navigation';
+import * as Teams from '../../../utils/teams';
 import * as Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
-import { Team } from '../../../interfaces/teams/team';
-import TeamMemberTable from './teamMemberTable';
 import TeamInviteTable from './teamInviteTable';
+import TeamMemberTable from './teamMemberTable';
 
 interface Props {
     team: Team;

@@ -3,10 +3,12 @@
  * Here the app is initialized and the main logic is started
  */
 
+import './globals';
+
 import $ from 'jquery';
 
-import * as Alerts from './utils/alerts';
 import * as BaseAPI from './api/_base';
+import * as Alerts from './utils/alerts';
 import * as Cache from './utils/cache';
 import * as Calendars from './utils/calendars';
 import * as Club from './utils/club';
@@ -18,7 +20,6 @@ import * as ToDo from './utils/todo';
 import * as Utils from './utils/utils';
 import * as WorkingTime from './utils/workingtime';
 import * as WorkingTimeStats from './utils/workingtimestats';
-import './globals';
 
 // Make namespaces available in the console (for debugging)
 

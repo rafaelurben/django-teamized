@@ -1,10 +1,10 @@
 import React from 'react';
 
+import { ID } from '../../../interfaces/common';
+import { Team } from '../../../interfaces/teams/team';
 import { waitingAlert } from '../../../utils/alerts';
 import * as Teams from '../../../utils/teams';
 import * as Dashboard from '../../common/dashboard';
-import { Team } from '../../../interfaces/teams/team';
-import { ID } from '../../../interfaces/common';
 import TeamTable from './teamTable';
 
 interface Props {

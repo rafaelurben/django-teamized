@@ -1,9 +1,9 @@
 import React from 'react';
 
-import * as Teams from '../../../utils/teams';
-import * as Navigation from '../../../utils/navigation';
-import { Team } from '../../../interfaces/teams/team';
 import { Member } from '../../../interfaces/teams/member';
+import { Team } from '../../../interfaces/teams/team';
+import * as Navigation from '../../../utils/navigation';
+import * as Teams from '../../../utils/teams';
 
 interface Props {
     team: Team;

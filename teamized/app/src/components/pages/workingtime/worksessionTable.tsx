@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { Team } from '../../../interfaces/teams/team';
+import { Worksession } from '../../../interfaces/workingtime/worksession';
 import * as Dashboard from '../../common/dashboard';
 import WorksessionTableRow from './worksessionTableRow';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
-import { Team } from '../../../interfaces/teams/team';
 
 interface Props {
     team: Team;
