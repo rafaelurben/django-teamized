@@ -27,3 +27,5 @@ jobs:
         run: npm run typescript-check
       - name: Check eslint
         run: npm run eslint-check
+      - name: Check build is working
+        run: npm run build
