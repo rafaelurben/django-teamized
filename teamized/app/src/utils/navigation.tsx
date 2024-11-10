@@ -10,7 +10,7 @@ import {
     PAGE_LIST,
     PAGE_NAMES,
 } from '../components/pageloader.jsx';
-import AppMenubar from '../components/menubar.jsx';
+import AppMenubar from '../components/menubar';
 import AppSidebar from '../components/sidebar.jsx';
 import * as Teams from './teams';
 import { getCurrentTeamData } from './cache';
