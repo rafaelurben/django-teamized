@@ -8,8 +8,8 @@ import { CacheCategoryType } from '../interfaces/cache/cacheCategoryType';
 import { TeamCache } from '../interfaces/cache/teamCache';
 import { ID } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
-import * as Navigation from './navigation';
-import * as Teams from './teams';
+import * as NavigationService from './navigation.service';
+import * as TeamsService from './teams.service';
 
 // Lookups
 
@@ -51,7 +51,10 @@ export function addTeam(team: Team) {
     const newTeamCache = { team: team, _state: {} };
     for (const category of Object.values(CacheCategory)) {
         newTeamCache[category] = {};
-        newTeamCache._state[category] = { _initial: true, _refreshing: false };
+        newTeamCache._state[category] = {
+            _initial: true,
+            _refreshing: false,
+        };
     }
     window.appdata.teamCache[team.id] = <TeamCache>newTeamCache;
     updateTeam(team);
@@ -66,7 +69,7 @@ export async function deleteTeam(teamId: ID) {
         // When no team is left, the backend automatically creates a new one
         // We need to re-fetch all teams in order to get the new one
         // This also sets the defaultTeamId
-        await Teams.getTeams();
+        await TeamsService.getTeams();
     } else if (window.appdata.defaultTeamId === teamId) {
         // When the default team is deleted, we need to switch to another team
         window.appdata.defaultTeamId = teamIds[0];
@@ -150,7 +153,7 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
 
                     teamData._state[category]._initial = false;
                     teamData._state[category]._refreshing = false;
-                    Navigation.renderPage();
+                    NavigationService.renderPage();
 
                     resolve(objects);
                 })

@@ -2,8 +2,8 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
+import * as WorkingtimeService from '../../../service/workingtime.service';
 import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
-import * as WorkingTime from '../../../utils/workingtime';
 
 function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
     if (currentWorksession) {
@@ -43,7 +43,7 @@ export default function WorksessionTrackingTileContent({
     const startSession = async () => {
         if (!startInProgress.current) {
             startInProgress.current = true;
-            await WorkingTime.startTrackingSession(team.id).then(() => {
+            await WorkingtimeService.startTrackingSession(team.id).then(() => {
                 forceComponentUpdate();
             });
             startInProgress.current = false;
@@ -53,7 +53,7 @@ export default function WorksessionTrackingTileContent({
     const stopSession = async () => {
         if (!stopInProgress.current) {
             stopInProgress.current = true;
-            await WorkingTime.stopTrackingSession().then(() => {
+            await WorkingtimeService.stopTrackingSession().then(() => {
                 forceComponentUpdate();
                 onFinishedSessionAdded();
             });
@@ -62,7 +62,10 @@ export default function WorksessionTrackingTileContent({
     };
 
     const renameCurrentSession = async () => {
-        await WorkingTime.renameWorkSessionPopup(team, currentWorksession!);
+        await WorkingtimeService.renameWorkSessionPopup(
+            team,
+            currentWorksession!
+        );
         forceComponentUpdate();
     };
 
@@ -73,12 +76,12 @@ export default function WorksessionTrackingTileContent({
 
     const updateCurrentSession = async () => {
         const before = window.appdata.current_worksession;
-        const after = await WorkingTime.getTrackingSession();
+        const after = await WorkingtimeService.getTrackingSession();
         if (before !== after && (before || after)) {
             forceComponentUpdate();
 
             if (before && (!after || before.id !== after.id)) {
-                WorkingTime.getMyWorkSessionsInTeam(team.id).then(() =>
+                WorkingtimeService.getMyWorkSessionsInTeam(team.id).then(() =>
                     onFinishedSessionAdded()
                 );
             }

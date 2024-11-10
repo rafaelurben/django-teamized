@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as Navigation from '../../../utils/navigation';
-import * as Teams from '../../../utils/teams';
+import * as NavigationService from '../../../service/navigation.service';
+import * as TeamsService from '../../../service/teams.service';
 
 interface Props {
     team: Team;
@@ -11,20 +11,20 @@ interface Props {
 
 export default function TeamTableRow({ team, isSelected }: Props) {
     const handleSwitchToButtonClick = () => {
-        Teams.switchTeam(team.id);
+        TeamsService.switchTeam(team.id);
     };
 
     const handleManageButtonClick = () => {
-        Teams.switchTeam(team.id);
-        Navigation.selectPage('team');
+        TeamsService.switchTeam(team.id);
+        NavigationService.selectPage('team');
     };
 
     const handleLeaveButtonClick = () => {
-        Teams.leaveTeamPopup(team);
+        TeamsService.leaveTeamPopup(team);
     };
 
     const handleDeleteButtonClick = () => {
-        Teams.deleteTeamPopup(team);
+        TeamsService.deleteTeamPopup(team);
     };
 
     return (

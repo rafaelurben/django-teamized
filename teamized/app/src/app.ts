@@ -8,35 +8,33 @@ import './globals';
 import $ from 'jquery';
 
 import * as BaseAPI from './api/_base';
-import * as Alerts from './utils/alerts';
-import * as Cache from './utils/cache';
-import * as Calendars from './utils/calendars';
-import * as Club from './utils/club';
-import * as DateTime from './utils/datetime';
-import * as Navigation from './utils/navigation';
-import * as SettingsUtils from './utils/settings';
-import * as Teams from './utils/teams';
-import * as ToDo from './utils/todo';
-import * as Utils from './utils/utils';
-import * as WorkingTime from './utils/workingtime';
-import * as WorkingTimeStats from './utils/workingtimestats';
+import * as CacheService from './service/cache.service';
+import * as CalendarService from './service/calendars.service';
+import * as ClubService from './service/clubs.service';
+import * as NavigationService from './service/navigation.service';
+import * as SettingsService from './service/settings.service';
+import * as TeamsService from './service/teams.service';
+import * as TodoService from './service/todo.service';
+import * as WorkingtimeService from './service/workingtime.service';
+import * as AlertUtils from './utils/alerts';
+import * as DatetimeUtils from './utils/datetime';
+import * as GeneralUtils from './utils/general';
 
 // Make namespaces available in the console (for debugging)
 
 window._App = {
-    Alerts,
+    AlertUtils,
     BaseAPI,
-    Cache,
-    Calendars,
-    Club,
-    DateTime,
-    Navigation,
-    Settings: SettingsUtils,
-    Teams,
-    ToDo,
-    Utils,
-    WorkingTime,
-    WorkingTimeStats,
+    CacheService,
+    CalendarService,
+    ClubService,
+    DatetimeUtils,
+    NavigationService,
+    SettingsService,
+    TeamsService,
+    TodoService,
+    GeneralUtils,
+    WorkingtimeService,
 };
 
 // Initialize appdata
@@ -74,26 +72,26 @@ function hideLoadingIndicator() {
 
 async function initialize() {
     if (new URL(window.location.href).searchParams.has('debug')) {
-        Utils.toggleDebug(true);
+        GeneralUtils.toggleDebug(true);
     }
 
     showLoadingIndicator();
 
-    Navigation.showSidebarOnDesktop();
-    Navigation.importFromURL();
-    Navigation.render();
+    NavigationService.showSidebarOnDesktop();
+    NavigationService.importFromURL();
+    NavigationService.render();
 
     await Promise.all([
-        SettingsUtils.getSettings(),
-        SettingsUtils.getProfile().then(Navigation.renderSidebar),
-        Teams.getTeams(),
+        SettingsService.getSettings(),
+        SettingsService.getProfile().then(NavigationService.renderSidebar),
+        TeamsService.getTeams(),
     ]);
 
-    Navigation.exportToURL();
-    Navigation.render();
+    NavigationService.exportToURL();
+    NavigationService.render();
 
-    Teams.checkURLInvite();
-    WorkingTime.getTrackingSession();
+    TeamsService.checkURLInvite();
+    WorkingtimeService.getTrackingSession();
 
     hideLoadingIndicator();
     window.appdata.initialLoadComplete = true;
@@ -109,15 +107,15 @@ async function reinitialize() {
         defaultTeamId: '',
         teamCache: {},
     };
-    Navigation.render();
+    NavigationService.render();
 
-    await Promise.all([SettingsUtils.getSettings(), Teams.getTeams()]);
+    await Promise.all([SettingsService.getSettings(), TeamsService.getTeams()]);
 
-    Navigation.render();
+    NavigationService.render();
 
-    WorkingTime.getTrackingSession().then();
+    WorkingtimeService.getTrackingSession().then();
 
-    Teams.switchTeam(oldTeamId);
+    TeamsService.switchTeam(oldTeamId);
 
     hideLoadingIndicator();
 }
@@ -145,7 +143,7 @@ function onkeypress(e: JQuery.Event) {
     } else if (e.key === 'F6' && e.shiftKey) {
         // Shift+F6 toggle debug mode
         e.preventDefault();
-        Utils.toggleDebug();
+        GeneralUtils.toggleDebug();
     }
 }
 
@@ -154,9 +152,9 @@ function onkeypress(e: JQuery.Event) {
 // Listen for DOM load -> initialize
 $(initialize);
 // Listen for navigation in the history (browser back/forward)
-$(window).on('popstate', Navigation.handleHistoryNavigation);
+$(window).on('popstate', NavigationService.handleHistoryNavigation);
 // Listen for click on the sidebar toggler
-$('#menubartitle').on('click', Navigation.toggleSidebar);
+$('#menubartitle').on('click', NavigationService.toggleSidebar);
 // Listen for click on the refresh button
 $('#refreshbutton').on('click', refresh);
 // Listen for F5 keypress

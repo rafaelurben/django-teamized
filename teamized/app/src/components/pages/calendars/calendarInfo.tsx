@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { Team } from '../../../interfaces/teams/team';
-import * as Calendars from '../../../utils/calendars';
-import * as Navigation from '../../../utils/navigation';
-import * as Dashboard from '../../common/dashboard';
+import * as CalendarService from '../../../service/calendars.service';
+import * as NavigationService from '../../../service/navigation.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 
@@ -22,19 +22,21 @@ export default function CalendarInfo({
     isAdmin,
 }: Props) {
     const editCalendar = () => {
-        Calendars.editCalendarPopup(team, selectedCalendar!).then(
-            Navigation.renderPage
+        CalendarService.editCalendarPopup(team, selectedCalendar!).then(
+            NavigationService.renderPage
         );
     };
 
     const deleteCalendar = () => {
-        Calendars.deleteCalendarPopup(team, selectedCalendar!).then(() => {
-            onCalendarDeleted();
-        });
+        CalendarService.deleteCalendarPopup(team, selectedCalendar!).then(
+            () => {
+                onCalendarDeleted();
+            }
+        );
     };
 
     const subscriptionPopup = async () => {
-        await Calendars.showCalendarSubscriptionPopup(selectedCalendar!);
+        await CalendarService.showCalendarSubscriptionPopup(selectedCalendar!);
     };
 
     if (!selectedCalendar) {

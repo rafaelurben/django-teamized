@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as Navigation from '../../../utils/navigation';
-import * as ToDo from '../../../utils/todo';
-import * as Dashboard from '../../common/dashboard';
+import * as NavigationService from '../../../service/navigation.service';
+import * as ToDo from '../../../service/todo.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 
@@ -22,7 +22,9 @@ export default function ListInfo({
     isAdmin,
 }: Props) {
     const editList = () => {
-        ToDo.editToDoListPopup(team, selectedList!).then(Navigation.renderPage);
+        ToDo.editToDoListPopup(team, selectedList!).then(
+            NavigationService.renderPage
+        );
     };
 
     const deleteList = () => {

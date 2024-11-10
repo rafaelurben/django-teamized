@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 import { Member } from '../../../interfaces/teams/member';
 import { Team } from '../../../interfaces/teams/team';
-import * as Cache from '../../../utils/cache';
-import * as Teams from '../../../utils/teams';
-import * as Dashboard from '../../common/dashboard';
+import * as CacheService from '../../../service/cache.service';
+import * as TeamsService from '../../../service/teams.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamMembersTableRow from './teamMemberTableRow';
 
@@ -14,11 +14,11 @@ interface Props {
 }
 
 export default function TeamMemberTable({ team, loggedInMember }: Props) {
-    const members = Object.values(Cache.getTeamData(team.id).members);
-    const loading = Cache.getCurrentTeamData()._state.members._initial;
+    const members = Object.values(CacheService.getTeamData(team.id).members);
+    const loading = CacheService.getCurrentTeamData()._state.members._initial;
 
     useEffect(() => {
-        if (loading) Teams.getMembers(team.id); // will re-render page
+        if (loading) TeamsService.getMembers(team.id); // will re-render page
     });
 
     return (

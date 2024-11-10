@@ -3,7 +3,7 @@ import React from 'react';
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as Calendars from '../../../utils/calendars';
+import * as CalendarService from '../../../service/calendars.service';
 import Tooltip from '../../common/tooltips/tooltip';
 import CalendarSelectorRow from './calendarSelectorRow';
 
@@ -23,7 +23,7 @@ export default function CalendarSelector({
     isAdmin,
 }: Props) {
     const createCalendar = () => {
-        Calendars.createCalendarPopup(team).then((calendar) => {
+        CalendarService.createCalendarPopup(team).then((calendar) => {
             onCalendarSelect(calendar.id);
         });
     };

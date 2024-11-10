@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Invite } from '../../../interfaces/teams/invite';
 import { Team } from '../../../interfaces/teams/team';
+import * as NavigationService from '../../../service/navigation.service';
+import * as TeamsService from '../../../service/teams.service';
 import { successAlert } from '../../../utils/alerts';
-import * as Navigation from '../../../utils/navigation';
-import * as Teams from '../../../utils/teams';
 
 interface Props {
     team: Team;
@@ -16,13 +16,13 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
         window.location.href.split('?')[0] + '?invite=' + invite.token;
 
     const handleDeleteButtonClick = async () => {
-        await Teams.deleteInvitePopup(team, invite);
-        Navigation.renderPage();
+        await TeamsService.deleteInvitePopup(team, invite);
+        NavigationService.renderPage();
     };
 
     const handleEditButtonClick = async () => {
-        await Teams.editInvitePopup(team, invite);
-        Navigation.renderPage();
+        await TeamsService.editInvitePopup(team, invite);
+        NavigationService.renderPage();
     };
 
     const copyToken = () => {

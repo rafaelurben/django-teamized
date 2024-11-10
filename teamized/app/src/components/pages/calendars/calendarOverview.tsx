@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
-import * as Calendars from '../../../utils/calendars';
+import * as CalendarService from '../../../service/calendars.service';
 import CalendarOverviewWeek from './calendarOverviewWeek';
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
@@ -19,28 +19,31 @@ export default function CalendarOverview({
     events,
 }: Props) {
     const [selectedMonth, setSelectedMonth] = useState(
-        Calendars.roundMonths(new Date())
+        CalendarService.roundMonths(new Date())
     );
 
     const go2prevMonth = () => {
-        setSelectedMonth(Calendars.roundMonths(selectedMonth, -1));
+        setSelectedMonth(CalendarService.roundMonths(selectedMonth, -1));
     };
 
     const go2today = () => {
         const date = new Date();
-        setSelectedMonth(Calendars.roundMonths(date, 0));
+        setSelectedMonth(CalendarService.roundMonths(date, 0));
         onDateSelect(date);
     };
 
     const go2nextMonth = () => {
-        setSelectedMonth(Calendars.roundMonths(selectedMonth, 1));
+        setSelectedMonth(CalendarService.roundMonths(selectedMonth, 1));
     };
 
     const today = new Date();
     const todaySelectedInCurrentMonth =
-        Calendars.isSameDate(selectedDate, today) &&
-        Calendars.isSameDate(selectedMonth, Calendars.roundMonths(today));
-    const firstDayShown = Calendars.getMondayOfWeek(selectedMonth);
+        CalendarService.isSameDate(selectedDate, today) &&
+        CalendarService.isSameDate(
+            selectedMonth,
+            CalendarService.roundMonths(today)
+        );
+    const firstDayShown = CalendarService.getMondayOfWeek(selectedMonth);
 
     const monthDisplay = selectedMonth.toLocaleString(undefined, {
         month: 'long',
@@ -95,7 +98,10 @@ export default function CalendarOverview({
                 {WEEKDAY_INDEXES.map((i) => (
                     <CalendarOverviewWeek
                         key={i}
-                        firstDay={Calendars.roundDays(firstDayShown, i * 7)}
+                        firstDay={CalendarService.roundDays(
+                            firstDayShown,
+                            i * 7
+                        )}
                         selectedMonth={selectedMonth}
                         selectedDate={selectedDate}
                         onDateSelect={onDateSelect}

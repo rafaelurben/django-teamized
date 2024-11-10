@@ -2,14 +2,13 @@ import React, { useEffect, useId, useReducer, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
+import * as CacheService from '../../../service/cache.service';
+import * as NavigationService from '../../../service/navigation.service';
+import * as WorkingtimeService from '../../../service/workingtime.service';
 import { errorAlert } from '../../../utils/alerts';
-import * as Cache from '../../../utils/cache';
 import { localInputFormat, roundDays } from '../../../utils/datetime';
-import * as Navigation from '../../../utils/navigation';
-import * as WorkingTime from '../../../utils/workingtime';
-import * as Stats from '../../../utils/workingtimestats';
-import * as Dashboard from '../../common/dashboard';
-import WorkingTimeStats from './workingtimeStats';
+import Dashboard from '../../common/dashboard';
+import WorkingtimeStats from './workingtimeStats';
 import WorksessionTable from './worksessionTable';
 import WorksessionTrackingTileContent from './worksessionTrackingTileContent';
 
@@ -56,20 +55,21 @@ export default function WorkingtimePage({ team }: Props) {
     };
 
     const createSession = async () => {
-        await WorkingTime.createWorkSessionPopup(team);
-        Navigation.renderPage();
+        await WorkingtimeService.createWorkSessionPopup(team);
+        NavigationService.renderPage();
     };
 
     const allMyWorksessionsInCurrentTeam = Object.values(
-        Cache.getTeamData(team.id).me_worksessions
+        CacheService.getTeamData(team.id).me_worksessions
     );
-    const loading = Cache.getCurrentTeamData()._state.me_worksessions._initial;
+    const loading =
+        CacheService.getCurrentTeamData()._state.me_worksessions._initial;
 
     useEffect(() => {
-        if (loading) WorkingTime.getMyWorkSessionsInTeam(team.id); // will re-render page
+        if (loading) WorkingtimeService.getMyWorkSessionsInTeam(team.id); // will re-render page
     });
 
-    const sessions: Worksession[] = Stats.filterByDateRange(
+    const sessions: Worksession[] = WorkingtimeService.filterByDateRange(
         allMyWorksessionsInCurrentTeam,
         statsRangeStart,
         statsRangeEnd
@@ -176,7 +176,7 @@ export default function WorkingtimePage({ team }: Props) {
                     help="Statistiken für den ausgewählten Zeitraum."
                     grow
                 >
-                    <WorkingTimeStats
+                    <WorkingtimeStats
                         sessions={sessions}
                         start={statsRangeStart}
                         end={statsRangeEnd}

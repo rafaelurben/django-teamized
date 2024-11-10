@@ -2,10 +2,10 @@ import React, { useId, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
+import * as NavigationService from '../../../service/navigation.service';
+import * as ToDo from '../../../service/todo.service';
 import { errorAlert } from '../../../utils/alerts';
-import * as Navigation from '../../../utils/navigation';
-import * as ToDo from '../../../utils/todo';
-import * as Dashboard from '../../common/dashboard';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ListViewItem from './listViewItem';
 
@@ -38,7 +38,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
             setIsCreating(true);
             ToDo.createToDoListItem(team.id, selectedList!.id, { name }).then(
                 () => {
-                    Navigation.renderPage();
+                    NavigationService.renderPage();
                     nameInput.value = '';
                     setIsCreating(false);
                 }

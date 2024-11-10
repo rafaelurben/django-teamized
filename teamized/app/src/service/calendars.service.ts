@@ -13,12 +13,17 @@ import {
 } from '../interfaces/calendar/calendarEvent';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
-import { confirmAlert, doubleConfirmAlert, Swal } from './alerts';
-import * as Cache from './cache';
-import { isInRange, isoFormat, localInputFormat, roundDays } from './datetime';
+import { confirmAlert, doubleConfirmAlert, Swal } from '../utils/alerts';
+import {
+    isInRange,
+    isoFormat,
+    localInputFormat,
+    roundDays,
+} from '../utils/datetime';
+import * as CacheService from './cache.service';
 
 // Reexport so that datetime.js functions can also be imported from calendars.js
-export * from './datetime';
+export * from '../utils/datetime';
 
 // Calendar utils
 
@@ -83,7 +88,7 @@ export function filterCalendarEventsByDate(
 // Calendar list
 
 export async function getCalendars(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory(
+    return await CacheService.refreshTeamCacheCategory(
         teamId,
         CacheCategory.CALENDARS
     );
@@ -93,7 +98,8 @@ export async function getCalendars(teamId: ID) {
 
 export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
     return await CalendarAPI.createCalendar(teamId, calendar).then((data) => {
-        Cache.getTeamData(teamId).calendars[data.calendar.id] = data.calendar;
+        CacheService.getTeamData(teamId).calendars[data.calendar.id] =
+            data.calendar;
         return data.calendar;
     });
 }
@@ -151,7 +157,7 @@ export async function editCalendar(
 ) {
     return await CalendarAPI.updateCalendar(teamId, calendarId, calendar).then(
         (data) => {
-            Cache.getTeamData(teamId).calendars[data.calendar.id] =
+            CacheService.getTeamData(teamId).calendars[data.calendar.id] =
                 data.calendar;
             return data.calendar;
         }
@@ -206,7 +212,7 @@ export async function editCalendarPopup(team: Team, calendar: Calendar) {
 
 export async function deleteCalendar(teamId: ID, calendarId: ID) {
     await CalendarAPI.deleteCalendar(teamId, calendarId).then(() => {
-        delete Cache.getTeamData(teamId).calendars[calendarId];
+        delete CacheService.getTeamData(teamId).calendars[calendarId];
     });
 }
 
@@ -292,8 +298,9 @@ export async function createEvent(
 ) {
     return await CalendarAPI.createEvent(teamId, calendarId, event).then(
         (data) => {
-            Cache.getTeamData(teamId).calendars[calendarId].events[data.id] =
-                data.event;
+            CacheService.getTeamData(teamId).calendars[calendarId].events[
+                data.id
+            ] = data.event;
             return data.event;
         }
     );
@@ -457,7 +464,7 @@ export async function editEvent(
         eventId,
         event
     ).then((data) => {
-        Cache.getTeamData(teamId).calendars[calendarId].events[eventId] =
+        CacheService.getTeamData(teamId).calendars[calendarId].events[eventId] =
             data.event;
         return data.event;
     });
@@ -625,9 +632,8 @@ export function editEventPopup(
 export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
     return await CalendarAPI.deleteEvent(teamId, calendarId, eventId).then(
         () => {
-            delete Cache.getTeamData(teamId).calendars[calendarId].events[
-                eventId
-            ];
+            delete CacheService.getTeamData(teamId).calendars[calendarId]
+                .events[eventId];
         }
     );
 }

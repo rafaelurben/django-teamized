@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as Cache from '../../../utils/cache';
-import * as Calendars from '../../../utils/calendars';
-import * as Dashboard from '../../common/dashboard';
+import * as CacheService from '../../../service/cache.service';
+import * as CalendarService from '../../../service/calendars.service';
+import Dashboard from '../../common/dashboard';
 import CalendarEventDisplay from './calendarEventDisplay';
 import CalendarEventPicker from './calendarEventPicker';
 import CalendarInfo from './calendarInfo';
@@ -17,34 +17,34 @@ interface Props {
 
 export default function CalendarsPage({ team }: Props) {
     const [selectedDate, setSelectedDate] = useState(
-        Calendars.roundDays(new Date())
+        CalendarService.roundDays(new Date())
     );
     const [selectedCalendarId, setSelectedCalendarId] = useState<ID | null>(
         null
     );
     const [selectedEventId, setSelectedEventId] = useState<ID | null>(null);
 
-    const calendarsMap = Cache.getTeamData(team.id).calendars;
+    const calendarsMap = CacheService.getTeamData(team.id).calendars;
     const calendars = Object.values(calendarsMap);
-    const loading = Cache.getCurrentTeamData()._state.calendars._initial;
+    const loading = CacheService.getCurrentTeamData()._state.calendars._initial;
 
     const isAdmin = team.member!.is_admin;
 
-    const eventMap = Calendars.flattenCalendarEvents(calendars);
+    const eventMap = CalendarService.flattenCalendarEvents(calendars);
 
     useEffect(() => {
         ensureValidCalendarId();
         ensureValidEventId();
 
-        if (loading) Calendars.getCalendars(team.id); // will re-render page
+        if (loading) CalendarService.getCalendars(team.id); // will re-render page
     });
 
     const handleDateSelect = (date: Date) => {
-        setSelectedDate(Calendars.roundDays(date));
+        setSelectedDate(CalendarService.roundDays(date));
         // If the current selected event is not in the new selected date, deselect it
         if (selectedEventId) {
             const evt = eventMap[selectedEventId];
-            if (evt && !Calendars.isDateInEvent(date, evt)) {
+            if (evt && !CalendarService.isDateInEvent(date, evt)) {
                 setSelectedEventId(null);
             }
         }
@@ -72,17 +72,19 @@ export default function CalendarsPage({ team }: Props) {
         }
     };
 
-    const dayDisplay = Calendars.getDateString(selectedDate);
+    const dayDisplay = CalendarService.getDateString(selectedDate);
 
     const selectedCalendar =
-        Cache.getCurrentTeamData().calendars[selectedCalendarId!];
+        CacheService.getCurrentTeamData().calendars[selectedCalendarId!];
     const selectedEvent = eventMap[selectedEventId!];
 
     return (
         <Dashboard.Page
             title="Kalender"
             subtitle="Kalender für dich und dein Team"
-            loading={Cache.getCurrentTeamData()._state.calendars._initial}
+            loading={
+                CacheService.getCurrentTeamData()._state.calendars._initial
+            }
         >
             <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
                 <Dashboard.Tile
@@ -107,7 +109,7 @@ export default function CalendarsPage({ team }: Props) {
                         selectedEvent={selectedEvent}
                         selectedCalendar={selectedCalendar}
                         calendars={calendars}
-                        events={Calendars.filterCalendarEventsByDate(
+                        events={CalendarService.filterCalendarEventsByDate(
                             Object.values(eventMap),
                             selectedDate
                         )}

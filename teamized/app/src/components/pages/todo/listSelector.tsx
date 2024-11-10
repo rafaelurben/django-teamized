@@ -3,7 +3,7 @@ import React from 'react';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as ToDo from '../../../utils/todo';
+import * as ToDo from '../../../service/todo.service';
 import Tooltip from '../../common/tooltips/tooltip';
 import ListSelectorRow from './listSelectorRow';
 

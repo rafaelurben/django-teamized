@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
-import * as Dashboard from '../../common/dashboard';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubMembersTableRow from './clubMembersTableRow';
 
@@ -22,8 +22,8 @@ export default function ClubMembersTable({
     isOwner,
 }: Props) {
     const handleCreateButtonClick = async () => {
-        await Club.createClubMemberPopup(team);
-        Navigation.renderPage();
+        await ClubService.createClubMemberPopup(team);
+        NavigationService.renderPage();
     };
 
     return (

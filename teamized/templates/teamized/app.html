@@ -49,10 +49,10 @@
         <ul class="dropdown-menu">
             <li><a class="dropdown-item text-info" href="#"
                    onclick="window.open('{% url "teamized:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
-            <li><a class="dropdown-item text-danger" href="#" onclick="window._App.Utils.toggleDebug()">DEBUG-Modus
+            <li><a class="dropdown-item text-danger" href="#" onclick="window._App.GeneralUtils.toggleDebug()">DEBUG-Modus
                 verlassen (Shift+F6)</a></li>
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" onclick="window._App.Navigation.reRender(); alert('Done!')">Navigation.reRender()</a>
+            <li><a class="dropdown-item" href="#" onclick="window._App.NavigationService.reRender(); alert('Done!')">NavigationService.reRender()</a>
             </li>
             <li><a class="dropdown-item" href="#" onclick="window.location.reload()">location.reload()</a></li>
         </ul>

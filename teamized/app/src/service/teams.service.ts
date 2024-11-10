@@ -10,16 +10,21 @@ import { ID } from '../interfaces/common';
 import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
 import { Member, MemberRequestDTO } from '../interfaces/teams/member';
 import { Team, TeamRequestDTO } from '../interfaces/teams/team';
-import { confirmAlert, doubleConfirmAlert, infoAlert, Swal } from './alerts';
-import * as Cache from './cache';
-import { isoFormat, localInputFormat } from './datetime';
-import * as Navigation from './navigation';
-import * as Utils from './utils';
+import {
+    confirmAlert,
+    doubleConfirmAlert,
+    infoAlert,
+    Swal,
+} from '../utils/alerts';
+import { isoFormat, localInputFormat } from '../utils/datetime';
+import { validateUUID } from '../utils/general';
+import * as CacheService from './cache.service';
+import * as NavigationService from './navigation.service';
 
-export { getTeamsList } from './cache';
+export { getTeamsList } from './cache.service';
 
 export function isCurrentTeamAdmin() {
-    const teamData = Cache.getCurrentTeamData();
+    const teamData = CacheService.getCurrentTeamData();
     if (teamData) {
         return ['owner', 'admin'].includes(teamData.team.member?.role || '');
     }
@@ -27,7 +32,7 @@ export function isCurrentTeamAdmin() {
 }
 
 export function hasCurrentTeamLinkedClub() {
-    const teamData = Cache.getCurrentTeamData();
+    const teamData = CacheService.getCurrentTeamData();
     if (teamData) {
         return teamData.team.club !== null;
     }
@@ -58,8 +63,8 @@ export function switchTeam(teamId: ID) {
     console.debug('Switching team to: ' + teamId);
 
     window.appdata.selectedTeamId = teamId;
-    Navigation.exportToURL();
-    Navigation.render();
+    NavigationService.exportToURL();
+    NavigationService.render();
 }
 
 //// API calls ////
@@ -68,7 +73,7 @@ export function switchTeam(teamId: ID) {
 
 export async function getTeams() {
     return await TeamsAPI.getTeams().then((data) => {
-        Cache.updateTeamsCache(data.teams, data.defaultTeamId);
+        CacheService.updateTeamsCache(data.teams, data.defaultTeamId);
         ensureExistingTeam();
         return data.teams;
     });
@@ -78,7 +83,7 @@ export async function getTeams() {
 
 export async function createTeam(team: TeamRequestDTO) {
     return await TeamsAPI.createTeam(team).then(async (data) => {
-        Cache.addTeam(data.team);
+        CacheService.addTeam(data.team);
         switchTeam(data.team.id);
 
         return data.team;
@@ -110,7 +115,7 @@ export async function createTeamPopup() {
 
                 Swal.showLoading();
                 return await createTeam({ name, description }).then(() => {
-                    Navigation.selectPage('team');
+                    NavigationService.selectPage('team');
                 });
             },
         })
@@ -121,7 +126,7 @@ export async function createTeamPopup() {
 
 export async function editTeam(teamId: ID, team: Partial<TeamRequestDTO>) {
     return await TeamsAPI.updateTeam(teamId, team).then(async (data) => {
-        Cache.getTeamData(teamId).team = data.team;
+        CacheService.getTeamData(teamId).team = data.team;
         return data.team;
     });
 }
@@ -161,9 +166,9 @@ export async function editTeamPopup(team: Team) {
 
 export async function deleteTeam(teamId: ID) {
     await TeamsAPI.deleteTeam(teamId).then(async () => {
-        await Cache.deleteTeam(teamId);
+        await CacheService.deleteTeam(teamId);
         ensureExistingTeam();
-        Navigation.selectPage('teamlist');
+        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -179,9 +184,9 @@ export async function deleteTeamPopup(team: Team) {
 
 export async function leaveTeam(teamId: ID) {
     await TeamsAPI.leaveTeam(teamId).then(async () => {
-        await Cache.deleteTeam(teamId);
+        await CacheService.deleteTeam(teamId);
         ensureExistingTeam();
-        Navigation.selectPage('teamlist');
+        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -196,11 +201,11 @@ export async function leaveTeamPopup(team: Team) {
 // Member list
 
 export async function getMembers(teamId: ID) {
-    const members = await Cache.refreshTeamCacheCategory<Member>(
+    const members = await CacheService.refreshTeamCacheCategory<Member>(
         teamId,
         CacheCategory.MEMBERS
     );
-    Cache.getTeamData(teamId).team.membercount = members.length;
+    CacheService.getTeamData(teamId).team.membercount = members.length;
     return members;
 }
 
@@ -213,7 +218,7 @@ export async function editMember(
 ) {
     return await TeamsAPI.updateMember(teamId, memberId, member).then(
         (data) => {
-            Cache.getTeamData(teamId).members[memberId] = data.member;
+            CacheService.getTeamData(teamId).members[memberId] = data.member;
             return data.id;
         }
     );
@@ -237,7 +242,7 @@ export async function demoteMemberPopup(team: Team, member: Member) {
 
 export async function deleteMember(teamId: ID, memberId: ID) {
     return await TeamsAPI.deleteMember(teamId, memberId).then(async () => {
-        const teamData = Cache.getTeamData(teamId);
+        const teamData = CacheService.getTeamData(teamId);
         delete teamData.members[memberId];
         teamData.team.membercount -= 1;
     });
@@ -253,7 +258,7 @@ export async function deleteMemberPopup(team: Team, member: Member) {
 // Invite list
 
 export async function getInvites(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory<Invite>(
+    return await CacheService.refreshTeamCacheCategory<Invite>(
         teamId,
         CacheCategory.INVITES
     );
@@ -263,7 +268,7 @@ export async function getInvites(teamId: ID) {
 
 export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
     return await TeamsAPI.createInvite(teamId, invite).then((data) => {
-        Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
+        CacheService.getTeamData(teamId).invites[data.invite.id] = data.invite;
         return data.invite;
     });
 }
@@ -317,7 +322,8 @@ export async function editInvite(
 ) {
     return await TeamsAPI.updateInvite(teamId, inviteId, invite).then(
         (data) => {
-            Cache.getTeamData(teamId).invites[data.invite.id] = data.invite;
+            CacheService.getTeamData(teamId).invites[data.invite.id] =
+                data.invite;
             return data.invite;
         }
     );
@@ -367,7 +373,7 @@ export async function editInvitePopup(team: Team, invite: Invite) {
 
 export async function deleteInvite(teamId: ID, inviteId: ID) {
     await TeamsAPI.deleteInvite(teamId, inviteId).then(async () => {
-        delete Cache.getTeamData(teamId).invites[inviteId];
+        delete CacheService.getTeamData(teamId).invites[inviteId];
     });
 }
 
@@ -383,9 +389,9 @@ export async function deleteInvitePopup(team: Team, invite: Invite) {
 
 export async function acceptInvite(token: string) {
     return await TeamsAPI.acceptInvite(token).then(async (data) => {
-        Cache.addTeam(data.team);
+        CacheService.addTeam(data.team);
         switchTeam(data.team.id);
-        Navigation.exportToURL({ removeParams: ['invite'] });
+        NavigationService.exportToURL({ removeParams: ['invite'] });
 
         await getMembers(data.team.id);
         return data.team;
@@ -393,12 +399,12 @@ export async function acceptInvite(token: string) {
 }
 
 export async function checkInvitePopup(token: string) {
-    if (!Utils.validateUUID(token)) {
+    if (!validateUUID(token)) {
         infoAlert(
             'Ungültiges Einladungsformat',
             'Diese Einladung liegt nicht im richtigen Format vor.'
         );
-        Navigation.exportToURL({ removeParams: ['invite'] });
+        NavigationService.exportToURL({ removeParams: ['invite'] });
         return;
     }
 
@@ -414,7 +420,7 @@ export async function checkInvitePopup(token: string) {
             async () => {
                 Swal.showLoading();
                 await acceptInvite(token);
-                Navigation.selectPage('team');
+                NavigationService.selectPage('team');
             },
             'Du wurdest eingeladen',
             {
@@ -425,7 +431,7 @@ export async function checkInvitePopup(token: string) {
             }
         );
     } else {
-        Navigation.exportToURL({ removeParams: ['invite'] });
+        NavigationService.exportToURL({ removeParams: ['invite'] });
     }
 }
 

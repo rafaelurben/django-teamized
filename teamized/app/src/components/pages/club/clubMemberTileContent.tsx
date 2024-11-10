@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as Cache from '../../../utils/cache';
-import * as Club from '../../../utils/club';
+import * as CacheService from '../../../service/cache.service';
+import * as ClubService from '../../../service/clubs.service';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubGroupsTable from './clubGroupsTable';
 import ClubMembersTable from './clubMembersTable';
@@ -20,7 +20,7 @@ export default function ClubMemberTileContent({
 }: Props) {
     const [selectedTab, setSelectedTab] = useState('all');
 
-    const teamData = Cache.getTeamData(team.id)!;
+    const teamData = CacheService.getTeamData(team.id)!;
 
     const clubMembers = Object.values(teamData.club_members);
     const clubGroups = Object.values(teamData.club_groups);
@@ -28,8 +28,8 @@ export default function ClubMemberTileContent({
     const clubGroupsLoading = teamData._state.club_groups._initial;
 
     useEffect(() => {
-        if (clubMembersLoading) Club.getClubMembers(team.id); // will re-render page
-        if (clubGroupsLoading) Club.getClubGroups(team.id); // will re-render page
+        if (clubMembersLoading) ClubService.getClubMembers(team.id); // will re-render page
+        if (clubGroupsLoading) ClubService.getClubGroups(team.id); // will re-render page
     });
 
     if (clubMembersLoading || clubGroupsLoading) {

@@ -2,7 +2,7 @@
  * Datetime utils
  */
 
-import { padZero } from './utils';
+import { padZero } from './general';
 
 // Datetime utils
 

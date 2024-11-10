@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
-import * as Dashboard from '../../common/dashboard';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
+import Dashboard from '../../common/dashboard';
 import ClubGroupsTableRow from './clubGroupsTableRow';
 
 interface Props {
@@ -15,8 +15,8 @@ interface Props {
 
 export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
     const handleCreateButtonClick = async () => {
-        await Club.createClubGroupPopup(team);
-        Navigation.renderPage();
+        await ClubService.createClubGroupPopup(team);
+        NavigationService.renderPage();
     };
 
     return (

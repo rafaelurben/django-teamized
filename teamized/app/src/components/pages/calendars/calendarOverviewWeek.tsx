@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
-import * as Calendars from '../../../utils/calendars';
+import * as CalendarService from '../../../service/calendars.service';
 import CalendarOverviewDay from './calendarOverviewDay';
 
 interface Props {
@@ -21,7 +21,7 @@ export default function CalendarOverviewWeek({
 }: Props) {
     const days: Date[] = [];
     for (let i = 0; i < 7; i++) {
-        days.push(Calendars.roundDays(firstDay, i));
+        days.push(CalendarService.roundDays(firstDay, i));
     }
 
     return (
@@ -30,12 +30,15 @@ export default function CalendarOverviewWeek({
                 <CalendarOverviewDay
                     key={i}
                     date={date}
-                    events={Calendars.filterCalendarEventsByDate(events, date)}
-                    isToday={Calendars.isSameDate(date, new Date())}
-                    isSelected={Calendars.isSameDate(selectedDate, date)}
-                    isInSelectedMonth={Calendars.isSameDate(
+                    events={CalendarService.filterCalendarEventsByDate(
+                        events,
+                        date
+                    )}
+                    isToday={CalendarService.isSameDate(date, new Date())}
+                    isSelected={CalendarService.isSameDate(selectedDate, date)}
+                    isInSelectedMonth={CalendarService.isSameDate(
                         selectedMonth,
-                        Calendars.roundMonths(date)
+                        CalendarService.roundMonths(date)
                     )}
                     onSelect={onDateSelect}
                 />

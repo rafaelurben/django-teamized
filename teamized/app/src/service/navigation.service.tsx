@@ -8,8 +8,8 @@ import { createRoot } from 'react-dom/client';
 import AppMenubar from '../components/menubar';
 import { PAGE_LIST, PAGE_NAMES, PageLoader } from '../components/pageloader';
 import AppSidebar from '../components/sidebar';
-import { getCurrentTeamData } from './cache';
-import * as Teams from './teams';
+import { getCurrentTeamData } from './cache.service';
+import * as TeamsService from './teams.service';
 
 const rootSidebar = createRoot(document.getElementById('app-sidebar')!);
 const rootMenubar = createRoot(document.getElementById('app-menubar')!);
@@ -35,7 +35,7 @@ export function exportToURL(options?: {
     removeParams?: string[];
 }) {
     ensureExistingPage();
-    Teams.ensureExistingTeam();
+    TeamsService.ensureExistingTeam();
 
     const oldurl = new URL(window.location.href);
     const newurl = new URL(window.location.href);
@@ -112,8 +112,8 @@ export function renderSidebar() {
         <AppSidebar
             selectedPage={window.appdata.currentPage}
             user={window.appdata.user}
-            isAdmin={Teams.isCurrentTeamAdmin()}
-            isClubEnabled={Teams.hasCurrentTeamLinkedClub()}
+            isAdmin={TeamsService.isCurrentTeamAdmin()}
+            isClubEnabled={TeamsService.hasCurrentTeamLinkedClub()}
             onPageSelect={selectPage}
         />
     );
@@ -126,9 +126,9 @@ export function renderPage() {
 export function renderMenubar() {
     rootMenubar.render(
         <AppMenubar
-            teams={Teams.getTeamsList()}
+            teams={TeamsService.getTeamsList()}
             selectedTeamId={window.appdata.selectedTeamId}
-            onTeamSelect={Teams.switchTeam}
+            onTeamSelect={TeamsService.switchTeam}
             onPageSelect={selectPage}
         />
     );
@@ -168,7 +168,7 @@ export function handleHistoryNavigation() {
     console.log('Navigated in history! Switching page...');
     importFromURL();
     ensureExistingPage();
-    Teams.ensureExistingTeam();
+    TeamsService.ensureExistingTeam();
     render();
     updatePageTitle();
 }

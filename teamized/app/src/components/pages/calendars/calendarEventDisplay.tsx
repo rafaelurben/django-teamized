@@ -2,9 +2,9 @@ import React from 'react';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { Team } from '../../../interfaces/teams/team';
-import * as Calendars from '../../../utils/calendars';
-import * as Navigation from '../../../utils/navigation';
-import * as Dashboard from '../../common/dashboard';
+import * as CalendarService from '../../../service/calendars.service';
+import * as NavigationService from '../../../service/navigation.service';
+import Dashboard from '../../common/dashboard';
 
 interface Props {
     team: Team;
@@ -13,20 +13,20 @@ interface Props {
 
 export default function CalendarEventDisplay({ team, event }: Props) {
     const editEvent = () => {
-        Calendars.editEventPopup(team, event.calendar!, event).then(
-            Navigation.renderPage
+        CalendarService.editEventPopup(team, event.calendar!, event).then(
+            NavigationService.renderPage
         );
     };
 
     const cloneEvent = () => {
-        Calendars.editEventPopup(team, event.calendar!, event, true).then(
-            Navigation.renderPage
+        CalendarService.editEventPopup(team, event.calendar!, event, true).then(
+            NavigationService.renderPage
         );
     };
 
     const deleteEvent = () => {
-        Calendars.deleteEventPopup(team, event.calendar!, event).then(
-            Navigation.renderPage
+        CalendarService.deleteEventPopup(team, event.calendar!, event).then(
+            NavigationService.renderPage
         );
     };
 
@@ -38,13 +38,17 @@ export default function CalendarEventDisplay({ team, event }: Props) {
     let eventEndDisplay: string;
 
     if (event.fullday) {
-        eventStartDisplay = Calendars.getDateString(new Date(event.dstart));
-        eventEndDisplay = Calendars.getDateString(new Date(event.dend));
+        eventStartDisplay = CalendarService.getDateString(
+            new Date(event.dstart)
+        );
+        eventEndDisplay = CalendarService.getDateString(new Date(event.dend));
     } else {
-        eventStartDisplay = Calendars.getDateTimeString(
+        eventStartDisplay = CalendarService.getDateTimeString(
             new Date(event.dtstart)
         );
-        eventEndDisplay = Calendars.getDateTimeString(new Date(event.dtend));
+        eventEndDisplay = CalendarService.getDateTimeString(
+            new Date(event.dtend)
+        );
     }
 
     return (

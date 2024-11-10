@@ -3,8 +3,8 @@ import React from 'react';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import { TodolistItem } from '../../../interfaces/todolist/todolistItem';
-import * as Navigation from '../../../utils/navigation';
-import * as ToDo from '../../../utils/todo';
+import * as NavigationService from '../../../service/navigation.service';
+import * as ToDo from '../../../service/todo.service';
 
 interface Props {
     team: Team;
@@ -16,18 +16,18 @@ export default function ListViewItem({ team, list, item }: Props) {
     const markDone = () => {
         ToDo.editToDoListItem(team.id, list.id, item.id, {
             done: true,
-        }).then(Navigation.renderPage);
+        }).then(NavigationService.renderPage);
     };
 
     const viewItem = () => {
         ToDo.viewToDoListItemPopup(team, list, item).then(
-            Navigation.renderPage
+            NavigationService.renderPage
         );
     };
 
     const deleteItem = () => {
         ToDo.deleteToDoListItemPopup(team, list, item).then(
-            Navigation.renderPage
+            NavigationService.renderPage
         );
     };
 

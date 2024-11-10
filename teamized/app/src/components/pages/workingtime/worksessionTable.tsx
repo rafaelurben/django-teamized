@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as Dashboard from '../../common/dashboard';
+import Dashboard from '../../common/dashboard';
 import WorksessionTableRow from './worksessionTableRow';
 
 interface Props {

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
 
 interface Props {
     team: Team;
@@ -13,17 +13,17 @@ interface Props {
 
 export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
     const handleRemoveButtonClick = async () => {
-        await Club.deleteClubGroupPopup(team, group);
-        Navigation.renderPage();
+        await ClubService.deleteClubGroupPopup(team, group);
+        NavigationService.renderPage();
     };
 
     const handleEditButtonClick = async () => {
-        await Club.editClubGroupPopup(team, group);
-        Navigation.renderPage();
+        await ClubService.editClubGroupPopup(team, group);
+        NavigationService.renderPage();
     };
 
     const handleSharePortfolioButtonClick = async () => {
-        await Club.showClubGroupPortfolioExportPopup(group);
+        await ClubService.showClubGroupPortfolioExportPopup(group);
     };
 
     return (

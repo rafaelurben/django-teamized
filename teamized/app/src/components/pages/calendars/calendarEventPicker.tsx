@@ -4,8 +4,8 @@ import { Calendar } from '../../../interfaces/calendar/calendar';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as Calendars from '../../../utils/calendars';
-import * as Navigation from '../../../utils/navigation';
+import * as CalendarService from '../../../service/calendars.service';
+import * as NavigationService from '../../../service/navigation.service';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import CalendarEventPickerRow from './calendarEventPickerRow';
 
@@ -31,12 +31,12 @@ export default function CalendarEventPicker({
     isAdmin,
 }: Props) {
     const createEvent = () => {
-        Calendars.createEventPopup(
+        CalendarService.createEventPopup(
             team,
             selectedDate,
             calendars,
             selectedCalendar.id
-        ).then(Navigation.renderPage);
+        ).then(NavigationService.renderPage);
     };
 
     const sortedEvents = events.sort((a, b) => {

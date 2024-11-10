@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
-import * as Calendars from '../../../utils/calendars';
+import * as CalendarService from '../../../service/calendars.service';
 
 interface Props {
     isSelected: boolean;
@@ -36,23 +36,23 @@ export default function CalendarEventPickerRow({
     };
 
     const getDateDisplay = () => {
-        const daystart = Calendars.roundDays(selectedDate);
-        const dayend = Calendars.roundDays(selectedDate, 1);
+        const daystart = CalendarService.roundDays(selectedDate);
+        const dayend = CalendarService.roundDays(selectedDate, 1);
 
         if (event.fullday) {
             const evtStart = new Date(event.dstart);
             const evtEnd = new Date(event.dend);
-            const sameDayStart = Calendars.isSameDate(daystart, evtStart);
-            const sameDayEnd = Calendars.isSameDate(daystart, evtEnd);
+            const sameDayStart = CalendarService.isSameDate(daystart, evtStart);
+            const sameDayEnd = CalendarService.isSameDate(daystart, evtEnd);
 
             if (sameDayStart && sameDayEnd) {
                 return 'Ganztägig';
             } else {
                 return (
                     'Vom ' +
-                    Calendars.getDateString(evtStart) +
+                    CalendarService.getDateString(evtStart) +
                     ' bis am ' +
-                    Calendars.getDateString(evtEnd)
+                    CalendarService.getDateString(evtEnd)
                 );
             }
         } else {
@@ -64,15 +64,15 @@ export default function CalendarEventPickerRow({
             if (sameDayStart && sameDayEnd) {
                 return (
                     'Von ' +
-                    Calendars.getTimeString(evtStart) +
+                    CalendarService.getTimeString(evtStart) +
                     ' bis ' +
-                    Calendars.getTimeString(evtEnd) +
+                    CalendarService.getTimeString(evtEnd) +
                     ' Uhr'
                 );
             } else if (sameDayStart) {
-                return 'Ab ' + Calendars.getTimeString(evtStart) + ' Uhr';
+                return 'Ab ' + CalendarService.getTimeString(evtStart) + ' Uhr';
             } else if (sameDayEnd) {
-                return 'Bis ' + Calendars.getTimeString(evtEnd) + ' Uhr';
+                return 'Bis ' + CalendarService.getTimeString(evtEnd) + ' Uhr';
             } else {
                 return 'Ganztägig';
             }

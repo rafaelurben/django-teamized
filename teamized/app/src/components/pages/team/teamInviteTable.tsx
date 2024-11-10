@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as Cache from '../../../utils/cache';
-import * as Navigation from '../../../utils/navigation';
-import * as Teams from '../../../utils/teams';
-import * as Dashboard from '../../common/dashboard';
+import * as CacheService from '../../../service/cache.service';
+import * as NavigationService from '../../../service/navigation.service';
+import * as TeamsService from '../../../service/teams.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamInviteTableRow from './teamInviteTableRow';
 
@@ -13,16 +13,16 @@ interface Props {
 }
 
 export default function TeamInviteTable({ team }: Props) {
-    const invites = Object.values(Cache.getTeamData(team.id).invites);
-    const loading = Cache.getCurrentTeamData()._state.invites._initial;
+    const invites = Object.values(CacheService.getTeamData(team.id).invites);
+    const loading = CacheService.getCurrentTeamData()._state.invites._initial;
 
     useEffect(() => {
-        if (loading) Teams.getInvites(team.id); // will re-render page
+        if (loading) TeamsService.getInvites(team.id); // will re-render page
     });
 
     const handleInviteCreateButtonClick = async () => {
-        await Teams.createInvitePopup(team);
-        Navigation.renderPage();
+        await TeamsService.createInvitePopup(team);
+        NavigationService.renderPage();
     };
 
     return (

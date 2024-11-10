@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
-import * as Teams from '../../../utils/teams';
-import * as Dashboard from '../../common/dashboard';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
+import * as TeamsService from '../../../service/teams.service';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import TeamInviteTable from './teamInviteTable';
@@ -16,18 +16,18 @@ interface Props {
 
 export default function TeamPage({ team }: Props) {
     const handleTeamEditButtonClick = async () => {
-        await Teams.editTeamPopup(team);
-        Navigation.renderPage();
+        await TeamsService.editTeamPopup(team);
+        NavigationService.renderPage();
     };
 
     const handleTeamDeleteButtonClick = async () => {
-        await Teams.deleteTeamPopup(team);
-        Navigation.selectPage('teamlist');
+        await TeamsService.deleteTeamPopup(team);
+        NavigationService.selectPage('teamlist');
     };
 
     const handleClubCreateButtonClick = async () => {
-        const result = await Club.createClubPopup(team);
-        if (result) Navigation.selectPage('club');
+        const result = await ClubService.createClubPopup(team);
+        if (result) NavigationService.selectPage('club');
     };
 
     return (

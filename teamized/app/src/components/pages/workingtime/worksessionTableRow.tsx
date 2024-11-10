@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
+import * as NavigationService from '../../../service/navigation.service';
+import * as WorkingtimeService from '../../../service/workingtime.service';
 import { seconds2HoursMinutesSeconds } from '../../../utils/datetime';
-import * as Navigation from '../../../utils/navigation';
-import * as WorkingTime from '../../../utils/workingtime';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
@@ -14,13 +14,13 @@ interface Props {
 
 export default function WorksessionTableRow({ team, session }: Props) {
     const handleDeleteButtonClick = async () => {
-        await WorkingTime.deleteWorkSessionPopup(team, session);
-        Navigation.renderPage();
+        await WorkingtimeService.deleteWorkSessionPopup(team, session);
+        NavigationService.renderPage();
     };
 
     const handleEditButtonClick = async () => {
-        await WorkingTime.editWorkSessionPopup(team, session);
-        Navigation.renderPage();
+        await WorkingtimeService.editWorkSessionPopup(team, session);
+        NavigationService.renderPage();
     };
 
     const getDurationDisplay = () => {

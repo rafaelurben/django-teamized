@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
+import * as TeamsService from '../../../service/teams.service';
 import { waitingAlert } from '../../../utils/alerts';
-import * as Teams from '../../../utils/teams';
-import * as Dashboard from '../../common/dashboard';
+import Dashboard from '../../common/dashboard';
 import TeamTable from './teamTable';
 
 interface Props {
@@ -19,7 +19,7 @@ export default function TeamlistPage({ teams, selectedTeamId }: Props) {
         ).value;
 
         waitingAlert('Einladung wird geprüft...');
-        Teams.checkInvitePopup(token);
+        TeamsService.checkInvitePopup(token);
     };
 
     const prefilledInviteToken =
@@ -46,7 +46,7 @@ export default function TeamlistPage({ teams, selectedTeamId }: Props) {
                         <button
                             type="button"
                             className="btn btn-outline-success border-1"
-                            onClick={Teams.createTeamPopup}
+                            onClick={TeamsService.createTeamPopup}
                         >
                             Team erstellen
                         </button>

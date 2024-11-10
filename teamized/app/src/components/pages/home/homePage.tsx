@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { CHANGELOG } from '../../../data/changelog';
 import { Settings } from '../../../interfaces/settings';
 import { User } from '../../../interfaces/user';
+import * as NavigationService from '../../../service/navigation.service';
+import * as SettingsService from '../../../service/settings.service';
 import { getDateString } from '../../../utils/datetime';
-import * as Navigation from '../../../utils/navigation';
-import * as SettingsUtils from '../../../utils/settings';
-import * as Utils from '../../../utils/utils';
-import * as Dashboard from '../../common/dashboard';
+import { toggleDebug } from '../../../utils/general';
+import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
@@ -25,7 +25,9 @@ export default function HomePage({ user, settings }: Props) {
     const applyAppearance = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const val = evt.target.value;
         const darkmode = val === 'dark' ? true : val === 'light' ? false : null;
-        SettingsUtils.editSettings({ darkmode }).then(Navigation.renderPage);
+        SettingsService.editSettings({ darkmode }).then(
+            NavigationService.renderPage
+        );
     };
 
     return (
@@ -42,7 +44,7 @@ export default function HomePage({ user, settings }: Props) {
                             Seitenleiste (links), um zu navigieren.
                         </span>
                         <a
-                            onClick={() => Utils.toggleDebug()}
+                            onClick={() => toggleDebug()}
                             style={{ opacity: 0 }}
                             className="ms-1"
                             aria-hidden="true"

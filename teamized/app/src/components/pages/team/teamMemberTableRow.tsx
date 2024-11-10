@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Member } from '../../../interfaces/teams/member';
 import { Team } from '../../../interfaces/teams/team';
-import * as Navigation from '../../../utils/navigation';
-import * as Teams from '../../../utils/teams';
+import * as NavigationService from '../../../service/navigation.service';
+import * as TeamsService from '../../../service/teams.service';
 
 interface Props {
     team: Team;
@@ -17,23 +17,23 @@ export default function TeamMemberTableRow({
     loggedInMember,
 }: Props) {
     const handlePromoteButtonClick = async () => {
-        await Teams.promoteMemberPopup(team, member);
-        Navigation.renderPage();
+        await TeamsService.promoteMemberPopup(team, member);
+        NavigationService.renderPage();
     };
 
     const handleDemoteButtonClick = async () => {
-        await Teams.demoteMemberPopup(team, member);
-        Navigation.renderPage();
+        await TeamsService.demoteMemberPopup(team, member);
+        NavigationService.renderPage();
     };
 
     const handleLeaveButtonClick = async () => {
-        await Teams.leaveTeamPopup(team);
-        Navigation.selectPage('teamlist');
+        await TeamsService.leaveTeamPopup(team);
+        NavigationService.selectPage('teamlist');
     };
 
     const handleRemoveButtonClick = async () => {
-        await Teams.deleteMemberPopup(team, member);
-        Navigation.renderPage();
+        await TeamsService.deleteMemberPopup(team, member);
+        NavigationService.renderPage();
     };
 
     return (

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
 import { getAge, getDateString } from '../../../utils/datetime';
-import * as Navigation from '../../../utils/navigation';
 
 interface Props {
     team: Team;
@@ -20,26 +20,26 @@ export default function ClubMembersTableRow({
     isOwner,
 }: Props) {
     const handleRemoveButtonClick = async () => {
-        await Club.deleteClubMemberPopup(team, clubMember);
-        Navigation.renderPage();
+        await ClubService.deleteClubMemberPopup(team, clubMember);
+        NavigationService.renderPage();
     };
 
     const handleEditButtonClick = async () => {
-        await Club.editClubMemberPopup(team, clubMember);
-        Navigation.renderPage();
+        await ClubService.editClubMemberPopup(team, clubMember);
+        NavigationService.renderPage();
     };
 
     const handlePortfolioEditButtonClick = async () => {
-        await Club.editClubMemberPortfolioPopup(team, clubMember);
+        await ClubService.editClubMemberPortfolioPopup(team, clubMember);
     };
 
     const handleGroupEditButtonClick = async () => {
-        await Club.updateClubMemberGroupsPopup(team, clubMember);
-        Navigation.renderPage();
+        await ClubService.updateClubMemberGroupsPopup(team, clubMember);
+        NavigationService.renderPage();
     };
 
     const handleCreateMagicLinkButtonClick = async () => {
-        await Club.createClubMemberMagicLink(team.id, clubMember.id);
+        await ClubService.createClubMemberMagicLink(team.id, clubMember.id);
     };
 
     return (

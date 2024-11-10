@@ -2,7 +2,7 @@ import React from 'react';
 import * as Recharts from 'recharts';
 
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as Stats from '../../../utils/workingtimestats';
+import * as WorkingtimeService from '../../../service/workingtime.service';
 
 interface Props {
     sessions: Worksession[];
@@ -11,8 +11,8 @@ interface Props {
 }
 
 export default function WorkingtimeStats({ sessions, start, end }: Props) {
-    const data = Stats.chartDataByDays(sessions, start, end);
-    const totalHours = Stats.totalDuration(sessions) / 3600;
+    const data = WorkingtimeService.chartDataByDays(sessions, start, end);
+    const totalHours = WorkingtimeService.totalDuration(sessions) / 3600;
 
     return (
         <>

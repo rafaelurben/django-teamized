@@ -16,14 +16,14 @@ import {
     doubleConfirmAlert,
     Swal,
     SweetAlertResult,
-} from './alerts';
-import * as Cache from './cache';
-import { getDateString } from './datetime';
+} from '../utils/alerts';
+import { getDateString } from '../utils/datetime';
+import * as CacheService from './cache.service';
 
 // ToDoList list
 
 export async function getToDoLists(teamId: ID) {
-    return await Cache.refreshTeamCacheCategory<Todolist>(
+    return await CacheService.refreshTeamCacheCategory<Todolist>(
         teamId,
         CacheCategory.TODOLISTS
     );
@@ -33,7 +33,8 @@ export async function getToDoLists(teamId: ID) {
 
 export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
     return await TodolistAPI.createTodolist(teamId, todolist).then((data) => {
-        Cache.getTeamData(teamId).todolists[data.todolist.id] = data.todolist;
+        CacheService.getTeamData(teamId).todolists[data.todolist.id] =
+            data.todolist;
         return data.todolist;
     });
 }
@@ -91,7 +92,7 @@ export async function editToDoList(
 ) {
     return await TodolistAPI.updateTodolist(teamId, todolistId, todolist).then(
         (data) => {
-            Cache.getTeamData(teamId).todolists[data.todolist.id] =
+            CacheService.getTeamData(teamId).todolists[data.todolist.id] =
                 data.todolist;
             return data.todolist;
         }
@@ -146,7 +147,7 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
 
 export async function deleteToDoList(teamId: ID, todolistId: ID) {
     await TodolistAPI.deleteTodolist(teamId, todolistId).then(() => {
-        delete Cache.getTeamData(teamId).todolists[todolistId];
+        delete CacheService.getTeamData(teamId).todolists[todolistId];
     });
 }
 
@@ -170,8 +171,9 @@ export async function createToDoListItem(
 ) {
     return await TodolistAPI.createTodolistItem(teamId, todolistId, item).then(
         (data) => {
-            Cache.getTeamData(teamId).todolists[todolistId].items[data.id] =
-                data.item;
+            CacheService.getTeamData(teamId).todolists[todolistId].items[
+                data.id
+            ] = data.item;
             return data.item;
         }
     );
@@ -191,7 +193,7 @@ export async function editToDoListItem(
         itemId,
         item
     ).then((data) => {
-        Cache.getTeamData(teamId).todolists[todolistId].items[itemId] =
+        CacheService.getTeamData(teamId).todolists[todolistId].items[itemId] =
             data.item;
         return data.item;
     });
@@ -286,7 +288,9 @@ export async function deleteToDoListItem(
         todolistId,
         itemId
     ).then(() => {
-        delete Cache.getTeamData(teamId).todolists[todolistId].items[itemId];
+        delete CacheService.getTeamData(teamId).todolists[todolistId].items[
+            itemId
+        ];
     });
 }
 

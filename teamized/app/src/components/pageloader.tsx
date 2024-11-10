@@ -4,8 +4,8 @@
 
 import React from 'react';
 
-import * as Cache from '../utils/cache';
-import * as Teams from '../utils/teams';
+import * as CacheService from '../service/cache.service';
+import * as TeamsService from '../service/teams.service';
 import CalendarsPage from './pages/calendars/calendarsPage';
 import ClubPage from './pages/club/clubPage';
 import HomePage from './pages/home/homePage';
@@ -31,7 +31,7 @@ interface Props {
 }
 
 export function PageLoader({ page }: Props) {
-    const teamData = Cache.getCurrentTeamData();
+    const teamData = CacheService.getCurrentTeamData();
 
     if (!teamData) {
         return (
@@ -70,7 +70,7 @@ export function PageLoader({ page }: Props) {
         case 'teamlist':
             return (
                 <TeamlistPage
-                    teams={Teams.getTeamsList()}
+                    teams={TeamsService.getTeamsList()}
                     selectedTeamId={window.appdata.selectedTeamId}
                 />
             );

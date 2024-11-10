@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as Club from '../../../utils/club';
-import * as Navigation from '../../../utils/navigation';
-import * as Dashboard from '../../common/dashboard';
+import * as ClubService from '../../../service/clubs.service';
+import * as NavigationService from '../../../service/navigation.service';
+import Dashboard from '../../common/dashboard';
 import ClubMemberTileContent from './clubMemberTileContent';
 
 interface Props {
@@ -12,13 +12,13 @@ interface Props {
 
 export default function ClubPage({ team }: Props) {
     const handleClubEditButtonClick = async () => {
-        await Club.editClubPopup(team);
-        Navigation.render();
+        await ClubService.editClubPopup(team);
+        NavigationService.render();
     };
 
     const handleClubDeleteButtonClick = async () => {
-        await Club.deleteClubPopup(team);
-        Navigation.selectPage('team');
+        await ClubService.deleteClubPopup(team);
+        NavigationService.selectPage('team');
     };
 
     const club = team.club!;
