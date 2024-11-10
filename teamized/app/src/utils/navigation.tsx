@@ -11,7 +11,7 @@ import {
     PAGE_NAMES,
 } from '../components/pageloader.jsx';
 import AppMenubar from '../components/menubar';
-import AppSidebar from '../components/sidebar.jsx';
+import AppSidebar from '../components/sidebar';
 import * as Teams from './teams';
 import { getCurrentTeamData } from './cache';
 
@@ -117,7 +117,7 @@ export function showSidebarOnDesktop() {
 export function renderSidebar() {
     rootSidebar.render(
         <AppSidebar
-            page={window.appdata.currentPage}
+            selectedPage={window.appdata.currentPage}
             user={window.appdata.user}
             isAdmin={Teams.isCurrentTeamAdmin()}
             isClubEnabled={Teams.hasCurrentTeamLinkedClub()}
