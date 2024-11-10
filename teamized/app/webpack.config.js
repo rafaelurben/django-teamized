@@ -10,24 +10,14 @@ module.exports = [
             filename: 'mainapp.js',
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.tsx'],
+            extensions: ['.ts', '.tsx', '.js'],
         },
         module: {
             rules: [
                 {
-                    test: /\.(js|ts)x?$/,
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
                     exclude: /node_modules/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: [
-                                '@babel/preset-react',
-                                '@babel/preset-typescript',
-                                '@babel/preset-env',
-                            ],
-                            plugins: ['@babel/plugin-transform-runtime'],
-                        },
-                    },
                 },
             ],
         },
