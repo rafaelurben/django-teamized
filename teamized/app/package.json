@@ -5,13 +5,13 @@
   "main": "src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack --mode production",
-    "build-live": "npx webpack --mode development --watch --devtool eval-source-map",
-    "prettier-check": "npx prettier src --check",
-    "prettier-fix": "npx prettier src --write",
-    "eslint-check": "npx eslint src",
-    "eslint-fix": "npx eslint --fix src",
-    "typescript-check": "npx tsc --noEmit"
+    "build": "npx --no webpack --mode production",
+    "build-live": "npx --no webpack --mode development --watch --devtool eval-source-map",
+    "prettier-check": "npx --no prettier src --check",
+    "prettier-fix": "npx --no prettier src --write",
+    "eslint-check": "npx --no eslint src",
+    "eslint-fix": "npx --no eslint --fix src",
+    "typescript-check": "npx --no tsc --noEmit"
   },
   "keywords": [],
   "author": "Rafael Urben",

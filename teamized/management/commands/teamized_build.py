@@ -30,18 +30,34 @@ class Command(BaseCommand):
         os.chdir(newcwd)
 
         self.stdout.write("Installing Teamized app dependencies...")
-        os.system("npm install")
+        code = os.system("npm install")
+
+        if code:
+            self.stdout.write(
+                self.style.ERROR(
+                    "[ERROR] 'npm install' exited with non-zero status code"
+                )
+            )
+            exit(code)
 
         self.stdout.write("Building Teamized app...")
 
         try:
             if options["live"]:
-                os.system("npm run build-live")
+                code = os.system("npm run build-live")
             else:
-                os.system("npm run build")
+                code = os.system("npm run build")
         except KeyboardInterrupt:
             self.stdout.write(self.style.WARNING("Keyboard interrupt!"))
 
         # Navigate back to the old working directory
         os.chdir(oldcwd)
         self.stdout.write(self.style.SUCCESS("Finished building Teamized app..."))
+
+        if code:
+            self.stdout.write(
+                self.style.ERROR(
+                    "[ERROR] 'npm run build[-live]' exited with non-zero status code!"
+                )
+            )
+            exit(code)
