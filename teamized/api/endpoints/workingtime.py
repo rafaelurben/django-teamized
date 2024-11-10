@@ -155,11 +155,12 @@ def endpoint_tracking_live(request):
     # Check if the user is already tracking a session
     active_session = user.get_active_work_session()
     if active_session is None:
-        raise exceptions.AlertException(
-            _("Es ist keine Sitzung im Gange."),
-            errorname="no_active_tracking_session_exists",
-            status=200,
-        )
+        return JsonResponse(
+            {
+                "error": "no_active_tracking_session_exists",
+                "message": _("Es ist keine Sitzung im Gange."),
+            }
+        )  # this is intentionally code 200 to not fill up the console
 
     # Return the session data
     return JsonResponse(

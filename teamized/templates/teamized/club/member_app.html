@@ -64,7 +64,7 @@
 
     <script>
         {% comment %}
-            document.api_base = "{% url 'teamized:club-api-memberinfo' memberuid=member.uid %}"; {% endcomment %}
+            window.api_base_url = "{% url 'teamized:club-api-memberinfo' memberuid=member.uid %}"; {% endcomment %}
     </script>
     {% comment %}
         <script src="{% static '' %}" type="module"></script> {% endcomment %}

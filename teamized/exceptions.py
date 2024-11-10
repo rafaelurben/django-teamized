@@ -13,9 +13,8 @@ class AlertException(Exception):
         title="Fehler",
         errorname="generic_error",
         status=400,
-        **kwargs
     ) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(*args)
         self._custom_title = title
         self._custom_text = text
         self._custom_errorname = errorname
@@ -45,8 +44,5 @@ class ValidationError(AlertException):
         title="Ungültige Daten",
         errorname="data_invalid",
         status=400,
-        **kwargs
     ) -> None:
-        super().__init__(
-            text, *args, title=title, errorname=errorname, status=status, **kwargs
-        )
+        super().__init__(text, *args, title=title, errorname=errorname, status=status)

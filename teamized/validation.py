@@ -55,7 +55,7 @@ class BaseValidator:
         **kwargs
     ):
         # If the attribute is not present in the data dict
-        if not attr in datadict:
+        if attr not in datadict:
             if required:
                 raise ValidationError(
                     _("Das Attribut '{}' darf nicht weggelassen werden!").format(attr)

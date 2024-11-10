@@ -1,23 +1,43 @@
 {
   "name": "teamized-reactapp",
   "version": "1.0.0",
-  "description": "This can also be run via 'python manage.py teamized_build [--live]'",
-  "main": "src/app.js",
+  "description": "The build commands can also be run via 'python manage.py teamized_build [--live]'",
+  "main": "src/app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
-    "build-live": "webpack --mode development --watch --devtool eval-source-map"
+    "build": "npx webpack --mode production",
+    "build-live": "npx webpack --mode development --watch --devtool eval-source-map",
+    "prettier-check": "npx prettier src --check",
+    "prettier-fix": "npx prettier src --write",
+    "eslint-check": "npx eslint src",
+    "eslint-fix": "npx eslint --fix src",
+    "typescript-check": "npx tsc --noEmit"
   },
   "keywords": [],
   "author": "Rafael Urben",
   "license": "GNU GENERAL PUBLIC LICENSE",
+  "repository": "https://github.com/rafaelurben/django-teamized",
+  "funding": "https://github.com/sponsors/rafaelurben/",
   "devDependencies": {
-    "@babel/preset-env": "7.26.0",
-    "@babel/preset-react": "7.25.9",
-    "@babel/preset-typescript": "7.26.0",
-    "babel-loader": "9.2.1",
-    "webpack": "5.95.0",
-    "webpack-cli": "5.1.4"
+    "@eslint/js": "~9.14.0",
+    "@types/bootstrap": "~5.2.10",
+    "@types/jquery": "~3.5.32",
+    "@types/node": "^22.9.0",
+    "eslint": "~9.14.0",
+    "eslint-config-prettier": "~9.1.0",
+    "eslint-plugin-prettier": "~5.2.1",
+    "eslint-plugin-react": "~7.37.2",
+    "eslint-plugin-react-hooks": "~5.0.0",
+    "eslint-plugin-simple-import-sort": "~12.1.1",
+    "globals": "~15.12.0",
+    "prettier": "~3.3.3",
+    "sweetalert2": "11.14.5",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.3",
+    "typescript-eslint": "~8.13.0",
+    "webpack": "~5.96.1",
+    "webpack-cli": "~5.1.4"
   },
   "dependencies": {
     "@types/react": "18.3.12",
@@ -26,6 +46,6 @@
     "jquery": "3.7.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "recharts": "2.13.0"
+    "recharts": "2.13.3"
   }
 }

@@ -33,6 +33,15 @@
             <!-- Custom CSS -->
             <link rel="stylesheet" href="{% static 'teamized/css/base.css' %}">
         {% endblock %}
+        
+        <style>
+            @media (min-width: 992px) {
+                .border-lg {
+                    border: 1px solid #ccc;
+                }
+            }
+        </style>
+
 
     {% endblock head %}
     {% block extrahead %}{% endblock %}
@@ -43,14 +52,6 @@
 <!-- Menubar -->
 {% block menubar %}
     <nav id="menubar" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-        <style>
-            @media (min-width: 992px) {
-                .border-lg {
-                    border: 1px solid #ccc;
-                }
-            }
-        </style>
-
         <div class="container-fluid">
             {% block menubartitle %}
                 <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'teamized:home' %}">Teamized</a>

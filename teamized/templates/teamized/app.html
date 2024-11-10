@@ -49,12 +49,12 @@
         <ul class="dropdown-menu">
             <li><a class="dropdown-item text-info" href="#"
                    onclick="window.open('{% url "teamized:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
-            <li><a class="dropdown-item text-danger" href="#" onclick="window._App.Utils.toggleDebug()">DEBUG-Modus
+            <li><a class="dropdown-item text-danger" href="#" onclick="window._App.GeneralUtils.toggleDebug()">DEBUG-Modus
                 verlassen (Shift+F6)</a></li>
             <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" onclick="window._App.Navigation.reRender(); alert('Done!')">Navigation.reRender()</a>
+            <li><a class="dropdown-item" href="#" onclick="window._App.NavigationService.reRender(); alert('Done!')">NavigationService.reRender()</a>
             </li>
-            <li><a class="dropdown-item" href="#" onclick="window.location.reload(true)">location.reload(true)</a></li>
+            <li><a class="dropdown-item" href="#" onclick="window.location.reload()">location.reload()</a></li>
         </ul>
     </li>
 {% endblock additional_menubar_items %}
@@ -62,12 +62,8 @@
 {% block scripts %}
     {{ block.super }}
     <script>
-        document.api_base_url = '{% url "teamized:home" %}api/';
+        window.api_base_url = '{% url "teamized:home" %}api/';
     </script>
-
-    <!-- Sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.32/dist/sweetalert2.min.js"
-            integrity="sha256-xMN7F3ir6Ty4qqJvPHcZ84Ker+HSJ+2CWWIDcNR1jkM=" crossorigin="anonymous"></script>
 
     <!-- Main app script -->
     <script src="{% static 'teamized/app/mainapp.js' %}"></script>
