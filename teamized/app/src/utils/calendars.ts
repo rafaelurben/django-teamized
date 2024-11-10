@@ -13,7 +13,7 @@ import {
     CalendarEventRequestDTO,
 } from '../interfaces/calendar/calendarEvent';
 import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
-import { ID } from '../interfaces/common';
+import { ID, IDIndexedObjectList } from '../interfaces/common';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import { Team } from '../interfaces/teams/team';
 
@@ -50,10 +50,10 @@ export function isDateInEvent(date: Date, evt: CalendarEvent): boolean {
  * @param {Array} calendars
  * @returns {object}
  */
-export function flattenCalendarEvents(calendars: Calendar[]): {
-    [key: ID]: CalendarEvent;
-} {
-    let events: { [key: ID]: CalendarEvent } = {};
+export function flattenCalendarEvents(
+    calendars: Calendar[]
+): IDIndexedObjectList<CalendarEvent> {
+    let events: IDIndexedObjectList<CalendarEvent> = {};
     Object.values(calendars).forEach((calendar) => {
         Object.values(calendar.events).forEach((evt) => {
             events[evt.id] = {
@@ -344,13 +344,13 @@ export function createEventPopup(
                     _updateFullDayToggle()
                 );
                 $('#swal-input-calendar').html(
-                    Object.entries(calendars)
+                    calendars
                         .map(
-                            ([calId, calendar]) => `
-                            <option value="${calId}">
-                                ${calendar.name}
-                            </option>
-                        `
+                            (calendar) => `
+                                <option value="${calendar.id}">
+                                    ${calendar.name}
+                                </option>
+                            `
                         )
                         .join('')
                 );

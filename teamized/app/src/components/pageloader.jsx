@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import Page_Calendars from './pages/calendars.jsx';
+import CalendarsPage from './pages/calendars/calendarsPage.tsx';
 import ClubPage from './pages/club/clubPage.tsx';
 import HomePage from './pages/home/homePage.tsx';
 import TeamlistPage from './pages/teamlist/teamlistPage.tsx';
@@ -82,13 +82,7 @@ export class PageLoader extends React.Component {
             case 'workingtime':
                 return <WorkingtimePage team={teamData.team} />;
             case 'calendars':
-                return (
-                    <Page_Calendars
-                        team={teamData.team}
-                        calendars={teamData.calendars}
-                        isAdmin={Teams.isCurrentTeamAdmin()}
-                    />
-                );
+                return <CalendarsPage team={teamData.team} />;
             case 'todo':
                 return <TodoPage team={teamData.team} />;
             case 'club':
