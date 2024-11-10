@@ -8,6 +8,18 @@ export interface ChangelogItem {
 
 export const CHANGELOG: ChangelogItem[] = [
     {
+        date: '2024-11-10',
+        changes: [
+            'Formulare werden bei einem Fehler nun nicht mehr geschlossen',
+            'Kalender Abonnier-Popup angepasst',
+            'Technisch: Komplette Code-Struktur überarbeitet',
+            'Technisch: Code von JavaScript zu TypeScript umgeschrieben',
+            'Technisch: Qualitätschecks hinzugefügt',
+            'Technisch: Abhängigkeiten aktualisiert',
+        ],
+        milestone: true,
+    },
+    {
         date: '2023-11-25',
         changes: [
             'Icon hinzugefügt',
