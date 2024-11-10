@@ -206,7 +206,7 @@ export async function editCalendarPopup(team: Team, calendar: Calendar) {
 // Calendar deletion
 
 export async function deleteCalendar(teamId: ID, calendarId: ID) {
-    await CalendarAPI.deleteCalendar(teamId, calendarId).then((data) => {
+    await CalendarAPI.deleteCalendar(teamId, calendarId).then(() => {
         delete Cache.getTeamData(teamId).calendars[calendarId];
     });
 }
@@ -343,7 +343,9 @@ export function createEventPopup(
                 $('#swal-input-fullday').on('change', () =>
                     _updateFullDayToggle()
                 );
-                $('#swal-input-calendar').html(
+
+                let $calendarsInput = $('#swal-input-calendar');
+                $calendarsInput.html(
                     calendars
                         .map(
                             (calendar) => `
@@ -354,7 +356,7 @@ export function createEventPopup(
                         )
                         .join('')
                 );
-                $('#swal-input-calendar').val(selectedCalendarId);
+                $calendarsInput.val(selectedCalendarId);
             },
             preConfirm: async () => {
                 let calendarId = <ID>$('#swal-input-calendar').val();
@@ -619,7 +621,7 @@ export function editEventPopup(
 
 export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
     return await CalendarAPI.deleteEvent(teamId, calendarId, eventId).then(
-        (data) => {
+        () => {
             delete Cache.getTeamData(teamId).calendars[calendarId].events[
                 eventId
             ];

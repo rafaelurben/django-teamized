@@ -10,6 +10,7 @@
     <button onclick="debug_reload()" class="btn btn-outline-primary mb-2">Aktualisieren / Neu laden</button>
 
     <h3>App-Daten</h3>
+    <label class="sr-only" for="appdata">Daten im JSON-Format</label>
     <textarea id="appdata" style="resize: both;" class="w-100 form-control mb-2" rows="10" disabled></textarea>
     <button onclick="debug_copy()" class="btn btn-outline-primary mb-2">Kopieren</button>
     <button onclick="debug_remove_me()" class="btn btn-outline-danger mb-2">Mich entfernen</button>
@@ -28,7 +29,7 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        var data = {};
+        let data = {};
 
         function _debug_display() {
             $('#appdata').html(JSON.stringify(data, null, 2));
@@ -50,14 +51,14 @@
 
         function debug_remove_me() {
             data.user = "Aus Datenschutzgründen entfernt.";
-            for (teamId in data.teamcache) {
+            for (let teamId in data.teamcache) {
                 data.teamcache[teamId].team.member.user = "Aus Datenschutzgründen entfernt.";
             }
             _debug_display();
         }
 
         function debug_remove_members() {
-            for (teamId in data.teamcache) {
+            for (let teamId in data.teamcache) {
                 data.teamcache[teamId].members = "Aus Datenschutzgründen entfernt.";
             }
             _debug_display();

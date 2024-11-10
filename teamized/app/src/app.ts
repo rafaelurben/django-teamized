@@ -135,8 +135,7 @@ function onkeypress(e: JQuery.Event) {
         if (e.shiftKey) {
             // Shift+F5 normal reload
             e.preventDefault();
-            // @ts-ignore
-            window.location.reload(true);
+            window.location.reload();
         } else if (!e.ctrlKey && !e.altKey) {
             // F5 soft reload
             e.preventDefault();

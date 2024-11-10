@@ -160,7 +160,7 @@ export async function editTeamPopup(team: Team) {
 // Team deletion
 
 export async function deleteTeam(teamId: ID) {
-    await TeamsAPI.deleteTeam(teamId).then(async (data) => {
+    await TeamsAPI.deleteTeam(teamId).then(async () => {
         await Cache.deleteTeam(teamId);
         ensureExistingTeam();
         Navigation.selectPage('teamlist');
@@ -178,7 +178,7 @@ export async function deleteTeamPopup(team: Team) {
 // Team leave
 
 export async function leaveTeam(teamId: ID) {
-    await TeamsAPI.leaveTeam(teamId).then(async (data) => {
+    await TeamsAPI.leaveTeam(teamId).then(async () => {
         await Cache.deleteTeam(teamId);
         ensureExistingTeam();
         Navigation.selectPage('teamlist');
@@ -236,7 +236,7 @@ export async function demoteMemberPopup(team: Team, member: Member) {
 // Member deletion
 
 export async function deleteMember(teamId: ID, memberId: ID) {
-    return await TeamsAPI.deleteMember(teamId, memberId).then(async (data) => {
+    return await TeamsAPI.deleteMember(teamId, memberId).then(async () => {
         let teamData = Cache.getTeamData(teamId);
         delete teamData.members[memberId];
         teamData.team.membercount -= 1;
@@ -366,7 +366,7 @@ export async function editInvitePopup(team: Team, invite: Invite) {
 // Invite deletion
 
 export async function deleteInvite(teamId: ID, inviteId: ID) {
-    await TeamsAPI.deleteInvite(teamId, inviteId).then(async (data) => {
+    await TeamsAPI.deleteInvite(teamId, inviteId).then(async () => {
         delete Cache.getTeamData(teamId).invites[inviteId];
     });
 }

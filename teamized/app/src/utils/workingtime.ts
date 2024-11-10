@@ -163,7 +163,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
 
 export async function deleteWorkSession(teamId: ID, sessionId: ID) {
     return await WorkingtimeAPI.deleteWorksession(teamId, sessionId).then(
-        (data) => {
+        () => {
             delete Cache.getCurrentTeamData().me_worksessions[sessionId];
         }
     );

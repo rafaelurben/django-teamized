@@ -145,7 +145,7 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
 // ToDoList deletion
 
 export async function deleteToDoList(teamId: ID, todolistId: ID) {
-    await TodolistAPI.deleteTodolist(teamId, todolistId).then((data) => {
+    await TodolistAPI.deleteTodolist(teamId, todolistId).then(() => {
         delete Cache.getTeamData(teamId).todolists[todolistId];
     });
 }
@@ -285,7 +285,7 @@ export async function deleteToDoListItem(
         teamId,
         todolistId,
         itemId
-    ).then((data) => {
+    ).then(() => {
         delete Cache.getTeamData(teamId).todolists[todolistId].items[itemId];
     });
 }

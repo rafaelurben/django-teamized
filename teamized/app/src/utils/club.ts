@@ -18,14 +18,6 @@ import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import { Team } from '../interfaces/teams/team';
 
-export function getCurrentClubData() {
-    const teamData = Cache.getCurrentTeamData();
-    if (teamData) {
-        return teamData.team.club;
-    }
-    return undefined;
-}
-
 //// API calls ////
 
 // Club creation
@@ -119,7 +111,7 @@ export async function editClubPopup(team: Team) {
 // Club delete
 
 export async function deleteClub(teamId: ID) {
-    return await ClubAPI.deleteClub(teamId).then(async (data) => {
+    return await ClubAPI.deleteClub(teamId).then(async () => {
         let teamData = Cache.getTeamData(teamId);
         teamData.team.club = null;
         teamData.club_members = {};
@@ -262,27 +254,23 @@ export async function editClubMemberPopup(team: Team, member: ClubMember) {
 // Member deletion
 
 export async function deleteClubMember(teamId: ID, memberId: ID) {
-    return await ClubAPI.deleteClubMember(teamId, memberId).then(
-        async (data) => {
-            let teamData = Cache.getTeamData(teamId);
-            delete teamData.club_members[memberId];
-            teamData.team.club!.membercount -= 1;
+    return await ClubAPI.deleteClubMember(teamId, memberId).then(async () => {
+        let teamData = Cache.getTeamData(teamId);
+        delete teamData.club_members[memberId];
+        teamData.team.club!.membercount -= 1;
 
-            // Remove member from all groups
-            for (let group of Object.values(
-                <IDIndexedObjectList<ClubGroup>>teamData.club_groups
-            )) {
-                if (group.memberids.includes(memberId)) {
-                    teamData.club_groups[group.id].memberids.splice(
-                        teamData.club_groups[group.id].memberids.indexOf(
-                            memberId
-                        ),
-                        1
-                    );
-                }
+        // Remove member from all groups
+        for (let group of Object.values(
+            <IDIndexedObjectList<ClubGroup>>teamData.club_groups
+        )) {
+            if (group.memberids.includes(memberId)) {
+                teamData.club_groups[group.id].memberids.splice(
+                    teamData.club_groups[group.id].memberids.indexOf(memberId),
+                    1
+                );
             }
         }
-    );
+    });
 }
 
 export async function deleteClubMemberPopup(team: Team, member: ClubMember) {
@@ -516,7 +504,7 @@ export async function editClubGroupPopup(team: Team, group: ClubGroup) {
 // Group deletion
 
 export async function deleteClubGroup(teamId: ID, groupId: ID) {
-    return await ClubAPI.deleteClubGroup(teamId, groupId).then(async (data) => {
+    return await ClubAPI.deleteClubGroup(teamId, groupId).then(async () => {
         let teamData = Cache.getTeamData(teamId);
         delete teamData.club_groups[groupId];
     });
@@ -537,7 +525,7 @@ export async function addClubMemberToGroup(
     groupId: ID
 ) {
     return await ClubAPI.addClubMemberToGroup(teamId, memberId, groupId).then(
-        async (data) => {
+        async () => {
             let teamData = Cache.getTeamData(teamId);
             teamData.club_groups[groupId].memberids.push(memberId);
         }
@@ -553,7 +541,7 @@ export async function removeClubMemberFromGroup(
         teamId,
         memberId,
         groupId
-    ).then(async (data) => {
+    ).then(async () => {
         let teamData = Cache.getTeamData(teamId);
         teamData.club_groups[groupId].memberids.splice(
             teamData.club_groups[groupId].memberids.indexOf(memberId),

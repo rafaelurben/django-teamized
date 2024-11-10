@@ -29,18 +29,6 @@ export function getCurrentTeamData() {
     return getTeamData(window.appdata.selectedTeamId!);
 }
 
-export function getMeInTeam(teamId: ID) {
-    return getTeamData(teamId).team.member;
-}
-
-export function getMeInCurrentTeam() {
-    return getMeInTeam(window.appdata.selectedTeamId!);
-}
-
-export function getMemberInTeam(teamId: ID, memberId: ID) {
-    return getTeamData(teamId).members[memberId];
-}
-
 // Add and remove teams from cache
 
 function updateTeam(team: Team & { [key in CacheCategory]?: any }) {

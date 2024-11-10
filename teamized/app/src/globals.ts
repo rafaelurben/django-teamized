@@ -4,6 +4,7 @@ import { TeamsCache } from './interfaces/cache/teamsCache';
 import { User } from './interfaces/user';
 
 declare global {
+    // noinspection JSUnusedGlobalSymbols
     interface Window {
         _App: any;
         api_base_url: string;
