@@ -5,11 +5,7 @@
 import { createRoot } from 'react-dom/client';
 import React from 'react';
 
-import {
-    PageLoader,
-    PAGE_LIST,
-    PAGE_NAMES,
-} from '../components/pageloader.jsx';
+import { PageLoader, PAGE_LIST, PAGE_NAMES } from '../components/pageloader';
 import AppMenubar from '../components/menubar';
 import AppSidebar from '../components/sidebar';
 import * as Teams from './teams';
