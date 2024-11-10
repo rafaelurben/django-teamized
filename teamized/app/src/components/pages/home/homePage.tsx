@@ -130,24 +130,26 @@ export default function HomePage({ user, settings }: Props) {
                     help="Neue Funktionen, Bugfixes und Änderungen"
                 >
                     <div className="m-1">
-                        {changelogItems.map((item, i) => [
-                            <h6 key={i + 'header'}>
-                                <b>{getDateString(new Date(item.date))}</b>
-                                {item.milestone ? (
-                                    <IconTooltip
-                                        icon="fa-solid fa-flag ms-2 text-danger"
-                                        title="Meilenstein"
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </h6>,
-                            <ul key={i + 'list'} className="small">
-                                {item.changes.map((change, j) => (
-                                    <li key={j}>{change}</li>
-                                ))}
-                            </ul>,
-                        ])}
+                        {changelogItems.map((item, i) => (
+                            <React.Fragment key={i}>
+                                <h6>
+                                    <b>{getDateString(new Date(item.date))}</b>
+                                    {item.milestone ? (
+                                        <IconTooltip
+                                            icon="fa-solid fa-flag ms-2 text-danger"
+                                            title="Meilenstein"
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                </h6>
+                                <ul className="small">
+                                    {item.changes.map((change, j) => (
+                                        <li key={j}>{change}</li>
+                                    ))}
+                                </ul>
+                            </React.Fragment>
+                        ))}
                         <button
                             className="btn btn-outline-primary btn-sm me-2"
                             onClick={() =>

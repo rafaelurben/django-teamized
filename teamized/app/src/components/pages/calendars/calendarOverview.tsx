@@ -81,18 +81,16 @@ export default function CalendarOverview({
             </div>
             <div className="mt-3">
                 <div className="d-flex justify-content-around my-3">
-                    {WEEKDAYS.map((day) => {
-                        return (
-                            <div key={day}>
-                                <div
-                                    className="d-flex justify-content-center align-items-center flex-column"
-                                    style={{ width: '3em', height: '2em' }}
-                                >
-                                    <b>{day}</b>
-                                </div>
+                    {WEEKDAYS.map((day) => (
+                        <div key={day}>
+                            <div
+                                className="d-flex justify-content-center align-items-center flex-column"
+                                style={{ width: '3em', height: '2em' }}
+                            >
+                                <b>{day}</b>
                             </div>
-                        );
-                    })}
+                        </div>
+                    ))}
                 </div>
                 {WEEKDAY_INDEXES.map((i) => (
                     <CalendarOverviewWeek

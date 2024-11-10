@@ -42,15 +42,9 @@ export default function CalendarInfo({
             <p className="ms-1 mb-0">
                 Im ausgewählten Team ist noch kein Kalender vorhanden.{' '}
                 {isAdmin ? (
-                    <IconTooltip
-                        key="admin"
-                        title='Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'
-                    ></IconTooltip>
+                    <IconTooltip title='Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
                 ) : (
-                    <IconTooltip
-                        key="noadmin"
-                        title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."
-                    ></IconTooltip>
+                    <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
                 )}
             </p>
         );

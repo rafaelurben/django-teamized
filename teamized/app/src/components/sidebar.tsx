@@ -105,7 +105,6 @@ export default function AppSidebar({
                                 Verein
                             </a>
                         </li>
-                        ,
                     </>
                 )}
             </ul>

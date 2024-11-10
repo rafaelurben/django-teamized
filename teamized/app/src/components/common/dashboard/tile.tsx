@@ -28,7 +28,6 @@ export default function Tile({
             {title && (
                 <>
                     <h5
-                        key="title"
                         className="dashboard-tile-title pt-2 text-bold"
                         style={{ flexBasis: 0 }}
                     >
@@ -37,7 +36,7 @@ export default function Tile({
                             <IconTooltip className="ms-2 small" title={help} />
                         )}
                     </h5>
-                    <hr key="hr" className="m-0" />
+                    <hr className="m-0" />
                 </>
             )}
             <div className="p-2 w-100 overflow-auto flex-grow-1">

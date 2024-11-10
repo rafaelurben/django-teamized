@@ -57,30 +57,6 @@ export default function CalendarEventPicker({
         selectedCalendar !== undefined && selectedCalendar !== null;
     const eventExists = events.length > 0;
 
-    let rows;
-    if (calendarExists) {
-        if (eventExists) {
-            rows = sortedEvents.map((event) => (
-                <CalendarEventPickerRow
-                    key={event.id}
-                    event={event}
-                    selectedDate={selectedDate}
-                    onSelect={onEventSelect}
-                    isSelected={
-                        !!selectedEvent && selectedEvent.id === event.id
-                    }
-                />
-            ));
-        } else {
-            rows = [
-                <p className="ms-1 mb-1" key="emptymessage">
-                    Keine Ereignisse an diesem Datum.
-                </p>,
-            ];
-        }
-        rows.push();
-    }
-
     return calendarExists ? (
         <>
             {eventExists ? (
@@ -96,9 +72,7 @@ export default function CalendarEventPicker({
                     />
                 ))
             ) : (
-                <p className="ms-1 mb-1" key="emptymessage">
-                    Keine Ereignisse an diesem Datum.
-                </p>
+                <p className="ms-1 mb-1">Keine Ereignisse an diesem Datum.</p>
             )}
             <button
                 className="btn btn-outline-success mt-2"

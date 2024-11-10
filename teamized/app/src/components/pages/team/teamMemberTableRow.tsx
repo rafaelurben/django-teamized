@@ -65,8 +65,8 @@ export default function TeamMemberTableRow({
                 <span>{member.role_text}</span>
             </td>
             {/* Action: Promote/Demote */}
-            {loggedInMember.is_owner ? (
-                !member.is_owner ? (
+            {loggedInMember.is_owner &&
+                (!member.is_owner ? (
                     !member.is_admin ? (
                         <td>
                             <a
@@ -88,8 +88,7 @@ export default function TeamMemberTableRow({
                     )
                 ) : (
                     <td></td>
-                )
-            ) : null}
+                ))}
             {/* Action: Leave / remove member */}
             {member.id === loggedInMember.id ? (
                 !loggedInMember.is_owner ? (

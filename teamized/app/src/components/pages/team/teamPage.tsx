@@ -56,11 +56,11 @@ export default function TeamPage({ team }: Props) {
                 >
                     <Dashboard.Table vertical={true}>
                         <tbody>
-                            <tr key="name">
+                            <tr>
                                 <th>Name:</th>
                                 <td>{team.name}</td>
                             </tr>
-                            <tr key="description">
+                            <tr>
                                 <th style={{ width: '1px' }} className="pe-3">
                                     Beschreibung:
                                 </th>
@@ -68,11 +68,11 @@ export default function TeamPage({ team }: Props) {
                                     {team.description}
                                 </td>
                             </tr>
-                            <tr key="membercount">
+                            <tr>
                                 <th>Mitglieder:</th>
                                 <td>{team.membercount}</td>
                             </tr>
-                            <tr key="id" className="debug-only">
+                            <tr className="debug-only">
                                 <th>ID:</th>
                                 <td>{team.id}</td>
                             </tr>

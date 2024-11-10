@@ -36,15 +36,9 @@ export default function ListInfo({
             <p className="ms-1 mb-0">
                 Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{' '}
                 {isAdmin ? (
-                    <IconTooltip
-                        key="admin"
-                        title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
-                    ></IconTooltip>
+                    <IconTooltip title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
                 ) : (
-                    <IconTooltip
-                        key="noadmin"
-                        title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."
-                    ></IconTooltip>
+                    <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></IconTooltip>
                 )}
             </p>
         );

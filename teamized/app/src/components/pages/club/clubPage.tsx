@@ -34,11 +34,11 @@ export default function ClubPage({ team }: Props) {
                 <Dashboard.Tile title="Vereinsinfos">
                     <Dashboard.Table vertical={true}>
                         <tbody>
-                            <tr key="name">
+                            <tr>
                                 <th>Name:</th>
                                 <td>{club.name}</td>
                             </tr>
-                            <tr key="url">
+                            <tr>
                                 <th>Login URL:</th>
                                 <td>
                                     <a target="_blank" href={club.url}>
@@ -46,7 +46,7 @@ export default function ClubPage({ team }: Props) {
                                     </a>
                                 </td>
                             </tr>
-                            <tr key="description">
+                            <tr>
                                 <th style={{ width: '1px' }} className="pe-3">
                                     Beschreibung:
                                 </th>
@@ -54,11 +54,11 @@ export default function ClubPage({ team }: Props) {
                                     {club.description}
                                 </td>
                             </tr>
-                            <tr key="membercount">
+                            <tr>
                                 <th>Mitglieder:</th>
                                 <td>{club.membercount}</td>
                             </tr>
-                            <tr key="id" className="debug-only">
+                            <tr className="debug-only">
                                 <th>ID:</th>
                                 <td>{club.id}</td>
                             </tr>

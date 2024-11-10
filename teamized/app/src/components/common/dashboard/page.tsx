@@ -18,20 +18,12 @@ export default function Page({
     return (
         <div className="dashboard p-0 w-100 h-100 d-flex flex-column">
             {title && (
-                <h4 key="title" className="dashboard-title pt-3 mx-3 text-bold">
-                    {title}
-                </h4>
+                <h4 className="dashboard-title pt-3 mx-3 text-bold">{title}</h4>
             )}
             {subtitle && (
-                <h5 key="subtitle" className="dashboard-subtitle mt-2 mx-3">
-                    {subtitle}
-                </h5>
+                <h5 className="dashboard-subtitle mt-2 mx-3">{subtitle}</h5>
             )}
-            {text && (
-                <p key="text" className="dashboard-text mt-2 mx-3">
-                    {text}
-                </p>
-            )}
+            {text && <p className="dashboard-text mt-2 mx-3">{text}</p>}
             {loading ? (
                 <div className="w-100 flex-grow-1 d-flex flex-column align-items-center justify-content-center">
                     <div className="spinner-border mb-3" role="status">

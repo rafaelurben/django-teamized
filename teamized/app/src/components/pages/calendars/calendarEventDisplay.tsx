@@ -54,7 +54,7 @@ export default function CalendarEventDisplay({ team, event }: Props) {
                     <th>Name:</th>
                     <td>{event.name}</td>
                 </tr>
-                {event.description ? (
+                {event.description && (
                     <tr>
                         <th style={{ width: '1px' }} className="pe-3">
                             Beschreibung:
@@ -63,13 +63,13 @@ export default function CalendarEventDisplay({ team, event }: Props) {
                             {event.description}
                         </td>
                     </tr>
-                ) : null}
-                {event.location ? (
+                )}
+                {event.location && (
                     <tr>
                         <th>Ort:</th>
                         <td>{event.location}</td>
                     </tr>
-                ) : null}
+                )}
                 <tr>
                     <th>Start:</th>
                     <td>{eventStartDisplay}</td>

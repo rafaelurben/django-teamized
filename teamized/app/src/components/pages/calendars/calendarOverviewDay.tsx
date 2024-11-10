@@ -58,13 +58,11 @@ export default function CalendarOverviewDay({
                 <span>{date.getDate()}</span>
                 {isSelected ? null : (
                     <span style={{ fontSize: '0.4rem', height: '0.4rem' }}>
-                        {colors.map((color) => {
-                            return (
-                                <span key={color} style={{ color: color }}>
-                                    <i className="fas fa-circle"></i>
-                                </span>
-                            );
-                        })}
+                        {colors.map((color) => (
+                            <span key={color} style={{ color: color }}>
+                                <i className="fas fa-circle"></i>
+                            </span>
+                        ))}
                     </span>
                 )}
             </div>

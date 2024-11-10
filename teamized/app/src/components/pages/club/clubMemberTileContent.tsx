@@ -38,9 +38,9 @@ export default function ClubMemberTileContent({
 
     return (
         <>
-            <div key="nav" className="m-2 border-0">
-                <ul key="ul" className="nav nav-tabs">
-                    <li key="all" className="nav-item">
+            <div className="m-2 border-0">
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
                         <button
                             className={
                                 selectedTab === 'all'
@@ -52,30 +52,27 @@ export default function ClubMemberTileContent({
                             Alle ({clubMembers.length})
                         </button>
                     </li>
-                    {clubGroups.map((clubGroup) => {
-                        return (
-                            <li key={clubGroup.id} className="nav-item">
-                                <button
-                                    className={
-                                        selectedTab === clubGroup.id
-                                            ? 'nav-link active'
-                                            : 'nav-link'
-                                    }
-                                    onClick={() => setSelectedTab(clubGroup.id)}
-                                >
-                                    {clubGroup.name} (
-                                    {clubGroup.memberids.length})
-                                    {clubGroup.description ? (
-                                        <IconTooltip
-                                            className="ms-1"
-                                            title={clubGroup.description}
-                                        />
-                                    ) : null}
-                                </button>
-                            </li>
-                        );
-                    })}
-                    <li key="edit" className="nav-item ms-auto">
+                    {clubGroups.map((clubGroup) => (
+                        <li key={clubGroup.id} className="nav-item">
+                            <button
+                                className={
+                                    selectedTab === clubGroup.id
+                                        ? 'nav-link active'
+                                        : 'nav-link'
+                                }
+                                onClick={() => setSelectedTab(clubGroup.id)}
+                            >
+                                {clubGroup.name} ({clubGroup.memberids.length})
+                                {clubGroup.description && (
+                                    <IconTooltip
+                                        className="ms-1"
+                                        title={clubGroup.description}
+                                    />
+                                )}
+                            </button>
+                        </li>
+                    ))}
+                    <li className="nav-item ms-auto">
                         <button
                             className={
                                 selectedTab === 'edit'
@@ -92,7 +89,6 @@ export default function ClubMemberTileContent({
             {selectedTab === 'all' ? (
                 // All club members
                 <ClubMembersTable
-                    key="table"
                     team={team}
                     clubMembers={clubMembers}
                     isAdmin={isAdmin}
@@ -101,7 +97,6 @@ export default function ClubMemberTileContent({
             ) : selectedTab === 'edit' ? (
                 // Edit club groups
                 <ClubGroupsTable
-                    key="table"
                     team={team}
                     clubGroups={clubGroups}
                     isAdmin={isAdmin}
@@ -109,7 +104,6 @@ export default function ClubMemberTileContent({
             ) : (
                 // Club members in selected group
                 <ClubMembersTable
-                    key="table"
                     team={team}
                     clubMembers={clubMembers.filter((cm) =>
                         teamData.club_groups[selectedTab].memberids.includes(
