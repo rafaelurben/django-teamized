@@ -6,7 +6,7 @@ export interface SuccessfulResponse {
     alert?: Alert;
 }
 
-export interface SuccessfulGetResponse extends SuccessfulResponse {}
+export type SuccessfulGetResponse = SuccessfulResponse;
 
 export interface SuccessfulPostResponse extends SuccessfulResponse {
     success: true;
