@@ -25,20 +25,20 @@ export function filterByDateRange(
  */
 function splitMultiDaySessions(sessions: Worksession[]): Worksession[] {
     // When a session starts before midnight and ends after midnight, it has to be split into multiple sessions
-    let toSplit: Worksession[] = [...sessions];
-    let result: Worksession[] = [];
+    const toSplit: Worksession[] = [...sessions];
+    const result: Worksession[] = [];
     while (toSplit.length > 0) {
-        let session = toSplit.pop()!;
-        let start = new Date(session.time_start);
-        let startDay = roundDays(start);
-        let end = new Date(session.time_end!);
-        let endDay = roundDays(new Date(end.getTime() - 1));
+        const session = toSplit.pop()!;
+        const start = new Date(session.time_start);
+        const startDay = roundDays(start);
+        const end = new Date(session.time_end!);
+        const endDay = roundDays(new Date(end.getTime() - 1));
         if (startDay < endDay) {
             // Start and end are on different days
             // Get the midnight after the first day
-            let midnight = roundDays(start, 1);
+            const midnight = roundDays(start, 1);
             // Create a new session starting at the start of the session and ending at midnight
-            let newSession1: Worksession = {
+            const newSession1: Worksession = {
                 ...session,
                 time_start: start.toISOString(),
                 time_end: midnight.toISOString(),
@@ -46,7 +46,7 @@ function splitMultiDaySessions(sessions: Worksession[]): Worksession[] {
             };
             result.push(newSession1);
             // Create a new session starting at midnight and ending at the end of the session
-            let newSession2: Worksession = {
+            const newSession2: Worksession = {
                 ...session,
                 time_start: midnight.toISOString(),
                 time_end: end.toISOString(),
@@ -74,21 +74,19 @@ export function chartDataByDays(
         [key: number]: { name: string; duration_s: number; duration_h: number };
     } = {};
     let i = 0;
-    while (true) {
-        let dayObj = roundDays(start, i++);
-        let dayTime = dayObj.getTime();
+    let dayTime: number;
+    do {
+        const dayObj = roundDays(start, i++);
+        dayTime = dayObj.getTime();
         days[dayTime] = {
             name: getDateString(dayObj),
             duration_s: 0,
             duration_h: 0,
         };
-        if (dayTime >= roundDays(new Date(end.getTime() - 1)).getTime()) {
-            break;
-        }
-    }
+    } while (dayTime < roundDays(new Date(end.getTime() - 1)).getTime());
 
     // Split sessions that start before midnight and end after midnight
-    let splitSessions = splitMultiDaySessions(sessions);
+    const splitSessions = splitMultiDaySessions(sessions);
     // Add the duration of each session to the corresponding day
     splitSessions.forEach((session) => {
         const day = roundDays(new Date(session.time_start)).getTime();

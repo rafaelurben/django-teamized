@@ -118,8 +118,9 @@ export default function HomePage({ user, settings }: Props) {
                             </label>
                         </div>
                         <div className="form-text">
-                            Bei "Automatisch" wird das Erscheinungsbild
-                            automatisch dem des Systems oder Browsers angepasst.
+                            Bei &quot;Automatisch&quot; wird das
+                            Erscheinungsbild automatisch dem des Systems oder
+                            Browsers angepasst.
                         </div>
                     </div>
                 </Dashboard.Tile>

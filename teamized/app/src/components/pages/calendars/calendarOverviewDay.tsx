@@ -8,7 +8,7 @@ interface Props {
     isToday: boolean;
     isInSelectedMonth: boolean;
     events: CalendarEvent[];
-    onSelect: (date: Date) => any;
+    onSelect: (date: Date) => unknown;
 }
 
 export default function CalendarOverviewDay({
@@ -42,8 +42,8 @@ export default function CalendarOverviewDay({
         return className;
     };
 
-    let colors: string[] = [];
-    for (let event of events) {
+    const colors: string[] = [];
+    for (const event of events) {
         if (!colors.includes(event.calendar!.color)) {
             colors.push(event.calendar!.color);
         }

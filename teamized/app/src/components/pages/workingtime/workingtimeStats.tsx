@@ -11,8 +11,8 @@ interface Props {
 }
 
 export default function WorkingtimeStats({ sessions, start, end }: Props) {
-    let data = Stats.chartDataByDays(sessions, start, end);
-    let totalHours = Stats.totalDuration(sessions) / 3600;
+    const data = Stats.chartDataByDays(sessions, start, end);
+    const totalHours = Stats.totalDuration(sessions) / 3600;
 
     return (
         <>

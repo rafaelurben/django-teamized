@@ -14,7 +14,7 @@ interface Props {
 
 export default function TeamlistPage({ teams, selectedTeamId }: Props) {
     const joinTeam = () => {
-        let token = (
+        const token = (
             document.getElementById('invite-token') as HTMLInputElement
         ).value;
 
@@ -37,9 +37,10 @@ export default function TeamlistPage({ teams, selectedTeamId }: Props) {
 
                 <Dashboard.Tile title="Team erstellen oder beitreten">
                     <p className="mx-1">
-                        Klicke auf "Team erstellen", um ein neues Team zu
-                        erstellen oder gib einen Einladungstoken ein und klicke
-                        auf "Team beitreten", um einem Team beizutreten.
+                        Klicke auf &quot;Team erstellen&quot;, um ein neues Team
+                        zu erstellen oder gib einen Einladungstoken ein und
+                        klicke auf &quot;Team beitreten&quot;, um einem Team
+                        beizutreten.
                     </p>
                     <div className="input-group my-2 px-1">
                         <button

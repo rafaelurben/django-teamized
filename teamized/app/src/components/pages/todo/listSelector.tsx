@@ -11,7 +11,7 @@ interface Props {
     team: Team;
     lists: Todolist[];
     selectedList: Todolist | null;
-    onListSelect: (listId: ID) => any;
+    onListSelect: (listId: ID) => unknown;
     isAdmin: boolean;
 }
 

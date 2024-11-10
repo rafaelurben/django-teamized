@@ -16,7 +16,7 @@ export default function Column({
     children,
 }: Partial<Props>) {
     let fullClassName = `dashboard-column d-flex flex-column ${className} col-${size}`;
-    for (let breakpoint of Object.keys(sizes)) {
+    for (const breakpoint of Object.keys(sizes)) {
         fullClassName += ` col-${breakpoint}-${sizes[breakpoint]}`;
     }
     if (grow) {

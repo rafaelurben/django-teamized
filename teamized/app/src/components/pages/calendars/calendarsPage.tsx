@@ -44,7 +44,7 @@ export default function CalendarsPage({ team }: Props) {
         setSelectedDate(Calendars.roundDays(date));
         // If the current selected event is not in the new selected date, deselect it
         if (selectedEventId) {
-            let evt = eventMap[selectedEventId];
+            const evt = eventMap[selectedEventId];
             if (evt && !Calendars.isDateInEvent(date, evt)) {
                 setSelectedEventId(null);
             }
@@ -52,7 +52,7 @@ export default function CalendarsPage({ team }: Props) {
     };
 
     const ensureValidCalendarId = () => {
-        const isValid = calendarsMap.hasOwnProperty(selectedCalendarId!);
+        const isValid = Object.hasOwn(calendarsMap, selectedCalendarId!);
         const calendarIds = Object.keys(calendarsMap);
         const hasCalendar = calendarIds.length > 0;
 
@@ -68,16 +68,16 @@ export default function CalendarsPage({ team }: Props) {
     const ensureValidEventId = () => {
         if (!selectedEventId) return;
 
-        if (!eventMap.hasOwnProperty(selectedEventId)) {
+        if (!Object.hasOwn(eventMap, selectedEventId)) {
             setSelectedEventId(null);
         }
     };
 
-    let dayDisplay = Calendars.getDateString(selectedDate);
+    const dayDisplay = Calendars.getDateString(selectedDate);
 
-    let selectedCalendar =
+    const selectedCalendar =
         Cache.getCurrentTeamData().calendars[selectedCalendarId!];
-    let selectedEvent = eventMap[selectedEventId!];
+    const selectedEvent = eventMap[selectedEventId!];
 
     return (
         <Dashboard.Page

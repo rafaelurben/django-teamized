@@ -196,7 +196,7 @@ export async function leaveTeamPopup(team: Team) {
 // Member list
 
 export async function getMembers(teamId: ID) {
-    let members = await Cache.refreshTeamCacheCategory<Member>(
+    const members = await Cache.refreshTeamCacheCategory<Member>(
         teamId,
         CacheCategory.MEMBERS
     );
@@ -237,7 +237,7 @@ export async function demoteMemberPopup(team: Team, member: Member) {
 
 export async function deleteMember(teamId: ID, memberId: ID) {
     return await TeamsAPI.deleteMember(teamId, memberId).then(async () => {
-        let teamData = Cache.getTeamData(teamId);
+        const teamData = Cache.getTeamData(teamId);
         delete teamData.members[memberId];
         teamData.team.membercount -= 1;
     });

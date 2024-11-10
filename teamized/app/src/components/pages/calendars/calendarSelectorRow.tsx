@@ -5,7 +5,7 @@ import { Calendar } from '../../../interfaces/calendar/calendar';
 
 interface Props {
     isSelected: boolean;
-    onSelect: (id: ID) => any;
+    onSelect: (id: ID) => unknown;
     calendar: Calendar;
 }
 

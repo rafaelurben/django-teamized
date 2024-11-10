@@ -6,7 +6,7 @@ import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 
 interface Props {
     isSelected: boolean;
-    onSelect: (eventID: ID | null) => any;
+    onSelect: (eventID: ID | null) => unknown;
     event: CalendarEvent;
     selectedDate: Date;
 }

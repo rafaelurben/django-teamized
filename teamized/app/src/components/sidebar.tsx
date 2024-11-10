@@ -11,7 +11,7 @@ interface Props {
     user: User;
     isAdmin: boolean;
     isClubEnabled: boolean;
-    onPageSelect: (page: string) => any;
+    onPageSelect: (page: string) => unknown;
 }
 
 export default function AppSidebar({
@@ -144,6 +144,7 @@ export default function AppSidebar({
                             className="dropdown-item"
                             href="https://de.gravatar.com/"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             <i className="me-2 fas fa-fw fa-arrow-up-right-from-square"></i>
                             Avatar

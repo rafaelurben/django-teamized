@@ -26,7 +26,7 @@ export default function TeamPage({ team }: Props) {
     };
 
     const handleClubCreateButtonClick = async () => {
-        let result = await Club.createClubPopup(team);
+        const result = await Club.createClubPopup(team);
         if (result) Navigation.selectPage('club');
     };
 

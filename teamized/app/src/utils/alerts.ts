@@ -17,7 +17,7 @@ export function apiRequestErrorAlert(request: JQuery.jqXHR) {
     console.debug(`Error: ${request.status} ${request.statusText}`, request);
 
     let jsonData: ErrorResponse;
-    if (request.hasOwnProperty('responseJSON')) {
+    if (Object.hasOwn(request, 'responseJSON')) {
         jsonData = request.responseJSON;
     } else {
         jsonData = {
@@ -170,12 +170,12 @@ export function successAlert(
  */
 export function confirmAlert(
     html: string,
-    preConfirm: () => any,
+    preConfirm: () => unknown,
     title: string = '',
     options: Partial<SweetAlertOptions> = {}
 ) {
     return new Promise((resolve, reject) => {
-        let data: SweetAlertOptions = {
+        const data: SweetAlertOptions = {
             title: title || 'Sicher?',
             html: html,
             icon: 'warning',
@@ -209,7 +209,7 @@ export function confirmAlert(
  * @param {*} preConfirm function that is called when the user confirms the alert twice
  * @returns the result of the preConfirm function if the user confirmed both alerts
  */
-export function doubleConfirmAlert(html: string, preConfirm: () => any) {
+export function doubleConfirmAlert(html: string, preConfirm: () => unknown) {
     return new Promise((resolve, reject) => {
         confirmAlert(html, () => {}, 'Sicher?').then(() => {
             confirmAlert(

@@ -41,7 +41,11 @@ export default function ClubPage({ team }: Props) {
                             <tr>
                                 <th>Login URL:</th>
                                 <td>
-                                    <a target="_blank" href={club.url}>
+                                    <a
+                                        target="_blank"
+                                        href={club.url}
+                                        rel="noreferrer"
+                                    >
                                         {club.slug}
                                     </a>
                                 </td>

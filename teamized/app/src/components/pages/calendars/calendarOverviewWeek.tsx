@@ -9,7 +9,7 @@ interface Props {
     selectedDate: Date;
     selectedMonth: Date;
     events: CalendarEvent[];
-    onDateSelect: (date: Date) => any;
+    onDateSelect: (date: Date) => unknown;
 }
 
 export default function CalendarOverviewWeek({
@@ -19,7 +19,7 @@ export default function CalendarOverviewWeek({
     selectedMonth,
     onDateSelect,
 }: Props) {
-    let days: Date[] = [];
+    const days: Date[] = [];
     for (let i = 0; i < 7; i++) {
         days.push(Calendars.roundDays(firstDay, i));
     }

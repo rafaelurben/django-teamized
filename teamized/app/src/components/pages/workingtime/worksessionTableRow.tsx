@@ -24,7 +24,7 @@ export default function WorksessionTableRow({ team, session }: Props) {
     };
 
     const getDurationDisplay = () => {
-        let data = seconds2HoursMinutesSeconds(session.duration);
+        const data = seconds2HoursMinutesSeconds(session.duration);
         return `${data.hours}h ${data.minutes}min ${data.seconds}s`;
     };
 

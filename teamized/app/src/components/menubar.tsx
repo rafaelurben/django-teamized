@@ -10,8 +10,8 @@ import { Team } from '../interfaces/teams/team';
 interface Props {
     teams: Team[];
     selectedTeamId: ID;
-    onTeamSelect: (teamId: ID) => any;
-    onPageSelect: (page: string) => any;
+    onTeamSelect: (teamId: ID) => unknown;
+    onPageSelect: (page: string) => unknown;
 }
 
 export default function AppMenubar({

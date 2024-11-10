@@ -33,11 +33,12 @@ export default function WorkingtimePage({ team }: Props) {
     const statsRangeEndId = useId();
 
     const applyStatsRange = () => {
-        let start = (
+        const start = (
             document.getElementById(statsRangeStartId) as HTMLInputElement
         ).valueAsDate;
-        let end = (document.getElementById(statsRangeEndId) as HTMLInputElement)
-            .valueAsDate;
+        const end = (
+            document.getElementById(statsRangeEndId) as HTMLInputElement
+        ).valueAsDate;
 
         if (!start || !end || isNaN(start.valueOf()) || isNaN(end.valueOf())) {
             errorAlert('Was ist das?', 'Ein angegebenes Datum ist ungültig');
@@ -68,7 +69,7 @@ export default function WorkingtimePage({ team }: Props) {
         if (loading) WorkingTime.getMyWorkSessionsInTeam(team.id); // will re-render page
     });
 
-    let sessions: Worksession[] = Stats.filterByDateRange(
+    const sessions: Worksession[] = Stats.filterByDateRange(
         allMyWorksessionsInCurrentTeam,
         statsRangeStart,
         statsRangeEnd

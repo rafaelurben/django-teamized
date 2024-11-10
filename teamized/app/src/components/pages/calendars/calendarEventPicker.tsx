@@ -13,7 +13,7 @@ interface Props {
     team: Team;
     calendars: Calendar[];
     events: CalendarEvent[];
-    onEventSelect: (eventID: ID | null) => any;
+    onEventSelect: (eventID: ID | null) => unknown;
     selectedEvent: CalendarEvent | null | undefined;
     selectedCalendar: Calendar;
     selectedDate: Date;

@@ -9,7 +9,7 @@ const WEEKDAY_INDEXES = [0, 1, 2, 3, 4, 5, 6];
 
 interface Props {
     selectedDate: Date;
-    onDateSelect: (date: Date) => any;
+    onDateSelect: (date: Date) => unknown;
     events: CalendarEvent[];
 }
 
@@ -42,7 +42,7 @@ export default function CalendarOverview({
         Calendars.isSameDate(selectedMonth, Calendars.roundMonths(today));
     const firstDayShown = Calendars.getMondayOfWeek(selectedMonth);
 
-    let monthDisplay = selectedMonth.toLocaleString(undefined, {
+    const monthDisplay = selectedMonth.toLocaleString(undefined, {
         month: 'long',
         year: 'numeric',
     });

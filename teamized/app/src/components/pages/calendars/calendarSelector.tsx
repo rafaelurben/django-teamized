@@ -11,7 +11,7 @@ interface Props {
     team: Team;
     calendars: Calendar[];
     selectedCalendar: Calendar;
-    onCalendarSelect: (calendarId: ID) => any;
+    onCalendarSelect: (calendarId: ID) => unknown;
     isAdmin: boolean;
 }
 

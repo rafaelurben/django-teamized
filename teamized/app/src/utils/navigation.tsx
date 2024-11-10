@@ -11,9 +11,9 @@ import AppSidebar from '../components/sidebar';
 import * as Teams from './teams';
 import { getCurrentTeamData } from './cache';
 
-let rootSidebar = createRoot(document.getElementById('app-sidebar')!);
-let rootMenubar = createRoot(document.getElementById('app-menubar')!);
-let rootPage = createRoot(document.getElementById('app-maincontent')!);
+const rootSidebar = createRoot(document.getElementById('app-sidebar')!);
+const rootMenubar = createRoot(document.getElementById('app-menubar')!);
+const rootPage = createRoot(document.getElementById('app-maincontent')!);
 
 function ensureExistingPage() {
     if (!PAGE_LIST.includes(window.appdata.currentPage)) {
@@ -22,8 +22,8 @@ function ensureExistingPage() {
 }
 
 function updatePageTitle() {
-    let teamName = getCurrentTeamData().team.name;
-    let pageName = PAGE_NAMES[window.appdata.currentPage];
+    const teamName = getCurrentTeamData().team.name;
+    const pageName = PAGE_NAMES[window.appdata.currentPage];
     document.title = `${pageName} - ${teamName} | Teamized App`;
 }
 
@@ -31,24 +31,21 @@ function updatePageTitle() {
  * Export changes from the cache to the URL
  */
 export function exportToURL(options?: {
-    additionalParams?: { [key: string]: any };
+    additionalParams?: { [key: string]: string };
     removeParams?: string[];
 }) {
     ensureExistingPage();
     Teams.ensureExistingTeam();
 
     const oldurl = new URL(window.location.href);
-    let newurl = new URL(window.location.href);
+    const newurl = new URL(window.location.href);
 
     // Export the pagename and teamid to the URL
     newurl.searchParams.set('p', window.appdata.currentPage);
     newurl.searchParams.set('t', window.appdata.selectedTeamId);
 
     if (options) {
-        let additionalParams: { [key: string]: any };
-        let removeParams: string[];
-
-        ({ additionalParams = {}, removeParams = [] } = options);
+        const { additionalParams = {}, removeParams = [] } = options;
 
         // Add the additional parameters
         for (const key in additionalParams) {
@@ -63,7 +60,7 @@ export function exportToURL(options?: {
 
     // If the URL has changed, update the URL
     if (oldurl.href !== newurl.href) {
-        let args: [object, string, string] = [
+        const args: [object, string, string] = [
             {
                 page: window.appdata.currentPage,
                 selectedTeamId: window.appdata.selectedTeamId,

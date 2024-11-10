@@ -131,9 +131,9 @@ export function localInputFormat(
     dateOnly: boolean = false
 ): string {
     if (value === undefined || value === null || value === '') return '';
-    let datetime = new Date(value);
+    const datetime = new Date(value);
     datetime.setMinutes(datetime.getMinutes() - datetime.getTimezoneOffset());
-    let result = datetime.toISOString().substring(0, 16);
+    const result = datetime.toISOString().substring(0, 16);
 
     if (dateOnly) return result.split('T')[0];
     return result;

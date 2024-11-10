@@ -53,7 +53,7 @@ export function isDateInEvent(date: Date, evt: CalendarEvent): boolean {
 export function flattenCalendarEvents(
     calendars: Calendar[]
 ): IDIndexedObjectList<CalendarEvent> {
-    let events: IDIndexedObjectList<CalendarEvent> = {};
+    const events: IDIndexedObjectList<CalendarEvent> = {};
     Object.values(calendars).forEach((calendar) => {
         Object.values(calendar.events).forEach((evt) => {
             events[evt.id] = {
@@ -70,12 +70,11 @@ export function flattenCalendarEvents(
  *
  * @param {Array} events
  * @param {Date} date
- * @returns {Array}
  */
 export function filterCalendarEventsByDate(
     events: CalendarEvent[],
     date: Date
-): Array<any> {
+): CalendarEvent[] {
     return events.filter((event) => {
         return isDateInEvent(date, event);
     });
@@ -307,8 +306,8 @@ export function createEventPopup(
     selectedCalendarId: ID
 ) {
     return new Promise((resolve, reject) => {
-        let _dt = localInputFormat(date);
-        let _d = localInputFormat(date, true);
+        const _dt = localInputFormat(date);
+        const _d = localInputFormat(date, true);
         Swal.fire({
             title: `Ereignis erstellen`,
             html: `
@@ -344,7 +343,7 @@ export function createEventPopup(
                     _updateFullDayToggle()
                 );
 
-                let $calendarsInput = $('#swal-input-calendar');
+                const $calendarsInput = $('#swal-input-calendar');
                 $calendarsInput.html(
                     calendars
                         .map(
@@ -359,11 +358,13 @@ export function createEventPopup(
                 $calendarsInput.val(selectedCalendarId);
             },
             preConfirm: async () => {
-                let calendarId = <ID>$('#swal-input-calendar').val();
-                let name = <string>$('#swal-input-name').val();
-                let description = <string>$('#swal-input-description').val();
-                let location = <string>$('#swal-input-location').val();
-                let fullday = <boolean>$('#swal-input-fullday').prop('checked');
+                const calendarId = <ID>$('#swal-input-calendar').val();
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
+                const location = <string>$('#swal-input-location').val();
+                const fullday = <boolean>(
+                    $('#swal-input-fullday').prop('checked')
+                );
 
                 if (!name) {
                     Swal.showValidationMessage('Es wird ein Name benötigt!');
@@ -371,8 +372,8 @@ export function createEventPopup(
                 }
 
                 if (fullday) {
-                    let dstart = <string>$('#swal-input-dstart').val();
-                    let dend = <string>$('#swal-input-dend').val();
+                    const dstart = <string>$('#swal-input-dstart').val();
+                    const dend = <string>$('#swal-input-dend').val();
 
                     if (!dstart || !dend) {
                         Swal.showValidationMessage(
@@ -387,7 +388,7 @@ export function createEventPopup(
                         return false;
                     }
 
-                    let newEvent: CalendarEventRequestDTO = {
+                    const newEvent: CalendarEventRequestDTO = {
                         name,
                         description,
                         location,
@@ -404,8 +405,8 @@ export function createEventPopup(
                         reject
                     );
                 } else {
-                    let dtstart = <string>$('#swal-input-dtstart').val();
-                    let dtend = <string>$('#swal-input-dtend').val();
+                    const dtstart = <string>$('#swal-input-dtstart').val();
+                    const dtend = <string>$('#swal-input-dtend').val();
 
                     if (!dtstart || !dtend) {
                         Swal.showValidationMessage(
@@ -420,7 +421,7 @@ export function createEventPopup(
                         return false;
                     }
 
-                    let newEvent: CalendarEventRequestDTO = {
+                    const newEvent: CalendarEventRequestDTO = {
                         name,
                         description,
                         location,
@@ -517,10 +518,12 @@ export function editEventPopup(
                 );
             },
             preConfirm: async () => {
-                let name = <string>$('#swal-input-name').val();
-                let description = <string>$('#swal-input-description').val();
-                let location = <string>$('#swal-input-location').val();
-                let fullday = <boolean>$('#swal-input-fullday').prop('checked');
+                const name = <string>$('#swal-input-name').val();
+                const description = <string>$('#swal-input-description').val();
+                const location = <string>$('#swal-input-location').val();
+                const fullday = <boolean>(
+                    $('#swal-input-fullday').prop('checked')
+                );
 
                 if (!name) {
                     Swal.showValidationMessage('Es wird ein Name benötigt!');
@@ -528,8 +531,8 @@ export function editEventPopup(
                 }
 
                 if (fullday) {
-                    let dstart = <string>$('#swal-input-dstart').val();
-                    let dend = <string>$('#swal-input-dend').val();
+                    const dstart = <string>$('#swal-input-dstart').val();
+                    const dend = <string>$('#swal-input-dend').val();
 
                     if (!dstart || !dend) {
                         Swal.showValidationMessage(
@@ -544,7 +547,7 @@ export function editEventPopup(
                         return false;
                     }
 
-                    let newEvent: CalendarEventRequestDTO = {
+                    const newEvent: CalendarEventRequestDTO = {
                         name,
                         description,
                         location,
@@ -570,8 +573,8 @@ export function editEventPopup(
                         ).then(resolve, reject);
                     }
                 } else {
-                    let dtstart = <string>$('#swal-input-dtstart').val();
-                    let dtend = <string>$('#swal-input-dtend').val();
+                    const dtstart = <string>$('#swal-input-dtstart').val();
+                    const dtend = <string>$('#swal-input-dtend').val();
 
                     if (!dtstart || !dtend) {
                         Swal.showValidationMessage(
@@ -586,7 +589,7 @@ export function editEventPopup(
                         return false;
                     }
 
-                    let newEvent: CalendarEventRequestDTO = {
+                    const newEvent: CalendarEventRequestDTO = {
                         name,
                         description,
                         location,

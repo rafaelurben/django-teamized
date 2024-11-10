@@ -21,11 +21,11 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
     const showDefaultToggleId = useId();
     const newItemNameInputId = useId();
 
-    const updateShowDone = (e: any) => {
-        setShowDone(e.target.checked);
+    const updateShowDone = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setShowDone((e.target as HTMLInputElement).checked);
     };
 
-    const createItem = (e: any) => {
+    const createItem = (e: React.FormEvent) => {
         e.preventDefault();
         const nameInput = document.getElementById(
             newItemNameInputId
@@ -72,7 +72,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                     type="checkbox"
                     role="switch"
                     id={showDefaultToggleId}
-                    onClick={updateShowDone}
+                    onChange={updateShowDone}
                 />
                 <label
                     className="form-check-label ms-1"

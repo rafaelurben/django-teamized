@@ -11,7 +11,7 @@ import { Calendar } from '../../../interfaces/calendar/calendar';
 interface Props {
     team: Team;
     selectedCalendar: Calendar | null;
-    onCalendarDeleted: () => any;
+    onCalendarDeleted: () => unknown;
     isAdmin: boolean;
 }
 

@@ -18,7 +18,7 @@ function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
 
 interface Props {
     team: Team;
-    onFinishedSessionAdded: () => any;
+    onFinishedSessionAdded: () => unknown;
 }
 
 export default function WorksessionTrackingTileContent({
@@ -32,8 +32,9 @@ export default function WorksessionTrackingTileContent({
         getTimeDisplay(currentWorksession)
     );
 
-    const clockRefreshIntervalID = useRef<any>();
-    const currentSessionRefreshIntervalId = useRef<any>();
+    const clockRefreshIntervalID = useRef<ReturnType<typeof setInterval>>();
+    const currentSessionRefreshIntervalId =
+        useRef<ReturnType<typeof setInterval>>();
 
     const startInProgress = useRef(false);
     const stopInProgress = useRef(false);
@@ -65,7 +66,7 @@ export default function WorksessionTrackingTileContent({
     };
 
     const updateTimeDisplay = () => {
-        let newDisplay = getTimeDisplay(window.appdata.current_worksession);
+        const newDisplay = getTimeDisplay(window.appdata.current_worksession);
         setTimeDisplay(newDisplay);
     };
 
@@ -96,6 +97,7 @@ export default function WorksessionTrackingTileContent({
             clearInterval(clockRefreshIntervalID.current);
             clearInterval(currentSessionRefreshIntervalId.current);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

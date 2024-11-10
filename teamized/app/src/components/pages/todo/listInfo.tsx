@@ -11,7 +11,7 @@ import { Todolist } from '../../../interfaces/todolist/todolist';
 interface Props {
     team: Team;
     selectedList: Todolist | null;
-    onListDeleted: () => any;
+    onListDeleted: () => unknown;
     isAdmin: boolean;
 }
 

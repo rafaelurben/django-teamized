@@ -5,7 +5,7 @@ import { ID } from '../../../interfaces/common';
 interface Props {
     list: Todolist;
     isSelected: boolean;
-    onSelect: (listId: ID) => any;
+    onSelect: (listId: ID) => unknown;
 }
 
 export default function ListSelectorRow({ list, isSelected, onSelect }: Props) {

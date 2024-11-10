@@ -14,8 +14,8 @@ import { TeamCache } from '../interfaces/cache/teamCache';
 // Lookups
 
 export function getTeamsList() {
-    let teams: Team[] = [];
-    for (let teamData of Object.values(window.appdata.teamCache)) {
+    const teams: Team[] = [];
+    for (const teamData of Object.values(window.appdata.teamCache)) {
         teams.push(teamData.team);
     }
     return teams;
@@ -31,11 +31,15 @@ export function getCurrentTeamData() {
 
 // Add and remove teams from cache
 
-function updateTeam(team: Team & { [key in CacheCategory]?: any }) {
-    for (let category of Object.values(CacheCategory)) {
-        if (team.hasOwnProperty(category)) {
+function updateTeam(
+    team: Team & {
+        [key in CacheCategory]?: CacheCategoryType[];
+    }
+) {
+    for (const category of Object.values(CacheCategory)) {
+        if (Object.hasOwn(team, category)) {
             window.appdata.teamCache[team.id][category] = {};
-            replaceTeamCacheCategory(team.id, category, team[category]);
+            replaceTeamCacheCategory(team.id, category, team[category]!);
             delete team[category];
             // Delete the category from the team object itself to avoid data redundancy
         }
@@ -44,7 +48,7 @@ function updateTeam(team: Team & { [key in CacheCategory]?: any }) {
 }
 
 export function addTeam(team: Team) {
-    let newTeamCache: any = { team: team, _state: {} };
+    const newTeamCache = { team: team, _state: {} };
     for (const category of Object.values(CacheCategory)) {
         newTeamCache[category] = {};
         newTeamCache._state[category] = { _initial: true, _refreshing: false };
@@ -57,7 +61,7 @@ export async function deleteTeam(teamId: ID) {
     // Delete the team from the team cache
     delete window.appdata.teamCache[teamId];
     // Update the defaultTeamId
-    let teamIds = Object.keys(window.appdata.teamCache);
+    const teamIds = Object.keys(window.appdata.teamCache);
     if (teamIds.length === 0) {
         // When no team is left, the backend automatically creates a new one
         // We need to re-fetch all teams in order to get the new one
@@ -74,9 +78,9 @@ export async function deleteTeam(teamId: ID) {
 export function updateTeamsCache(teams: Team[], defaultTeamId: ID) {
     window.appdata.defaultTeamId = defaultTeamId;
 
-    let oldIds = Object.keys(window.appdata.teamCache);
+    const oldIds = Object.keys(window.appdata.teamCache);
 
-    for (let team of teams) {
+    for (const team of teams) {
         // Remove team from oldIds if it was there
         if (oldIds.includes(team.id)) {
             oldIds.splice(oldIds.indexOf(team.id), 1);
@@ -91,7 +95,7 @@ export function updateTeamsCache(teams: Team[], defaultTeamId: ID) {
     }
 
     // Remove teams that are no longer in the list
-    for (let teamId of oldIds) {
+    for (const teamId of oldIds) {
         delete window.appdata.teamCache[teamId];
     }
 }
@@ -103,7 +107,7 @@ export function replaceTeamCacheCategory<T extends CacheCategoryType>(
     category: CacheCategory,
     objects: T[]
 ) {
-    let teamData = getTeamData(teamId);
+    const teamData = getTeamData(teamId);
     if (teamData === null) {
         console.warn(
             '[Cache] Team ' +
@@ -112,7 +116,7 @@ export function replaceTeamCacheCategory<T extends CacheCategoryType>(
         );
     } else {
         teamData[category] = {};
-        for (let obj of objects) {
+        for (const obj of objects) {
             teamData[category][obj.id] = obj;
         }
     }
@@ -123,7 +127,7 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
     category: CacheCategory
 ) {
     return new Promise<T[]>((resolve, reject) => {
-        let teamData = getTeamData(teamId);
+        const teamData = getTeamData(teamId);
         if (teamData._state[category]._refreshing === true) {
             // If the category is already being refreshed, we don't need to do anything
             // This will neither resolve nor reject the promise
@@ -141,7 +145,7 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
                 category
             )
                 .then((data) => {
-                    let objects: T[] = data[category.split('_').at(-1)!];
+                    const objects: T[] = data[category.split('_').at(-1)!];
                     replaceTeamCacheCategory<T>(teamId, category, objects);
 
                     teamData._state[category]._initial = false;

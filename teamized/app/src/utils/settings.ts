@@ -50,7 +50,7 @@ export async function getSettings() {
  */
 export async function editSettings(settings: Partial<Settings>) {
     // Apply new settings
-    let newSettings = { ...window.appdata.settings, ...settings };
+    const newSettings = { ...window.appdata.settings, ...settings };
     applySettings(newSettings);
     // Save new settings on server
     return await GeneralAPI.updateSettings(newSettings).then(

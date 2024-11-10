@@ -6,7 +6,7 @@ import { User } from './interfaces/user';
 declare global {
     // noinspection JSUnusedGlobalSymbols
     interface Window {
-        _App: any;
+        _App: unknown;
         api_base_url: string;
         appdata: {
             currentPage: string;

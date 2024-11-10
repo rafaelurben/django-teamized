@@ -29,7 +29,7 @@ export default function TodoPage({ team }: Props) {
 
     const ensureValidListId = () => {
         const isValid =
-            selectedListId && todolistMap.hasOwnProperty(selectedListId);
+            selectedListId && Object.hasOwn(todolistMap, selectedListId);
         const listIds = Object.keys(todolistMap);
         const hasList = listIds.length > 0;
 
@@ -42,7 +42,7 @@ export default function TodoPage({ team }: Props) {
         }
     };
 
-    let selectedList = (selectedListId &&
+    const selectedList = (selectedListId &&
         Cache.getCurrentTeamData().todolists[
             selectedListId
         ]) as Todolist | null;
