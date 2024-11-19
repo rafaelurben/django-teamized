@@ -1,5 +1,5 @@
 name: check_app.yml
-on: [push, pull_request]
+on: [push]
 
 jobs:
   check:
