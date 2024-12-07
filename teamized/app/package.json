@@ -40,12 +40,12 @@
     "webpack-cli": "~5.1.4"
   },
   "dependencies": {
-    "@types/react": "18.3.14",
-    "@types/react-dom": "18.3.2",
+    "@types/react": "19.0.1",
+    "@types/react-dom": "19.0.1",
     "bootstrap": "5.3.3",
     "jquery": "3.7.1",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "recharts": "2.14.1"
   }
 }
