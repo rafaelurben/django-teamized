@@ -1,33 +1,33 @@
 {
-  "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-
-    /* Language and Environment */
-    "target": "es2023",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "jsx": "react-jsx",
-    /* Modules */
-    "module": "esnext",
-    "moduleResolution": "node",
-    /* Interop Constraints */
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
-    "strict": true,
-    "noImplicitAny": false,
-    /* Completeness */
-    "skipLibCheck": true
-  },
-  "exclude": [
-    "node_modules",
-    "*.config.js"
-  ],
-  "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+        /* Visit https://aka.ms/tsconfig to read more about this file */
+
+        /* Language and Environment */
+        "target": "es2023",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "jsx": "react-jsx",
+        /* Modules */
+        "module": "esnext",
+        "moduleResolution": "node",
+        /* Interop Constraints */
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        /* Type Checking */
+        "strict": true,
+        "noImplicitAny": false,
+        /* Completeness */
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "node_modules",
+        "*.config.js"
+    ],
+    "ts-node": {
+        "compilerOptions": {
+            "module": "CommonJS"
+        }
     }
-  }
 }
