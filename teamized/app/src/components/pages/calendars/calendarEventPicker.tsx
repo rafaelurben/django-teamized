@@ -36,7 +36,7 @@ export default function CalendarEventPicker({
             selectedDate,
             calendars,
             selectedCalendar.id
-        ).then(NavigationService.renderPage);
+        ).then(NavigationService.render);
     };
 
     const sortedEvents = events.sort((a, b) => {

@@ -16,18 +16,18 @@ export default function ListViewItem({ team, list, item }: Props) {
     const markDone = () => {
         ToDo.editToDoListItem(team.id, list.id, item.id, {
             done: true,
-        }).then(NavigationService.renderPage);
+        }).then(NavigationService.render);
     };
 
     const viewItem = () => {
         ToDo.viewToDoListItemPopup(team, list, item).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 
     const deleteItem = () => {
         ToDo.deleteToDoListItemPopup(team, list, item).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 

@@ -14,19 +14,19 @@ interface Props {
 export default function CalendarEventDisplay({ team, event }: Props) {
     const editEvent = () => {
         CalendarService.editEventPopup(team, event.calendar!, event).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 
     const cloneEvent = () => {
         CalendarService.editEventPopup(team, event.calendar!, event, true).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 
     const deleteEvent = () => {
         CalendarService.deleteEventPopup(team, event.calendar!, event).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 

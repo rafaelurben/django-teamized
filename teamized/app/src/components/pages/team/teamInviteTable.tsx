@@ -22,7 +22,7 @@ export default function TeamInviteTable({ team }: Props) {
 
     const handleInviteCreateButtonClick = async () => {
         await TeamsService.createInvitePopup(team);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     return (

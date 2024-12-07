@@ -38,7 +38,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
             setIsCreating(true);
             ToDo.createToDoListItem(team.id, selectedList!.id, { name }).then(
                 () => {
-                    NavigationService.renderPage();
+                    NavigationService.render();
                     nameInput.value = '';
                     setIsCreating(false);
                 }

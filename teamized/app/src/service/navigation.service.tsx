@@ -5,15 +5,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import AppMenubar from '../components/menubar';
-import { PAGE_LIST, PAGE_NAMES, PageLoader } from '../components/pageloader';
-import AppSidebar from '../components/sidebar';
+import App from '../components/App';
+import { PAGE_LIST, PAGE_NAMES } from '../components/pageloader';
 import { getCurrentTeamData } from './cache.service';
 import * as TeamsService from './teams.service';
 
-const rootSidebar = createRoot(document.getElementById('app-sidebar')!);
-const rootMenubar = createRoot(document.getElementById('app-menubar')!);
-const rootPage = createRoot(document.getElementById('app-maincontent')!);
+const root = createRoot(document.getElementById('react-root')!);
 
 function ensureExistingPage() {
     if (!PAGE_LIST.includes(window.appdata.currentPage)) {
@@ -107,43 +104,12 @@ export function showSidebarOnDesktop() {
     }
 }
 
-export function renderSidebar() {
-    rootSidebar.render(
-        <AppSidebar
-            selectedPage={window.appdata.currentPage}
-            user={window.appdata.user}
-            isAdmin={TeamsService.isCurrentTeamAdmin()}
-            isClubEnabled={TeamsService.hasCurrentTeamLinkedClub()}
-            onPageSelect={selectPage}
-        />
-    );
-}
-
-export function renderPage() {
-    rootPage.render(<PageLoader page={window.appdata.currentPage} />);
-}
-
-export function renderMenubar() {
-    rootMenubar.render(
-        <AppMenubar
-            teams={TeamsService.getTeamsList()}
-            selectedTeamId={window.appdata.selectedTeamId}
-            onTeamSelect={TeamsService.switchTeam}
-            onPageSelect={selectPage}
-        />
-    );
-}
-
 export function render() {
-    renderMenubar();
-    renderSidebar();
-    renderPage();
+    root.render(<App />);
 }
 
 export function reRender() {
-    rootPage.unmount();
-    rootSidebar.unmount();
-    rootMenubar.unmount();
+    root.unmount();
     render();
 }
 

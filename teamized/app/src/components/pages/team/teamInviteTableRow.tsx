@@ -17,12 +17,12 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
 
     const handleDeleteButtonClick = async () => {
         await TeamsService.deleteInvitePopup(team, invite);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleEditButtonClick = async () => {
         await TeamsService.editInvitePopup(team, invite);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const copyToken = () => {

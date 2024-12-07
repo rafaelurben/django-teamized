@@ -207,7 +207,7 @@ export async function getTrackingSession() {
             return null;
         } else {
             window.appdata.current_worksession = data.session;
-            NavigationService.renderPage();
+            NavigationService.render();
             return data.session;
         }
     });

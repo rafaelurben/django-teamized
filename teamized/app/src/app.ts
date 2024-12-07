@@ -83,7 +83,7 @@ async function initialize() {
 
     await Promise.all([
         SettingsService.getSettings(),
-        SettingsService.getProfile().then(NavigationService.renderSidebar),
+        SettingsService.getProfile().then(NavigationService.render),
         TeamsService.getTeams(),
     ]);
 
@@ -122,7 +122,7 @@ async function reinitialize() {
 
 // Reload
 
-async function refresh() {
+export async function refresh() {
     if (!window.appdata.loadInProgress) {
         await reinitialize();
     }
@@ -153,9 +153,5 @@ function onkeypress(e: JQuery.Event) {
 $(initialize);
 // Listen for navigation in the history (browser back/forward)
 $(window).on('popstate', NavigationService.handleHistoryNavigation);
-// Listen for click on the sidebar toggler
-$('#menubartitle').on('click', NavigationService.toggleSidebar);
-// Listen for click on the refresh button
-$('#refreshbutton').on('click', refresh);
 // Listen for F5 keypress
 $(document).on('keydown', onkeypress);

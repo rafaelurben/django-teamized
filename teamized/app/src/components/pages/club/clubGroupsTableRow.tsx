@@ -14,12 +14,12 @@ interface Props {
 export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
     const handleRemoveButtonClick = async () => {
         await ClubService.deleteClubGroupPopup(team, group);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleEditButtonClick = async () => {
         await ClubService.editClubGroupPopup(team, group);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleSharePortfolioButtonClick = async () => {

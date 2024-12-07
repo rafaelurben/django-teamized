@@ -16,7 +16,7 @@ interface Props {
 export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
     const handleCreateButtonClick = async () => {
         await ClubService.createClubGroupPopup(team);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     return (

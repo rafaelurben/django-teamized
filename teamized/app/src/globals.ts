@@ -7,7 +7,13 @@ declare global {
     // noinspection JSUnusedGlobalSymbols
     interface Window {
         _App: unknown;
-        api_base_url: string;
+        teamized_globals: {
+            api_base_url: string;
+            logout_url: string;
+            debug_url: string;
+            account_url: string;
+            home_url: string;
+        };
         appdata: {
             currentPage: string;
             current_worksession?: Worksession | null;

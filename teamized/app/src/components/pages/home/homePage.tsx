@@ -26,7 +26,7 @@ export default function HomePage({ user, settings }: Props) {
         const val = evt.target.value;
         const darkmode = val === 'dark' ? true : val === 'light' ? false : null;
         SettingsService.editSettings({ darkmode }).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 

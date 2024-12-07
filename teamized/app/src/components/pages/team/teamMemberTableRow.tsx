@@ -18,12 +18,12 @@ export default function TeamMemberTableRow({
 }: Props) {
     const handlePromoteButtonClick = async () => {
         await TeamsService.promoteMemberPopup(team, member);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleDemoteButtonClick = async () => {
         await TeamsService.demoteMemberPopup(team, member);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleLeaveButtonClick = async () => {
@@ -33,7 +33,7 @@ export default function TeamMemberTableRow({
 
     const handleRemoveButtonClick = async () => {
         await TeamsService.deleteMemberPopup(team, member);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     return (

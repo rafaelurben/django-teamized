@@ -153,7 +153,7 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
 
                     teamData._state[category]._initial = false;
                     teamData._state[category]._refreshing = false;
-                    NavigationService.renderPage();
+                    NavigationService.render();
 
                     resolve(objects);
                 })

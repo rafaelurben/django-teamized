@@ -21,12 +21,12 @@ export default function ClubMembersTableRow({
 }: Props) {
     const handleRemoveButtonClick = async () => {
         await ClubService.deleteClubMemberPopup(team, clubMember);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleEditButtonClick = async () => {
         await ClubService.editClubMemberPopup(team, clubMember);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handlePortfolioEditButtonClick = async () => {
@@ -35,7 +35,7 @@ export default function ClubMembersTableRow({
 
     const handleGroupEditButtonClick = async () => {
         await ClubService.updateClubMemberGroupsPopup(team, clubMember);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleCreateMagicLinkButtonClick = async () => {

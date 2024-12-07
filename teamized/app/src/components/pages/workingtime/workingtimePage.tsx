@@ -56,7 +56,7 @@ export default function WorkingtimePage({ team }: Props) {
 
     const createSession = async () => {
         await WorkingtimeService.createWorkSessionPopup(team);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const allMyWorksessionsInCurrentTeam = Object.values(

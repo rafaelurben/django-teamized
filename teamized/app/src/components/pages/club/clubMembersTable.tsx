@@ -23,7 +23,7 @@ export default function ClubMembersTable({
 }: Props) {
     const handleCreateButtonClick = async () => {
         await ClubService.createClubMemberPopup(team);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     return (

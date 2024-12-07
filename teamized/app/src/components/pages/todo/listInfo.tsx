@@ -23,7 +23,7 @@ export default function ListInfo({
 }: Props) {
     const editList = () => {
         ToDo.editToDoListPopup(team, selectedList!).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 

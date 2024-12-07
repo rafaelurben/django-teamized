@@ -23,7 +23,7 @@ export default function CalendarInfo({
 }: Props) {
     const editCalendar = () => {
         CalendarService.editCalendarPopup(team, selectedCalendar!).then(
-            NavigationService.renderPage
+            NavigationService.render
         );
     };
 

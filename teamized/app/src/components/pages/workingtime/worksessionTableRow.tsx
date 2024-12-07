@@ -15,12 +15,12 @@ interface Props {
 export default function WorksessionTableRow({ team, session }: Props) {
     const handleDeleteButtonClick = async () => {
         await WorkingtimeService.deleteWorkSessionPopup(team, session);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleEditButtonClick = async () => {
         await WorkingtimeService.editWorkSessionPopup(team, session);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const getDurationDisplay = () => {

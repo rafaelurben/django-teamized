@@ -17,7 +17,7 @@ interface Props {
 export default function TeamPage({ team }: Props) {
     const handleTeamEditButtonClick = async () => {
         await TeamsService.editTeamPopup(team);
-        NavigationService.renderPage();
+        NavigationService.render();
     };
 
     const handleTeamDeleteButtonClick = async () => {
