@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 
-import { Member } from '../../../interfaces/teams/member';
-import { Team } from '../../../interfaces/teams/team';
-import * as CacheService from '../../../service/cache.service';
+import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamMembersTableRow from './teamMemberTableRow';
 
 interface Props {
-    team: Team;
-    loggedInMember: Member;
+    teamData: TeamCache;
 }
 
-export default function TeamMemberTable({ team, loggedInMember }: Props) {
-    const members = Object.values(CacheService.getTeamData(team.id).members);
-    const loading = CacheService.getCurrentTeamData()._state.members._initial;
+export default function TeamMemberTable({ teamData }: Props) {
+    const team = teamData.team;
+    const loggedInMember = team.member!;
+
+    const members = Object.values(teamData.members);
+    const loading = teamData._state.members._initial;
 
     useEffect(() => {
         if (loading) TeamsService.getMembers(team.id); // will re-render page

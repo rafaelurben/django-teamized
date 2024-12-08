@@ -25,10 +25,6 @@ export function getTeamData(teamId: ID) {
     return window.appdata.teamCache[teamId] || null;
 }
 
-export function getCurrentTeamData() {
-    return getTeamData(window.appdata.selectedTeamId!);
-}
-
 // Add and remove teams from cache
 
 function updateTeam(

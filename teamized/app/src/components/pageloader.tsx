@@ -4,8 +4,11 @@
 
 import React from 'react';
 
-import * as CacheService from '../service/cache.service';
 import * as TeamsService from '../service/teams.service';
+import {
+    useCurrentTeamData,
+    useNavigationState,
+} from '../utils/navigation/navigationProvider';
 import CalendarsPage from './pages/calendars/calendarsPage';
 import ClubPage from './pages/club/clubPage';
 import HomePage from './pages/home/homePage';
@@ -24,14 +27,9 @@ export const PAGE_NAMES = {
     todo: 'To-do-Listen',
 };
 
-export const PAGE_LIST = Object.keys(PAGE_NAMES);
-
-interface Props {
-    page: string;
-}
-
-export function PageLoader({ page }: Props) {
-    const teamData = CacheService.getCurrentTeamData();
+export function PageLoader() {
+    const { selectedPage } = useNavigationState();
+    const teamData = useCurrentTeamData();
 
     if (!teamData) {
         return (
@@ -44,7 +42,10 @@ export function PageLoader({ page }: Props) {
         );
     }
 
-    if (page.startsWith('club') && teamData.team.club === null) {
+    const pageName = PAGE_NAMES[selectedPage] || '404 Nicht gefunden';
+    document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
+
+    if (selectedPage.startsWith('club') && teamData.team.club === null) {
         return (
             <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
                 <div className="text-danger mb-4" role="status">
@@ -59,7 +60,7 @@ export function PageLoader({ page }: Props) {
         );
     }
 
-    switch (page) {
+    switch (selectedPage) {
         case 'home':
             return (
                 <HomePage
@@ -68,22 +69,17 @@ export function PageLoader({ page }: Props) {
                 />
             );
         case 'teamlist':
-            return (
-                <TeamlistPage
-                    teams={TeamsService.getTeamsList()}
-                    selectedTeamId={window.appdata.selectedTeamId}
-                />
-            );
+            return <TeamlistPage teams={TeamsService.getTeamsList()} />;
         case 'team':
-            return <TeamPage team={teamData.team} />;
+            return <TeamPage />;
         case 'workingtime':
-            return <WorkingtimePage team={teamData.team} />;
+            return <WorkingtimePage />;
         case 'calendars':
-            return <CalendarsPage team={teamData.team} />;
+            return <CalendarsPage />;
         case 'todo':
-            return <TodoPage team={teamData.team} />;
+            return <TodoPage />;
         case 'club':
-            return <ClubPage team={teamData.team} />;
+            return <ClubPage />;
         default:
             return (
                 <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">

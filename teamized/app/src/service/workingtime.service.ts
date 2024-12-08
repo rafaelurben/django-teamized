@@ -43,7 +43,7 @@ export async function createWorkSession(
 ) {
     return await WorkingtimeAPI.createWorksession(teamId, session).then(
         (data) => {
-            CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+            CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
                 data.session;
             return data.session;
         }
@@ -107,7 +107,7 @@ export async function editWorkSession(
         sessionId,
         session
     ).then(async (data) => {
-        CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+        CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
             data.session;
         return data.session;
     });
@@ -171,7 +171,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
 export async function deleteWorkSession(teamId: ID, sessionId: ID) {
     return await WorkingtimeAPI.deleteWorksession(teamId, sessionId).then(
         () => {
-            delete CacheService.getCurrentTeamData().me_worksessions[sessionId];
+            delete CacheService.getTeamData(teamId).me_worksessions[sessionId];
         }
     );
 }
@@ -232,9 +232,9 @@ export async function renameWorkSession(
         note,
     }).then((data) => {
         if (
-            data.session.id in CacheService.getCurrentTeamData().me_worksessions
+            data.session.id in CacheService.getTeamData(teamId).me_worksessions
         ) {
-            CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+            CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
                 data.session;
         }
         if (

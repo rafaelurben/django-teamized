@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as CacheService from '../../../service/cache.service';
 import * as Todo from '../../../service/todo.service';
+import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import ListInfo from './listInfo';
 import ListSelector from './listSelector';
 import ListView from './listView';
 
-interface Props {
-    team: Team;
-}
+export default function TodoPage() {
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
 
-export default function TodoPage({ team }: Props) {
     const [selectedListId, setSelectedListId] = useState<ID | null>(null);
 
-    const todolistMap = CacheService.getTeamData(team.id).todolists;
-    const loading = CacheService.getCurrentTeamData()._state.todolists._initial;
+    const todolistMap = teamData.todolists;
+    const loading = teamData._state.todolists._initial;
 
     const isAdmin = team.member!.is_admin;
 
@@ -44,9 +42,7 @@ export default function TodoPage({ team }: Props) {
     };
 
     const selectedList = (selectedListId &&
-        CacheService.getCurrentTeamData().todolists[
-            selectedListId
-        ]) as Todolist | null;
+        teamData.todolists[selectedListId]) as Todolist | null;
 
     return (
         <Dashboard.Page

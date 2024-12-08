@@ -6,35 +6,29 @@
 import React from 'react';
 
 import { refresh } from '../app';
-import { ID } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
 import { User } from '../interfaces/user';
 import * as NavigationService from '../service/navigation.service';
 import * as GeneralUtils from '../utils/general';
+import {
+    useNavigationState,
+    useNavigationStateDispatch,
+    usePageNavigatorAsEventHandler,
+} from '../utils/navigation/navigationProvider';
 
 interface Props {
     teams: Team[];
     user: User;
-    selectedTeamId: ID;
-    onTeamSelect: (teamId: ID) => unknown;
-    onPageSelect: (page: string) => unknown;
 }
 
-export default function AppMenubar({
-    teams,
-    user,
-    selectedTeamId,
-    onTeamSelect,
-    onPageSelect,
-}: Props) {
-    const handleTeamSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onTeamSelect(e.target.value);
-    };
+export default function AppMenubar({ teams, user }: Props) {
+    const { selectedTeamId } = useNavigationState();
 
-    // Note: Calling this function with the page parameter returns a new function
-    // that will be called when an event fires.
-    const selectPage = (page: string) => () => {
-        onPageSelect(page);
+    const selectPage = usePageNavigatorAsEventHandler();
+    const updateNavigationState = useNavigationStateDispatch();
+
+    const handleTeamSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        updateNavigationState({ update: { selectedTeamId: e.target.value } });
     };
 
     const globals = window.teamized_globals;

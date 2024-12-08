@@ -1,16 +1,20 @@
 import React from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
 import * as NavigationService from '../../../service/navigation.service';
+import {
+    useCurrentTeamData,
+    usePageNavigator,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import ClubMemberTileContent from './clubMemberTileContent';
 
-interface Props {
-    team: Team;
-}
+export default function ClubPage() {
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
 
-export default function ClubPage({ team }: Props) {
+    const selectPage = usePageNavigator();
+
     const handleClubEditButtonClick = async () => {
         await ClubService.editClubPopup(team);
         NavigationService.render();

@@ -15,11 +15,9 @@ declare global {
             home_url: string;
         };
         appdata: {
-            currentPage: string;
             current_worksession?: Worksession | null;
             debug_prompt_accepted: boolean;
             defaultTeamId: string;
-            selectedTeamId: string;
             settings: Settings;
             teamCache: TeamsCache;
             user: User;

@@ -40,10 +40,8 @@ window._App = {
 // Initialize appdata
 
 window.appdata = {
-    currentPage: 'home',
     defaultTeamId: '',
     debug_prompt_accepted: false,
-    selectedTeamId: '',
     teamCache: {},
     user: {
         id: '',
@@ -78,7 +76,6 @@ async function initialize() {
     showLoadingIndicator();
 
     NavigationService.showSidebarOnDesktop();
-    NavigationService.importFromURL();
     NavigationService.render();
 
     await Promise.all([
@@ -87,20 +84,16 @@ async function initialize() {
         TeamsService.getTeams(),
     ]);
 
-    NavigationService.exportToURL();
     NavigationService.render();
-
-    TeamsService.checkURLInvite();
-    WorkingtimeService.getTrackingSession();
 
     hideLoadingIndicator();
     window.appdata.initialLoadComplete = true;
+
+    await WorkingtimeService.getTrackingSession();
 }
 
 async function reinitialize() {
     showLoadingIndicator();
-
-    const oldTeamId = window.appdata.selectedTeamId;
 
     window.appdata = {
         ...window.appdata,
@@ -109,15 +102,17 @@ async function reinitialize() {
     };
     NavigationService.render();
 
-    await Promise.all([SettingsService.getSettings(), TeamsService.getTeams()]);
+    await Promise.all([
+        SettingsService.getSettings(),
+        SettingsService.getProfile(),
+        TeamsService.getTeams(),
+    ]);
 
     NavigationService.render();
 
-    WorkingtimeService.getTrackingSession().then();
-
-    TeamsService.switchTeam(oldTeamId);
-
     hideLoadingIndicator();
+
+    await WorkingtimeService.getTrackingSession();
 }
 
 // Reload
@@ -151,7 +146,5 @@ function onkeypress(e: JQuery.Event) {
 
 // Listen for DOM load -> initialize
 $(initialize);
-// Listen for navigation in the history (browser back/forward)
-$(window).on('popstate', NavigationService.handleHistoryNavigation);
-// Listen for F5 keypress
+// Listen for key presses
 $(document).on('keydown', onkeypress);

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
-import * as CacheService from '../../../service/cache.service';
+import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
 import Dashboard from '../../common/dashboard';
@@ -9,12 +8,14 @@ import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamInviteTableRow from './teamInviteTableRow';
 
 interface Props {
-    team: Team;
+    teamData: TeamCache;
 }
 
-export default function TeamInviteTable({ team }: Props) {
-    const invites = Object.values(CacheService.getTeamData(team.id).invites);
-    const loading = CacheService.getCurrentTeamData()._state.invites._initial;
+export default function TeamInviteTable({ teamData }: Props) {
+    const team = teamData?.team;
+
+    const invites = Object.values(teamData.invites);
+    const loading = teamData._state.invites._initial;
 
     useEffect(() => {
         if (loading) TeamsService.getInvites(team.id); // will re-render page

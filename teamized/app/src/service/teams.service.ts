@@ -19,53 +19,8 @@ import {
 import { isoFormat, localInputFormat } from '../utils/datetime';
 import { validateUUID } from '../utils/general';
 import * as CacheService from './cache.service';
-import * as NavigationService from './navigation.service';
 
 export { getTeamsList } from './cache.service';
-
-export function isCurrentTeamAdmin() {
-    const teamData = CacheService.getCurrentTeamData();
-    if (teamData) {
-        return ['owner', 'admin'].includes(teamData.team.member?.role || '');
-    }
-    return false;
-}
-
-export function hasCurrentTeamLinkedClub() {
-    const teamData = CacheService.getCurrentTeamData();
-    if (teamData) {
-        return teamData.team.club !== null;
-    }
-    return false;
-}
-
-export function ensureExistingTeam() {
-    if (window.appdata.selectedTeamId) {
-        // Team selected; check if it is valid
-        if (window.appdata.selectedTeamId in window.appdata.teamCache) {
-            // Team is in cache, so it must be a valid team id
-            return;
-        }
-    }
-
-    // No team selected or team doesn't exist; select default
-    console.log(
-        "No team selected or team doesn't exist; falling back to default"
-    );
-    switchTeam(window.appdata.defaultTeamId);
-}
-
-export function switchTeam(teamId: ID) {
-    if (window.appdata.selectedTeamId === teamId) {
-        // Already selected; no action needed
-        return;
-    }
-    console.debug('Switching team to: ' + teamId);
-
-    window.appdata.selectedTeamId = teamId;
-    NavigationService.exportToURL();
-    NavigationService.render();
-}
 
 //// API calls ////
 
@@ -74,7 +29,6 @@ export function switchTeam(teamId: ID) {
 export async function getTeams() {
     return await TeamsAPI.getTeams().then((data) => {
         CacheService.updateTeamsCache(data.teams, data.defaultTeamId);
-        ensureExistingTeam();
         return data.teams;
     });
 }
@@ -84,8 +38,6 @@ export async function getTeams() {
 export async function createTeam(team: TeamRequestDTO) {
     return await TeamsAPI.createTeam(team).then(async (data) => {
         CacheService.addTeam(data.team);
-        switchTeam(data.team.id);
-
         return data.team;
     });
 }
@@ -161,8 +113,6 @@ export async function editTeamPopup(team: Team) {
 export async function deleteTeam(teamId: ID) {
     return await TeamsAPI.deleteTeam(teamId).then(async () => {
         await CacheService.deleteTeam(teamId);
-        ensureExistingTeam();
-        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -179,8 +129,6 @@ export async function deleteTeamPopup(team: Team) {
 export async function leaveTeam(teamId: ID) {
     return await TeamsAPI.leaveTeam(teamId).then(async () => {
         await CacheService.deleteTeam(teamId);
-        ensureExistingTeam();
-        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -380,9 +328,6 @@ export async function deleteInvitePopup(team: Team, invite: Invite) {
 export async function acceptInvite(token: string) {
     return await TeamsAPI.acceptInvite(token).then(async (data) => {
         CacheService.addTeam(data.team);
-        switchTeam(data.team.id);
-        NavigationService.exportToURL({ removeParams: ['invite'] });
-
         await getMembers(data.team.id);
         return data.team;
     });

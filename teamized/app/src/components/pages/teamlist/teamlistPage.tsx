@@ -1,25 +1,57 @@
 import React from 'react';
 
-import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
 import { waitingAlert } from '../../../utils/alerts';
+import {
+    useNavigationState,
+    useNavigationStateDispatch,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import TeamTable from './teamTable';
 
 interface Props {
     teams: Team[];
-    selectedTeamId: ID;
 }
 
-export default function TeamlistPage({ teams, selectedTeamId }: Props) {
+export default function TeamlistPage({ teams }: Props) {
+    const { selectedTeamId } = useNavigationState();
+    const updateNavigationState = useNavigationStateDispatch();
+
     const joinTeam = () => {
         const token = (
             document.getElementById('invite-token') as HTMLInputElement
         ).value;
 
         waitingAlert('Einladung wird geprüft...');
-        TeamsService.checkInvitePopup(token);
+        TeamsService.checkInvitePopup(token)
+            .then((result) => {
+                if (result.isConfirmed) {
+                    updateNavigationState({
+                        update: {
+                            selectedPage: 'team',
+                            selectedTeamId: result.value!.id,
+                        },
+                        remove: ['invite'],
+                    });
+                }
+            })
+            .catch(() => {
+                updateNavigationState({ remove: ['invite'] });
+            });
+    };
+
+    const createTeam = () => {
+        TeamsService.createTeamPopup().then((result) => {
+            if (result.isConfirmed) {
+                updateNavigationState({
+                    update: {
+                        selectedPage: 'team',
+                        selectedTeamId: result.value!.id,
+                    },
+                });
+            }
+        });
     };
 
     const prefilledInviteToken =
@@ -46,7 +78,7 @@ export default function TeamlistPage({ teams, selectedTeamId }: Props) {
                         <button
                             type="button"
                             className="btn btn-outline-success border-1"
-                            onClick={TeamsService.createTeamPopup}
+                            onClick={createTeam}
                         >
                             Team erstellen
                         </button>

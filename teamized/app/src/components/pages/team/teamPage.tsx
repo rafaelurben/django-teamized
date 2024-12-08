@@ -1,20 +1,24 @@
 import React from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
 import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import {
+    useCurrentTeamData,
+    usePageNavigator,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
 
-interface Props {
-    team: Team;
-}
+export default function TeamPage() {
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
 
-export default function TeamPage({ team }: Props) {
+    const selectPage = usePageNavigator();
+
     const handleTeamEditButtonClick = async () => {
         await TeamsService.editTeamPopup(team);
         NavigationService.render();
@@ -136,15 +140,12 @@ export default function TeamPage({ team }: Props) {
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Mitglieder">
-                    <TeamMemberTable
-                        team={team}
-                        loggedInMember={team.member!}
-                    />
+                    <TeamMemberTable teamData={teamData} />
                 </Dashboard.Tile>
 
                 {team.member!.is_owner && (
                     <Dashboard.Tile title="Einladungen">
-                        <TeamInviteTable team={team} />
+                        <TeamInviteTable teamData={teamData} />
                     </Dashboard.Tile>
                 )}
             </Dashboard.Column>
