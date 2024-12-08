@@ -29,8 +29,10 @@ export default function CalendarInfo({
 
     const deleteCalendar = () => {
         CalendarService.deleteCalendarPopup(team, selectedCalendar!).then(
-            () => {
-                onCalendarDeleted();
+            (result) => {
+                if (result.isConfirmed) {
+                    onCalendarDeleted();
+                }
             }
         );
     };

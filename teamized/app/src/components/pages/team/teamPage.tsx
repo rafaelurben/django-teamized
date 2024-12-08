@@ -21,13 +21,20 @@ export default function TeamPage({ team }: Props) {
     };
 
     const handleTeamDeleteButtonClick = async () => {
-        await TeamsService.deleteTeamPopup(team);
-        NavigationService.selectPage('teamlist');
+        await TeamsService.deleteTeamPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('teamlist');
+                NavigationService.render();
+            }
+        });
     };
 
-    const handleClubCreateButtonClick = async () => {
-        const result = await ClubService.createClubPopup(team);
-        if (result) NavigationService.selectPage('club');
+    const handleClubCreateButtonClick = () => {
+        ClubService.createClubPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('club');
+            }
+        });
     };
 
     return (

@@ -26,7 +26,11 @@ export default function CalendarEventDisplay({ team, event }: Props) {
 
     const deleteEvent = () => {
         CalendarService.deleteEventPopup(team, event.calendar!, event).then(
-            NavigationService.render
+            (result) => {
+                if (result.isConfirmed) {
+                    NavigationService.render();
+                }
+            }
         );
     };
 

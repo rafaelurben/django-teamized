@@ -23,8 +23,10 @@ export default function ListSelector({
     isAdmin,
 }: Props) {
     const createList = () => {
-        ToDo.createToDoListPopup(team).then((todolist) => {
-            onListSelect(todolist.id);
+        ToDo.createToDoListPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                onListSelect(result.value!.id);
+            }
         });
     };
 

@@ -17,8 +17,11 @@ export default function ClubPage({ team }: Props) {
     };
 
     const handleClubDeleteButtonClick = async () => {
-        await ClubService.deleteClubPopup(team);
-        NavigationService.selectPage('team');
+        await ClubService.deleteClubPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('team');
+            }
+        });
     };
 
     const club = team.club!;

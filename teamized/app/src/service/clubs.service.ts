@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 import * as ClubAPI from '../api/club';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { ClubRequestDTO } from '../interfaces/club/club';
+import { Club, ClubRequestDTO } from '../interfaces/club/club';
 import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
 import {
     ClubMember,
@@ -35,42 +35,40 @@ export async function createClub(teamId: ID, club: ClubRequestDTO) {
 }
 
 export async function createClubPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: 'Verein erstellen',
-            html: `
-      <label class="swal2-input-label" for="swal-input-name">Name:</label>
-      <input type="text" id="swal-input-name" class="swal2-input" placeholder="Dein Verein">
-      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Infos über deinen Verein"></textarea>
-      <label class="swal2-input-label" for="swal-input-slug">Slug:</label>
-      <input type="text" id="swal-input-slug" class="swal2-input" placeholder="dein-verein">
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
-                const slug = <string>$('#swal-input-slug').val();
+    return await Swal.fire<Club>({
+        title: 'Verein erstellen',
+        html: `
+          <label class="swal2-input-label" for="swal-input-name">Name:</label>
+          <input type="text" id="swal-input-name" class="swal2-input" placeholder="Dein Verein">
+          <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+          <textarea id="swal-input-description" class="swal2-textarea" placeholder="Infos über deinen Verein"></textarea>
+          <label class="swal2-input-label" for="swal-input-slug">Slug:</label>
+          <input type="text" id="swal-input-slug" class="swal2-input" placeholder="dein-verein">
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
+            const slug = <string>$('#swal-input-slug').val();
 
-                if (!name || !description || !slug) {
-                    Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                    return false;
-                }
-                if (!slug.match(/^[0-9a-z\-_]+$/)) {
-                    Swal.showValidationMessage(
-                        'Der Slug darf nur aus Kleinbuchstaben, Zahlen und Bindestrichen bestehen!'
-                    );
-                    return false;
-                }
+            if (!name || !description || !slug) {
+                Swal.showValidationMessage('Bitte fülle alle Felder aus!');
+                return false;
+            }
+            if (!slug.match(/^[0-9a-z\-_]+$/)) {
+                Swal.showValidationMessage(
+                    'Der Slug darf nur aus Kleinbuchstaben, Zahlen und Bindestrichen bestehen!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createClub(team.id, { name, slug, description });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createClub(team.id, { name, slug, description });
+        },
+    });
 }
 
 // Club edit
@@ -570,63 +568,57 @@ export async function updateClubMemberGroupsPopup(
         .filter((group) => group.memberids.includes(member.id))
         .map((group) => group.id);
 
-    return (
-        await Swal.fire({
-            title: 'Gruppenzuordnung',
-            html: `
-      <p>Vereinsmitglied: ${member.first_name} ${member.last_name}</p><hr />
-      <label class="swal2-input-label" for="swal-input-groups">Gruppen:</label>
-      <select id="swal-input-groups" class="swal2-input h-auto py-3" multiple size="${groups.length}"></select>
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            didOpen: () => {
-                const $groupsInput = $('#swal-input-groups');
+    return await Swal.fire({
+        title: 'Gruppenzuordnung',
+        html: `
+          <p>Vereinsmitglied: ${member.first_name} ${member.last_name}</p><hr />
+          <label class="swal2-input-label" for="swal-input-groups">Gruppen:</label>
+          <select id="swal-input-groups" class="swal2-input h-auto py-3" multiple size="${groups.length}"></select>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        didOpen: () => {
+            const $groupsInput = $('#swal-input-groups');
 
-                $groupsInput.html(
-                    groups
-                        .map(
-                            (group) =>
-                                `<option value="${group.id}">${group.name}</option>`
-                        )
-                        .join('')
-                );
-                $groupsInput.val(currentGroupIds);
-            },
-            preConfirm: async () => {
-                const selectedGroupIds = <ID[]>$('#swal-input-groups').val();
+            $groupsInput.html(
+                groups
+                    .map(
+                        (group) =>
+                            `<option value="${group.id}">${group.name}</option>`
+                    )
+                    .join('')
+            );
+            $groupsInput.val(currentGroupIds);
+        },
+        preConfirm: async () => {
+            const selectedGroupIds = <ID[]>$('#swal-input-groups').val();
 
-                Swal.showLoading();
-                const requests: Promise<void>[] = [];
-                for (const groupId of selectedGroupIds) {
-                    if (!currentGroupIds.includes(groupId)) {
-                        requests.push(
-                            addClubMemberToGroup(team.id, member.id, groupId)
-                        );
-                    }
+            Swal.showLoading();
+            const requests: Promise<void>[] = [];
+            for (const groupId of selectedGroupIds) {
+                if (!currentGroupIds.includes(groupId)) {
+                    requests.push(
+                        addClubMemberToGroup(team.id, member.id, groupId)
+                    );
                 }
-                for (const groupId of currentGroupIds) {
-                    if (!selectedGroupIds.includes(groupId)) {
-                        requests.push(
-                            removeClubMemberFromGroup(
-                                team.id,
-                                member.id,
-                                groupId
-                            )
-                        );
-                    }
+            }
+            for (const groupId of currentGroupIds) {
+                if (!selectedGroupIds.includes(groupId)) {
+                    requests.push(
+                        removeClubMemberFromGroup(team.id, member.id, groupId)
+                    );
                 }
-                await Promise.all(requests);
-                successAlert(
-                    'Die Gruppenzuordnung wurde aktualisiert.',
-                    'Gruppenzuordnung aktualisiert'
-                );
-                return true;
-            },
-        })
-    ).value;
+            }
+            await Promise.all(requests);
+            successAlert(
+                'Die Gruppenzuordnung wurde aktualisiert.',
+                'Gruppenzuordnung aktualisiert'
+            );
+            return true;
+        },
+    });
 }
 
 // Group portfolios
