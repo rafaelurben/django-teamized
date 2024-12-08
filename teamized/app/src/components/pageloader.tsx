@@ -9,7 +9,7 @@ import * as TeamsService from '../service/teams.service';
 import CalendarsPage from './pages/calendars/calendarsPage';
 import ClubPage from './pages/club/clubPage';
 import HomePage from './pages/home/homePage';
-import Page_Team from './pages/team/teamPage';
+import TeamPage from './pages/team/teamPage';
 import TeamlistPage from './pages/teamlist/teamlistPage';
 import TodoPage from './pages/todo/todoPage';
 import WorkingtimePage from './pages/workingtime/workingtimePage';
@@ -75,7 +75,7 @@ export function PageLoader({ page }: Props) {
                 />
             );
         case 'team':
-            return <Page_Team team={teamData.team} />;
+            return <TeamPage team={teamData.team} />;
         case 'workingtime':
             return <WorkingtimePage team={teamData.team} />;
         case 'calendars':
@@ -84,5 +84,19 @@ export function PageLoader({ page }: Props) {
             return <TodoPage team={teamData.team} />;
         case 'club':
             return <ClubPage team={teamData.team} />;
+        default:
+            return (
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
+                    <div className="text-danger mb-4" role="status">
+                        <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
+                    </div>
+                    <h3>404 Nicht gefunden</h3>
+                    <p>
+                        Diese Seite wurde leider nicht gefunden. Vielleicht
+                        findest du die gesuchte Seite ja links in der
+                        Navigation?
+                    </p>
+                </div>
+            );
     }
 }
