@@ -4,7 +4,10 @@
 
 import React, { useEffect } from 'react';
 
+import * as SettingsService from '../service/settings.service';
 import * as TeamsService from '../service/teams.service';
+import * as WorkingtimeService from '../service/workingtime.service';
+import { useAppdata, useAppdataRefresh } from '../utils/appdataProvider';
 import {
     useNavigationState,
     useNavigationStateDispatch,
@@ -17,8 +20,26 @@ export default function App() {
     const { selectedTeamId } = useNavigationState();
     const updateNavigationState = useNavigationStateDispatch();
 
+    const appdata = useAppdata();
+    const refreshData = useAppdataRefresh();
+
+    // On initial render
     useEffect(() => {
-        // Check URL invite on page load
+        console.debug('[Teamized] Initial render of App component.');
+
+        // Load data
+        Promise.all([
+            SettingsService.getSettings().then(refreshData),
+            SettingsService.getProfile().then(refreshData),
+            TeamsService.getTeams().then(refreshData),
+        ]).then(() => {
+            window.appdata.initialLoadComplete = true;
+            window.appdata.loadInProgress = false;
+            refreshData();
+        });
+        WorkingtimeService.getTrackingSession().then(refreshData);
+
+        // Check URL for invite
         TeamsService.checkURLInvite()
             .then((result) => {
                 if (result && result.isConfirmed) {
@@ -26,39 +47,38 @@ export default function App() {
                         update: { pageName: 'team', teamId: result.value!.id },
                         remove: ['invite'],
                     });
+                    refreshData();
                 }
             })
             .catch(() => {
                 updateNavigationState({ remove: ['invite'] });
             });
-    }, [updateNavigationState]);
+    }, [updateNavigationState, refreshData]);
 
+    // On every render
     useEffect(() => {
-        ensureValidTeamId();
-    });
-
-    const ensureValidTeamId = () => {
+        // Ensure valid team id
         if (
-            !(selectedTeamId in window.appdata.teamCache) &&
-            window.appdata.initialLoadComplete &&
-            window.appdata.defaultTeamId
+            !(selectedTeamId in appdata.teamCache) &&
+            appdata.initialLoadComplete &&
+            appdata.defaultTeamId
         ) {
             updateNavigationState({
-                update: { selectedTeamId: window.appdata.defaultTeamId },
+                update: { selectedTeamId: appdata.defaultTeamId },
             });
         }
-    };
+    });
 
     return (
         <>
             <AppMenubar
                 teams={TeamsService.getTeamsList()}
-                user={window.appdata.user}
+                user={appdata.user}
             />
 
             <div id="app-root" className="d-flex">
                 <div id="app-sidebar" data-bs-theme="dark">
-                    <AppSidebar user={window.appdata.user} />
+                    <AppSidebar user={appdata.user} />
                 </div>
                 <div id="app-maincontent" className="flex-grow-1 overflow-auto">
                     <PageLoader />

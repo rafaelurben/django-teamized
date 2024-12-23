@@ -5,10 +5,11 @@
 
 import React from 'react';
 
-import { refresh } from '../app';
 import { Team } from '../interfaces/teams/team';
 import { User } from '../interfaces/user';
 import * as NavigationService from '../service/navigation.service';
+import { softRefresh } from '../service/navigation.service';
+import { useAppdata } from '../utils/appdataProvider';
 import * as GeneralUtils from '../utils/general';
 import {
     useNavigationState,
@@ -32,6 +33,7 @@ export default function AppMenubar({ teams, user }: Props) {
     };
 
     const globals = window.teamized_globals;
+    const appdata = useAppdata();
 
     return (
         <nav
@@ -122,10 +124,16 @@ export default function AppMenubar({ teams, user }: Props) {
                             <a
                                 className="nav-link ms-1 me-1"
                                 href="#"
-                                onClick={() => refresh()}
+                                onClick={() => softRefresh()}
                                 title="Neu laden (F5)"
                             >
-                                <i className="fas fa-fw fa-rotate"></i>
+                                <i
+                                    className={
+                                        appdata.loadInProgress
+                                            ? 'fas fa-fw fa-rotate fa-spin'
+                                            : 'fas fa-fw fa-rotate'
+                                    }
+                                ></i>
                                 <span className="d-lg-none ms-2">
                                     Neu laden
                                 </span>
@@ -172,18 +180,6 @@ export default function AppMenubar({ teams, user }: Props) {
                                     </a>
                                 </li>
                                 <li className="dropdown-divider"></li>
-                                <li>
-                                    <a
-                                        className="dropdown-item"
-                                        href="#"
-                                        onClick={() => {
-                                            NavigationService.reRender();
-                                            alert('Done!');
-                                        }}
-                                    >
-                                        NavigationService.reRender()
-                                    </a>
-                                </li>
                                 <li>
                                     <a
                                         className="dropdown-item"

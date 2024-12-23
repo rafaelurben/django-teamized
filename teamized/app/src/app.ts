@@ -58,95 +58,14 @@ window.appdata = {
     loadInProgress: true,
 };
 
-function showLoadingIndicator() {
-    window.appdata.loadInProgress = true;
-    $('#refreshbutton>a>i').addClass('fa-spin');
-}
-
-function hideLoadingIndicator() {
-    window.appdata.loadInProgress = false;
-    $('#refreshbutton>a>i').removeClass('fa-spin');
-}
-
 async function initialize() {
     if (new URL(window.location.href).searchParams.has('debug')) {
         GeneralUtils.toggleDebug(true);
     }
 
-    showLoadingIndicator();
-
     NavigationService.showSidebarOnDesktop();
     NavigationService.render();
-
-    await Promise.all([
-        SettingsService.getSettings(),
-        SettingsService.getProfile().then(NavigationService.render),
-        TeamsService.getTeams(),
-    ]);
-
-    NavigationService.render();
-
-    hideLoadingIndicator();
-    window.appdata.initialLoadComplete = true;
-
-    await WorkingtimeService.getTrackingSession();
-    NavigationService.render();
 }
-
-async function reinitialize() {
-    showLoadingIndicator();
-
-    window.appdata = {
-        ...window.appdata,
-        defaultTeamId: '',
-        teamCache: {},
-    };
-    NavigationService.render();
-
-    await Promise.all([
-        SettingsService.getSettings(),
-        SettingsService.getProfile(),
-        TeamsService.getTeams(),
-    ]);
-
-    NavigationService.render();
-
-    hideLoadingIndicator();
-
-    await WorkingtimeService.getTrackingSession();
-    NavigationService.render();
-}
-
-// Reload
-
-export async function refresh() {
-    if (!window.appdata.loadInProgress) {
-        await reinitialize();
-    }
-}
-
-function onkeypress(e: JQuery.Event) {
-    if (e.key === 'F5') {
-        // F5
-        if (e.shiftKey) {
-            // Shift+F5 normal reload
-            e.preventDefault();
-            window.location.reload();
-        } else if (!e.ctrlKey && !e.altKey) {
-            // F5 soft reload
-            e.preventDefault();
-            refresh().then();
-        }
-    } else if (e.key === 'F6' && e.shiftKey) {
-        // Shift+F6 toggle debug mode
-        e.preventDefault();
-        GeneralUtils.toggleDebug();
-    }
-}
-
-// Add event listeners
 
 // Listen for DOM load -> initialize
 $(initialize);
-// Listen for key presses
-$(document).on('keydown', onkeypress);
