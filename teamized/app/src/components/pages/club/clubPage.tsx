@@ -29,8 +29,6 @@ export default function ClubPage() {
     };
 
     const club = team.club!;
-    const isAdmin = team.member!.is_admin;
-    const isOwner = team.member!.is_owner;
 
     return (
         <Dashboard.Page
@@ -76,7 +74,7 @@ export default function ClubPage() {
                             </tr>
                         </tbody>
                         <Dashboard.TableButtonFooter
-                            show={isOwner}
+                            show={team.member!.is_owner}
                             noTopBorder={true}
                         >
                             <button
@@ -96,11 +94,7 @@ export default function ClubPage() {
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Vereinsmitglieder">
-                    <ClubMemberTileContent
-                        team={team}
-                        isAdmin={isAdmin}
-                        isOwner={isOwner}
-                    />
+                    <ClubMemberTileContent teamData={teamData} />
                 </Dashboard.Tile>
             </Dashboard.Column>
         </Dashboard.Page>

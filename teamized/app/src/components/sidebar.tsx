@@ -6,8 +6,8 @@
 import React from 'react';
 
 import { User } from '../interfaces/user';
-import * as CacheService from '../service/cache.service';
 import {
+    useCurrentTeamData,
     useNavigationState,
     usePageNavigatorAsEventHandler,
     usePageNavigatorURL,
@@ -18,8 +18,8 @@ interface Props {
 }
 
 export default function AppSidebar({ user }: Props) {
-    const { selectedPage, selectedTeamId } = useNavigationState();
-    const teamData = CacheService.getTeamData(selectedTeamId);
+    const { selectedPage } = useNavigationState();
+    const teamData = useCurrentTeamData();
 
     const selectPage = usePageNavigatorAsEventHandler();
     const getPageURL = usePageNavigatorURL();

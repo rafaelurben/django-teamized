@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
-import * as CacheService from '../../../service/cache.service';
+import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as ClubService from '../../../service/clubs.service';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubGroupsTable from './clubGroupsTable';
 import ClubMembersTable from './clubMembersTable';
 
 interface Props {
-    team: Team;
-    isAdmin: boolean;
-    isOwner: boolean;
+    teamData: TeamCache;
 }
 
-export default function ClubMemberTileContent({
-    team,
-    isAdmin,
-    isOwner,
-}: Props) {
+export default function ClubMemberTileContent({ teamData }: Props) {
     const [selectedTab, setSelectedTab] = useState('all');
 
-    const teamData = CacheService.getTeamData(team.id)!;
+    const team = teamData.team;
+    const isOwner = teamData.team.member!.is_owner;
+    const isAdmin = teamData.team.member!.is_admin;
 
     const clubMembers = Object.values(teamData.club_members);
     const clubGroups = Object.values(teamData.club_groups);
