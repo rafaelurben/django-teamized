@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
 import { TeamCache } from '../../../interfaces/cache/teamCache';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamInviteTableRow from './teamInviteTableRow';
@@ -12,18 +12,23 @@ interface Props {
 }
 
 export default function TeamInviteTable({ teamData }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const team = teamData?.team;
 
     const invites = Object.values(teamData.invites);
     const loading = teamData._state.invites._initial;
 
     useEffect(() => {
-        if (loading) TeamsService.getInvites(team.id); // will re-render page
+        if (loading) {
+            TeamsService.getInvites(team.id).then(refreshData);
+        }
     });
 
-    const handleInviteCreateButtonClick = async () => {
-        await TeamsService.createInvitePopup(team);
-        NavigationService.render();
+    const handleInviteCreateButtonClick = () => {
+        TeamsService.createInvitePopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

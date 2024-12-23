@@ -1,8 +1,8 @@
 import React from 'react';
 
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigator,
@@ -14,21 +14,24 @@ import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
 
 export default function TeamPage() {
+    const refreshData = useAppdataRefresh();
+
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
     const selectPage = usePageNavigator();
 
-    const handleTeamEditButtonClick = async () => {
-        await TeamsService.editTeamPopup(team);
-        NavigationService.render();
+    const handleTeamEditButtonClick = () => {
+        TeamsService.editTeamPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleTeamDeleteButtonClick = async () => {
         await TeamsService.deleteTeamPopup(team).then((result) => {
             if (result.isConfirmed) {
                 selectPage('teamlist');
-                NavigationService.render();
+                refreshData();
             }
         });
     };
@@ -37,6 +40,7 @@ export default function TeamPage() {
         ClubService.createClubPopup(team).then((result) => {
             if (result.isConfirmed) {
                 selectPage('club');
+                refreshData();
             }
         });
     };

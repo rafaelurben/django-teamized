@@ -90,6 +90,7 @@ async function initialize() {
     window.appdata.initialLoadComplete = true;
 
     await WorkingtimeService.getTrackingSession();
+    NavigationService.render();
 }
 
 async function reinitialize() {
@@ -113,6 +114,7 @@ async function reinitialize() {
     hideLoadingIndicator();
 
     await WorkingtimeService.getTrackingSession();
+    NavigationService.render();
 }
 
 // Reload

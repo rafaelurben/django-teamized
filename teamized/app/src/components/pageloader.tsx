@@ -5,6 +5,7 @@
 import React from 'react';
 
 import * as TeamsService from '../service/teams.service';
+import { useAppdata } from '../utils/appdataProvider';
 import {
     useCurrentTeamData,
     useNavigationState,
@@ -28,6 +29,8 @@ export const PAGE_NAMES = {
 };
 
 export function PageLoader() {
+    const appdata = useAppdata();
+
     const { selectedPage } = useNavigationState();
     const teamData = useCurrentTeamData();
 
@@ -62,12 +65,7 @@ export function PageLoader() {
 
     switch (selectedPage) {
         case 'home':
-            return (
-                <HomePage
-                    user={window.appdata.user}
-                    settings={window.appdata.settings}
-                />
-            );
+            return <HomePage user={appdata.user} settings={appdata.settings} />;
         case 'teamlist':
             return <TeamlistPage teams={TeamsService.getTeamsList()} />;
         case 'team':

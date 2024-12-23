@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Member } from '../../../interfaces/teams/member';
 import { Team } from '../../../interfaces/teams/team';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { usePageNavigator } from '../../../utils/navigation/navigationProvider';
 
 interface Props {
@@ -18,28 +18,33 @@ export default function TeamMemberTableRow({
     loggedInMember,
 }: Props) {
     const selectPage = usePageNavigator();
+    const refreshData = useAppdataRefresh();
 
-    const handlePromoteButtonClick = async () => {
-        await TeamsService.promoteMemberPopup(team, member);
-        NavigationService.render();
+    const handlePromoteButtonClick = () => {
+        TeamsService.promoteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleDemoteButtonClick = async () => {
-        await TeamsService.demoteMemberPopup(team, member);
-        NavigationService.render();
+    const handleDemoteButtonClick = () => {
+        TeamsService.demoteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleLeaveButtonClick = async () => {
-        await TeamsService.leaveTeamPopup(team).then((result) => {
+    const handleLeaveButtonClick = () => {
+        TeamsService.leaveTeamPopup(team).then((result) => {
             if (result.isConfirmed) {
                 selectPage('teamlist');
+                refreshData();
             }
         });
     };
 
-    const handleRemoveButtonClick = async () => {
-        await TeamsService.deleteMemberPopup(team, member);
-        NavigationService.render();
+    const handleRemoveButtonClick = () => {
+        TeamsService.deleteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

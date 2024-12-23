@@ -1,9 +1,9 @@
-import React, { useEffect, useId, useReducer, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as NavigationService from '../../../service/navigation.service';
 import * as WorkingtimeService from '../../../service/workingtime.service';
 import { errorAlert } from '../../../utils/alerts';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { localInputFormat, roundDays } from '../../../utils/datetime';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
@@ -14,10 +14,10 @@ import WorksessionTrackingTileContent from './worksessionTrackingTileContent';
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export default function WorkingtimePage() {
+    const refreshData = useAppdataRefresh();
+
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
-
-    const [, forceComponentUpdate] = useReducer((x) => x + 1, 0);
 
     const [statsRangeStart, setStatsRangeStart] = useState(
         roundDays(new Date(new Date().getTime() - 7 * ONE_DAY_MS))
@@ -52,9 +52,10 @@ export default function WorkingtimePage() {
         setStatsRangeEnd(end);
     };
 
-    const createSession = async () => {
-        await WorkingtimeService.createWorkSessionPopup(team);
-        NavigationService.render();
+    const createSession = () => {
+        WorkingtimeService.createWorkSessionPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const allMyWorksessionsInCurrentTeam = Object.values(
@@ -63,7 +64,11 @@ export default function WorkingtimePage() {
     const loading = teamData._state.me_worksessions._initial;
 
     useEffect(() => {
-        if (loading) WorkingtimeService.getMyWorkSessionsInTeam(team.id); // will re-render page
+        if (loading) {
+            WorkingtimeService.getMyWorkSessionsInTeam(team.id).then(
+                refreshData
+            );
+        }
     });
 
     const sessions: Worksession[] = WorkingtimeService.filterByDateRange(
@@ -91,7 +96,6 @@ export default function WorkingtimePage() {
                         <Dashboard.Tile title="Sitzung aufzeichnen" grow>
                             <WorksessionTrackingTileContent
                                 team={team}
-                                onFinishedSessionAdded={forceComponentUpdate}
                             ></WorksessionTrackingTileContent>
                         </Dashboard.Tile>
                     </Dashboard.Column>

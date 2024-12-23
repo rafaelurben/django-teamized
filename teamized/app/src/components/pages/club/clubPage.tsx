@@ -1,7 +1,7 @@
 import React from 'react';
 
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigator,
@@ -10,20 +10,24 @@ import Dashboard from '../../common/dashboard';
 import ClubMemberTileContent from './clubMemberTileContent';
 
 export default function ClubPage() {
+    const refreshData = useAppdataRefresh();
+
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
     const selectPage = usePageNavigator();
 
-    const handleClubEditButtonClick = async () => {
-        await ClubService.editClubPopup(team);
-        NavigationService.render();
+    const handleClubEditButtonClick = () => {
+        ClubService.editClubPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleClubDeleteButtonClick = async () => {
         await ClubService.deleteClubPopup(team).then((result) => {
             if (result.isConfirmed) {
                 selectPage('team');
+                refreshData();
             }
         });
     };

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamMembersTableRow from './teamMemberTableRow';
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export default function TeamMemberTable({ teamData }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const team = teamData.team;
     const loggedInMember = team.member!;
 
@@ -18,7 +21,9 @@ export default function TeamMemberTable({ teamData }: Props) {
     const loading = teamData._state.members._initial;
 
     useEffect(() => {
-        if (loading) TeamsService.getMembers(team.id); // will re-render page
+        if (loading) {
+            TeamsService.getMembers(team.id).then(refreshData);
+        }
     });
 
     return (

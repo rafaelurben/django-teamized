@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as NavigationService from '../../../service/navigation.service';
 import * as ToDo from '../../../service/todo.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
@@ -21,15 +21,20 @@ export default function ListInfo({
     onListDeleted,
     isAdmin,
 }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const editList = () => {
-        ToDo.editToDoListPopup(team, selectedList!).then(
-            NavigationService.render
-        );
+        ToDo.editToDoListPopup(team, selectedList!).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const deleteList = () => {
-        ToDo.deleteToDoListPopup(team, selectedList!).then(() => {
-            onListDeleted();
+        ToDo.deleteToDoListPopup(team, selectedList!).then((result) => {
+            if (result.isConfirmed) {
+                onListDeleted();
+                refreshData();
+            }
         });
     };
 

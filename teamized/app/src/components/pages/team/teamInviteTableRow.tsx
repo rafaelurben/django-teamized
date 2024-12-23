@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Invite } from '../../../interfaces/teams/invite';
 import { Team } from '../../../interfaces/teams/team';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
 import { successAlert } from '../../../utils/alerts';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -12,17 +12,21 @@ interface Props {
 }
 
 export default function TeamInviteTableRow({ team, invite }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const inviteURL =
         window.location.href.split('?')[0] + '?invite=' + invite.token;
 
-    const handleDeleteButtonClick = async () => {
-        await TeamsService.deleteInvitePopup(team, invite);
-        NavigationService.render();
+    const handleDeleteButtonClick = () => {
+        TeamsService.deleteInvitePopup(team, invite).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleEditButtonClick = async () => {
-        await TeamsService.editInvitePopup(team, invite);
-        NavigationService.render();
+    const handleEditButtonClick = () => {
+        TeamsService.editInvitePopup(team, invite).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const copyToken = () => {

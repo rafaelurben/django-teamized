@@ -3,7 +3,7 @@ import React from 'react';
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getAge, getDateString } from '../../../utils/datetime';
 
 interface Props {
@@ -19,23 +19,30 @@ export default function ClubMembersTableRow({
     isAdmin,
     isOwner,
 }: Props) {
-    const handleRemoveButtonClick = async () => {
-        await ClubService.deleteClubMemberPopup(team, clubMember);
-        NavigationService.render();
+    const refreshData = useAppdataRefresh();
+
+    const handleRemoveButtonClick = () => {
+        ClubService.deleteClubMemberPopup(team, clubMember).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleEditButtonClick = async () => {
-        await ClubService.editClubMemberPopup(team, clubMember);
-        NavigationService.render();
+    const handleEditButtonClick = () => {
+        ClubService.editClubMemberPopup(team, clubMember).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handlePortfolioEditButtonClick = async () => {
         await ClubService.editClubMemberPortfolioPopup(team, clubMember);
     };
 
-    const handleGroupEditButtonClick = async () => {
-        await ClubService.updateClubMemberGroupsPopup(team, clubMember);
-        NavigationService.render();
+    const handleGroupEditButtonClick = () => {
+        ClubService.updateClubMemberGroupsPopup(team, clubMember).then(
+            (result) => {
+                if (result.isConfirmed) refreshData();
+            }
+        );
     };
 
     const handleCreateMagicLinkButtonClick = async () => {

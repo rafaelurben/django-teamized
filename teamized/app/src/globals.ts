@@ -1,7 +1,4 @@
-import { TeamsCache } from './interfaces/cache/teamsCache';
-import { Settings } from './interfaces/settings';
-import { User } from './interfaces/user';
-import { Worksession } from './interfaces/workingtime/worksession';
+import { Appdata } from './interfaces/appdata';
 
 declare global {
     // noinspection JSUnusedGlobalSymbols
@@ -14,15 +11,6 @@ declare global {
             account_url: string;
             home_url: string;
         };
-        appdata: {
-            current_worksession?: Worksession | null;
-            debug_prompt_accepted: boolean;
-            defaultTeamId: string;
-            settings: Settings;
-            teamCache: TeamsCache;
-            user: User;
-            initialLoadComplete: boolean;
-            loadInProgress: boolean;
-        };
+        appdata: Appdata;
     }
 }

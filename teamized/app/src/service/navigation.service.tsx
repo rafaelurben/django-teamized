@@ -6,6 +6,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from '../components/App';
+import { AppdataProvider } from '../utils/appdataProvider';
 import { NavigationProvider } from '../utils/navigation/navigationProvider';
 
 const rootElem = document.getElementById('react-root')!;
@@ -29,9 +30,11 @@ export function showSidebarOnDesktop() {
 
 export function render() {
     root.render(
-        <NavigationProvider>
-            <App />
-        </NavigationProvider>
+        <AppdataProvider>
+            <NavigationProvider>
+                <App />
+            </NavigationProvider>
+        </AppdataProvider>
     );
 }
 

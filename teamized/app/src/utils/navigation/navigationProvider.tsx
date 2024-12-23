@@ -1,9 +1,8 @@
-import React from 'react';
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 import { ID } from '../../interfaces/common';
-import { getTeamData } from '../../service/cache.service';
 import * as NavigationService from '../../service/navigation.service';
+import { useAppdata } from '../appdataProvider';
 import { NavigationState, NavigationStateChange } from './navigationState';
 import {
     exportNavigationStateToURL,
@@ -146,5 +145,6 @@ export function useTeamSwitcher() {
 
 export function useCurrentTeamData() {
     const { selectedTeamId } = useNavigationState();
-    return getTeamData(selectedTeamId);
+    const appdata = useAppdata();
+    return appdata.teamCache[selectedTeamId] || null;
 }

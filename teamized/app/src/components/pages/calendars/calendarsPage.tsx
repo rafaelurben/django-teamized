@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
 import * as CalendarService from '../../../service/calendars.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import CalendarEventDisplay from './calendarEventDisplay';
@@ -11,6 +12,8 @@ import CalendarOverview from './calendarOverview';
 import CalendarSelector from './calendarSelector';
 
 export default function CalendarsPage() {
+    const refreshData = useAppdataRefresh();
+
     const [selectedDate, setSelectedDate] = useState(
         CalendarService.roundDays(new Date())
     );
@@ -34,7 +37,9 @@ export default function CalendarsPage() {
         ensureValidCalendarId();
         ensureValidEventId();
 
-        if (loading) CalendarService.getCalendars(team.id); // will re-render page
+        if (loading) {
+            CalendarService.getCalendars(team.id).then(refreshData);
+        }
     });
 
     const handleDateSelect = (date: Date) => {

@@ -2,9 +2,9 @@ import React, { useId, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as NavigationService from '../../../service/navigation.service';
 import * as ToDo from '../../../service/todo.service';
 import { errorAlert } from '../../../utils/alerts';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ListViewItem from './listViewItem';
@@ -16,6 +16,8 @@ interface Props {
 }
 
 export default function ListView({ team, selectedList, isAdmin }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const [isCreating, setIsCreating] = useState(false);
     const [showDone, setShowDone] = useState(false);
     const showDefaultToggleId = useId();
@@ -38,9 +40,9 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
             setIsCreating(true);
             ToDo.createToDoListItem(team.id, selectedList!.id, { name }).then(
                 () => {
-                    NavigationService.render();
                     nameInput.value = '';
                     setIsCreating(false);
+                    refreshData();
                 }
             );
         }

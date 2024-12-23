@@ -3,7 +3,7 @@ import React from 'react';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 
 interface Props {
@@ -12,24 +12,24 @@ interface Props {
 }
 
 export default function CalendarEventDisplay({ team, event }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const editEvent = () => {
         CalendarService.editEventPopup(team, event.calendar!, event).then(
-            NavigationService.render
+            refreshData
         );
     };
 
     const cloneEvent = () => {
         CalendarService.editEventPopup(team, event.calendar!, event, true).then(
-            NavigationService.render
+            refreshData
         );
     };
 
     const deleteEvent = () => {
         CalendarService.deleteEventPopup(team, event.calendar!, event).then(
             (result) => {
-                if (result.isConfirmed) {
-                    NavigationService.render();
-                }
+                if (result.isConfirmed) refreshData();
             }
         );
     };

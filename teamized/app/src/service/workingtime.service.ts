@@ -26,7 +26,6 @@ import {
     roundDays,
 } from '../utils/datetime';
 import * as CacheService from './cache.service';
-import * as NavigationService from './navigation.service';
 
 export async function getMyWorkSessionsInTeam(teamId: ID) {
     return await CacheService.refreshTeamCacheCategory<Worksession>(
@@ -203,7 +202,6 @@ export async function getTrackingSession() {
             return null;
         } else {
             window.appdata.current_worksession = data.session;
-            NavigationService.render();
             return data.session;
         }
     });

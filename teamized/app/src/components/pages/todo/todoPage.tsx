@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ID } from '../../../interfaces/common';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as Todo from '../../../service/todo.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import ListInfo from './listInfo';
@@ -10,6 +11,8 @@ import ListSelector from './listSelector';
 import ListView from './listView';
 
 export default function TodoPage() {
+    const refreshData = useAppdataRefresh();
+
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
@@ -23,7 +26,9 @@ export default function TodoPage() {
     useEffect(() => {
         ensureValidListId();
 
-        if (loading) Todo.getToDoLists(team.id); // will re-render page
+        if (loading) {
+            Todo.getToDoLists(team.id).then(refreshData);
+        }
     });
 
     const ensureValidListId = () => {

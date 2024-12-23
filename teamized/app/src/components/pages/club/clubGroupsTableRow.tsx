@@ -3,7 +3,7 @@ import React from 'react';
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -12,14 +12,18 @@ interface Props {
 }
 
 export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
-    const handleRemoveButtonClick = async () => {
-        await ClubService.deleteClubGroupPopup(team, group);
-        NavigationService.render();
+    const refreshData = useAppdataRefresh();
+
+    const handleRemoveButtonClick = () => {
+        ClubService.deleteClubGroupPopup(team, group).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleEditButtonClick = async () => {
-        await ClubService.editClubGroupPopup(team, group);
-        NavigationService.render();
+    const handleEditButtonClick = () => {
+        ClubService.editClubGroupPopup(team, group).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleSharePortfolioButtonClick = async () => {

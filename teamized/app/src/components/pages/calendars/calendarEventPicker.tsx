@@ -5,7 +5,7 @@ import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import CalendarEventPickerRow from './calendarEventPickerRow';
 
@@ -30,13 +30,17 @@ export default function CalendarEventPicker({
     selectedDate,
     isAdmin,
 }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const createEvent = () => {
         CalendarService.createEventPopup(
             team,
             selectedDate,
             calendars,
             selectedCalendar.id
-        ).then(NavigationService.render);
+        ).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const sortedEvents = events.sort((a, b) => {
