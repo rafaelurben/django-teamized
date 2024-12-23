@@ -67,12 +67,14 @@ let root = createRoot(rootElem);
 
 export function render() {
     root.render(
-        <AppdataProvider>
-            <NavigationProvider>
-                <KeyboardListener />
-                <App />
-            </NavigationProvider>
-        </AppdataProvider>
+        <React.StrictMode>
+            <AppdataProvider>
+                <NavigationProvider>
+                    <KeyboardListener />
+                    <App />
+                </NavigationProvider>
+            </AppdataProvider>
+        </React.StrictMode>
     );
 }
 
