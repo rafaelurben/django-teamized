@@ -19,11 +19,11 @@
   "repository": "https://github.com/rafaelurben/django-teamized",
   "funding": "https://github.com/sponsors/rafaelurben/",
   "devDependencies": {
-    "@eslint/js": "~9.16.0",
+    "@eslint/js": "~9.17.0",
     "@types/bootstrap": "~5.2.10",
     "@types/jquery": "~3.5.32",
     "@types/node": "^22.9.0",
-    "eslint": "~9.16.0",
+    "eslint": "~9.17.0",
     "eslint-config-prettier": "~9.1.0",
     "eslint-plugin-prettier": "~5.2.1",
     "eslint-plugin-react": "~7.37.2",
@@ -31,21 +31,21 @@
     "eslint-plugin-simple-import-sort": "~12.1.1",
     "globals": "~15.13.0",
     "prettier": "~3.4.0",
-    "sweetalert2": "11.14.5",
+    "sweetalert2": "11.15.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.7.0",
-    "typescript-eslint": "~8.17.0",
+    "typescript-eslint": "~8.18.0",
     "webpack": "~5.97.0",
-    "webpack-cli": "~5.1.4"
+    "webpack-cli": "~6.0.0"
   },
   "dependencies": {
-    "@types/react": "18.3.14",
-    "@types/react-dom": "18.3.2",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
     "bootstrap": "5.3.3",
     "jquery": "3.7.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "recharts": "2.14.1"
+    "recharts": "2.15.0"
   }
 }
