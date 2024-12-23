@@ -12,7 +12,10 @@ import {
     ClubMember,
     ClubMemberRequestDTO,
 } from '../interfaces/club/clubMember';
-import { ClubMemberPortfolioRequestDTO } from '../interfaces/club/clubMemberPortfolio';
+import {
+    ClubMemberPortfolio,
+    ClubMemberPortfolioRequestDTO,
+} from '../interfaces/club/clubMemberPortfolio';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
 import {
@@ -81,34 +84,32 @@ export async function editClub(teamId: ID, club: Partial<ClubRequestDTO>) {
 }
 
 export async function editClubPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: 'Verein bearbeiten',
-            html: `
+    return await Swal.fire<Club>({
+        title: 'Verein bearbeiten',
+        html: `
       <p>Verein: ${team.club!.name}</p><hr />
       <label class="swal2-input-label" for="swal-input-name">Name:</label>
       <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.club!.name}" value="${team.club!.name}">
       <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
       <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.club!.description}">${team.club!.description}</textarea>
     `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
 
-                if (!name || !description) {
-                    Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                    return false;
-                }
+            if (!name || !description) {
+                Swal.showValidationMessage('Bitte fülle alle Felder aus!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editClub(team.id, { name, description });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editClub(team.id, { name, description });
+        },
+    });
 }
 
 // Club delete
@@ -154,10 +155,9 @@ export async function createClubMember(
 }
 
 export async function createClubMemberPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: 'Vereinsmitglied hinzufügen',
-            html: `
+    return await Swal.fire<ClubMember>({
+        title: 'Vereinsmitglied hinzufügen',
+        html: `
       <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
       <input type="text" id="swal-input-first_name" class="swal2-input" placeholder="Max">
       <label class="swal2-input-label" for="swal-input-last_name">Nachname:</label>
@@ -167,33 +167,32 @@ export async function createClubMemberPopup(team: Team) {
       <label class="swal2-input-label" for="swal-input-birth_date">Geburtsdatum:</label>
       <input type="date" id="swal-input-birth_date" class="swal2-input">
     `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Hinzufügen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const first_name = <string>$('#swal-input-first_name').val();
-                const last_name = <string>$('#swal-input-last_name').val();
-                const email = <string>$('#swal-input-email').val();
-                const birth_date = <string>$('#swal-input-birth_date').val();
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Hinzufügen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const first_name = <string>$('#swal-input-first_name').val();
+            const last_name = <string>$('#swal-input-last_name').val();
+            const email = <string>$('#swal-input-email').val();
+            const birth_date = <string>$('#swal-input-birth_date').val();
 
-                if (!first_name || !last_name || !email) {
-                    Swal.showValidationMessage(
-                        'Namen und E-Mail-Adresse sind Pflichtfelder!'
-                    );
-                    return false;
-                }
+            if (!first_name || !last_name || !email) {
+                Swal.showValidationMessage(
+                    'Namen und E-Mail-Adresse sind Pflichtfelder!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createClubMember(team.id, {
-                    first_name,
-                    last_name,
-                    email,
-                    birth_date,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createClubMember(team.id, {
+                first_name,
+                last_name,
+                email,
+                birth_date,
+            });
+        },
+    });
 }
 
 // Member edit
@@ -213,10 +212,9 @@ export async function editClubMember(
 }
 
 export async function editClubMemberPopup(team: Team, member: ClubMember) {
-    return (
-        await Swal.fire({
-            title: 'Vereinsmitglied bearbeiten',
-            html: `
+    return await Swal.fire<ClubMember>({
+        title: 'Vereinsmitglied bearbeiten',
+        html: `
       <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
       <input type="text" id="swal-input-first_name" class="swal2-input" placeholder="${member.first_name}" value="${member.first_name}">
       <label class="swal2-input-label" for="swal-input-last_name">Nachname:</label>
@@ -226,33 +224,32 @@ export async function editClubMemberPopup(team: Team, member: ClubMember) {
       <label class="swal2-input-label" for="swal-input-birth_date">Geburtsdatum:</label>
       <input type="date" id="swal-input-birth_date" class="swal2-input" value="${member.birth_date}">
     `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const first_name = <string>$('#swal-input-first_name').val();
-                const last_name = <string>$('#swal-input-last_name').val();
-                const email = <string>$('#swal-input-email').val();
-                const birth_date = <string>$('#swal-input-birth_date').val();
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const first_name = <string>$('#swal-input-first_name').val();
+            const last_name = <string>$('#swal-input-last_name').val();
+            const email = <string>$('#swal-input-email').val();
+            const birth_date = <string>$('#swal-input-birth_date').val();
 
-                if (!first_name || !last_name || !email) {
-                    Swal.showValidationMessage(
-                        'Namen und E-Mail-Adresse sind Pflichtfelder!'
-                    );
-                    return false;
-                }
+            if (!first_name || !last_name || !email) {
+                Swal.showValidationMessage(
+                    'Namen und E-Mail-Adresse sind Pflichtfelder!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editClubMember(team.id, member.id, {
-                    first_name,
-                    last_name,
-                    email,
-                    birth_date,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editClubMember(team.id, member.id, {
+                first_name,
+                last_name,
+                email,
+                birth_date,
+            });
+        },
+    });
 }
 
 // Member deletion
@@ -312,26 +309,22 @@ export async function editClubMemberPortfolioPopup(
     team: Team,
     member: ClubMember
 ) {
-    return (
-        await Swal.fire({
-            title: `${member.first_name} ${member.last_name}: Portfolio bearbeiten`,
-            html: `Portfolio laden...`,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            didOpen: async () => {
-                Swal.showLoading();
-                Swal.disableButtons();
-                const container = Swal.getHtmlContainer()!;
-                const portfolio = await getClubMemberPortfolio(
-                    team.id,
-                    member.id
-                );
+    return await Swal.fire<ClubMemberPortfolio>({
+        title: `${member.first_name} ${member.last_name}: Portfolio bearbeiten`,
+        html: `Portfolio laden...`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        didOpen: async () => {
+            Swal.showLoading();
+            Swal.disableButtons();
+            const container = Swal.getHtmlContainer()!;
+            const portfolio = await getClubMemberPortfolio(team.id, member.id);
 
-                Swal.hideLoading();
-                Swal.enableButtons();
-                container.innerHTML = `
+            Swal.hideLoading();
+            Swal.enableButtons();
+            container.innerHTML = `
                     <label class="swal2-checkbox d-flex" for="swal-input-visible">
                         <input type="checkbox" id="swal-input-visible" ${portfolio.visible ? 'checked' : ''}>
                         <span>Portfolio sichtbar?</span>
@@ -357,43 +350,36 @@ export async function editClubMemberPortfolioPopup(
                     <label class="swal2-input-label" for="swal-input-contact_email">Kontakt-E-Mail:</label>
                     <input type="email" id="swal-input-contact_email" class="swal2-input" placeholder="example@tpto.ch" value="${portfolio.contact_email}">
                 `;
-            },
-            preConfirm: async () => {
-                const visible = <boolean>(
-                    $('#swal-input-visible').prop('checked')
-                );
-                const image1_url = <string>$('#swal-input-image1_url').val();
-                const image2_url = <string>$('#swal-input-image2_url').val();
-                const member_since = <number>(
-                    $('#swal-input-member_since').val()
-                );
-                const hobby_since = <number>$('#swal-input-hobby_since').val();
-                const role = <string>$('#swal-input-role').val();
-                const profession = <string>$('#swal-input-profession').val();
-                const hobbies = <string>$('#swal-input-hobbies').val();
-                const highlights = <string>$('#swal-input-highlights').val();
-                const biography = <string>$('#swal-input-biography').val();
-                const contact_email = <string>(
-                    $('#swal-input-contact_email').val()
-                );
+        },
+        preConfirm: async () => {
+            const visible = <boolean>$('#swal-input-visible').prop('checked');
+            const image1_url = <string>$('#swal-input-image1_url').val();
+            const image2_url = <string>$('#swal-input-image2_url').val();
+            const member_since = <number>$('#swal-input-member_since').val();
+            const hobby_since = <number>$('#swal-input-hobby_since').val();
+            const role = <string>$('#swal-input-role').val();
+            const profession = <string>$('#swal-input-profession').val();
+            const hobbies = <string>$('#swal-input-hobbies').val();
+            const highlights = <string>$('#swal-input-highlights').val();
+            const biography = <string>$('#swal-input-biography').val();
+            const contact_email = <string>$('#swal-input-contact_email').val();
 
-                Swal.showLoading();
-                return await editClubMemberPortfolio(team.id, member.id, {
-                    visible,
-                    image1_url,
-                    image2_url,
-                    member_since,
-                    hobby_since,
-                    role,
-                    profession,
-                    hobbies,
-                    highlights,
-                    biography,
-                    contact_email,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editClubMemberPortfolio(team.id, member.id, {
+                visible,
+                image1_url,
+                image2_url,
+                member_since,
+                hobby_since,
+                role,
+                profession,
+                hobbies,
+                highlights,
+                biography,
+                contact_email,
+            });
+        },
+    });
 }
 
 // Member magic link
@@ -426,34 +412,32 @@ export async function createClubGroup(teamId: ID, group: ClubGroupRequestDTO) {
 }
 
 export async function createClubGroupPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: 'Gruppe erstellen',
-            html: `
+    return await Swal.fire<ClubGroup>({
+        title: 'Gruppe erstellen',
+        html: `
       <p>Verein: ${team.club!.name}</p><hr />
       <label class="swal2-input-label" for="swal-input-name">Name:</label>
       <input type="text" id="swal-input-name" class="swal2-input" placeholder="Name">
       <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
       <textarea id="swal-input-description" class="swal2-textarea" placeholder="Beschreibung"></textarea>
     `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
 
-                if (!name) {
-                    Swal.showValidationMessage('Bitte gib einen Namen ein!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Bitte gib einen Namen ein!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createClubGroup(team.id, { name, description });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createClubGroup(team.id, { name, description });
+        },
+    });
 }
 
 // Group edit
@@ -472,37 +456,35 @@ export async function editClubGroup(
 }
 
 export async function editClubGroupPopup(team: Team, group: ClubGroup) {
-    return (
-        await Swal.fire({
-            title: 'Gruppe bearbeiten',
-            html: `
+    return await Swal.fire<ClubGroup>({
+        title: 'Gruppe bearbeiten',
+        html: `
       <p>Gruppe: ${group.name}</p><hr />
       <label class="swal2-input-label" for="swal-input-name">Name:</label>
       <input type="text" id="swal-input-name" class="swal2-input" placeholder="${group.name}" value="${group.name}">
       <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
       <textarea id="swal-input-description" class="swal2-textarea" placeholder="${group.description}">${group.description}</textarea>
     `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
 
-                if (!name) {
-                    Swal.showValidationMessage('Bitte gib einen Namen ein!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Bitte gib einen Namen ein!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editClubGroup(team.id, group.id, {
-                    name,
-                    description,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editClubGroup(team.id, group.id, {
+                name,
+                description,
+            });
+        },
+    });
 }
 
 // Group deletion

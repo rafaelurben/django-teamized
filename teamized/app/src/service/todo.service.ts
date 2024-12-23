@@ -200,10 +200,9 @@ export async function editToDoListItemPopup(
     todolist: Todolist,
     item: TodolistItem
 ) {
-    return (
-        await Swal.fire({
-            title: `Listeneintrag bearbeiten`,
-            html: `
+    return await Swal.fire<TodolistItem>({
+        title: `Listeneintrag bearbeiten`,
+        html: `
             <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Titel:</label>
             <input type="text" id="swal-input-name" class="swal2-input w-100" placeholder="${item.name}" value="${item.name}">
@@ -214,35 +213,34 @@ export async function editToDoListItemPopup(
                 <span class="swal2-label">Erledigt</span>
             </label>
         `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Speichern',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = (<HTMLInputElement>(
-                    document.getElementById('swal-input-name')
-                )).value;
-                const description = (<HTMLInputElement>(
-                    document.getElementById('swal-input-description')
-                )).value;
-                const done = (<HTMLInputElement>(
-                    document.getElementById('swal-input-done')
-                )).checked;
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Speichern',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = (<HTMLInputElement>(
+                document.getElementById('swal-input-name')
+            )).value;
+            const description = (<HTMLInputElement>(
+                document.getElementById('swal-input-description')
+            )).value;
+            const done = (<HTMLInputElement>(
+                document.getElementById('swal-input-done')
+            )).checked;
 
-                if (!name) {
-                    Swal.showValidationMessage('Du musst einen Titel angeben!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Du musst einen Titel angeben!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editToDoListItem(team.id, todolist.id, item.id, {
-                    name,
-                    description,
-                    done,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editToDoListItem(team.id, todolist.id, item.id, {
+                name,
+                description,
+                done,
+            });
+        },
+    });
 }
 
 // ToDoListItem view
