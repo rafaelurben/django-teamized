@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 import { ID } from '../../interfaces/common';
-import * as NavigationService from '../../service/navigation.service';
 import { useAppdata } from '../appdataProvider';
+import { hideSidebarOnMobile } from '../general';
 import { NavigationState, NavigationStateChange } from './navigationState';
 import {
     exportNavigationStateToURL,
@@ -106,7 +106,7 @@ export function useNavigationStateDispatchURLPreview() {
  */
 export function usePageNavigator() {
     const dispatch = useNavigationStateDispatch();
-    NavigationService.hideSidebarOnMobile();
+    hideSidebarOnMobile();
     return (pageName: string) => {
         return dispatch({ update: { selectedPage: pageName } });
     };

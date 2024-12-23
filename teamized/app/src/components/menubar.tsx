@@ -5,10 +5,9 @@
 
 import React from 'react';
 
+import { softRefresh } from '../app';
 import { Team } from '../interfaces/teams/team';
 import { User } from '../interfaces/user';
-import * as NavigationService from '../service/navigation.service';
-import { softRefresh } from '../service/navigation.service';
 import { useAppdata } from '../utils/appdataProvider';
 import * as GeneralUtils from '../utils/general';
 import {
@@ -47,7 +46,7 @@ export default function AppMenubar({ teams, user }: Props) {
                     id="menubartitle"
                     className="navbar-brand ms-1 sidebar-toggle"
                     href="#"
-                    onClick={() => NavigationService.toggleSidebar()}
+                    onClick={() => GeneralUtils.toggleSidebar()}
                 >
                     <i className="fa-fw fa-solid fa-square-caret-left when-open"></i>
                     <i className="fa-fw fa-solid fa-square-caret-right when-closed"></i>

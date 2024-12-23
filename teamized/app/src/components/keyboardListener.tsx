@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { useEffect } from 'react';
 
-import { softRefresh } from '../service/navigation.service';
+import { softRefresh } from '../app';
 import * as GeneralUtils from '../utils/general';
 
 export default function KeyboardListener() {
