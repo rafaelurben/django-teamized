@@ -33,9 +33,9 @@ export default function WorksessionTrackingTileContent({
         getTimeDisplay(currentWorksession)
     );
 
-    const clockRefreshIntervalID = useRef<ReturnType<typeof setInterval>>();
+    const clockRefreshIntervalID = useRef<ReturnType<typeof setInterval>>(null);
     const currentSessionRefreshIntervalId =
-        useRef<ReturnType<typeof setInterval>>();
+        useRef<ReturnType<typeof setInterval>>(null);
 
     const startInProgress = useRef(false);
     const stopInProgress = useRef(false);
@@ -98,8 +98,12 @@ export default function WorksessionTrackingTileContent({
         updateCurrentSession();
 
         return () => {
-            clearInterval(clockRefreshIntervalID.current);
-            clearInterval(currentSessionRefreshIntervalId.current);
+            if (clockRefreshIntervalID.current) {
+                clearInterval(clockRefreshIntervalID.current);
+            }
+            if (currentSessionRefreshIntervalId.current) {
+                clearInterval(currentSessionRefreshIntervalId.current);
+            }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
