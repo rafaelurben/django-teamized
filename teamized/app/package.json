@@ -2,7 +2,7 @@
   "name": "teamized-reactapp",
   "version": "1.0.0",
   "description": "The build commands can also be run via 'python manage.py teamized_build [--live]'",
-  "main": "src/app.ts",
+  "main": "src/app.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx --no -- webpack --mode production",
@@ -40,12 +40,12 @@
     "webpack-cli": "~6.0.0"
   },
   "dependencies": {
-    "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
+    "@types/react": "19.0.2",
+    "@types/react-dom": "19.0.2",
     "bootstrap": "5.3.3",
     "jquery": "3.7.1",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "recharts": "2.15.0"
   }
 }

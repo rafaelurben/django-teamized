@@ -23,8 +23,10 @@ export default function CalendarSelector({
     isAdmin,
 }: Props) {
     const createCalendar = () => {
-        CalendarService.createCalendarPopup(team).then((calendar) => {
-            onCalendarSelect(calendar.id);
+        CalendarService.createCalendarPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                onCalendarSelect(result.value!.id);
+            }
         });
     };
 

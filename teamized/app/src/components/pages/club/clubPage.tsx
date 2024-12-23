@@ -1,29 +1,38 @@
 import React from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import {
+    useCurrentTeamData,
+    usePageNavigator,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import ClubMemberTileContent from './clubMemberTileContent';
 
-interface Props {
-    team: Team;
-}
+export default function ClubPage() {
+    const refreshData = useAppdataRefresh();
 
-export default function ClubPage({ team }: Props) {
-    const handleClubEditButtonClick = async () => {
-        await ClubService.editClubPopup(team);
-        NavigationService.render();
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
+
+    const selectPage = usePageNavigator();
+
+    const handleClubEditButtonClick = () => {
+        ClubService.editClubPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleClubDeleteButtonClick = async () => {
-        await ClubService.deleteClubPopup(team);
-        NavigationService.selectPage('team');
+        await ClubService.deleteClubPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('team');
+                refreshData();
+            }
+        });
     };
 
     const club = team.club!;
-    const isAdmin = team.member!.is_admin;
-    const isOwner = team.member!.is_owner;
 
     return (
         <Dashboard.Page
@@ -69,7 +78,7 @@ export default function ClubPage({ team }: Props) {
                             </tr>
                         </tbody>
                         <Dashboard.TableButtonFooter
-                            show={isOwner}
+                            show={team.member!.is_owner}
                             noTopBorder={true}
                         >
                             <button
@@ -89,11 +98,7 @@ export default function ClubPage({ team }: Props) {
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Vereinsmitglieder">
-                    <ClubMemberTileContent
-                        team={team}
-                        isAdmin={isAdmin}
-                        isOwner={isOwner}
-                    />
+                    <ClubMemberTileContent teamData={teamData} />
                 </Dashboard.Tile>
             </Dashboard.Column>
         </Dashboard.Page>

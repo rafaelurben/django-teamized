@@ -10,7 +10,7 @@
 <head>
     {% block head %}
         <title>{% block title %}{% endblock %} | Teamized</title>
-        <meta charset="utf-8"/>
+        <meta charset="utf-8" />
         {% block noindex %}
             <meta name="robots" content="noindex">
         {% endblock noindex %}
@@ -29,19 +29,10 @@
             <!-- Bootstrap (CSS framework) -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
                   integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
-                  crossorigin="anonymous" referrerpolicy="no-referrer"/>
+                  crossorigin="anonymous" referrerpolicy="no-referrer" />
             <!-- Custom CSS -->
             <link rel="stylesheet" href="{% static 'teamized/css/base.css' %}">
         {% endblock %}
-        
-        <style>
-            @media (min-width: 992px) {
-                .border-lg {
-                    border: 1px solid #ccc;
-                }
-            }
-        </style>
-
 
     {% endblock head %}
     {% block extrahead %}{% endblock %}
@@ -49,25 +40,24 @@
 
 <body>
 
-<!-- Menubar -->
-{% block menubar %}
-    <nav id="menubar" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-        <div class="container-fluid">
-            {% block menubartitle %}
-                <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'teamized:home' %}">Teamized</a>
-            {% endblock menubartitle %}
-            <!-- Navbar toggle for small devices -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-                    aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Navigation bar -->
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="navbar-nav nav w-100 me-1 mb-2 justify-content-end">
-                    {% block all_menubar_items %}
-                        {% block additional_menubar_items %}
-                        {% endblock additional_menubar_items %}
-                        {% block menubar_items_end %}
+{% block body %}
+
+    <!-- Menubar -->
+    {% block menubar %}
+        <nav id="menubar" class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                {% block menubartitle %}
+                    <a id="menubartitle" class="navbar-brand ms-3" href="{% url 'teamized:home' %}">Teamized</a>
+                {% endblock menubartitle %}
+                <!-- Navbar toggle for small devices -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                        aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Navigation bar -->
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav nav w-100 me-1 mb-2 justify-content-end">
+                        {% block all_menubar_items %}
                             {% if not user.is_authenticated %}
                                 <li class="nav-item border-lg rounded border-secondary ms-2">
                                     <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}"
@@ -113,25 +103,27 @@
                                     </form>
                                 </li>
                             {% endif %}
-                        {% endblock menubar_items_end %}
-                    {% endblock all_menubar_items %}
-                </ul>
+                        {% endblock all_menubar_items %}
+                    </ul>
+                </div>
             </div>
+        </nav>
+    {% endblock menubar %}
+
+    <!-- Main content -->
+    {% block contentcontainer %}
+        <div class="px-4 py-3 container-fluid" id="maincontent">
+            {% block content %}
+            {% endblock content %}
         </div>
-    </nav>
-{% endblock menubar %}
+    {% endblock contentcontainer %}
 
-<!-- Main content -->
-{% block contentcontainer %}
-    <div class="px-4 py-3 container-fluid" id="maincontent">
-        {% block content %}
-        {% endblock content %}
-    </div>
-{% endblock contentcontainer %}
+    <!-- Scripts -->
+    {% block scripts %}
+    {% endblock scripts %}
 
-<!-- Scripts -->
-{% block scripts %}
-{% endblock scripts %}
+{% endblock body %}
+
 </body>
 
 </html>

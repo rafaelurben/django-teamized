@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import * as CacheService from '../../../service/cache.service';
 import * as CalendarService from '../../../service/calendars.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import CalendarEventDisplay from './calendarEventDisplay';
 import CalendarEventPicker from './calendarEventPicker';
@@ -11,11 +11,9 @@ import CalendarInfo from './calendarInfo';
 import CalendarOverview from './calendarOverview';
 import CalendarSelector from './calendarSelector';
 
-interface Props {
-    team: Team;
-}
+export default function CalendarsPage() {
+    const refreshData = useAppdataRefresh();
 
-export default function CalendarsPage({ team }: Props) {
     const [selectedDate, setSelectedDate] = useState(
         CalendarService.roundDays(new Date())
     );
@@ -24,9 +22,12 @@ export default function CalendarsPage({ team }: Props) {
     );
     const [selectedEventId, setSelectedEventId] = useState<ID | null>(null);
 
-    const calendarsMap = CacheService.getTeamData(team.id).calendars;
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
+
+    const calendarsMap = teamData.calendars;
     const calendars = Object.values(calendarsMap);
-    const loading = CacheService.getCurrentTeamData()._state.calendars._initial;
+    const loading = teamData._state.calendars._initial;
 
     const isAdmin = team.member!.is_admin;
 
@@ -36,7 +37,9 @@ export default function CalendarsPage({ team }: Props) {
         ensureValidCalendarId();
         ensureValidEventId();
 
-        if (loading) CalendarService.getCalendars(team.id); // will re-render page
+        if (loading) {
+            CalendarService.getCalendars(team.id).then(refreshData);
+        }
     });
 
     const handleDateSelect = (date: Date) => {
@@ -74,17 +77,14 @@ export default function CalendarsPage({ team }: Props) {
 
     const dayDisplay = CalendarService.getDateString(selectedDate);
 
-    const selectedCalendar =
-        CacheService.getCurrentTeamData().calendars[selectedCalendarId!];
+    const selectedCalendar = teamData.calendars[selectedCalendarId!];
     const selectedEvent = eventMap[selectedEventId!];
 
     return (
         <Dashboard.Page
             title="Kalender"
             subtitle="Kalender für dich und dein Team"
-            loading={
-                CacheService.getCurrentTeamData()._state.calendars._initial
-            }
+            loading={loading}
         >
             <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
                 <Dashboard.Tile

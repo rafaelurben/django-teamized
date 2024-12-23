@@ -42,7 +42,7 @@ export abstract class API {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: method,
-                url: window.api_base_url + endpoint,
+                url: window.teamized_globals.api_base_url + endpoint,
                 data: data,
                 success: (data: T) => {
                     if (!options?.disableSuccessAlert && data.alert) {

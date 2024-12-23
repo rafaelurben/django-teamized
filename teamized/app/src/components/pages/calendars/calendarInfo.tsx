@@ -3,7 +3,7 @@ import React from 'react';
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
@@ -21,16 +21,23 @@ export default function CalendarInfo({
     onCalendarDeleted,
     isAdmin,
 }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const editCalendar = () => {
         CalendarService.editCalendarPopup(team, selectedCalendar!).then(
-            NavigationService.renderPage
+            (result) => {
+                if (result.isConfirmed) refreshData();
+            }
         );
     };
 
     const deleteCalendar = () => {
         CalendarService.deleteCalendarPopup(team, selectedCalendar!).then(
-            () => {
-                onCalendarDeleted();
+            (result) => {
+                if (result.isConfirmed) {
+                    onCalendarDeleted();
+                    refreshData();
+                }
             }
         );
     };

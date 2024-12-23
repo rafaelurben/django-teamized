@@ -6,21 +6,24 @@
 import React from 'react';
 
 import { User } from '../interfaces/user';
+import {
+    useCurrentTeamData,
+    useNavigationState,
+    usePageNavigatorAsEventHandler,
+    usePageNavigatorURL,
+} from '../utils/navigation/navigationProvider';
 
 interface Props {
-    selectedPage: string;
     user: User;
-    isAdmin: boolean;
-    isClubEnabled: boolean;
-    onPageSelect: (page: string) => unknown;
 }
 
-export default function AppSidebar({
-    user,
-    isClubEnabled,
-    selectedPage,
-    onPageSelect,
-}: Props) {
+export default function AppSidebar({ user }: Props) {
+    const { selectedPage } = useNavigationState();
+    const teamData = useCurrentTeamData();
+
+    const selectPage = usePageNavigatorAsEventHandler();
+    const getPageURL = usePageNavigatorURL();
+
     const getLinkClass = (forPage: string) => {
         if (forPage === selectedPage) {
             return 'nav-link active';
@@ -34,9 +37,9 @@ export default function AppSidebar({
             <ul className="nav nav-pills flex-column mb-auto flex-nowrap overflow-auto">
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('home')}
                         className={getLinkClass('home')}
-                        onClick={() => onPageSelect('home')}
+                        onClick={selectPage('home')}
                     >
                         <i className="fas fa-fw fa-home" />
                         Startseite
@@ -44,9 +47,9 @@ export default function AppSidebar({
                 </li>
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('teamlist')}
                         className={getLinkClass('teamlist')}
-                        onClick={() => onPageSelect('teamlist')}
+                        onClick={selectPage('teamlist')}
                     >
                         <i className="fas fa-fw fa-user-group" />
                         Teams
@@ -55,9 +58,9 @@ export default function AppSidebar({
                 <hr className="my-1" />
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('team')}
                         className={getLinkClass('team')}
-                        onClick={() => onPageSelect('team')}
+                        onClick={selectPage('team')}
                     >
                         <i className="fas fa-fw fa-users-viewfinder" />
                         Team
@@ -65,9 +68,9 @@ export default function AppSidebar({
                 </li>
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('workingtime')}
                         className={getLinkClass('workingtime')}
-                        onClick={() => onPageSelect('workingtime')}
+                        onClick={selectPage('workingtime')}
                     >
                         <i className="fas fa-fw fa-business-time" />
                         Arbeitszeit
@@ -75,9 +78,9 @@ export default function AppSidebar({
                 </li>
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('calendars')}
                         className={getLinkClass('calendars')}
-                        onClick={() => onPageSelect('calendars')}
+                        onClick={selectPage('calendars')}
                     >
                         <i className="fas fa-fw fa-calendar-days" />
                         Kalender
@@ -85,22 +88,22 @@ export default function AppSidebar({
                 </li>
                 <li>
                     <a
-                        href="#"
+                        href={getPageURL('todo')}
                         className={getLinkClass('todo')}
-                        onClick={() => onPageSelect('todo')}
+                        onClick={selectPage('todo')}
                     >
                         <i className="fas fa-fw fa-tasks" />
                         To-do-Listen
                     </a>
                 </li>
-                {isClubEnabled && (
+                {teamData !== null && teamData.team.club !== null && (
                     <>
                         <hr className="my-1" />
                         <li>
                             <a
-                                href="#"
+                                href={getPageURL('club')}
                                 className={getLinkClass('club')}
-                                onClick={() => onPageSelect('club')}
+                                onClick={selectPage('club')}
                             >
                                 <i className="fas fa-fw fa-people-group" />
                                 Verein
@@ -134,7 +137,7 @@ export default function AppSidebar({
                     <li>
                         <a
                             className="dropdown-item"
-                            href="/account/?next=/teamized/app/"
+                            href={window.teamized_globals.account_url}
                         >
                             <i className="me-2 fas fa-fw fa-user"></i>
                             Account
@@ -157,7 +160,7 @@ export default function AppSidebar({
                     <li>
                         <a
                             className="dropdown-item"
-                            href="/account/logout?next=/teamized/"
+                            href={window.teamized_globals.logout_url}
                         >
                             <i className="me-2 fas fa-fw fa-arrow-right-from-bracket"></i>
                             Ausloggen

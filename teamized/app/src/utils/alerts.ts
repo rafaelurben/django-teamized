@@ -167,40 +167,31 @@ export function successAlert(
  * @param {*} preConfirm function that is called when the user confirms the alert
  * @param {String} title
  * @param {object} options
- * @returns the result of the preConfirm function if the user confirmed the alert
+ * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
  */
-export function confirmAlert(
+export async function confirmAlert<T>(
     html: string,
-    preConfirm: () => unknown,
+    preConfirm: (() => Promise<T>) | null,
     title: string = '',
     options: Partial<SweetAlertOptions> = {}
 ) {
-    return new Promise((resolve, reject) => {
-        const data: SweetAlertOptions = {
-            title: title || 'Sicher?',
-            html: html,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Ja',
-            cancelButtonText: 'Nein, abbrechen',
-            ...options,
-        } as SweetAlertOptions;
+    const data: SweetAlertOptions = {
+        title: title || 'Sicher?',
+        html: html,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Ja',
+        cancelButtonText: 'Nein, abbrechen',
+        ...options,
+    } as SweetAlertOptions;
 
-        if (preConfirm !== undefined) {
-            data.preConfirm = preConfirm;
-            data.showLoaderOnConfirm = true;
-        }
+    if (preConfirm !== undefined && preConfirm !== null) {
+        data.preConfirm = preConfirm;
+        data.showLoaderOnConfirm = true;
+    }
 
-        Swal.fire(data)
-            .then((result) => {
-                if (result.isConfirmed) {
-                    resolve(result.value);
-                }
-                // Do not resolve nor reject if dismissed/cancelled
-            })
-            .catch(reject);
-    });
+    return await Swal.fire<T>(data);
 }
 
 /**
@@ -208,17 +199,21 @@ export function confirmAlert(
  *
  * @param {*} html
  * @param {*} preConfirm function that is called when the user confirms the alert twice
- * @returns the result of the preConfirm function if the user confirmed both alerts
+ * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
  */
-export function doubleConfirmAlert(html: string, preConfirm: () => unknown) {
-    return new Promise((resolve, reject) => {
-        confirmAlert(html, () => {}, 'Sicher?').then(() => {
-            confirmAlert(
-                html +
-                    "<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>",
-                preConfirm,
-                'Absolut sicher?'
-            ).then(resolve, reject);
-        }, reject);
-    });
+export async function doubleConfirmAlert<T>(
+    html: string,
+    preConfirm: () => Promise<T>
+) {
+    const firstAlertResult = await confirmAlert<null>(html, null, 'Sicher?');
+    if (firstAlertResult.isConfirmed) {
+        return await confirmAlert<T>(
+            html +
+                "<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>",
+            preConfirm,
+            'Absolut sicher?'
+        );
+    } else {
+        return firstAlertResult;
+    }
 }

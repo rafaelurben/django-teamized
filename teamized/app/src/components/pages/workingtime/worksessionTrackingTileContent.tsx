@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
 import * as WorkingtimeService from '../../../service/workingtime.service';
+import { useAppdata, useAppdataRefresh } from '../../../utils/appdataProvider';
 import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
 
 function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
@@ -19,23 +20,21 @@ function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
 
 interface Props {
     team: Team;
-    onFinishedSessionAdded: () => unknown;
 }
 
-export default function WorksessionTrackingTileContent({
-    team,
-    onFinishedSessionAdded,
-}: Props) {
-    const currentWorksession = window.appdata.current_worksession;
-    const [, forceComponentUpdate] = useReducer((x) => x + 1, 0);
+export default function WorksessionTrackingTileContent({ team }: Props) {
+    const appdata = useAppdata();
+    const refreshData = useAppdataRefresh();
+
+    const currentWorksession = appdata.current_worksession;
 
     const [timeDisplay, setTimeDisplay] = useState(
         getTimeDisplay(currentWorksession)
     );
 
-    const clockRefreshIntervalID = useRef<ReturnType<typeof setInterval>>();
+    const clockRefreshIntervalID = useRef<ReturnType<typeof setInterval>>(null);
     const currentSessionRefreshIntervalId =
-        useRef<ReturnType<typeof setInterval>>();
+        useRef<ReturnType<typeof setInterval>>(null);
 
     const startInProgress = useRef(false);
     const stopInProgress = useRef(false);
@@ -43,9 +42,9 @@ export default function WorksessionTrackingTileContent({
     const startSession = async () => {
         if (!startInProgress.current) {
             startInProgress.current = true;
-            await WorkingtimeService.startTrackingSession(team.id).then(() => {
-                forceComponentUpdate();
-            });
+            await WorkingtimeService.startTrackingSession(team.id).then(
+                refreshData
+            );
             startInProgress.current = false;
         }
     };
@@ -53,56 +52,56 @@ export default function WorksessionTrackingTileContent({
     const stopSession = async () => {
         if (!stopInProgress.current) {
             stopInProgress.current = true;
-            await WorkingtimeService.stopTrackingSession().then(() => {
-                forceComponentUpdate();
-                onFinishedSessionAdded();
-            });
+            await WorkingtimeService.stopTrackingSession().then(refreshData);
             stopInProgress.current = false;
         }
     };
 
-    const renameCurrentSession = async () => {
-        await WorkingtimeService.renameWorkSessionPopup(
+    const renameCurrentSession = () => {
+        WorkingtimeService.renameWorkSessionPopup(
             team,
             currentWorksession!
-        );
-        forceComponentUpdate();
-    };
-
-    const updateTimeDisplay = () => {
-        const newDisplay = getTimeDisplay(window.appdata.current_worksession);
-        setTimeDisplay(newDisplay);
-    };
-
-    const updateCurrentSession = async () => {
-        const before = window.appdata.current_worksession;
-        const after = await WorkingtimeService.getTrackingSession();
-        if (before !== after && (before || after)) {
-            forceComponentUpdate();
-
-            if (before && (!after || before.id !== after.id)) {
-                WorkingtimeService.getMyWorkSessionsInTeam(team.id).then(() =>
-                    onFinishedSessionAdded()
-                );
-            }
-        }
+        ).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     useEffect(() => {
+        const updateTimeDisplay = () => {
+            const newDisplay = getTimeDisplay(currentWorksession);
+            setTimeDisplay(newDisplay);
+        };
+
+        const updateCurrentSession = async () => {
+            const before = currentWorksession;
+            const after = await WorkingtimeService.getTrackingSession();
+
+            if (before && (!after || before.id !== after.id)) {
+                WorkingtimeService.getMyWorkSessionsInTeam(team.id).then(
+                    refreshData
+                );
+            } else if (before && after && before.note !== after.note) {
+                refreshData();
+            }
+        };
+
         clockRefreshIntervalID.current = setInterval(updateTimeDisplay, 1000);
         currentSessionRefreshIntervalId.current = setInterval(
             updateCurrentSession,
             15000
         );
 
-        updateCurrentSession();
+        updateTimeDisplay();
 
         return () => {
-            clearInterval(clockRefreshIntervalID.current);
-            clearInterval(currentSessionRefreshIntervalId.current);
+            if (clockRefreshIntervalID.current) {
+                clearInterval(clockRefreshIntervalID.current);
+            }
+            if (currentSessionRefreshIntervalId.current) {
+                clearInterval(currentSessionRefreshIntervalId.current);
+            }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [currentWorksession, refreshData, team.id]);
 
     return (
         <>

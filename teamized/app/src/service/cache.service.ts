@@ -8,7 +8,6 @@ import { CacheCategoryType } from '../interfaces/cache/cacheCategoryType';
 import { TeamCache } from '../interfaces/cache/teamCache';
 import { ID } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
-import * as NavigationService from './navigation.service';
 import * as TeamsService from './teams.service';
 
 // Lookups
@@ -23,10 +22,6 @@ export function getTeamsList() {
 
 export function getTeamData(teamId: ID) {
     return window.appdata.teamCache[teamId] || null;
-}
-
-export function getCurrentTeamData() {
-    return getTeamData(window.appdata.selectedTeamId!);
 }
 
 // Add and remove teams from cache
@@ -153,8 +148,6 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
 
                     teamData._state[category]._initial = false;
                     teamData._state[category]._refreshing = false;
-                    NavigationService.renderPage();
-
                     resolve(objects);
                 })
                 .catch((error) => {

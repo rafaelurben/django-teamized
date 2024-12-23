@@ -3,7 +3,7 @@ import React from 'react';
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import ClubGroupsTableRow from './clubGroupsTableRow';
 
@@ -14,9 +14,12 @@ interface Props {
 }
 
 export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
-    const handleCreateButtonClick = async () => {
-        await ClubService.createClubGroupPopup(team);
-        NavigationService.renderPage();
+    const refreshData = useAppdataRefresh();
+
+    const handleCreateButtonClick = () => {
+        ClubService.createClubGroupPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

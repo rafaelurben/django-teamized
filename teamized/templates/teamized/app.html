@@ -18,65 +18,30 @@
     <link rel="stylesheet" href="{% static 'teamized/css/darkmode.css' %}">
 {% endblock extrahead %}
 
-{% block menubartitle %}
-    <!-- Sidebar trigger with menubar title -->
-    <a id="menubartitle" class="navbar-brand ms-1 sidebar-toggle" href="#">
-        <i class="fa-fw fa-solid fa-square-caret-left when-open"></i>
-        <i class="fa-fw fa-solid fa-square-caret-right when-closed"></i>
-        <span class="ms-1">Teamized</span>
-    </a>
-{% endblock menubartitle %}
+{% block body %}
 
-{% block additional_menubar_items %}
-    <!-- Team switcher -->
-    <div id="app-menubar">
-        <!-- Filled by React -->
+    <div id="react-root" class="h-100 d-flex flex-column">
+        <!-- Filled by React / fallback content: -->
+        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+            <div class="spinner-border mb-3" role="status">
+                <span class="visually-hidden">Laden...</span>
+            </div>
+            <p>App wird geladen...</p>
+        </div>
     </div>
-    <!-- Reload button -->
-    <li class="nav-item border-lg rounded border-secondary ms-2" id="refreshbutton">
-        <a class="nav-link ms-1 me-1" href="#" title="{% translate "Neu laden" %} (F5)">
-            <i class="fas fa-fw fa-rotate"></i>
-            <span class="d-lg-none ms-2">{% translate "Neu laden" %}</span>
-        </a>
-    </li>
-    <!-- Hidden DEBUG menu item (activate via Shift+F6) -->
-    <li class="nav-item dropdown border-lg rounded border-danger ms-2 debug-only">
-        <a class="nav-link dropdown-toggle ms-1 me-1 text-danger" href="#" title="DEBUG MENU" role="button"
-           data-bs-toggle="dropdown">
-            <i class="fas fa-fw fa-bug"></i>
-            <span class="d-lg-none ms-2">DEBUG MENU</span>
-        </a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item text-info" href="#"
-                   onclick="window.open('{% url "teamized:app-debug" %}', '_blank');">DEBUG-Seite öffnen</a></li>
-            <li><a class="dropdown-item text-danger" href="#" onclick="window._App.GeneralUtils.toggleDebug()">DEBUG-Modus
-                verlassen (Shift+F6)</a></li>
-            <li class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" onclick="window._App.NavigationService.reRender(); alert('Done!')">NavigationService.reRender()</a>
-            </li>
-            <li><a class="dropdown-item" href="#" onclick="window.location.reload()">location.reload()</a></li>
-        </ul>
-    </li>
-{% endblock additional_menubar_items %}
 
-{% block scripts %}
-    {{ block.super }}
+    <!-- Scripts -->
     <script>
-        window.api_base_url = '{% url "teamized:home" %}api/';
+        window.teamized_globals = {
+            api_base_url: '{% url 'teamized:home' %}api/',
+            home_url: '{% url 'teamized:home' %}',
+            debug_url: '{% url 'teamized:app-debug' %}',
+            account_url: '{% url 'account:home' %}?next={% url 'teamized:app' %}',
+            logout_url: '{% url 'account:logout' %}?next={% url 'teamized:home' %}',
+        };
     </script>
 
     <!-- Main app script -->
     <script src="{% static 'teamized/app/mainapp.js' %}"></script>
-{% endblock scripts %}
 
-{% block contentcontainer %}
-    <!-- Main content area (everything below the menubar) -->
-    <div id="app-root" class="d-flex">
-        <div id="app-sidebar" data-bs-theme="dark">
-            <!-- Filled by React -->
-        </div>
-        <div id="app-maincontent" class="w-100 overflow-auto">
-            <!-- Filled by React -->
-        </div>
-    </div>
-{% endblock contentcontainer %}
+{% endblock body %}

@@ -2,8 +2,9 @@ import React from 'react';
 
 import { Member } from '../../../interfaces/teams/member';
 import { Team } from '../../../interfaces/teams/team';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { usePageNavigator } from '../../../utils/navigation/navigationProvider';
 
 interface Props {
     team: Team;
@@ -16,24 +17,34 @@ export default function TeamMemberTableRow({
     member,
     loggedInMember,
 }: Props) {
-    const handlePromoteButtonClick = async () => {
-        await TeamsService.promoteMemberPopup(team, member);
-        NavigationService.renderPage();
+    const selectPage = usePageNavigator();
+    const refreshData = useAppdataRefresh();
+
+    const handlePromoteButtonClick = () => {
+        TeamsService.promoteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleDemoteButtonClick = async () => {
-        await TeamsService.demoteMemberPopup(team, member);
-        NavigationService.renderPage();
+    const handleDemoteButtonClick = () => {
+        TeamsService.demoteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
-    const handleLeaveButtonClick = async () => {
-        await TeamsService.leaveTeamPopup(team);
-        NavigationService.selectPage('teamlist');
+    const handleLeaveButtonClick = () => {
+        TeamsService.leaveTeamPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('teamlist');
+                refreshData();
+            }
+        });
     };
 
-    const handleRemoveButtonClick = async () => {
-        await TeamsService.deleteMemberPopup(team, member);
-        NavigationService.renderPage();
+    const handleRemoveButtonClick = () => {
+        TeamsService.deleteMemberPopup(team, member).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

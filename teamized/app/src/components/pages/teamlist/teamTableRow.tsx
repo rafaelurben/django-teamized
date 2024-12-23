@@ -1,8 +1,12 @@
 import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import {
+    usePageNavigator,
+    useTeamSwitcher,
+} from '../../../utils/navigation/navigationProvider';
 
 interface Props {
     team: Team;
@@ -10,21 +14,30 @@ interface Props {
 }
 
 export default function TeamTableRow({ team, isSelected }: Props) {
+    const refreshData = useAppdataRefresh();
+
+    const selectPage = usePageNavigator();
+    const selectTeam = useTeamSwitcher();
+
     const handleSwitchToButtonClick = () => {
-        TeamsService.switchTeam(team.id);
+        selectTeam(team.id);
     };
 
     const handleManageButtonClick = () => {
-        TeamsService.switchTeam(team.id);
-        NavigationService.selectPage('team');
+        selectTeam(team.id);
+        selectPage('team');
     };
 
     const handleLeaveButtonClick = () => {
-        TeamsService.leaveTeamPopup(team);
+        TeamsService.leaveTeamPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleDeleteButtonClick = () => {
-        TeamsService.deleteTeamPopup(team);
+        TeamsService.deleteTeamPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

@@ -1,28 +1,34 @@
 import React, { useEffect } from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
-import * as CacheService from '../../../service/cache.service';
-import * as NavigationService from '../../../service/navigation.service';
+import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamInviteTableRow from './teamInviteTableRow';
 
 interface Props {
-    team: Team;
+    teamData: TeamCache;
 }
 
-export default function TeamInviteTable({ team }: Props) {
-    const invites = Object.values(CacheService.getTeamData(team.id).invites);
-    const loading = CacheService.getCurrentTeamData()._state.invites._initial;
+export default function TeamInviteTable({ teamData }: Props) {
+    const refreshData = useAppdataRefresh();
+
+    const team = teamData?.team;
+
+    const invites = Object.values(teamData.invites);
+    const loading = teamData._state.invites._initial;
 
     useEffect(() => {
-        if (loading) TeamsService.getInvites(team.id); // will re-render page
+        if (loading) {
+            TeamsService.getInvites(team.id).then(refreshData);
+        }
     });
 
-    const handleInviteCreateButtonClick = async () => {
-        await TeamsService.createInvitePopup(team);
-        NavigationService.renderPage();
+    const handleInviteCreateButtonClick = () => {
+        TeamsService.createInvitePopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     return (

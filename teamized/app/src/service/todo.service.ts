@@ -40,10 +40,9 @@ export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
 }
 
 export async function createToDoListPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: `To-do-Liste erstellen`,
-            html: `
+    return await Swal.fire<Todolist>({
+        title: `To-do-Liste erstellen`,
+        html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Name:</label>
             <input type="text" id="swal-input-name" class="swal2-input" placeholder="Listenname">
@@ -52,35 +51,34 @@ export async function createToDoListPopup(team: Team) {
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
             <input type="color" id="swal-input-color" class="swal2-input form-control-color">
         `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = (<HTMLInputElement>(
-                    document.getElementById('swal-input-name')
-                )).value;
-                const description = (<HTMLInputElement>(
-                    document.getElementById('swal-input-description')
-                )).value;
-                const color = (<HTMLInputElement>(
-                    document.getElementById('swal-input-color')
-                )).value;
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = (<HTMLInputElement>(
+                document.getElementById('swal-input-name')
+            )).value;
+            const description = (<HTMLInputElement>(
+                document.getElementById('swal-input-description')
+            )).value;
+            const color = (<HTMLInputElement>(
+                document.getElementById('swal-input-color')
+            )).value;
 
-                if (!name) {
-                    Swal.showValidationMessage('Bitte gib einen Namen ein!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Bitte gib einen Namen ein!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createToDoList(team.id, {
-                    name,
-                    description,
-                    color,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createToDoList(team.id, {
+                name,
+                description,
+                color,
+            });
+        },
+    });
 }
 
 // ToDoList edit
@@ -100,10 +98,9 @@ export async function editToDoList(
 }
 
 export async function editToDoListPopup(team: Team, todolist: Todolist) {
-    return (
-        await Swal.fire({
-            title: `To-do-Liste bearbeiten`,
-            html: `
+    return await Swal.fire<Todolist>({
+        title: `To-do-Liste bearbeiten`,
+        html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Name:</label>
             <input type="text" id="swal-input-name" class="swal2-input" placeholder="${todolist.name}" value="${todolist.name}">
@@ -112,47 +109,46 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
             <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
             <input type="color" id="swal-input-color" class="swal2-input form-control-color" value="${todolist.color}">
         `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Speichern',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = (<HTMLInputElement>(
-                    document.getElementById('swal-input-name')
-                )).value;
-                const description = (<HTMLInputElement>(
-                    document.getElementById('swal-input-description')
-                )).value;
-                const color = (<HTMLInputElement>(
-                    document.getElementById('swal-input-color')
-                )).value;
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Speichern',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = (<HTMLInputElement>(
+                document.getElementById('swal-input-name')
+            )).value;
+            const description = (<HTMLInputElement>(
+                document.getElementById('swal-input-description')
+            )).value;
+            const color = (<HTMLInputElement>(
+                document.getElementById('swal-input-color')
+            )).value;
 
-                if (!name) {
-                    Swal.showValidationMessage('Bitte gib einen Namen ein!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Bitte gib einen Namen ein!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editToDoList(team.id, todolist.id, {
-                    name,
-                    description,
-                    color,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editToDoList(team.id, todolist.id, {
+                name,
+                description,
+                color,
+            });
+        },
+    });
 }
 
 // ToDoList deletion
 
 export async function deleteToDoList(teamId: ID, todolistId: ID) {
-    await TodolistAPI.deleteTodolist(teamId, todolistId).then(() => {
+    return await TodolistAPI.deleteTodolist(teamId, todolistId).then(() => {
         delete CacheService.getTeamData(teamId).todolists[todolistId];
     });
 }
 
 export async function deleteToDoListPopup(team: Team, todolist: Todolist) {
-    await doubleConfirmAlert(
+    return await doubleConfirmAlert(
         `Willst du folgende To-do-Liste wirklich löschen?<br /><br />
             <b>Name:</b> ${todolist.name} <br />
             <b>Beschreibung: </b>${todolist.description} <br />
@@ -204,10 +200,9 @@ export async function editToDoListItemPopup(
     todolist: Todolist,
     item: TodolistItem
 ) {
-    return (
-        await Swal.fire({
-            title: `Listeneintrag bearbeiten`,
-            html: `
+    return await Swal.fire<TodolistItem>({
+        title: `Listeneintrag bearbeiten`,
+        html: `
             <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-name">Titel:</label>
             <input type="text" id="swal-input-name" class="swal2-input w-100" placeholder="${item.name}" value="${item.name}">
@@ -218,35 +213,34 @@ export async function editToDoListItemPopup(
                 <span class="swal2-label">Erledigt</span>
             </label>
         `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Speichern',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = (<HTMLInputElement>(
-                    document.getElementById('swal-input-name')
-                )).value;
-                const description = (<HTMLInputElement>(
-                    document.getElementById('swal-input-description')
-                )).value;
-                const done = (<HTMLInputElement>(
-                    document.getElementById('swal-input-done')
-                )).checked;
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Speichern',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = (<HTMLInputElement>(
+                document.getElementById('swal-input-name')
+            )).value;
+            const description = (<HTMLInputElement>(
+                document.getElementById('swal-input-description')
+            )).value;
+            const done = (<HTMLInputElement>(
+                document.getElementById('swal-input-done')
+            )).checked;
 
-                if (!name) {
-                    Swal.showValidationMessage('Du musst einen Titel angeben!');
-                    return false;
-                }
+            if (!name) {
+                Swal.showValidationMessage('Du musst einen Titel angeben!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editToDoListItem(team.id, todolist.id, item.id, {
-                    name,
-                    description,
-                    done,
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editToDoListItem(team.id, todolist.id, item.id, {
+                name,
+                description,
+                done,
+            });
+        },
+    });
 }
 
 // ToDoListItem view
@@ -299,7 +293,7 @@ export async function deleteToDoListItemPopup(
     todolist: Todolist,
     item: TodolistItem
 ) {
-    await confirmAlert(
+    return await confirmAlert(
         'Willst du folgenden Listeneintrag wirklich löschen?<br /><br />' +
             `<b>Name:</b> ${item.name} <br /><b>Beschreibung: </b>${item.description}`,
         async () => await deleteToDoListItem(team.id, todolist.id, item.id)

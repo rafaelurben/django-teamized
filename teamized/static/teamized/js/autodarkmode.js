@@ -2,17 +2,17 @@
  * Auto dark mode
  */
 
-'use strict'
+'use strict';
 
 function updateTheme() {
     const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-bs-theme', theme)
+    document.documentElement.setAttribute('data-bs-theme', theme);
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    updateTheme()
-})
+    updateTheme();
+});
 
 window.addEventListener('DOMContentLoaded', () => {
-    updateTheme()
-})
+    updateTheme();
+});

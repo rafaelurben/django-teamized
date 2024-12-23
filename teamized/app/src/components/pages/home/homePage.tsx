@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { CHANGELOG } from '../../../data/changelog';
 import { Settings } from '../../../interfaces/settings';
 import { User } from '../../../interfaces/user';
-import * as NavigationService from '../../../service/navigation.service';
 import * as SettingsService from '../../../service/settings.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getDateString } from '../../../utils/datetime';
 import { toggleDebug } from '../../../utils/general';
 import Dashboard from '../../common/dashboard';
@@ -16,6 +16,8 @@ interface Props {
 }
 
 export default function HomePage({ user, settings }: Props) {
+    const refreshData = useAppdataRefresh();
+
     const [changelogAmount, setChangelogAmount] = useState(5);
 
     const canExpandChangelog = CHANGELOG.length > changelogAmount;
@@ -25,9 +27,7 @@ export default function HomePage({ user, settings }: Props) {
     const applyAppearance = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const val = evt.target.value;
         const darkmode = val === 'dark' ? true : val === 'light' ? false : null;
-        SettingsService.editSettings({ darkmode }).then(
-            NavigationService.renderPage
-        );
+        SettingsService.editSettings({ darkmode }).then(refreshData);
     };
 
     return (

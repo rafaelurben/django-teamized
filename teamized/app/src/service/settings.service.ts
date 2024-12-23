@@ -5,8 +5,8 @@
 import $ from 'jquery';
 
 import * as GeneralAPI from '../api/general';
+import { render } from '../app';
 import { Settings } from '../interfaces/settings';
-import * as NavigationService from './navigation.service';
 
 // User profile
 
@@ -34,7 +34,7 @@ function applySettings(settings: Settings) {
         }
     }
     // Rerender the page to apply the changes
-    NavigationService.render();
+    render();
 }
 
 export async function getSettings() {

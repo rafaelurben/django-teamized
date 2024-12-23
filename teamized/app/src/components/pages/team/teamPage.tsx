@@ -1,33 +1,48 @@
 import React from 'react';
 
-import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
-import * as NavigationService from '../../../service/navigation.service';
 import * as TeamsService from '../../../service/teams.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import {
+    useCurrentTeamData,
+    usePageNavigator,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
 
-interface Props {
-    team: Team;
-}
+export default function TeamPage() {
+    const refreshData = useAppdataRefresh();
 
-export default function TeamPage({ team }: Props) {
-    const handleTeamEditButtonClick = async () => {
-        await TeamsService.editTeamPopup(team);
-        NavigationService.renderPage();
+    const teamData = useCurrentTeamData();
+    const team = teamData?.team;
+
+    const selectPage = usePageNavigator();
+
+    const handleTeamEditButtonClick = () => {
+        TeamsService.editTeamPopup(team).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const handleTeamDeleteButtonClick = async () => {
-        await TeamsService.deleteTeamPopup(team);
-        NavigationService.selectPage('teamlist');
+        await TeamsService.deleteTeamPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('teamlist');
+                refreshData();
+            }
+        });
     };
 
-    const handleClubCreateButtonClick = async () => {
-        const result = await ClubService.createClubPopup(team);
-        if (result) NavigationService.selectPage('club');
+    const handleClubCreateButtonClick = () => {
+        ClubService.createClubPopup(team).then((result) => {
+            if (result.isConfirmed) {
+                selectPage('club');
+                refreshData();
+            }
+        });
     };
 
     return (
@@ -129,15 +144,12 @@ export default function TeamPage({ team }: Props) {
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Mitglieder">
-                    <TeamMemberTable
-                        team={team}
-                        loggedInMember={team.member!}
-                    />
+                    <TeamMemberTable teamData={teamData} />
                 </Dashboard.Tile>
 
                 {team.member!.is_owner && (
                     <Dashboard.Tile title="Einladungen">
-                        <TeamInviteTable team={team} />
+                        <TeamInviteTable teamData={teamData} />
                     </Dashboard.Tile>
                 )}
             </Dashboard.Column>

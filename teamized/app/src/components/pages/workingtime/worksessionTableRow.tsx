@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as NavigationService from '../../../service/navigation.service';
 import * as WorkingtimeService from '../../../service/workingtime.service';
+import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { seconds2HoursMinutesSeconds } from '../../../utils/datetime';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
@@ -13,14 +13,22 @@ interface Props {
 }
 
 export default function WorksessionTableRow({ team, session }: Props) {
-    const handleDeleteButtonClick = async () => {
-        await WorkingtimeService.deleteWorkSessionPopup(team, session);
-        NavigationService.renderPage();
+    const refreshData = useAppdataRefresh();
+
+    const handleDeleteButtonClick = () => {
+        WorkingtimeService.deleteWorkSessionPopup(team, session).then(
+            (result) => {
+                if (result.isConfirmed) refreshData();
+            }
+        );
     };
 
-    const handleEditButtonClick = async () => {
-        await WorkingtimeService.editWorkSessionPopup(team, session);
-        NavigationService.renderPage();
+    const handleEditButtonClick = () => {
+        WorkingtimeService.editWorkSessionPopup(team, session).then(
+            (result) => {
+                if (result.isConfirmed) refreshData();
+            }
+        );
     };
 
     const getDurationDisplay = () => {

@@ -26,7 +26,6 @@ import {
     roundDays,
 } from '../utils/datetime';
 import * as CacheService from './cache.service';
-import * as NavigationService from './navigation.service';
 
 export async function getMyWorkSessionsInTeam(teamId: ID) {
     return await CacheService.refreshTeamCacheCategory<Worksession>(
@@ -43,7 +42,7 @@ export async function createWorkSession(
 ) {
     return await WorkingtimeAPI.createWorksession(teamId, session).then(
         (data) => {
-            CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+            CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
                 data.session;
             return data.session;
         }
@@ -52,10 +51,9 @@ export async function createWorkSession(
 
 export async function createWorkSessionPopup(team: Team) {
     const _dt = localInputFormat(new Date());
-    return (
-        await Swal.fire({
-            title: `Sitzung erstellen`,
-            html: `
+    return await Swal.fire<Worksession>({
+        title: `Sitzung erstellen`,
+        html: `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-note">Notiz:</label>
             <textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz"></textarea>
@@ -64,37 +62,36 @@ export async function createWorkSessionPopup(team: Team) {
             <label class="swal2-input-label" for="swal-input-dtend">Bis:</label>
             <input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${_dt}">
         `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const note = (<HTMLInputElement>(
-                    document.getElementById('swal-input-note')
-                )).value;
-                const dtstart = (<HTMLInputElement>(
-                    document.getElementById('swal-input-dtstart')
-                )).value;
-                const dtend = (<HTMLInputElement>(
-                    document.getElementById('swal-input-dtend')
-                )).value;
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const note = (<HTMLInputElement>(
+                document.getElementById('swal-input-note')
+            )).value;
+            const dtstart = (<HTMLInputElement>(
+                document.getElementById('swal-input-dtstart')
+            )).value;
+            const dtend = (<HTMLInputElement>(
+                document.getElementById('swal-input-dtend')
+            )).value;
 
-                if (!dtstart || !dtend) {
-                    Swal.showValidationMessage(
-                        'Start- und Endzeit sind Pflichtfelder!'
-                    );
-                    return false;
-                }
+            if (!dtstart || !dtend) {
+                Swal.showValidationMessage(
+                    'Start- und Endzeit sind Pflichtfelder!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createWorkSession(team.id, {
-                    note,
-                    time_start: isoFormat(dtstart),
-                    time_end: isoFormat(dtend),
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createWorkSession(team.id, {
+                note,
+                time_start: isoFormat(dtstart),
+                time_end: isoFormat(dtend),
+            });
+        },
+    });
 }
 
 // WorkSession edit
@@ -109,7 +106,7 @@ export async function editWorkSession(
         sessionId,
         session
     ).then(async (data) => {
-        CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+        CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
             data.session;
         return data.session;
     });
@@ -119,55 +116,53 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
     let dtstart = localInputFormat(session.time_start);
     let dtend =
         session.time_end !== null ? localInputFormat(session.time_end) : '';
-    return (
-        await Swal.fire({
-            title: `Sitzung bearbeiten`,
-            html:
-                `
+    return await Swal.fire<Worksession>({
+        title: `Sitzung bearbeiten`,
+        html:
+            `
             <p>Team: ${team.name}</p><hr />
             <label class="swal2-input-label" for="swal-input-note">Notiz:</label>
             <textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>` +
-                (session.is_created_via_tracking
-                    ? '<hr><p class="swal2-text mt-3 mb-0 small opacity-50 px-3">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
-                    : `
+            (session.is_created_via_tracking
+                ? '<hr><p class="swal2-text mt-3 mb-0 small opacity-50 px-3">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
+                : `
                     <label class="swal2-input-label" for="swal-input-dtstart">Von:</label>
                     <input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${dtstart}">
                     <label class="swal2-input-label" for="swal-input-dtend">Bis:</label>
                     <input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${dtend}">
                     `),
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Speichern',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const note = (<HTMLInputElement>(
-                    document.getElementById('swal-input-note')
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Speichern',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const note = (<HTMLInputElement>(
+                document.getElementById('swal-input-note')
+            )).value;
+
+            if (!session.is_created_via_tracking) {
+                dtstart = (<HTMLInputElement>(
+                    document.getElementById('swal-input-dtstart')
                 )).value;
-
-                if (!session.is_created_via_tracking) {
-                    dtstart = (<HTMLInputElement>(
-                        document.getElementById('swal-input-dtstart')
-                    )).value;
-                    dtend = (<HTMLInputElement>(
-                        document.getElementById('swal-input-dtend')
-                    )).value;
-                    if (!dtstart || !dtend) {
-                        Swal.showValidationMessage(
-                            'Start- und Endzeit sind Pflichtfelder!'
-                        );
-                        return false;
-                    }
+                dtend = (<HTMLInputElement>(
+                    document.getElementById('swal-input-dtend')
+                )).value;
+                if (!dtstart || !dtend) {
+                    Swal.showValidationMessage(
+                        'Start- und Endzeit sind Pflichtfelder!'
+                    );
+                    return false;
                 }
+            }
 
-                Swal.showLoading();
-                return await editWorkSession(team.id, session.id, {
-                    note,
-                    time_start: isoFormat(dtstart),
-                    time_end: isoFormat(dtend),
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editWorkSession(team.id, session.id, {
+                note,
+                time_start: isoFormat(dtstart),
+                time_end: isoFormat(dtend),
+            });
+        },
+    });
 }
 
 // WorkSession deletion
@@ -175,13 +170,13 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
 export async function deleteWorkSession(teamId: ID, sessionId: ID) {
     return await WorkingtimeAPI.deleteWorksession(teamId, sessionId).then(
         () => {
-            delete CacheService.getCurrentTeamData().me_worksessions[sessionId];
+            delete CacheService.getTeamData(teamId).me_worksessions[sessionId];
         }
     );
 }
 
 export async function deleteWorkSessionPopup(team: Team, session: Worksession) {
-    await confirmAlert(
+    return await confirmAlert(
         'Willst du folgende Sitzung wirklich löschen?<br /><br />' +
             `<b>Notiz:</b> ${session.note}`,
         async () => await deleteWorkSession(team.id, session.id)
@@ -207,7 +202,6 @@ export async function getTrackingSession() {
             return null;
         } else {
             window.appdata.current_worksession = data.session;
-            NavigationService.renderPage();
             return data.session;
         }
     });
@@ -236,9 +230,9 @@ export async function renameWorkSession(
         note,
     }).then((data) => {
         if (
-            data.session.id in CacheService.getCurrentTeamData().me_worksessions
+            data.session.id in CacheService.getTeamData(teamId).me_worksessions
         ) {
-            CacheService.getCurrentTeamData().me_worksessions[data.session.id] =
+            CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
                 data.session;
         }
         if (
@@ -252,22 +246,20 @@ export async function renameWorkSession(
 }
 
 export async function renameWorkSessionPopup(team: Team, session: Worksession) {
-    return (
-        await Swal.fire({
-            title: `Sitzung umbenennen`,
-            html: `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>`,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Speichern',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const note = <string>$('#swal-input-note').val();
+    return await Swal.fire<Worksession>({
+        title: `Sitzung umbenennen`,
+        html: `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>`,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Speichern',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const note = <string>$('#swal-input-note').val();
 
-                Swal.showLoading();
-                return await renameWorkSession(team.id, session.id, note);
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await renameWorkSession(team.id, session.id, note);
+        },
+    });
 }
 
 // Workingtime stats utils

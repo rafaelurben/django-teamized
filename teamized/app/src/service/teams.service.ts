@@ -19,53 +19,8 @@ import {
 import { isoFormat, localInputFormat } from '../utils/datetime';
 import { validateUUID } from '../utils/general';
 import * as CacheService from './cache.service';
-import * as NavigationService from './navigation.service';
 
 export { getTeamsList } from './cache.service';
-
-export function isCurrentTeamAdmin() {
-    const teamData = CacheService.getCurrentTeamData();
-    if (teamData) {
-        return ['owner', 'admin'].includes(teamData.team.member?.role || '');
-    }
-    return false;
-}
-
-export function hasCurrentTeamLinkedClub() {
-    const teamData = CacheService.getCurrentTeamData();
-    if (teamData) {
-        return teamData.team.club !== null;
-    }
-    return false;
-}
-
-export function ensureExistingTeam() {
-    if (window.appdata.selectedTeamId) {
-        // Team selected; check if it is valid
-        if (window.appdata.selectedTeamId in window.appdata.teamCache) {
-            // Team is in cache, so it must be a valid team id
-            return;
-        }
-    }
-
-    // No team selected or team doesn't exist; select default
-    console.log(
-        "No team selected or team doesn't exist; falling back to default"
-    );
-    switchTeam(window.appdata.defaultTeamId);
-}
-
-export function switchTeam(teamId: ID) {
-    if (window.appdata.selectedTeamId === teamId) {
-        // Already selected; no action needed
-        return;
-    }
-    console.debug('Switching team to: ' + teamId);
-
-    window.appdata.selectedTeamId = teamId;
-    NavigationService.exportToURL();
-    NavigationService.render();
-}
 
 //// API calls ////
 
@@ -74,7 +29,6 @@ export function switchTeam(teamId: ID) {
 export async function getTeams() {
     return await TeamsAPI.getTeams().then((data) => {
         CacheService.updateTeamsCache(data.teams, data.defaultTeamId);
-        ensureExistingTeam();
         return data.teams;
     });
 }
@@ -84,42 +38,36 @@ export async function getTeams() {
 export async function createTeam(team: TeamRequestDTO) {
     return await TeamsAPI.createTeam(team).then(async (data) => {
         CacheService.addTeam(data.team);
-        switchTeam(data.team.id);
-
         return data.team;
     });
 }
 
 export async function createTeamPopup() {
-    return (
-        await Swal.fire({
-            title: 'Team erstellen',
-            html: `
-      <label class="swal2-input-label mt-0" for="swal-input-name">Name:</label>
-      <input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">
-      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-      <textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
+    return await Swal.fire<Team>({
+        title: 'Team erstellen',
+        html: `
+          <label class="swal2-input-label mt-0" for="swal-input-name">Name:</label>
+          <input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">
+          <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+          <textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
 
-                if (!name || !description) {
-                    Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                    return false;
-                }
+            if (!name || !description) {
+                Swal.showValidationMessage('Bitte fülle alle Felder aus!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createTeam({ name, description }).then(() => {
-                    NavigationService.selectPage('team');
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createTeam({ name, description });
+        },
+    });
 }
 
 // Team edit
@@ -132,43 +80,39 @@ export async function editTeam(teamId: ID, team: Partial<TeamRequestDTO>) {
 }
 
 export async function editTeamPopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: 'Team bearbeiten',
-            html: `
-      <p>Team: ${team.name}</p><hr />
-      <label class="swal2-input-label" for="swal-input-name">Name:</label>
-      <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">
-      <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-      <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const name = <string>$('#swal-input-name').val();
-                const description = <string>$('#swal-input-description').val();
+    return await Swal.fire<Team>({
+        title: 'Team bearbeiten',
+        html: `
+          <p>Team: ${team.name}</p><hr />
+          <label class="swal2-input-label" for="swal-input-name">Name:</label>
+          <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">
+          <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
+          <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const name = <string>$('#swal-input-name').val();
+            const description = <string>$('#swal-input-description').val();
 
-                if (!name || !description) {
-                    Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                    return false;
-                }
+            if (!name || !description) {
+                Swal.showValidationMessage('Bitte fülle alle Felder aus!');
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editTeam(team.id, { name, description });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editTeam(team.id, { name, description });
+        },
+    });
 }
 
 // Team deletion
 
 export async function deleteTeam(teamId: ID) {
-    await TeamsAPI.deleteTeam(teamId).then(async () => {
+    return await TeamsAPI.deleteTeam(teamId).then(async () => {
         await CacheService.deleteTeam(teamId);
-        ensureExistingTeam();
-        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -183,10 +127,8 @@ export async function deleteTeamPopup(team: Team) {
 // Team leave
 
 export async function leaveTeam(teamId: ID) {
-    await TeamsAPI.leaveTeam(teamId).then(async () => {
+    return await TeamsAPI.leaveTeam(teamId).then(async () => {
         await CacheService.deleteTeam(teamId);
-        ensureExistingTeam();
-        NavigationService.selectPage('teamlist');
     });
 }
 
@@ -274,43 +216,41 @@ export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
 }
 
 export async function createInvitePopup(team: Team) {
-    return (
-        await Swal.fire({
-            title: `Einladung erstellen`,
-            html: `
-      <p>Team: ${team.name}</p><hr />
-      <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
-      <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>
-      <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
-      <input type="number" id="swal-input-uses_left" class="swal2-input" value="1">
-      <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
-      <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Erstellen',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const note = <string>$('#swal-input-note').val();
-                const uses_left = <number>$('#swal-input-uses_left').val();
-                const valid_until = <string>$('#swal-input-valid_until').val();
+    return await Swal.fire<Invite>({
+        title: `Einladung erstellen`,
+        html: `
+          <p>Team: ${team.name}</p><hr />
+          <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
+          <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>
+          <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
+          <input type="number" id="swal-input-uses_left" class="swal2-input" value="1">
+          <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
+          <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Erstellen',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const note = <string>$('#swal-input-note').val();
+            const uses_left = <number>$('#swal-input-uses_left').val();
+            const valid_until = <string>$('#swal-input-valid_until').val();
 
-                if (!uses_left || !note) {
-                    Swal.showValidationMessage(
-                        'Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!'
-                    );
-                    return false;
-                }
+            if (!uses_left || !note) {
+                Swal.showValidationMessage(
+                    'Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await createInvite(team.id, {
-                    note,
-                    uses_left,
-                    valid_until: isoFormat(valid_until),
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await createInvite(team.id, {
+                note,
+                uses_left,
+                valid_until: isoFormat(valid_until),
+            });
+        },
+    });
 }
 
 // Invite edit
@@ -330,55 +270,53 @@ export async function editInvite(
 }
 
 export async function editInvitePopup(team: Team, invite: Invite) {
-    return (
-        await Swal.fire({
-            title: 'Einladung bearbeiten',
-            html: `
-      <p>Team: ${team.name}</p><hr />
-      <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
-      <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>
-      <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
-      <input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">
-      <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
-      <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">
-    `,
-            focusConfirm: false,
-            showCancelButton: true,
-            confirmButtonText: 'Aktualisieren',
-            cancelButtonText: 'Abbrechen',
-            preConfirm: async () => {
-                const note = <string>$('#swal-input-note').val();
-                const uses_left = <number>$('#swal-input-uses_left').val();
-                const valid_until = <string>$('#swal-input-valid_until').val();
+    return await Swal.fire({
+        title: 'Einladung bearbeiten',
+        html: `
+          <p>Team: ${team.name}</p><hr />
+          <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
+          <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>
+          <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
+          <input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">
+          <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
+          <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Aktualisieren',
+        cancelButtonText: 'Abbrechen',
+        preConfirm: async () => {
+            const note = <string>$('#swal-input-note').val();
+            const uses_left = <number>$('#swal-input-uses_left').val();
+            const valid_until = <string>$('#swal-input-valid_until').val();
 
-                if (!uses_left || !note) {
-                    Swal.showValidationMessage(
-                        'Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!'
-                    );
-                    return false;
-                }
+            if (!uses_left || !note) {
+                Swal.showValidationMessage(
+                    'Bitte fülle die Felder Notizen und Anzahl Benutzungen aus!'
+                );
+                return false;
+            }
 
-                Swal.showLoading();
-                return await editInvite(team.id, invite.id, {
-                    note,
-                    uses_left,
-                    valid_until: isoFormat(valid_until),
-                });
-            },
-        })
-    ).value;
+            Swal.showLoading();
+            return await editInvite(team.id, invite.id, {
+                note,
+                uses_left,
+                valid_until: isoFormat(valid_until),
+            });
+        },
+    });
 }
 
 // Invite deletion
 
 export async function deleteInvite(teamId: ID, inviteId: ID) {
-    await TeamsAPI.deleteInvite(teamId, inviteId).then(async () => {
+    return await TeamsAPI.deleteInvite(teamId, inviteId).then(async () => {
         delete CacheService.getTeamData(teamId).invites[inviteId];
     });
 }
 
 export async function deleteInvitePopup(team: Team, invite: Invite) {
-    await confirmAlert(
+    return await confirmAlert(
         'Willst du folgende Einladung wirklich löschen?<br /><br />' +
             `<b>Notiz:</b> ${invite.note} <br /><b>Token: </b>${invite.token}`,
         async () => await deleteInvite(team.id, invite.id)
@@ -390,9 +328,6 @@ export async function deleteInvitePopup(team: Team, invite: Invite) {
 export async function acceptInvite(token: string) {
     return await TeamsAPI.acceptInvite(token).then(async (data) => {
         CacheService.addTeam(data.team);
-        switchTeam(data.team.id);
-        NavigationService.exportToURL({ removeParams: ['invite'] });
-
         await getMembers(data.team.id);
         return data.team;
     });
@@ -404,23 +339,20 @@ export async function checkInvitePopup(token: string) {
             'Ungültiges Einladungsformat',
             'Diese Einladung liegt nicht im richtigen Format vor.'
         );
-        NavigationService.exportToURL({ removeParams: ['invite'] });
-        return;
+        return Promise.reject(null);
     }
 
     const data = await TeamsAPI.checkInvite(token);
 
     if (data.status === 'invite-valid') {
         const team = data.team;
-        await confirmAlert(
+        return await confirmAlert(
             `Möchtest du folgendem Team beitreten?<br /><br />
-      <b>Name:</b> ${team.name}<br />
-      <b>Beschreibung: </b>${team.description}<br />
-      <b>Anzahl Mitglieder: </b>${team.membercount}<br />`,
+              <b>Name:</b> ${team.name}<br />
+              <b>Beschreibung: </b>${team.description}<br />
+              <b>Anzahl Mitglieder: </b>${team.membercount}<br />`,
             async () => {
-                Swal.showLoading();
-                await acceptInvite(token);
-                NavigationService.selectPage('team');
+                return await acceptInvite(token);
             },
             'Du wurdest eingeladen',
             {
@@ -431,7 +363,7 @@ export async function checkInvitePopup(token: string) {
             }
         );
     } else {
-        NavigationService.exportToURL({ removeParams: ['invite'] });
+        return Promise.reject(null);
     }
 }
 
