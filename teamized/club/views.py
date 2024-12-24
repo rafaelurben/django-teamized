@@ -34,7 +34,6 @@ def member_login(request, club, member):
     """
 
     if member.session_is_logged_in(request):
-        messages.success(request, "Du bist bereits eingeloggt.")
         return redirect(
             reverse(
                 "teamized:club_member_app",

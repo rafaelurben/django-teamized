@@ -49,15 +49,19 @@ def iddict(lst: list):
 
 
 def now_plus_1h():
-    return timezone.now() + timezone.timedelta(hours=1)
+    return timezone.now() + timedelta(hours=1)
+
+
+def now_plus_1w():
+    return timezone.now() + timedelta(weeks=1)
 
 
 def now_plus_2w():
-    return timezone.now() + timezone.timedelta(weeks=2)
+    return timezone.now() + timedelta(weeks=2)
 
 
-def now_plus_8w():
-    return timezone.now() + timezone.timedelta(weeks=8)
+def now_plus_180d():
+    return timezone.now() + timedelta(days=180)
 
 
 def is_valid_uuid(val):
