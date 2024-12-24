@@ -59,6 +59,17 @@ export async function updateEvent(
     );
 }
 
+export async function moveEvent(
+    teamId: ID,
+    calendarId: ID,
+    eventId: ID,
+    calendarId2: ID
+) {
+    return await API.post<{ event: CalendarEvent }>(
+        `teams/${teamId}/calendars/${calendarId}/events/${eventId}/move/${calendarId2}`
+    );
+}
+
 export async function deleteEvent(teamId: ID, calendarId: ID, eventId: ID) {
     return await API.delete(
         `teams/${teamId}/calendars/${calendarId}/events/${eventId}`

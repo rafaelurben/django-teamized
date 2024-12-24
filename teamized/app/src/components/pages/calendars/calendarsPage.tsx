@@ -125,7 +125,11 @@ export default function CalendarsPage() {
                     className="order-lg-3"
                 >
                     {/* Selected event */}
-                    <CalendarEventDisplay event={selectedEvent} team={team} />
+                    <CalendarEventDisplay
+                        event={selectedEvent}
+                        team={team}
+                        calendars={calendars}
+                    />
                 </Dashboard.Tile>
                 <Dashboard.Tile
                     title="Kalenderübersicht"
