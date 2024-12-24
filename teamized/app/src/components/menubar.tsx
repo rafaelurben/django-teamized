@@ -46,7 +46,10 @@ export default function AppMenubar({ teams, user }: Props) {
                     id="menubartitle"
                     className="navbar-brand ms-1 sidebar-toggle"
                     href="#"
-                    onClick={() => GeneralUtils.toggleSidebar()}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        GeneralUtils.toggleSidebar();
+                    }}
                 >
                     <i className="fa-fw fa-solid fa-square-caret-left when-open"></i>
                     <i className="fa-fw fa-solid fa-square-caret-right when-closed"></i>
