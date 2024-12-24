@@ -103,6 +103,16 @@ export default function CalendarEventDisplay({
                     <th>Ende:</th>
                     <td>{eventEndDisplay}</td>
                 </tr>
+                <tr>
+                    <th>Kalender:</th>
+                    <td>
+                        <i
+                            style={{ color: event.calendar?.color }}
+                            className="fas fa-circle small me-2"
+                        ></i>
+                        {event.calendar?.name}
+                    </td>
+                </tr>
                 <tr className="debug-only">
                     <th>ID:</th>
                     <td>{event.id}</td>
