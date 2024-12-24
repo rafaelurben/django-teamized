@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Calendar } from '../../../interfaces/calendar/calendar';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
@@ -9,21 +10,37 @@ import Dashboard from '../../common/dashboard';
 interface Props {
     team: Team;
     event: CalendarEvent;
+    calendars: Calendar[];
 }
 
-export default function CalendarEventDisplay({ team, event }: Props) {
+export default function CalendarEventDisplay({
+    team,
+    event,
+    calendars,
+}: Props) {
     const refreshData = useAppdataRefresh();
 
     const editEvent = () => {
-        CalendarService.editEventPopup(team, event.calendar!, event).then(
-            refreshData
-        );
+        CalendarService.editEventPopup(
+            team,
+            event.calendar!,
+            calendars,
+            event
+        ).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const cloneEvent = () => {
-        CalendarService.editEventPopup(team, event.calendar!, event, true).then(
-            refreshData
-        );
+        CalendarService.editEventPopup(
+            team,
+            event.calendar!,
+            calendars,
+            event,
+            true
+        ).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const deleteEvent = () => {
@@ -85,6 +102,16 @@ export default function CalendarEventDisplay({ team, event }: Props) {
                 <tr>
                     <th>Ende:</th>
                     <td>{eventEndDisplay}</td>
+                </tr>
+                <tr>
+                    <th>Kalender:</th>
+                    <td>
+                        <i
+                            style={{ color: event.calendar?.color }}
+                            className="fas fa-circle small me-2"
+                        ></i>
+                        {event.calendar?.name}
+                    </td>
                 </tr>
                 <tr className="debug-only">
                     <th>ID:</th>

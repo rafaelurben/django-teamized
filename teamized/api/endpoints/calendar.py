@@ -206,3 +206,47 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
                 },
             }
         )
+
+
+@api_view(["post"])
+@csrf_exempt
+@teamized_prep()
+@require_objects(
+    [
+        ("team", Team, "team"),
+        ("calendar", Calendar, "calendar1"),
+        ("event", CalendarEvent, "event"),
+        ("toCalendar", Calendar, "calendar2"),
+    ]
+)
+def endpoint_event_move(request, team: Team, calendar1: Calendar, event: CalendarEvent, calendar2: Calendar):
+    """
+    Endpoint for moving an event.
+    """
+
+    # Check if both calendars are in team
+    if calendar1.team != team or calendar2.team != team:
+        return OBJ_NOT_FOUND
+    # Check if event is in calendar1
+    if event.calendar != calendar1:
+        return OBJ_NOT_FOUND
+
+    user: User = request.teamized_user
+
+    if not team.user_is_member(user):
+        return NO_PERMISSION
+
+    event.calendar = calendar2
+    event.save()
+
+    return JsonResponse(
+        {
+            "success": True,
+            "id": event.uid,
+            "event": event.as_dict(),
+            "alert": {
+                "title": _("Ereignis verschoben"),
+                "text": _("Das Ereignis wurde erfolgreich verschoben."),
+            },
+        }
+    )

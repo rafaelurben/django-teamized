@@ -68,6 +68,11 @@ urlpatterns = [
         ep.calendar.endpoint_event,
         name="api-event",
     ),
+    path(
+        "teams/<team>/calendars/<calendar>/events/<event>/move/<toCalendar>",
+        ep.calendar.endpoint_event_move,
+        name="api-event-move",
+    ),
     # To-Do API views
     path("teams/<team>/todolists", ep.todo.endpoint_todolists, name="api-todolists"),
     path(

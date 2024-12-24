@@ -10,8 +10,9 @@ export const CHANGELOG: ChangelogItem[] = [
     {
         date: '2024-12-24',
         changes: [
-            'Kleine Änderungen an Code-Struktur',
-            'Aktualisierung von Abhängigkeiten',
+            '[Kalender] Ereignisse können nun zwischen Kalendern verschoben werden',
+            'Technisch: Kleine Änderungen an Code-Struktur',
+            'Technisch: Aktualisierung von Abhängigkeiten',
         ],
     },
     {
