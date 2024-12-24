@@ -8,6 +8,7 @@ import uuid
 from copy import deepcopy
 
 from django.db import models
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -70,47 +71,47 @@ class Club(models.Model):
             "membercount": self.members.count(),
         }
 
+    def ensure_session_structure(self, request):
+        if "teamized_clubmember_sessions" not in request.session:
+            request.session["teamized_clubmember_sessions"] = {}
+        if str(self.uid) not in request.session["teamized_clubmember_sessions"]:
+            request.session["teamized_clubmember_sessions"][str(self.uid)] = {}
+
     def session_get_logged_in_members(self, request):
+        self.ensure_session_structure(request)
         members = []
-        if "teamized_clubmember_sessions" in request.session:
-            sessions = request.session["teamized_clubmember_sessions"]
-            if str(self.uid) in sessions:
-                for memberuid, magicuid in deepcopy(
-                    request.session["teamized_clubmember_sessions"][str(self.uid)]
-                ).items():
-                    if ClubMemberMagicLink.objects.filter(
-                        uid=magicuid,
-                        member_id=memberuid,
-                        logged_in=True,
-                        logged_out=False,
-                        valid_until__gt=timezone.now(),
-                    ).exists():
-                        magiclink = ClubMemberMagicLink.objects.get(
-                            uid=magicuid,
-                            member_id=memberuid,
-                            logged_in=True,
-                            logged_out=False,
-                            valid_until__gt=timezone.now(),
-                        )
-                        members.append(
-                            {
-                                "member": magiclink.member,
-                                "url": (
-                                    reverse(
-                                        "teamized:club_member_app",
-                                        kwargs={
-                                            "clubslug": magiclink.member.club.slug,
-                                            "memberuid": magiclink.member.uid,
-                                        },
-                                    )
-                                ),
-                            }
-                        )
-                    else:
-                        del request.session["teamized_clubmember_sessions"][
-                            str(self.uid)
-                        ][memberuid]
-                        request.session.modified = True
+        for member_uid, session_uid in deepcopy(
+            request.session["teamized_clubmember_sessions"][str(self.uid)]
+        ).items():
+            if ClubMemberSession.objects.filter(
+                uid=session_uid,
+                member_id=member_uid,
+                valid_until__gt=timezone.now(),
+            ).exists():
+                session = ClubMemberSession.objects.get(
+                    uid=session_uid,
+                    member_id=member_uid,
+                    valid_until__gt=timezone.now(),
+                )
+                members.append(
+                    {
+                        "member": session.member,
+                        "url": (
+                            reverse(
+                                "teamized:club_member_app",
+                                kwargs={
+                                    "clubslug": session.member.club.slug,
+                                    "memberuid": session.member.uid,
+                                },
+                            )
+                        ),
+                    }
+                )
+            else:
+                del request.session["teamized_clubmember_sessions"][
+                    str(self.uid)
+                ][member_uid]
+                request.session.modified = True
         return members
 
     @classmethod
@@ -272,32 +273,22 @@ class ClubMember(models.Model):
         return ClubMemberMagicLink.objects.filter(
             uid=magic_uid,
             member=self,
-            login_until__gt=timezone.now(),
-            logged_in=False,
-            logged_out=False,
-        ).exists()
-
-    def can_use_magicuid(self, magic_uid):
-        if not utils.is_valid_uuid(magic_uid):
-            return False
-        return ClubMemberMagicLink.objects.filter(
-            uid=magic_uid,
-            member=self,
             valid_until__gt=timezone.now(),
-            logged_in=True,
-            logged_out=False,
         ).exists()
 
     def session_is_logged_in(self, request):
-        if "teamized_clubmember_sessions" in request.session:
-            sessions = request.session["teamized_clubmember_sessions"]
-            if self.clubuid in sessions:
-                if self.memberuid in sessions[self.clubuid]:
-                    if self.can_use_magicuid(sessions[self.clubuid][self.memberuid]):
-                        return True
-                    del sessions[self.clubuid][self.memberuid]
-                    request.session.modified = True
-        return False
+        self.club.ensure_session_structure(request)
+        club_sessions = request.session["teamized_clubmember_sessions"][self.clubuid]
+        if self.memberuid not in club_sessions:
+            return False
+        if not ClubMemberSession.objects.filter(uid=club_sessions[self.memberuid],
+                                                member=self,
+                                                valid_until__gt=timezone.now()).exists():
+            del club_sessions[self.memberuid]
+            request.session.modified = True
+            messages.error(request, _("Deine Sitzung ist ungültig oder abgelaufen. Bitte logge dich erneut ein."))
+            return False
+        return True
 
     def session_login(self, request, magic_uid):
         if not self.can_login_with_magicuid(magic_uid):
@@ -306,55 +297,32 @@ class ClubMember(models.Model):
         ClubMemberMagicLink.objects.get(
             uid=magic_uid,
             member=self,
-            login_until__gt=timezone.now(),
-            logged_in=False,
-            logged_out=False,
-        ).mark_logged_in()
+        ).delete()
+        session = self.create_session()
 
-        if "teamized_clubmember_sessions" not in request.session:
-            request.session["teamized_clubmember_sessions"] = {}
-        if self.clubuid not in request.session["teamized_clubmember_sessions"]:
-            request.session["teamized_clubmember_sessions"][self.clubuid] = {}
-        request.session["teamized_clubmember_sessions"][self.clubuid][
-            self.memberuid
-        ] = str(magic_uid)
+        self.club.ensure_session_structure(request)
+        request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid] = str(session.uid)
         request.session.modified = True
-
         return True
 
     def session_logout(self, request):
-        if "teamized_clubmember_sessions" in request.session:
-            if self.clubuid in request.session["teamized_clubmember_sessions"]:
-                if (
-                    self.memberuid
-                    in request.session["teamized_clubmember_sessions"][self.clubuid]
-                ):
-                    magic_uid = request.session["teamized_clubmember_sessions"][
-                        self.clubuid
-                    ][self.memberuid]
-                    del request.session["teamized_clubmember_sessions"][self.clubuid][
-                        self.memberuid
-                    ]
-                    if (
-                        len(
-                            request.session["teamized_clubmember_sessions"][
-                                self.clubuid
-                            ]
-                        )
-                        == 0
-                    ):
-                        del request.session["teamized_clubmember_sessions"][
-                            self.clubuid
-                        ]
-                    if len(request.session["teamized_clubmember_sessions"]) == 0:
-                        del request.session["teamized_clubmember_sessions"]
-                    if ClubMemberMagicLink.objects.filter(
-                        uid=magic_uid, member=self
-                    ).exists():
-                        ClubMemberMagicLink.objects.get(
-                            uid=magic_uid, member=self
-                        ).mark_logged_out()
+        self.club.ensure_session_structure(request)
+        if self.memberuid not in request.session["teamized_clubmember_sessions"][self.clubuid]:
+            return
+        session_uid = request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid]
+        del request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid]
         request.session.modified = True
+        if ClubMemberSession.objects.filter(
+            uid=session_uid, member=self
+        ).exists():
+            ClubMemberSession.objects.get(
+                uid=session_uid, member=self
+            ).delete()
+
+    def create_session(self) -> "ClubMemberSession":
+        """Create a session for this member."""
+
+        return ClubMemberSession.objects.create(member=self)
 
     def create_magic_link(self) -> "ClubMemberMagicLink":
         """Create a new magic link for this member."""
@@ -434,6 +402,35 @@ class ClubMember(models.Model):
         self.save()
 
 
+class ClubMemberSession(models.Model):
+    uid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+    )
+    member = models.ForeignKey(
+        ClubMember,
+        on_delete=models.CASCADE,
+        verbose_name=_("Mitglied"),
+        related_name="sessions",
+    )
+
+    valid_until = models.DateTimeField(
+        verbose_name=_("Gültig bis"), default=utils.now_plus_180d
+    )
+
+    date_created = models.DateTimeField(
+        verbose_name=_("Erstellt am"), auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=_("Zuletzt geändert am"), auto_now=True
+    )
+
+    class Meta:
+        verbose_name = _("Sitzung")
+        verbose_name_plural = _("Sitzungen")
+
+    objects = models.Manager()
+
+
 class ClubMemberMagicLink(models.Model):
     uid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
@@ -445,16 +442,8 @@ class ClubMemberMagicLink(models.Model):
         related_name="magic_links",
     )
 
-    logged_in = models.BooleanField(verbose_name=_("Eingeloggt?"), default=False)
-    logged_out = models.BooleanField(
-        verbose_name=_("Wieder ausgeloggt?"), default=False
-    )
-
-    login_until = models.DateTimeField(
-        verbose_name=_("Login bis"), default=utils.now_plus_1h
-    )
     valid_until = models.DateTimeField(
-        verbose_name=_("Verwendbar bis"), default=utils.now_plus_2w
+        verbose_name=_("Verwendbar bis"), default=utils.now_plus_1w
     )
 
     date_created = models.DateTimeField(
@@ -469,14 +458,6 @@ class ClubMemberMagicLink(models.Model):
         verbose_name_plural = _("Magische Links")
 
     objects = models.Manager()
-
-    def mark_logged_in(self):
-        self.logged_in = True
-        self.save()
-
-    def mark_logged_out(self):
-        self.logged_out = True
-        self.save()
 
     def get_absolute_url(self, request):
         return (
@@ -634,7 +615,6 @@ class ClubMemberGroupMembership(models.Model):
         verbose_name = _("Gruppenmitgliedschaft")
         verbose_name_plural = _("Gruppenmitgliedschaften")
         unique_together = [["group", "member"]]
-
 
 # class ClubPoll(models.Model):
 #     uid = models.UUIDField(
