@@ -30,14 +30,17 @@ export default function WorkingtimePage() {
     const statsRangeEndId = useId();
 
     const applyStatsRange = () => {
-        const start = (
+        const startVal = (
             document.getElementById(statsRangeStartId) as HTMLInputElement
-        ).valueAsDate;
-        const end = (
+        ).value;
+        const start = new Date(startVal);
+        const endVal = (
             document.getElementById(statsRangeEndId) as HTMLInputElement
-        ).valueAsDate;
+        ).value;
+        const end = new Date(endVal);
+        console.log(startVal, start, endVal, end);
 
-        if (!start || !end || isNaN(start.valueOf()) || isNaN(end.valueOf())) {
+        if (!startVal || !endVal || !start || !end) {
             errorAlert('Was ist das?', 'Ein angegebenes Datum ist ungültig');
             return;
         }
