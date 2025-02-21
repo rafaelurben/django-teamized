@@ -31,7 +31,7 @@
     "eslint-plugin-simple-import-sort": "~12.1.1",
     "globals": "~15.15.0",
     "prettier": "~3.5.0",
-    "sweetalert2": "11.17.1",
+    "sweetalert2": "11.17.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.7.0",
