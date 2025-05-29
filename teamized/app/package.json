@@ -40,7 +40,7 @@
     "webpack-cli": "~6.0.0"
   },
   "dependencies": {
-    "@types/react": "19.1.5",
+    "@types/react": "19.1.6",
     "@types/react-dom": "19.1.5",
     "bootstrap": "5.3.6",
     "jquery": "3.7.1",
