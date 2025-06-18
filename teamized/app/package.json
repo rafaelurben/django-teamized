@@ -19,11 +19,11 @@
   "repository": "https://github.com/rafaelurben/django-teamized",
   "funding": "https://github.com/sponsors/rafaelurben/",
   "devDependencies": {
-    "@eslint/js": "~9.28.0",
+    "@eslint/js": "~9.29.0",
     "@types/bootstrap": "~5.2.10",
     "@types/jquery": "~3.5.32",
     "@types/node": "^22.9.0",
-    "eslint": "~9.28.0",
+    "eslint": "~9.29.0",
     "eslint-config-prettier": "~10.1.0",
     "eslint-plugin-prettier": "~5.4.0",
     "eslint-plugin-react": "~7.37.2",
