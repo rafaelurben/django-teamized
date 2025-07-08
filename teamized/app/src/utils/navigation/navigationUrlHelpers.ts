@@ -1,4 +1,8 @@
 import { NavigationState } from './navigationState';
+import {
+    getNavigationStateFromLocalStorage,
+    saveNavigationStateToLocalStorage,
+} from './navigationStorageHelpers';
 
 const SHORT_KEYS = {
     selectedPage: 'p',
@@ -7,10 +11,14 @@ const SHORT_KEYS = {
 
 export function importNavigationStateFromURL() {
     const searchParams = new URL(window.location.href).searchParams;
+    const defaultState = getNavigationStateFromLocalStorage() || {
+        selectedPage: 'home',
+        selectedTeamId: window.appdata.defaultTeamId,
+    };
 
     const state: NavigationState = {
-        selectedPage: searchParams.get('p') || 'home',
-        selectedTeamId: searchParams.get('t') || window.appdata.defaultTeamId,
+        selectedPage: searchParams.get('p') || defaultState.selectedPage,
+        selectedTeamId: searchParams.get('t') || defaultState.selectedTeamId,
     };
 
     for (const [k, v] of searchParams.entries()) {
@@ -49,4 +57,6 @@ export function exportNavigationStateToURL(state: NavigationState) {
             window.history.pushState(null, '', newURL.href);
         }
     }
+
+    saveNavigationStateToLocalStorage(state);
 }
