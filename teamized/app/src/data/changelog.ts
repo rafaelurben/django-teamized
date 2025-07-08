@@ -8,6 +8,12 @@ export interface ChangelogItem {
 
 export const CHANGELOG: ChangelogItem[] = [
     {
+        date: '2025-07-09',
+        changes: [
+            'Die zuletzt geöffnete Seite und das zuletzt ausgewählte Team werden nun gespeichert',
+        ],
+    },
+    {
         date: '2024-12-24',
         changes: [
             '[Kalender] Ereignisse können nun zwischen Kalendern verschoben werden',
