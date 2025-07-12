@@ -55,7 +55,9 @@ def endpoint_worksessions(request, team: Team):
 @csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("session", WorkSession, "session")])
-def endpoint_worksession(request, team: Team, session: WorkSession):  # pylint: disable=unused-argument
+def endpoint_worksession(
+    request, team: Team, session: WorkSession
+):  # pylint: disable=unused-argument
     """
     Endpoint for managing or deleting a WorkSession.
     """

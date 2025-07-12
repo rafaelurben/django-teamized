@@ -1,4 +1,5 @@
 """Main API endpoints"""
+
 from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.utils.translation import gettext as _

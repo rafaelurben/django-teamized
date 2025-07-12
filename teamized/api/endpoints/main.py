@@ -301,7 +301,7 @@ def endpoint_invites(request, team: Team):
                 "alert": {
                     "title": _("Einladung erstellt"),
                     "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>"
-                            % _("Bitte kopier mich!"),
+                    % _("Bitte kopier mich!"),
                     "timer": 0,
                     "showConfirmButton": True,
                     "toast": False,
