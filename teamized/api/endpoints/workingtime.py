@@ -48,13 +48,14 @@ def endpoint_worksessions(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
 @csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("session", WorkSession, "session")])
-def endpoint_worksession(request, team: Team, session: WorkSession):
+def endpoint_worksession(request, team: Team, session: WorkSession):  # pylint: disable=unused-argument
     """
     Endpoint for managing or deleting a WorkSession.
     """
@@ -98,6 +99,7 @@ def endpoint_worksession(request, team: Team, session: WorkSession):
                 },
             }
         )
+    return None
 
 
 @api_view(["post"])

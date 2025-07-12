@@ -48,6 +48,7 @@ def endpoint_todolists(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -105,6 +106,7 @@ def endpoint_todolist(request, team: Team, todolist: ToDoList):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -146,6 +148,7 @@ def endpoint_todolistitems(request, team: Team, todolist: ToDoList):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -206,3 +209,4 @@ def endpoint_todolistitem(request, team: Team, todolist: ToDoList, item: ToDoLis
                 },
             }
         )
+    return None

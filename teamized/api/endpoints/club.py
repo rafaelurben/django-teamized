@@ -1,8 +1,8 @@
 """Main API endpoints"""
-
+from django.db.models import QuerySet
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
+from django.views.decorators.csrf import csrf_exempt
 
 from teamized.api.utils.constants import (
     ENDPOINT_NOT_FOUND,
@@ -11,8 +11,8 @@ from teamized.api.utils.constants import (
     OBJ_NOT_FOUND,
 )
 from teamized.api.utils.decorators import require_objects, api_view
-from teamized.decorators import teamized_prep
 from teamized.club.models import Club, ClubMember, ClubMemberGroup
+from teamized.decorators import teamized_prep
 from teamized.models import User, Team
 
 
@@ -46,6 +46,7 @@ def endpoint_create_club(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -102,6 +103,7 @@ def endpoint_club(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -141,6 +143,7 @@ def endpoint_members(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["post", "delete"])
@@ -173,8 +176,8 @@ def endpoint_member(request, team: Team, member: ClubMember):
                 "id": member.uid,
                 "member": member.as_dict(),
                 "alert": {
-                    "title": _("Mitglied aktualisiert"),
-                    "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+                    "title": _("Vereinsmitglied aktualisiert"),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich aktualisiert."),
                 },
             }
         )
@@ -185,11 +188,12 @@ def endpoint_member(request, team: Team, member: ClubMember):
             {
                 "success": True,
                 "alert": {
-                    "title": _("Mitglied entfernt"),
-                    "text": _("Das Mitglied wurde erfolgreich entfernt."),
+                    "title": _("Vereinsmitglied entfernt"),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich entfernt."),
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -231,10 +235,11 @@ def endpoint_member_portfolio(request, team: Team, member: ClubMember):
                 "portfolio": member.portfolio_as_dict(),
                 "alert": {
                     "title": _("Portfolio aktualisiert"),
-                    "text": _("Das Mitglied wurde erfolgreich aktualisiert."),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich aktualisiert."),
                 },
             }
         )
+    return None
 
 
 @api_view(["post", "delete"])
@@ -281,7 +286,7 @@ def endpoint_member_groupmembership(
                 "member": member.as_dict(),
                 "alert": {
                     "title": _("Gruppe hinzugefügt"),
-                    "text": _("Das Mitglied wurde erfolgreich der Gruppe hinzugefügt."),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich der Gruppe hinzugefügt."),
                 },
             }
         )
@@ -295,10 +300,11 @@ def endpoint_member_groupmembership(
                 "success": True,
                 "alert": {
                     "title": _("Gruppe entfernt"),
-                    "text": _("Das Mitglied wurde erfolgreich aus der Gruppe entfernt."),
+                    "text": _("Das Vereinsmitglied wurde erfolgreich aus der Gruppe entfernt."),
                 },
             }
         )
+    return None
 
 
 @api_view(["post"])
@@ -343,6 +349,7 @@ def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -365,7 +372,7 @@ def endpoint_groups(request, team: Team):
     is_admin: bool = team.user_is_admin(user)
 
     if request.method == "GET":
-        groups: list[ClubMemberGroup] = club.groups.order_by("name")
+        groups: QuerySet[ClubMemberGroup] = club.groups.order_by("name")
 
         return JsonResponse(
             {"groups": [group.as_dict(request, include_shared_url=is_admin) for group in groups]}
@@ -386,6 +393,7 @@ def endpoint_groups(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["post", "delete"])
@@ -436,3 +444,4 @@ def endpoint_group(request, team: Team, group: ClubMemberGroup):
                 },
             }
         )
+    return None

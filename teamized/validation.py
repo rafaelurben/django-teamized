@@ -133,7 +133,7 @@ class DateValidator(BaseValidator):
 
 class RegexValidator(StringValidator):
     @classmethod
-    def _convert(cls, value, regex, **kwargs):
+    def _convert(cls, value, regex="", **kwargs):
         if not re.match(regex, value):
             raise ValidationError(
                 _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value)

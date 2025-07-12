@@ -10,10 +10,10 @@ from django.utils.translation import gettext as _
 from teamized import models
 
 # This is required for the club admin views
-import teamized.club.admin
+import teamized.club.admin  # pylint: disable=unused-import
 
 # This is required for the apikey admin view
-import teamized.api.utils.admin
+import teamized.api.utils.admin  # pylint: disable=unused-import
 
 # Register your models here.
 
@@ -249,7 +249,7 @@ class CalendarAdmin(admin.ModelAdmin):
     ]
 
 
-# Todo
+# To-do lists
 
 
 class ToDoAdminListInline(admin.TabularInline):

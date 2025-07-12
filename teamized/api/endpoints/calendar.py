@@ -48,6 +48,7 @@ def endpoint_calendars(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -105,6 +106,7 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -146,6 +148,7 @@ def endpoint_events(request, team: Team, calendar: Calendar):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -206,6 +209,7 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
                 },
             }
         )
+    return None
 
 
 @api_view(["post"])

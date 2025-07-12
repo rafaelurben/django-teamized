@@ -20,7 +20,7 @@ def clubview():
             if not models.Club.objects.filter(slug=clubslug).exists():
                 messages.error(
                     request,
-                    "Ungültiger Link: Der gesuchte Verein wurde nicht gefunden!",
+                    _("Ungültiger Link: Der gesuchte Verein wurde nicht gefunden!"),
                 )
                 return render(request, "teamized/club/error.html", status=404)
 
@@ -33,7 +33,8 @@ def clubview():
                 if not models.ClubMember.objects.filter(uid=memberuid, club=club).exists():
                     messages.error(
                         request,
-                        f"Ungültiger Link: Im Verein '{club.name}' wurde kein Mitglied mit dieser ID gefunden!",
+                        _("Ungültiger Link: Im Verein {clubname} wurde kein Mitglied mit dieser ID gefunden!").format(
+                            clubname=club.name),
                     )
                     return render(request, "teamized/club/error.html", status=404)
 

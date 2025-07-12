@@ -2,13 +2,11 @@
 
 from django.db import models
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
+from django.views.decorators.csrf import csrf_exempt
 
 from teamized import enums, exceptions
 from teamized.api.utils.constants import (
-    ENDPOINT_NOT_FOUND,
-    NOT_IMPLEMENTED,
     DATA_INVALID,
     NO_PERMISSION,
     OBJ_NOT_FOUND,
@@ -46,6 +44,7 @@ def endpoint_settings(request):
     if request.method == "POST":
         user.update_settings_from_post_data(request.POST)
         return JsonResponse({"success": True, "settings": user.settings_as_dict()})
+    return None
 
 
 @api_view(["get", "post"])
@@ -115,6 +114,7 @@ def endpoint_teams(request):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post", "delete"])
@@ -183,6 +183,7 @@ def endpoint_team(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get"])
@@ -205,6 +206,7 @@ def endpoint_members(request, team: Team):
         )
 
         return JsonResponse({"members": [m.as_dict() for m in members]})
+    return None
 
 
 @api_view(["post", "delete"])
@@ -268,6 +270,7 @@ def endpoint_member(request, team: Team, member: Member):
                 },
             }
         )
+    return None
 
 
 @api_view(["get", "post"])
@@ -298,7 +301,7 @@ def endpoint_invites(request, team: Team):
                 "alert": {
                     "title": _("Einladung erstellt"),
                     "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>"
-                    % _("Bitte kopier mich!"),
+                            % _("Bitte kopier mich!"),
                     "timer": 0,
                     "showConfirmButton": True,
                     "toast": False,
@@ -306,6 +309,7 @@ def endpoint_invites(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["post", "delete"])
@@ -351,6 +355,7 @@ def endpoint_invite(request, team: Team, invite: Invite):
                 },
             }
         )
+    return None
 
 
 @api_view(["post"])
@@ -396,6 +401,7 @@ def endpoint_team_leave(request, team: Team):
                 },
             }
         )
+    return None
 
 
 @api_view(["get"])
@@ -420,6 +426,7 @@ def endpoint_invite_info(request, invite: Invite):
         invite.check_validity_for_user(user)
 
         return JsonResponse({"status": "invite-valid", "team": invite.team.as_dict()})
+    return None
 
 
 @api_view(["post"])
@@ -448,3 +455,4 @@ def endpoint_invite_accept(request, invite: Invite):
                 },
             }
         )
+    return None

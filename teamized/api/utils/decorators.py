@@ -29,8 +29,11 @@ def _is_valid_uuid(val):
         return False
 
 
-def api_view(allowed_methods=["get"], perms_required=()):
+def api_view(allowed_methods: list[str] = None, perms_required=tuple()):
     """Decorator: Protect an api view from unauthorized access."""
+
+    if allowed_methods is None:
+        allowed_methods = ["get"]
 
     def decorator(function):
         @wraps(function)

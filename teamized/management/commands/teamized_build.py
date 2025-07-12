@@ -7,6 +7,7 @@ Note: This is a management command, so it can be run with the command
 
 import os
 import os.path
+import sys
 
 from django.core.management.base import BaseCommand
 
@@ -36,7 +37,7 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.ERROR("[ERROR] 'npm install' exited with non-zero status code")
             )
-            exit(code)
+            sys.exit(code)
 
         self.stdout.write("Building Teamized app...")
 
@@ -56,4 +57,4 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.ERROR("[ERROR] 'npm run build[-live]' exited with non-zero status code!")
             )
-            exit(code)
+            sys.exit(code)

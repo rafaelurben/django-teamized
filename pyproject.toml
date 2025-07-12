@@ -51,3 +51,26 @@ version = { file = ["_version.txt"] }
 line-length = 100
 target-version = ['py311', 'py312', 'py313']
 include = '\.pyi?$'
+
+[tool.pylint.main]
+ignore = ["migrations", "node_modules"]
+disable= [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "django-not-configured",
+    "line-too-long",
+    "too-many-ancestors",
+    "too-many-lines",
+    "too-many-instance-attributes",
+    "too-many-arguments",
+    "too-many-positional-arguments",
+    "too-many-return-statements",
+    "too-few-public-methods",
+    "consider-using-from-import",
+    "cyclic-import",
+]
+load-plugins = ["pylint_django"]
+
+[tool.pylint.reports]
+min-similarity-lines = 10
