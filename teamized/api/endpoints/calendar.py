@@ -219,7 +219,9 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
         ("toCalendar", Calendar, "calendar2"),
     ]
 )
-def endpoint_event_move(request, team: Team, calendar1: Calendar, event: CalendarEvent, calendar2: Calendar):
+def endpoint_event_move(
+    request, team: Team, calendar1: Calendar, event: CalendarEvent, calendar2: Calendar
+):
     """
     Endpoint for moving an event.
     """

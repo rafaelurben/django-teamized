@@ -36,19 +36,14 @@ def api_view(allowed_methods=["get"], perms_required=()):
         @wraps(function)
         def wrap(request, *args, **kwargs):
             try:
-                if request.method.lower() not in map(
-                    lambda x: x.lower(), allowed_methods
-                ):
+                if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
                     return METHOD_NOT_ALLOWED
 
                 apikey = request.GET.get("apikey", None)
 
                 # If the user provided an apikey, try to authenticate with it
                 if apikey:
-                    if (
-                        _is_valid_uuid(apikey)
-                        and ApiKey.objects.filter(key=apikey).exists()
-                    ):
+                    if _is_valid_uuid(apikey) and ApiKey.objects.filter(key=apikey).exists():
                         keyobject = ApiKey.objects.get(key=apikey)
 
                         if request.method.upper() == "GET":

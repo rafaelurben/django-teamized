@@ -20,9 +20,7 @@ def member_app(request, club, member):
             )
         )
 
-    return render(
-        request, "teamized/club/member_app.html", {"member": member, "club": club}
-    )
+    return render(request, "teamized/club/member_app.html", {"member": member, "club": club})
 
 
 @clubview()
@@ -68,9 +66,7 @@ def member_login(request, club, member):
             )
 
         member.send_magic_link(request)
-        messages.success(
-            request, "Ein magischer Link wurde an deine E-Mail-Adresse gesendet."
-        )
+        messages.success(request, "Ein magischer Link wurde an deine E-Mail-Adresse gesendet.")
         # Redirect to prevent resubmission of form
         return redirect(
             reverse(

@@ -30,9 +30,7 @@ def clubview():
             if "memberuid" in kwargs:
                 memberuid = kwargs.pop("memberuid")
 
-                if not models.ClubMember.objects.filter(
-                    uid=memberuid, club=club
-                ).exists():
+                if not models.ClubMember.objects.filter(uid=memberuid, club=club).exists():
                     messages.error(
                         request,
                         f"Ungültiger Link: Im Verein '{club.name}' wurde kein Mitglied mit dieser ID gefunden!",

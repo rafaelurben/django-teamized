@@ -295,9 +295,7 @@ def endpoint_member_groupmembership(
                 "success": True,
                 "alert": {
                     "title": _("Gruppe entfernt"),
-                    "text": _(
-                        "Das Mitglied wurde erfolgreich aus der Gruppe entfernt."
-                    ),
+                    "text": _("Das Mitglied wurde erfolgreich aus der Gruppe entfernt."),
                 },
             }
         )
@@ -370,12 +368,7 @@ def endpoint_groups(request, team: Team):
         groups: list[ClubMemberGroup] = club.groups.order_by("name")
 
         return JsonResponse(
-            {
-                "groups": [
-                    group.as_dict(request, include_shared_url=is_admin)
-                    for group in groups
-                ]
-            }
+            {"groups": [group.as_dict(request, include_shared_url=is_admin) for group in groups]}
         )
     if request.method == "POST":
         if not is_admin:

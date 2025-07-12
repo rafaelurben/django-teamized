@@ -9,39 +9,69 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teamized', '0006_clubmembergroup_shared_uid'),
+        ("teamized", "0006_clubmembergroup_shared_uid"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='clubmembermagiclink',
-            name='logged_in',
+            model_name="clubmembermagiclink",
+            name="logged_in",
         ),
         migrations.RemoveField(
-            model_name='clubmembermagiclink',
-            name='logged_out',
+            model_name="clubmembermagiclink",
+            name="logged_out",
         ),
         migrations.RemoveField(
-            model_name='clubmembermagiclink',
-            name='login_until',
+            model_name="clubmembermagiclink",
+            name="login_until",
         ),
         migrations.AlterField(
-            model_name='clubmembermagiclink',
-            name='valid_until',
-            field=models.DateTimeField(default=teamized.utils.now_plus_1w, verbose_name='Verwendbar bis'),
+            model_name="clubmembermagiclink",
+            name="valid_until",
+            field=models.DateTimeField(
+                default=teamized.utils.now_plus_1w, verbose_name="Verwendbar bis"
+            ),
         ),
         migrations.CreateModel(
-            name='ClubMemberSession',
+            name="ClubMemberSession",
             fields=[
-                ('uid', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, verbose_name='UID')),
-                ('valid_until', models.DateTimeField(default=teamized.utils.now_plus_180d, verbose_name='Gültig bis')),
-                ('date_created', models.DateTimeField(auto_now_add=True, verbose_name='Erstellt am')),
-                ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Zuletzt geändert am')),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sessions', to='teamized.clubmember', verbose_name='Mitglied')),
+                (
+                    "uid",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="UID",
+                    ),
+                ),
+                (
+                    "valid_until",
+                    models.DateTimeField(
+                        default=teamized.utils.now_plus_180d, verbose_name="Gültig bis"
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am"),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
+                ),
+                (
+                    "member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="sessions",
+                        to="teamized.clubmember",
+                        verbose_name="Mitglied",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Sitzung',
-                'verbose_name_plural': 'Sitzungen',
+                "verbose_name": "Sitzung",
+                "verbose_name_plural": "Sitzungen",
             },
         ),
     ]

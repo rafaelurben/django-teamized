@@ -51,9 +51,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date_modified",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Zuletzt geändert am"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
                 ),
             ],
             options={
@@ -85,33 +83,23 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "phone",
-                    models.CharField(
-                        blank=True, default="", max_length=50, verbose_name="Telefon"
-                    ),
+                    models.CharField(blank=True, default="", max_length=50, verbose_name="Telefon"),
                 ),
                 (
                     "mobile",
-                    models.CharField(
-                        blank=True, default="", max_length=50, verbose_name="Mobil"
-                    ),
+                    models.CharField(blank=True, default="", max_length=50, verbose_name="Mobil"),
                 ),
                 (
                     "street",
-                    models.CharField(
-                        blank=True, default="", max_length=50, verbose_name="Straße"
-                    ),
+                    models.CharField(blank=True, default="", max_length=50, verbose_name="Straße"),
                 ),
                 (
                     "zip_code",
-                    models.CharField(
-                        blank=True, default="", max_length=50, verbose_name="PLZ"
-                    ),
+                    models.CharField(blank=True, default="", max_length=50, verbose_name="PLZ"),
                 ),
                 (
                     "city",
-                    models.CharField(
-                        blank=True, default="", max_length=50, verbose_name="Ort"
-                    ),
+                    models.CharField(blank=True, default="", max_length=50, verbose_name="Ort"),
                 ),
                 (
                     "notes",
@@ -123,9 +111,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date_modified",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Zuletzt geändert am"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
                 ),
                 (
                     "club",
@@ -162,9 +148,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "logged_out",
-                    models.BooleanField(
-                        default=False, verbose_name="Wieder ausgeloggt?"
-                    ),
+                    models.BooleanField(default=False, verbose_name="Wieder ausgeloggt?"),
                 ),
                 (
                     "login_until",
@@ -185,9 +169,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date_modified",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Zuletzt geändert am"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
                 ),
                 (
                     "member",
@@ -241,9 +223,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date_modified",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Zuletzt geändert am"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
                 ),
                 (
                     "club",
@@ -297,9 +277,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date_modified",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Zuletzt geändert am"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Zuletzt geändert am"),
                 ),
             ],
             options={

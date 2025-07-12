@@ -41,16 +41,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="clubmember",
             name="portfolio_image1_url",
-            field=models.URLField(
-                blank=True, default="", verbose_name="Portfolio-Bild 1"
-            ),
+            field=models.URLField(blank=True, default="", verbose_name="Portfolio-Bild 1"),
         ),
         migrations.AddField(
             model_name="clubmember",
             name="portfolio_image2_url",
-            field=models.URLField(
-                blank=True, default="", verbose_name="Portfolio-Bild 1"
-            ),
+            field=models.URLField(blank=True, default="", verbose_name="Portfolio-Bild 1"),
         ),
         migrations.AddField(
             model_name="clubmember",
@@ -62,16 +58,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="clubmember",
             name="portfolio_profession",
-            field=models.CharField(
-                blank=True, default="", max_length=50, verbose_name="Beruf"
-            ),
+            field=models.CharField(blank=True, default="", max_length=50, verbose_name="Beruf"),
         ),
         migrations.AddField(
             model_name="clubmember",
             name="portfolio_role",
-            field=models.CharField(
-                blank=True, default="", max_length=50, verbose_name="Rolle"
-            ),
+            field=models.CharField(blank=True, default="", max_length=50, verbose_name="Rolle"),
         ),
         migrations.AddField(
             model_name="clubmember",

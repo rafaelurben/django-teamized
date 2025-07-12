@@ -27,9 +27,7 @@ class BaseValidator:
             return cls._convert(value, **kwargs)
         except Exception as exc:
             raise ValidationError(
-                _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(
-                    value
-                )
+                _("Der Wert '{}' entspricht nicht dem erwarteten Datentyp!").format(value)
             ) from exc
 
     @classmethod
@@ -52,7 +50,7 @@ class BaseValidator:
         required: bool = True,
         default: any = None,
         null=False,
-        **kwargs
+        **kwargs,
     ):
         # If the attribute is not present in the data dict
         if attr not in datadict:
@@ -69,9 +67,7 @@ class BaseValidator:
         # If the value is null
         if cls._is_null(value):
             if not null:
-                raise ValidationError(
-                    _("Das Attribut '{}' darf nicht null sein!").format(attr)
-                )
+                raise ValidationError(_("Das Attribut '{}' darf nicht null sein!").format(attr))
             return None
 
         # Before convert (for subclasses)
@@ -140,9 +136,7 @@ class RegexValidator(StringValidator):
     def _convert(cls, value, regex, **kwargs):
         if not re.match(regex, value):
             raise ValidationError(
-                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(
-                    value
-                )
+                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value)
             )
         return value
 
@@ -156,9 +150,7 @@ def boolean(
     return BooleanValidator.validate(datadict, attr, required, default, null)
 
 
-def integer(
-    datadict: dict, attr: str, required: bool = True, default: int = "", null=False
-) -> int:
+def integer(datadict: dict, attr: str, required: bool = True, default: int = "", null=False) -> int:
     return IntegerValidator.validate(datadict, attr, required, default, null)
 
 
@@ -170,9 +162,7 @@ def text(
     null=False,
     max_length: int = None,
 ) -> str:
-    return StringValidator.validate(
-        datadict, attr, required, default, null, max_length=max_length
-    )
+    return StringValidator.validate(datadict, attr, required, default, null, max_length=max_length)
 
 
 def datetime(

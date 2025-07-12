@@ -16,9 +16,7 @@ def shared_group_portfolios(request, uuid):
     except ClubMemberGroup.DoesNotExist:
         return OBJ_NOT_FOUND
 
-    return JsonResponse(
-        group.get_member_portfolios(), headers={"Access-Control-Allow-Origin": "*"}
-    )
+    return JsonResponse(group.get_member_portfolios(), headers={"Access-Control-Allow-Origin": "*"})
 
 
 # Catch-all error

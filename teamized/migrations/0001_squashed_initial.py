@@ -169,15 +169,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "key",
-                    models.UUIDField(
-                        default=uuid.uuid4, unique=True, verbose_name="Key"
-                    ),
+                    models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="Key"),
                 ),
                 (
                     "name",
-                    models.CharField(
-                        blank=True, default="", max_length=100, verbose_name="Name"
-                    ),
+                    models.CharField(blank=True, default="", max_length=100, verbose_name="Name"),
                 ),
                 (
                     "read",
@@ -185,9 +181,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "write",
-                    models.BooleanField(
-                        default=False, verbose_name="Write permission?"
-                    ),
+                    models.BooleanField(default=False, verbose_name="Write permission?"),
                 ),
                 (
                     "user",

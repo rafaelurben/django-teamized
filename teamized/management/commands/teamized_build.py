@@ -34,9 +34,7 @@ class Command(BaseCommand):
 
         if code:
             self.stdout.write(
-                self.style.ERROR(
-                    "[ERROR] 'npm install' exited with non-zero status code"
-                )
+                self.style.ERROR("[ERROR] 'npm install' exited with non-zero status code")
             )
             exit(code)
 
@@ -56,8 +54,6 @@ class Command(BaseCommand):
 
         if code:
             self.stdout.write(
-                self.style.ERROR(
-                    "[ERROR] 'npm run build[-live]' exited with non-zero status code!"
-                )
+                self.style.ERROR("[ERROR] 'npm run build[-live]' exited with non-zero status code!")
             )
             exit(code)

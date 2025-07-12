@@ -29,9 +29,7 @@ def endpoint_worksessions(request, team: Team):
 
     if request.method == "GET":
         # Get all ended sessions of the user in the team
-        sessions = (
-            member.work_sessions.filter(is_ended=True).order_by("-time_start").all()
-        )
+        sessions = member.work_sessions.filter(is_ended=True).order_by("-time_start").all()
         return JsonResponse(
             {
                 "worksessions": [session.as_dict() for session in sessions],

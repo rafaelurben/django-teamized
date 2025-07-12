@@ -50,9 +50,7 @@ urlpatterns = [
         name="api-workingtime-tracking-stop",
     ),
     # Calendar API views
-    path(
-        "teams/<team>/calendars", ep.calendar.endpoint_calendars, name="api-calendars"
-    ),
+    path("teams/<team>/calendars", ep.calendar.endpoint_calendars, name="api-calendars"),
     path(
         "teams/<team>/calendars/<calendar>",
         ep.calendar.endpoint_calendar,
@@ -91,13 +89,9 @@ urlpatterns = [
         name="api-todolistitem",
     ),
     # Club API views
-    path(
-        "teams/<team>/create-club", ep.club.endpoint_create_club, name="api-create-club"
-    ),
+    path("teams/<team>/create-club", ep.club.endpoint_create_club, name="api-create-club"),
     path("teams/<team>/club", ep.club.endpoint_club, name="api-club"),
-    path(
-        "teams/<team>/club/members", ep.club.endpoint_members, name="api-club-members"
-    ),
+    path("teams/<team>/club/members", ep.club.endpoint_members, name="api-club-members"),
     path(
         "teams/<team>/club/members/<member>",
         ep.club.endpoint_member,

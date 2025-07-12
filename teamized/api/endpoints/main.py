@@ -67,8 +67,7 @@ def endpoint_teams(request):
         return JsonResponse(
             {
                 "teams": [
-                    mi.team.as_dict(member=mi, membercount=mi.membercount)
-                    for mi in memberinstances
+                    mi.team.as_dict(member=mi, membercount=mi.membercount) for mi in memberinstances
                 ],
                 "defaultTeamId": memberinstances[0].team.uid,
             }
@@ -162,18 +161,14 @@ def endpoint_team(request, team: Team):
 
         if team.linked_club is not None:
             raise exceptions.AlertException(
-                text=_(
-                    "Solange der Vereinsmodus aktiv ist, kann das Team nicht gelöscht werden."
-                ),
+                text=_("Solange der Vereinsmodus aktiv ist, kann das Team nicht gelöscht werden."),
                 title=_("Vereinsmodus aktiv"),
                 errorname="club-mode-active",
             )
 
         if team.members.count() > 1:
             raise exceptions.AlertException(
-                text=_(
-                    "Das Team kann nicht gelöscht werden, da es noch Mitglieder enthält."
-                ),
+                text=_("Das Team kann nicht gelöscht werden, da es noch Mitglieder enthält."),
                 title=_("Team ist nicht leer"),
                 errorname="team-has-members",
             )

@@ -16,9 +16,7 @@ from django.urls import reverse
 
 from teamized import utils, decorators, validation
 
-_ = (
-    lambda s: s  # dummy translation function # pylint: disable=unnecessary-lambda-assignment
-)
+_ = lambda s: s  # dummy translation function # pylint: disable=unnecessary-lambda-assignment
 
 
 # Create your models here.
@@ -45,12 +43,8 @@ class Club(models.Model):
         help_text=_("Wird auf der Login-Seite angezeigt."),
     )
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
     class Meta:
         verbose_name = _("Verein")
@@ -108,9 +102,7 @@ class Club(models.Model):
                     }
                 )
             else:
-                del request.session["teamized_clubmember_sessions"][
-                    str(self.uid)
-                ][member_uid]
+                del request.session["teamized_clubmember_sessions"][str(self.uid)][member_uid]
                 request.session.modified = True
         return members
 
@@ -128,9 +120,7 @@ class Club(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, default=self.name)
-        self.description = validation.text(
-            data, "description", False, default=self.description
-        )
+        self.description = validation.text(data, "description", False, default=self.description)
         self.save()
 
 
@@ -150,35 +140,19 @@ class ClubMember(models.Model):
         verbose_name=_("Geburtsdatum"), null=True, blank=True, default=None
     )
 
-    phone = models.CharField(
-        max_length=50, verbose_name=_("Telefon"), blank=True, default=""
-    )
-    mobile = models.CharField(
-        max_length=50, verbose_name=_("Mobil"), blank=True, default=""
-    )
+    phone = models.CharField(max_length=50, verbose_name=_("Telefon"), blank=True, default="")
+    mobile = models.CharField(max_length=50, verbose_name=_("Mobil"), blank=True, default="")
 
-    street = models.CharField(
-        max_length=50, verbose_name=_("Straße"), blank=True, default=""
-    )
-    zip_code = models.CharField(
-        max_length=50, verbose_name=_("PLZ"), blank=True, default=""
-    )
-    city = models.CharField(
-        max_length=50, verbose_name=_("Ort"), blank=True, default=""
-    )
+    street = models.CharField(max_length=50, verbose_name=_("Straße"), blank=True, default="")
+    zip_code = models.CharField(max_length=50, verbose_name=_("PLZ"), blank=True, default="")
+    city = models.CharField(max_length=50, verbose_name=_("Ort"), blank=True, default="")
 
     notes = models.TextField(verbose_name=_("Notizen"), blank=True, default="")
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
-    portfolio_visible = models.BooleanField(
-        verbose_name=_("Portfolio sichtbar?"), default=True
-    )
+    portfolio_visible = models.BooleanField(verbose_name=_("Portfolio sichtbar?"), default=True)
     portfolio_image1_url = models.URLField(
         verbose_name=_("Portfolio-Bild 1"), default="", blank=True
     )
@@ -197,15 +171,9 @@ class ClubMember(models.Model):
     portfolio_profession = models.CharField(
         verbose_name=_("Beruf"), max_length=50, default="", blank=True
     )
-    portfolio_hobbies = models.TextField(
-        verbose_name=_("Hobbies"), default="", blank=True
-    )
-    portfolio_highlights = models.TextField(
-        verbose_name=_("Highlights"), default="", blank=True
-    )
-    portfolio_biography = models.TextField(
-        verbose_name=_("Biografie"), default="", blank=True
-    )
+    portfolio_hobbies = models.TextField(verbose_name=_("Hobbies"), default="", blank=True)
+    portfolio_highlights = models.TextField(verbose_name=_("Highlights"), default="", blank=True)
+    portfolio_biography = models.TextField(verbose_name=_("Biografie"), default="", blank=True)
     portfolio_contact_email = models.EmailField(
         verbose_name=_("Kontakt-E-Mail"), default="", blank=True
     )
@@ -281,12 +249,15 @@ class ClubMember(models.Model):
         club_sessions = request.session["teamized_clubmember_sessions"][self.clubuid]
         if self.memberuid not in club_sessions:
             return False
-        if not ClubMemberSession.objects.filter(uid=club_sessions[self.memberuid],
-                                                member=self,
-                                                valid_until__gt=timezone.now()).exists():
+        if not ClubMemberSession.objects.filter(
+            uid=club_sessions[self.memberuid], member=self, valid_until__gt=timezone.now()
+        ).exists():
             del club_sessions[self.memberuid]
             request.session.modified = True
-            messages.error(request, _("Deine Sitzung ist ungültig oder abgelaufen. Bitte logge dich erneut ein."))
+            messages.error(
+                request,
+                _("Deine Sitzung ist ungültig oder abgelaufen. Bitte logge dich erneut ein."),
+            )
             return False
         return True
 
@@ -301,7 +272,9 @@ class ClubMember(models.Model):
         session = self.create_session()
 
         self.club.ensure_session_structure(request)
-        request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid] = str(session.uid)
+        request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid] = str(
+            session.uid
+        )
         request.session.modified = True
         return True
 
@@ -312,12 +285,8 @@ class ClubMember(models.Model):
         session_uid = request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid]
         del request.session["teamized_clubmember_sessions"][self.clubuid][self.memberuid]
         request.session.modified = True
-        if ClubMemberSession.objects.filter(
-            uid=session_uid, member=self
-        ).exists():
-            ClubMemberSession.objects.get(
-                uid=session_uid, member=self
-            ).delete()
+        if ClubMemberSession.objects.filter(uid=session_uid, member=self).exists():
+            ClubMemberSession.objects.get(uid=session_uid, member=self).delete()
 
     def create_session(self) -> "ClubMemberSession":
         """Create a session for this member."""
@@ -345,19 +314,13 @@ class ClubMember(models.Model):
             first_name=validation.text(data, "first_name", True),
             last_name=validation.text(data, "last_name", True),
             email=validation.text(data, "email", True),
-            birth_date=validation.date(
-                data, "birth_date", False, default=None, null=True
-            ),
+            birth_date=validation.date(data, "birth_date", False, default=None, null=True),
         )
 
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
-        self.first_name = validation.text(
-            data, "first_name", False, default=self.first_name
-        )
-        self.last_name = validation.text(
-            data, "last_name", False, default=self.last_name
-        )
+        self.first_name = validation.text(data, "first_name", False, default=self.first_name)
+        self.last_name = validation.text(data, "last_name", False, default=self.last_name)
         self.email = validation.text(data, "email", False, default=self.email)
         self.birth_date = validation.date(
             data, "birth_date", False, default=self.birth_date, null=True
@@ -381,9 +344,7 @@ class ClubMember(models.Model):
         self.portfolio_hobby_since = validation.integer(
             data, "hobby_since", False, default=self.portfolio_hobby_since
         )
-        self.portfolio_role = validation.text(
-            data, "role", False, default=self.portfolio_role
-        )
+        self.portfolio_role = validation.text(data, "role", False, default=self.portfolio_role)
         self.portfolio_profession = validation.text(
             data, "profession", False, default=self.portfolio_profession
         )
@@ -413,16 +374,10 @@ class ClubMemberSession(models.Model):
         related_name="sessions",
     )
 
-    valid_until = models.DateTimeField(
-        verbose_name=_("Gültig bis"), default=utils.now_plus_180d
-    )
+    valid_until = models.DateTimeField(verbose_name=_("Gültig bis"), default=utils.now_plus_180d)
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
     class Meta:
         verbose_name = _("Sitzung")
@@ -442,16 +397,10 @@ class ClubMemberMagicLink(models.Model):
         related_name="magic_links",
     )
 
-    valid_until = models.DateTimeField(
-        verbose_name=_("Verwendbar bis"), default=utils.now_plus_1w
-    )
+    valid_until = models.DateTimeField(verbose_name=_("Verwendbar bis"), default=utils.now_plus_1w)
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
     class Meta:
         verbose_name = _("Magischer Link")
@@ -516,12 +465,8 @@ class ClubMemberGroup(models.Model):
         unique=True,
     )
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
     class Meta:
         verbose_name = _("Vereinsmitgliedergruppe")
@@ -563,9 +508,7 @@ class ClubMemberGroup(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, default=self.name)
-        self.description = validation.text(
-            data, "description", False, default=self.description
-        )
+        self.description = validation.text(data, "description", False, default=self.description)
         self.save()
 
     def get_member_portfolios(self):
@@ -604,17 +547,14 @@ class ClubMemberGroupMembership(models.Model):
         related_name="group_memberships",
     )
 
-    date_created = models.DateTimeField(
-        verbose_name=_("Erstellt am"), auto_now_add=True
-    )
-    date_modified = models.DateTimeField(
-        verbose_name=_("Zuletzt geändert am"), auto_now=True
-    )
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
 
     class Meta:
         verbose_name = _("Gruppenmitgliedschaft")
         verbose_name_plural = _("Gruppenmitgliedschaften")
         unique_together = [["group", "member"]]
+
 
 # class ClubPoll(models.Model):
 #     uid = models.UUIDField(

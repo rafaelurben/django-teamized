@@ -23,9 +23,7 @@ ENDPOINT_NOT_FOUND = JsonResponse(
 NO_PERMISSION_APIKEY = JsonResponse(
     {
         "error": "no-permission-api-key",
-        "message": _(
-            "Du hast keine Berechtigung dazu. (Authentifizierung via API-Key)"
-        ),
+        "message": _("Du hast keine Berechtigung dazu. (Authentifizierung via API-Key)"),
     },
     status=403,
 )
@@ -33,9 +31,7 @@ NO_PERMISSION_APIKEY = JsonResponse(
 NO_PERMISSION_SESSION = JsonResponse(
     {
         "error": "no-permission-session",
-        "message": _(
-            "Du hast keine Berechtigung dazu. (Authentifizierung via Session)"
-        ),
+        "message": _("Du hast keine Berechtigung dazu. (Authentifizierung via Session)"),
     },
     status=403,
 )
