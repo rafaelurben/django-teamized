@@ -276,8 +276,8 @@ export async function deleteClubMember(teamId: ID, memberId: ID) {
 }
 
 export async function deleteClubMemberPopup(team: Team, member: ClubMember) {
-    return await confirmAlert(
-        `Willst du ${member.first_name} ${member.last_name} aus dem Verein '${team.club!.name}' entfernen?`,
+    return await doubleConfirmAlert(
+        `Willst du das Vereinsmitglied '${member.first_name} ${member.last_name}' im Verein '${team.club!.name}' wirklich löschen? Dabei werden auch alle zugehörigen Daten wie Portfolios und Gruppenzugehörigkeiten gelöscht!`,
         async () => await deleteClubMember(team.id, member.id)
     );
 }
@@ -499,7 +499,7 @@ export async function deleteClubGroup(teamId: ID, groupId: ID) {
 
 export async function deleteClubGroupPopup(team: Team, group: ClubGroup) {
     return await confirmAlert(
-        `Willst du die Gruppe '${group.name}' wirklich löschen?`,
+        `Willst du die Gruppe '${group.name}' wirklich löschen? Die Mitglieder dieser Gruppe werden nicht gelöscht, sondern nur aus der Gruppe entfernt.`,
         async () => await deleteClubGroup(team.id, group.id)
     );
 }
