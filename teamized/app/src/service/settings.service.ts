@@ -74,14 +74,19 @@ export async function editSettings(settings: Partial<Settings>) {
 function setColorScheme(scheme: string) {
     if (scheme === 'dark') {
         $('body').attr('data-bs-theme', 'dark');
-        // Disabling CSS files might not work in all browsers, but this should switch the SweetAlert stylesheet
-        $('link#swal-dark').prop('disabled', false);
-        $('link#swal-light').prop('disabled', true);
     } else {
         $('body').attr('data-bs-theme', 'light');
-        // Disabling CSS files might not work in all browsers, but this should switch the SweetAlert stylesheet
-        $('link#swal-light').prop('disabled', false);
-        $('link#swal-dark').prop('disabled', true);
+    }
+}
+
+export function getSwalTheme() {
+    switch (window.appdata.settings.darkmode) {
+        case true:
+            return 'dark';
+        case false:
+            return 'light';
+        default:
+            return 'auto';
     }
 }
 

@@ -14,6 +14,7 @@ import {
 } from '../interfaces/workingtime/worksession';
 import {
     confirmAlert,
+    fireAlert,
     successAlert,
     Swal,
     waitingAlert,
@@ -51,7 +52,7 @@ export async function createWorkSession(
 
 export async function createWorkSessionPopup(team: Team) {
     const _dt = localInputFormat(new Date());
-    return await Swal.fire<Worksession>({
+    return await fireAlert<Worksession>({
         title: `Sitzung erstellen`,
         html: `
             <p>Team: ${team.name}</p><hr />
@@ -116,7 +117,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
     let dtstart = localInputFormat(session.time_start);
     let dtend =
         session.time_end !== null ? localInputFormat(session.time_end) : '';
-    return await Swal.fire<Worksession>({
+    return await fireAlert<Worksession>({
         title: `Sitzung bearbeiten`,
         html:
             `
@@ -246,7 +247,7 @@ export async function renameWorkSession(
 }
 
 export async function renameWorkSessionPopup(team: Team, session: Worksession) {
-    return await Swal.fire<Worksession>({
+    return await fireAlert<Worksession>({
         title: `Sitzung umbenennen`,
         html: `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>`,
         focusConfirm: false,

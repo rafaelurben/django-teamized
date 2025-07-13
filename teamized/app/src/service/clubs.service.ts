@@ -21,6 +21,7 @@ import { Team } from '../interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
+    fireAlert,
     successAlert,
     Swal,
 } from '../utils/alerts';
@@ -38,7 +39,7 @@ export async function createClub(teamId: ID, club: ClubRequestDTO) {
 }
 
 export async function createClubPopup(team: Team) {
-    return await Swal.fire<Club>({
+    return await fireAlert<Club>({
         title: 'Verein erstellen',
         html: `
           <label class="swal2-input-label" for="swal-input-name">Name:</label>
@@ -84,7 +85,7 @@ export async function editClub(teamId: ID, club: Partial<ClubRequestDTO>) {
 }
 
 export async function editClubPopup(team: Team) {
-    return await Swal.fire<Club>({
+    return await fireAlert<Club>({
         title: 'Verein bearbeiten',
         html: `
       <p>Verein: ${team.club!.name}</p><hr />
@@ -155,7 +156,7 @@ export async function createClubMember(
 }
 
 export async function createClubMemberPopup(team: Team) {
-    return await Swal.fire<ClubMember>({
+    return await fireAlert<ClubMember>({
         title: 'Vereinsmitglied hinzufügen',
         html: `
       <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
@@ -212,7 +213,7 @@ export async function editClubMember(
 }
 
 export async function editClubMemberPopup(team: Team, member: ClubMember) {
-    return await Swal.fire<ClubMember>({
+    return await fireAlert<ClubMember>({
         title: 'Vereinsmitglied bearbeiten',
         html: `
       <label class="swal2-input-label" for="swal-input-first_name">Vorname:</label>
@@ -309,7 +310,7 @@ export async function editClubMemberPortfolioPopup(
     team: Team,
     member: ClubMember
 ) {
-    return await Swal.fire<ClubMemberPortfolio>({
+    return await fireAlert<ClubMemberPortfolio>({
         title: `${member.first_name} ${member.last_name}: Portfolio bearbeiten`,
         html: `Portfolio laden...`,
         focusConfirm: false,
@@ -412,7 +413,7 @@ export async function createClubGroup(teamId: ID, group: ClubGroupRequestDTO) {
 }
 
 export async function createClubGroupPopup(team: Team) {
-    return await Swal.fire<ClubGroup>({
+    return await fireAlert<ClubGroup>({
         title: 'Gruppe erstellen',
         html: `
       <p>Verein: ${team.club!.name}</p><hr />
@@ -456,7 +457,7 @@ export async function editClubGroup(
 }
 
 export async function editClubGroupPopup(team: Team, group: ClubGroup) {
-    return await Swal.fire<ClubGroup>({
+    return await fireAlert<ClubGroup>({
         title: 'Gruppe bearbeiten',
         html: `
       <p>Gruppe: ${group.name}</p><hr />
@@ -550,7 +551,7 @@ export async function updateClubMemberGroupsPopup(
         .filter((group) => group.memberids.includes(member.id))
         .map((group) => group.id);
 
-    return await Swal.fire({
+    return await fireAlert({
         title: 'Gruppenzuordnung',
         html: `
           <p>Vereinsmitglied: ${member.first_name} ${member.last_name}</p><hr />
@@ -606,7 +607,7 @@ export async function updateClubMemberGroupsPopup(
 // Group portfolios
 
 export async function showClubGroupPortfolioExportPopup(group: ClubGroup) {
-    return await Swal.fire({
+    return await fireAlert({
         title: 'Mitgliederportfolios exportieren',
         html: `
             Über folgende URL können die Mitgliederportfolios der Gruppe "${group.name}"

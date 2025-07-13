@@ -14,6 +14,7 @@ import {
 import {
     confirmAlert,
     doubleConfirmAlert,
+    fireAlert,
     Swal,
     SweetAlertResult,
 } from '../utils/alerts';
@@ -40,7 +41,7 @@ export async function createToDoList(teamId: ID, todolist: TodolistRequestDTO) {
 }
 
 export async function createToDoListPopup(team: Team) {
-    return await Swal.fire<Todolist>({
+    return await fireAlert<Todolist>({
         title: `To-do-Liste erstellen`,
         html: `
             <p>Team: ${team.name}</p><hr />
@@ -98,7 +99,7 @@ export async function editToDoList(
 }
 
 export async function editToDoListPopup(team: Team, todolist: Todolist) {
-    return await Swal.fire<Todolist>({
+    return await fireAlert<Todolist>({
         title: `To-do-Liste bearbeiten`,
         html: `
             <p>Team: ${team.name}</p><hr />
@@ -200,7 +201,7 @@ export async function editToDoListItemPopup(
     todolist: Todolist,
     item: TodolistItem
 ) {
-    return await Swal.fire<TodolistItem>({
+    return await fireAlert<TodolistItem>({
         title: `Listeneintrag bearbeiten`,
         html: `
             <p>Team: ${team.name}</p><p>Liste: ${todolist.name}</p><hr />
@@ -250,7 +251,7 @@ export async function viewToDoListItemPopup(
     todolist: Todolist,
     item: TodolistItem
 ) {
-    return await Swal.fire({
+    return await fireAlert({
         title: item.name,
         html: `
             <p style="white-space: pre-line;">${item.description || '<i>Keine zusätzliche Notiz vorhanden</i>'}</p>

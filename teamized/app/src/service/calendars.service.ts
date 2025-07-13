@@ -13,7 +13,12 @@ import {
 } from '../interfaces/calendar/calendarEvent';
 import { ID, IDIndexedObjectList } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
-import { confirmAlert, doubleConfirmAlert, Swal } from '../utils/alerts';
+import {
+    confirmAlert,
+    doubleConfirmAlert,
+    fireAlert,
+    Swal,
+} from '../utils/alerts';
 import {
     isInRange,
     isoFormat,
@@ -105,7 +110,7 @@ export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
 }
 
 export async function createCalendarPopup(team: Team) {
-    return await Swal.fire<Calendar>({
+    return await fireAlert<Calendar>({
         title: `Kalender erstellen`,
         html: `
             <p>Team: ${team.name}</p><hr />
@@ -163,7 +168,7 @@ export async function editCalendar(
 }
 
 export async function editCalendarPopup(team: Team, calendar: Calendar) {
-    return await Swal.fire<Calendar>({
+    return await fireAlert<Calendar>({
         title: `Kalender bearbeiten`,
         html: `
             <p>Team: ${team.name}</p><hr />
@@ -229,7 +234,7 @@ export async function showCalendarSubscriptionPopup(calendar: Calendar) {
     const urlHTTP = calendar.ics_url;
     const urlWebcal = 'webcal://' + urlHTTP.split('//')[1];
 
-    Swal.fire({
+    fireAlert({
         title: 'Kalender abonnieren',
         html: `
     Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
@@ -318,7 +323,7 @@ async function generalizedEventPopup({
         dtend = localInputFormat(prefilledEvent.dtend);
     }
 
-    return await Swal.fire<CalendarEvent>({
+    return await fireAlert<CalendarEvent>({
         title: titleText,
         html: `
             <p>Team: ${team.name}</p><hr />

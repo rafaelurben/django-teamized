@@ -4,12 +4,23 @@
  */
 
 import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from 'sweetalert2';
 
 import { ErrorResponse } from '../interfaces/responses/errorResponse';
 import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
+import { getSwalTheme } from '../service/settings.service';
 
 export { Swal, SweetAlertOptions, SweetAlertResult };
+
+/**
+ * Wrapper for Swal.fire() to set the theme
+ */
+export function fireAlert<T>(options: SweetAlertOptions = {}) {
+    return Swal.fire<T>({
+        theme: getSwalTheme(),
+        ...options,
+    });
+}
 
 /**
  * Create an alert based on a failed ajax request
@@ -49,7 +60,7 @@ export function apiRequestErrorAlert(request: JQuery.jqXHR) {
         Swal.hideLoading();
     } else {
         // If no Swal is currently shown, fire a Swal modal.
-        return Swal.fire(alertData as SweetAlertOptions);
+        return fireAlert(alertData as SweetAlertOptions);
     }
 }
 
@@ -59,7 +70,7 @@ export function apiRequestErrorAlert(request: JQuery.jqXHR) {
  * @param {object} data
  */
 export function apiRequestSuccessAlert(data: SuccessfulResponse) {
-    return Swal.fire({
+    return fireAlert({
         toast: true,
         icon: 'success',
         position: 'top-right',
@@ -84,7 +95,7 @@ export function errorAlert(
     message: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    return Swal.fire({
+    return fireAlert({
         title: title,
         html: message,
         icon: 'error',
@@ -104,7 +115,7 @@ export function infoAlert(
     message: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    return Swal.fire({
+    return fireAlert({
         title: title,
         html: message,
         icon: 'info',
@@ -122,7 +133,7 @@ export function waitingAlert(
     text: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    return Swal.fire({
+    return fireAlert({
         title: 'In Bearbeitung...',
         text: text,
         toast: true,
@@ -145,7 +156,7 @@ export function successAlert(
     title: string,
     options: Partial<SweetAlertOptions> = {}
 ) {
-    return Swal.fire({
+    return fireAlert({
         toast: true,
         icon: 'success',
         position: 'top-right',
@@ -176,6 +187,7 @@ export async function confirmAlert<T>(
     options: Partial<SweetAlertOptions> = {}
 ) {
     const data: SweetAlertOptions = {
+        theme: getSwalTheme(),
         title: title || 'Sicher?',
         html: html,
         icon: 'warning',
@@ -191,7 +203,7 @@ export async function confirmAlert<T>(
         data.showLoaderOnConfirm = true;
     }
 
-    return await Swal.fire<T>(data);
+    return await fireAlert<T>(data);
 }
 
 /**

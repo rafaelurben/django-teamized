@@ -13,6 +13,7 @@ import { Team, TeamRequestDTO } from '../interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
+    fireAlert,
     infoAlert,
     Swal,
 } from '../utils/alerts';
@@ -43,7 +44,7 @@ export async function createTeam(team: TeamRequestDTO) {
 }
 
 export async function createTeamPopup() {
-    return await Swal.fire<Team>({
+    return await fireAlert<Team>({
         title: 'Team erstellen',
         html: `
           <label class="swal2-input-label mt-0" for="swal-input-name">Name:</label>
@@ -80,7 +81,7 @@ export async function editTeam(teamId: ID, team: Partial<TeamRequestDTO>) {
 }
 
 export async function editTeamPopup(team: Team) {
-    return await Swal.fire<Team>({
+    return await fireAlert<Team>({
         title: 'Team bearbeiten',
         html: `
           <p>Team: ${team.name}</p><hr />
@@ -216,7 +217,7 @@ export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
 }
 
 export async function createInvitePopup(team: Team) {
-    return await Swal.fire<Invite>({
+    return await fireAlert<Invite>({
         title: `Einladung erstellen`,
         html: `
           <p>Team: ${team.name}</p><hr />
@@ -270,7 +271,7 @@ export async function editInvite(
 }
 
 export async function editInvitePopup(team: Team, invite: Invite) {
-    return await Swal.fire({
+    return await fireAlert({
         title: 'Einladung bearbeiten',
         html: `
           <p>Team: ${team.name}</p><hr />
