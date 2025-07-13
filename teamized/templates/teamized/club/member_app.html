@@ -25,49 +25,14 @@
 
 
 {% block contentcontainer %}
-    <!-- Sweetalert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"
-            integrity="sha384-Bsupiv7OpT7E3CJ6GTeszyRbP70Dn+u0ifdC42h1D6Nb05l2ZZcKdOy459MsxgUv"
-            crossorigin="anonymous"></script>
-    <!-- JQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- React -->
-    {% if debug %}
-        <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"
-                integrity="sha384-0HL/VWVbwweJfp0saUL50fXRuSABCdVeinTBoJCDXprLkJ49VI0QMWNGMRt8ebnT"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"
-                integrity="sha384-79Od0yhavbvtuP2nWl+Y6mwgs8AlknSIikYSw0+uOc65GTyH8SW7e2hCyCB303Y2"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-router@6.13.0/dist/umd/react-router.development.js"
-                integrity="sha384-PAOSqPPLmXLe3RbpGzYchgw9hiRIUxb3r+72WZHKGLnw0V6Cfm9I1Z2IzYqlXA1W"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-router-dom@6.13.0/dist/umd/react-router-dom.development.js"
-                integrity="sha384-yjQ5cM939FsVam7vF2NiIV5FGkRsqj11hiZWcIkYDNDGVRF8ffymbK99Fl604Gha"
-                crossorigin="anonymous"></script>
-    {% else %}
-        <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"
-                integrity="sha384-tMH8h3BGESGckSAVGZ82T9n90ztNXxvdwvdM6UoR56cYcf+0iGXBliJ29D+wZ/x8"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"
-                integrity="sha384-bm7MnzvK++ykSwVJ2tynSE5TRdN+xL418osEVF2DE/L/gfWHj91J2Sphe582B1Bh"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-router@6.13.0/dist/umd/react-router.production.min.js"
-                integrity="sha384-0uFoSUuHaKyn0+X+CbYQdGx2roobPl0qGXSk2pG2Tx8LkCHb3KKLILi/Z5TJ8rPQ"
-                crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/react-router-dom@6.13.0/dist/umd/react-router-dom.production.min.js"
-                integrity="sha384-LcCiYd6iEPznKpaGKVTjjo2rJlE9/lCO6HV32NdmpybE0MTq5n9YIOynEZtnEUgH"
-                crossorigin="anonymous"></script>
-    {% endif %}
-
     <script>
         {% comment %}
-            window.teamized_globals.api_base_url = "{% url 'teamized:club-api-memberinfo' memberuid=member.uid %}"; {% endcomment %}
+            window.teamized_globals.api_base_url = "{% url 'teamized:club-api-memberinfo' memberuid=member.uid %}";
+        {% endcomment %}
     </script>
     {% comment %}
-        <script src="{% static '' %}" type="module"></script> {% endcomment %}
+        <script src="{% static '' %}" type="module"></script>
+    {% endcomment %}
 
     <div id="app-maincontent" class="w-100 overflow-auto px-4 py-3 container-fluid">
         Da ist noch nix drin...
