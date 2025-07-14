@@ -18,6 +18,7 @@ from django.urls import reverse
 import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
 
+
 # Create your models here.
 
 
@@ -388,7 +389,9 @@ class Invite(models.Model):
 
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
-                text=_("Du bist bereits Mitglied in diesem Team."),
+                text=_("Du bist bereits Mitglied im Team {team_name}.").format(
+                    team_name=self.team.name
+                ),
                 title=_("Einladung ungültig"),
                 errorname="invite-already-member",
             )
