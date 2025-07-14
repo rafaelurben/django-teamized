@@ -648,10 +648,10 @@ class Calendar(models.Model):
         calendarlines = [
             "BEGIN:VCALENDAR",
             "VERSION:2.0",
-            "PRODID:-//Rafael Urben//Teamized Calendar//EN",
+            "PRODID:-//Rafael Urben//Teamized Calendar//DE",
             "CALSCALE:GREGORIAN",
             "METHOD:PUBLISH",
-            "UID:" + str(self.ics_uid),
+            "UID:" + str(self.uid),
             "NAME:" + utils.ical_text(self.name),
             "X-WR-CALNAME:" + utils.ical_text(self.name),
             "DESCRIPTION:" + utils.ical_text(self.description),
