@@ -3,7 +3,7 @@
 from django.views.decorators.csrf import csrf_exempt
 
 # This is a reimport so the endpoints can be imported easier
-from teamized.api.endpoints import main, workingtime, calendar, todo, club
+from teamized.api.endpoints import main, workingtime, calendar, todo, club, club_presence
 from teamized.api.utils.constants import ENDPOINT_NOT_FOUND
 
 # Basic API views

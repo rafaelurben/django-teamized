@@ -1,4 +1,4 @@
-"""Main API endpoints"""
+"""Club main API endpoints"""
 
 from django.db.models import QuerySet
 from django.http import JsonResponse

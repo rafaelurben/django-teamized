@@ -88,7 +88,7 @@ urlpatterns = [
         ep.todo.endpoint_todolistitem,
         name="api-todolistitem",
     ),
-    # Club API views
+    # Club main API views
     path("teams/<team>/create-club", ep.club.endpoint_create_club, name="api-create-club"),
     path("teams/<team>/club", ep.club.endpoint_club, name="api-club"),
     path("teams/<team>/club/members", ep.club.endpoint_members, name="api-club-members"),
@@ -117,6 +117,32 @@ urlpatterns = [
         "teams/<team>/club/groups/<group>",
         ep.club.endpoint_group,
         name="api-club-group",
+    ),
+    # Club presence API views
+    path(
+        "teams/<team>/club/presence-events",
+        ep.club_presence.endpoint_presence_events,
+        name="api-club-presence-events",
+    ),
+    path(
+        "teams/<team>/club/presence-events/<presence_event>",
+        ep.club_presence.endpoint_presence_event,
+        name="api-club-presence-event",
+    ),
+    path(
+        "teams/<team>/club/presence-events/<presence_event>/participations",
+        ep.club_presence.endpoint_presence_event_participation_list,
+        name="api-club-presence-event-participations",
+    ),
+    path(
+        "teams/<team>/club/presence-events/<presence_event>/participations/bulk-create",
+        ep.club_presence.endpoint_presence_event_participation_bulk_create,
+        name="api-club-presence-event-participation-bulk-create",
+    ),
+    path(
+        "teams/<team>/club/presence-events/<presence_event>/participations/<participation>",
+        ep.club_presence.endpoint_presence_event_participation,
+        name="api-club-presence-event-participation",
     ),
     # Catch-all error view for 404 JSON responses
     re_path(".*", ep.endpoint_not_found, name="api-not-found"),
