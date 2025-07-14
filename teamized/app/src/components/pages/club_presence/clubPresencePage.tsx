@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
 import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import EventSelector from './eventSelector';
+import { ParticipationTile } from './participationTile';
 
 export default function ClubPresencePage() {
     const refreshData = useAppdataRefresh();
@@ -29,18 +31,19 @@ export default function ClubPresencePage() {
         if (loading) {
             ClubPresenceService.getPresenceEvents(team.id).then(refreshData);
         }
+
+        if (teamData._state.club_members._initial) {
+            ClubService.getClubMembers(team.id).then(refreshData);
+        }
+        if (teamData._state.club_groups._initial) {
+            ClubService.getClubGroups(team.id).then(refreshData);
+        }
     });
 
     const ensureValidEventId = () => {
         const isValid = Object.hasOwn(eventsMap, selectedEventId!);
-        const eventIds = Object.keys(eventsMap);
-        const hasEvent = eventIds.length > 0;
 
-        if (!isValid && hasEvent) {
-            // If the current event is invalid and there are event, select the first one.
-            setSelectedEventId(eventIds[0]);
-        } else if (!isValid) {
-            // If the current event is set but there are no events, select null.
+        if (!isValid) {
             setSelectedEventId(null);
         }
     };
@@ -67,7 +70,22 @@ export default function ClubPresencePage() {
                     />
                 </Dashboard.Tile>
             </Dashboard.Column>
-            <Dashboard.Column sizes={{ lg: 8 }}></Dashboard.Column>
+            <Dashboard.Column sizes={{ lg: 8 }}>
+                {selectedEvent ? (
+                    <ParticipationTile
+                        team={team}
+                        selectedEvent={selectedEvent}
+                        isAdmin={isAdmin}
+                    />
+                ) : (
+                    <Dashboard.Tile
+                        title="Ausgewähltes Ereignis"
+                        help="Bitte wähle ein Ereignis aus der linken Spalte."
+                    >
+                        <p className="ms-1 mb-0">Kein Ereignis ausgewählt.</p>
+                    </Dashboard.Tile>
+                )}
+            </Dashboard.Column>
         </Dashboard.Page>
     );
 }

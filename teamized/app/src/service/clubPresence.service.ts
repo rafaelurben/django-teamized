@@ -90,3 +90,13 @@ export async function createPresenceEventPopup(team: Team) {
         },
     });
 }
+
+export async function getClubPresenceEventParticipations(
+    teamId: ID,
+    eventId: ID
+) {
+    return await ClubPresenceAPI.getClubPresenceEventParticipations(
+        teamId,
+        eventId
+    ).then((data) => data.participations);
+}
