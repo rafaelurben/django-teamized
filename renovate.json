@@ -1,24 +1,17 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:recommended"
+        "config:recommended",
+        "npm:unpublishSafe",
+        "group:allNonMajor",
+        "automergeStableNonMajor"
     ],
     "packageRules": [
         {
-            "description": "Automerge patch updates after 2 days",
-            "matchUpdateTypes": [
-                "patch"
-            ],
-            "minimumReleaseAge": "2 days",
-            "automerge": true
-        },
-        {
-            "description": "Automerge minor updates after 5 days",
-            "matchUpdateTypes": [
-                "minor"
-            ],
-            "minimumReleaseAge": "5 days",
-            "automerge": true
+            "description": "Don't automerge Django minor updates",
+            "matchPackageNames": ["django"],
+            "matchUpdateTypes": ["major", "minor"],
+            "automerge": false
         }
     ],
     "lockFileMaintenance": {
