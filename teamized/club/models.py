@@ -4,19 +4,17 @@ Django will handle the database itself. Only the models need to be defined here.
 """
 
 import uuid
-
 from copy import deepcopy
 
-from django.db import models
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.db import models
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from teamized import utils, decorators, validation
-
-_ = lambda s: s  # dummy translation function # pylint: disable=unnecessary-lambda-assignment
 
 
 # Create your models here.

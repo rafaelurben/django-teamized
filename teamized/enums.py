@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 
 
 class Roles(models.TextChoices):
-    "Roles a team member can have"
+    """Roles a team member can have"""
 
     OWNER = "owner", _("Besitzer")
     ADMIN = "admin", _("Administrator")

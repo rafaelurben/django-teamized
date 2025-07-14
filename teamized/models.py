@@ -143,7 +143,7 @@ class User(models.Model):
 
 
 class Team(models.Model):
-    "A team"
+    """A team"""
 
     uid = models.UUIDField(
         primary_key=True,
@@ -246,7 +246,7 @@ class Team(models.Model):
 
 
 class Member(models.Model):
-    "Connection between User and Team"
+    """Connection between User and Team"""
 
     uid = models.UUIDField(
         primary_key=True,
@@ -314,7 +314,7 @@ class Member(models.Model):
 
 
 class Invite(models.Model):
-    "Invites for teams"
+    """Invites for teams"""
 
     NOT_FOUND_TITLE = _("Einladung ungültig")
     NOT_FOUND_TEXT = _("Eine Einladung mit dem angegebenen Token konnte nicht gefunden werden.")
@@ -365,20 +365,13 @@ class Invite(models.Model):
             "valid_until": None if self.valid_until is None else self.valid_until.isoformat(),
         }
 
-    def get_time_left_days(self) -> float:
-        "Get the time left in days until the invite expires."
-
-        if self.valid_until is None:
-            return float("inf")
-        return (self.valid_until - timezone.now()).total_days()
-
     def is_valid_uses(self) -> bool:
-        "Check if the invite has any uses left"
+        """Check if the invite has any uses left"""
 
         return self.uses_left > 0
 
     def is_valid_time(self) -> bool:
-        "Check if the invite is still valid"
+        """Check if the invite is still valid"""
 
         if self.valid_until is None:
             return True
@@ -386,12 +379,12 @@ class Invite(models.Model):
 
     @admin.display(boolean=True)
     def is_valid(self) -> bool:
-        "Check if the invitation is still valid"
+        """Check if the invitation is still valid"""
 
         return self.is_valid_uses() and self.is_valid_time()
 
     def check_validity_for_user(self, user: User) -> bool:
-        "Check if an user can use an invite - raise AlertException if not."
+        """Check if an user can use an invite - raise AlertException if not."""
 
         if self.team.user_is_member(user):
             raise exceptions.AlertException(
@@ -456,7 +449,7 @@ class Invite(models.Model):
 
 
 class WorkSession(models.Model):
-    "Model for work sessions"
+    """Model for work sessions"""
 
     uid = models.UUIDField(
         primary_key=True,
@@ -497,8 +490,9 @@ class WorkSession(models.Model):
     note = models.TextField(blank=True, default="")
 
     @property
+    @admin.display()
     def duration(self) -> float:
-        "Get the (current) session duration in seconds"
+        """Get the (current) session duration in seconds"""
 
         if self.time_end is None:
             return (timezone.now() - self.time_start).total_seconds()
@@ -524,7 +518,7 @@ class WorkSession(models.Model):
         }
 
     def end(self) -> None:
-        "End the work session"
+        """End the work session"""
 
         self.time_end = timezone.now()
         self.is_ended = True
@@ -679,13 +673,13 @@ class Calendar(models.Model):
         return response
 
     def get_online_url(self, request):
-        "Get the url to the calendar page in the app"
+        """Get the url to the calendar page in the app"""
 
         path = reverse("teamized:app")
         return request.build_absolute_uri(path) + f"?p=calendars&t={self.team_id}"
 
     def get_ics_url(self, request=None):
-        "Get the url to the ics file"
+        """Get the url to the ics file"""
 
         path = reverse("teamized:calendar_ics", args=[self.ics_uid])
         if request is None:
@@ -802,7 +796,7 @@ class CalendarEvent(models.Model):
         ]
 
     def clean(self) -> None:
-        "Verify that the event is valid"
+        """Verify that the event is valid"""
 
         if self.fullday:
             if self.dstart is None or self.dend is None:

@@ -1,5 +1,7 @@
 import uuid
 from datetime import timedelta, datetime, date
+from collections.abc import Iterable
+
 from django.utils import timezone
 
 
@@ -41,9 +43,9 @@ def ical_text(text: str):
     return text
 
 
-def iddict(lst: list):
+def iddict(lst: Iterable):
     """
-    Returns a dictionary from a list of objects with an id attribute
+    Returns a dictionary from an object iterable with an id attribute
     """
     return {x["id"]: x for x in lst}
 

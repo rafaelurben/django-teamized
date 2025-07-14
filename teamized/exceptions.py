@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 
 class AlertException(Exception):
-    "Exception class for errors that should be alerted to the user"
+    """Exception class for errors that should be alerted to the user"""
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class AlertException(Exception):
 
 
 class ValidationError(AlertException):
-    "Exception class for validation errors"
+    """Exception class for validation errors"""
 
     def __init__(
         self,

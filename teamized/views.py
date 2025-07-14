@@ -11,7 +11,7 @@ from teamized.models import Calendar
 
 
 def home(request):
-    "Show the home page"
+    """Show the home page"""
     return render(request, "teamized/home.html")
 
 
@@ -21,18 +21,18 @@ def home(request):
 @login_required(login_url=reverse_lazy("account:login"))
 @teamized_prep()
 def app(request):
-    "Show the app page"
+    """Show the app page"""
     return render(request, "teamized/app.html")
 
 
 @login_required(login_url=reverse_lazy("account:login"))
 def app_debug(request):
-    "Show the debug page"
+    """Show the debug page"""
     return render(request, "teamized/debug.html")
 
 
 def manifest(request):
-    "Render the manifest.json file"
+    """Render the manifest.json file"""
     response = render(request, "teamized/manifest.json", {})
     response["Content-Type"] = "text/json"
     response["Service-Worker-Allowed"] = reverse("teamized:home")
@@ -43,7 +43,7 @@ def manifest(request):
 
 
 def calendar_ics(request, uuid):
-    "Get the .ics file for a public calendar"
+    """Get the .ics file for a public calendar"""
 
     try:
         calendar: Calendar = Calendar.objects.get(ics_uid=uuid, is_public=True)
@@ -57,5 +57,5 @@ def calendar_ics(request, uuid):
 
 
 def notfound(request):
-    "Show a 404 page"
+    """Show a 404 page"""
     return render(request, "teamized/404.html", status=404)

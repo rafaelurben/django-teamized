@@ -55,19 +55,18 @@ def endpoint_worksessions(request, team: Team):
 @csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("session", WorkSession, "session")])
-def endpoint_worksession(
-    request, team: Team, session: WorkSession
-):  # pylint: disable=unused-argument
+def endpoint_worksession(request, team: Team, session: WorkSession):
     """
     Endpoint for managing or deleting a WorkSession.
     """
-
-    # Note: The team argument is only here to maintain the same url structure as the endpoint above.
 
     user: User = request.teamized_user
 
     # Check if it's the user's session
     if session.user != user:
+        return OBJ_NOT_FOUND
+    # Check if session is in team
+    if session.team != team:
         return OBJ_NOT_FOUND
 
     if request.method == "GET":

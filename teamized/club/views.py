@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib import messages
 
 import teamized.club.models as models
 from teamized.club.decorators import clubview
+
 
 # Create your views here.
 
@@ -127,7 +128,7 @@ def club_login(request, club):
     )
 
 
-### Error
+# Error
 
 
 def error(request):

@@ -15,7 +15,7 @@ from teamized.exceptions import ValidationError
 
 
 class BaseValidator:
-    "Base class for validating POST request data"
+    """Base class for validating POST request data"""
 
     @classmethod
     def _convert(cls, value, **kwargs):
