@@ -12,6 +12,7 @@ import {
 } from '../utils/navigation/navigationProvider';
 import CalendarsPage from './pages/calendars/calendarsPage';
 import ClubPage from './pages/club/clubPage';
+import ClubPresencePage from './pages/club_presence/clubPresencePage';
 import HomePage from './pages/home/homePage';
 import TeamPage from './pages/team/teamPage';
 import TeamlistPage from './pages/teamlist/teamlistPage';
@@ -21,6 +22,7 @@ import WorkingtimePage from './pages/workingtime/workingtimePage';
 export const PAGE_NAMES = {
     home: 'Startseite',
     club: 'Verein',
+    club_presence: 'Anwesenheit',
     calendars: 'Kalender',
     team: 'Team',
     teamlist: 'Teams',
@@ -78,6 +80,8 @@ export function PageLoader() {
             return <TodoPage />;
         case 'club':
             return <ClubPage />;
+        case 'club_presence':
+            return <ClubPresencePage />;
         default:
             return (
                 <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
