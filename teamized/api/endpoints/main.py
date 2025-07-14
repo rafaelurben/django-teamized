@@ -173,6 +173,20 @@ def endpoint_team(request, team: Team):
                 errorname="team-has-members",
             )
 
+        if team.calendars.count() > 1:
+            raise exceptions.AlertException(
+                text=_("Das Team kann nicht gelöscht werden, da es noch Kalender enthält."),
+                title=_("Team hat noch Kalender"),
+                errorname="team-has-calendars",
+            )
+
+        if team.todolists.count() > 1:
+            raise exceptions.AlertException(
+                text=_("Das Team kann nicht gelöscht werden, da es noch To-do-Listen enthält."),
+                title=_("Team hat noch To-do-Listen"),
+                errorname="team-has-todolists",
+            )
+
         team.delete()
         return JsonResponse(
             {
