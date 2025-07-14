@@ -7,6 +7,7 @@ import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
+import Urlize from '../../common/utils/urlize';
 
 interface Props {
     team: Team;
@@ -70,8 +71,8 @@ export default function CalendarInfo({
                     <th style={{ width: '1px' }} className="pe-3">
                         Beschreibung:
                     </th>
-                    <td style={{ whiteSpace: 'pre-line' }}>
-                        {selectedCalendar.description}
+                    <td>
+                        <Urlize text={selectedCalendar.description} />
                     </td>
                 </tr>
                 <tr>

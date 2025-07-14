@@ -6,6 +6,7 @@ import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Dashboard from '../../common/dashboard';
+import Urlize from '../../common/utils/urlize';
 
 interface Props {
     team: Team;
@@ -84,8 +85,8 @@ export default function CalendarEventDisplay({
                         <th style={{ width: '1px' }} className="pe-3">
                             Beschreibung:
                         </th>
-                        <td style={{ whiteSpace: 'pre-line' }}>
-                            {event.description}
+                        <td>
+                            <Urlize text={event.description} />
                         </td>
                     </tr>
                 )}

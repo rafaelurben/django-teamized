@@ -148,7 +148,7 @@ export default function CalendarsPage() {
                     title="Kalenderdetails"
                     help="Sieh dir Infos zum oben ausgewählten Kalender an."
                 >
-                    {/* Selecting, creating and managing calendars */}
+                    {/* Calendar details */}
                     <CalendarInfo
                         team={team}
                         selectedCalendar={selectedCalendar}

@@ -5,6 +5,7 @@ import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
 import { successAlert } from '../../../utils/alerts';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import Urlize from '../../common/utils/urlize';
 
 interface Props {
     team: Team;
@@ -54,8 +55,8 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
     return (
         <tr>
             {/* Note */}
-            <td style={{ whiteSpace: 'pre-line' }}>
-                <span>{invite.note}</span>
+            <td>
+                <Urlize text={invite.note} />
             </td>
             {/* Share */}
             <td>

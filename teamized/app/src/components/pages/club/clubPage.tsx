@@ -7,6 +7,7 @@ import {
     usePageNavigator,
 } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
+import Urlize from '../../common/utils/urlize';
 import ClubMemberTileContent from './clubMemberTileContent';
 
 export default function ClubPage() {
@@ -64,8 +65,8 @@ export default function ClubPage() {
                                 <th style={{ width: '1px' }} className="pe-3">
                                     Beschreibung:
                                 </th>
-                                <td style={{ whiteSpace: 'pre-line' }}>
-                                    {club.description}
+                                <td>
+                                    <Urlize text={club.description} />
                                 </td>
                             </tr>
                             <tr>

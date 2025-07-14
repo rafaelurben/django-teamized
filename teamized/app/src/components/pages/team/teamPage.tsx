@@ -10,6 +10,7 @@ import {
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
+import Urlize from '../../common/utils/urlize';
 import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
 
@@ -79,8 +80,8 @@ export default function TeamPage() {
                                 <th style={{ width: '1px' }} className="pe-3">
                                     Beschreibung:
                                 </th>
-                                <td style={{ whiteSpace: 'pre-line' }}>
-                                    {team.description}
+                                <td>
+                                    <Urlize text={team.description} />
                                 </td>
                             </tr>
                             <tr>
