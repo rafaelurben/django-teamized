@@ -1,6 +1,7 @@
 import { Calendar } from '../calendar/calendar';
 import { ClubGroup } from '../club/clubGroup';
 import { ClubMember } from '../club/clubMember';
+import { ClubPresenceEvent } from '../club/clubPresenceEvent';
 import { IDIndexedObjectList } from '../common';
 import { Invite } from '../teams/invite';
 import { Member } from '../teams/member';
@@ -18,6 +19,7 @@ export interface TeamCache {
     me_worksessions: IDIndexedObjectList<Worksession>;
     club_members: IDIndexedObjectList<ClubMember>;
     club_groups: IDIndexedObjectList<ClubGroup>;
+    club_presence_events: IDIndexedObjectList<ClubPresenceEvent>;
     _state: {
         [key in CacheCategory]: {
             _initial: boolean;

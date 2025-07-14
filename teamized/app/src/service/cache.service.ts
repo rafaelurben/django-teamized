@@ -143,7 +143,10 @@ export async function refreshTeamCacheCategory<T extends CacheCategoryType>(
                 category
             )
                 .then((data) => {
-                    const objects: T[] = data[category.split('_').at(-1)!];
+                    const response_key = category.includes('_')
+                        ? category.split('_').slice(1).join('_')
+                        : category;
+                    const objects: T[] = data[response_key];
                     replaceTeamCacheCategory<T>(teamId, category, objects);
 
                     teamData._state[category]._initial = false;

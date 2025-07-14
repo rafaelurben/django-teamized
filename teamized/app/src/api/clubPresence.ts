@@ -13,18 +13,12 @@ import {
 import { ID } from '../interfaces/common';
 import { API } from './_base';
 
-export async function getClubPresenceEvents(teamId: ID) {
-    return await API.get<{ presence_events: ClubPresenceEvent[] }>(
-        `teams/${teamId}/club/presence-events`
-    );
-}
-
 export async function createClubPresenceEvent(
     teamId: ID,
     event: ClubPresenceEventRequestDTO
 ) {
     return await API.post<{ presence_event: ClubPresenceEvent }>(
-        `teams/${teamId}/club/presence-events`,
+        `teams/${teamId}/club/presence_events`,
         event
     );
 }
@@ -35,13 +29,13 @@ export async function updateClubPresenceEvent(
     event: Partial<ClubPresenceEventRequestDTO>
 ) {
     return await API.put<{ presence_event: ClubPresenceEvent }>(
-        `teams/${teamId}/club/presence-events/${eventId}`,
+        `teams/${teamId}/club/presence_events/${eventId}`,
         event
     );
 }
 
 export async function deleteClubPresenceEvent(teamId: ID, eventId: ID) {
-    return await API.delete(`teams/${teamId}/club/presence-events/${eventId}`);
+    return await API.delete(`teams/${teamId}/club/presence_events/${eventId}`);
 }
 
 export async function getClubPresenceEventParticipations(
@@ -49,7 +43,7 @@ export async function getClubPresenceEventParticipations(
     eventId: ID
 ) {
     return await API.get<{ participations: ClubPresenceEventParticipation[] }>(
-        `teams/${teamId}/club/presence-events/${eventId}/participations`
+        `teams/${teamId}/club/presence_events/${eventId}/participations`
     );
 }
 
@@ -61,7 +55,7 @@ export async function bulkCreateClubPresenceEventParticipations(
     return await API.post<{
         participations: ClubPresenceEventParticipation[];
     }>(
-        `teams/${teamId}/club/presence-events/${eventId}/participations/bulk-create`,
+        `teams/${teamId}/club/presence_events/${eventId}/participations/bulk-create`,
         { member_ids }
     );
 }
@@ -75,7 +69,7 @@ export async function updateClubPresenceEventParticipation(
     return await API.put<{
         participation: ClubPresenceEventParticipation;
     }>(
-        `teams/${teamId}/club/presence-events/${eventId}/participations/${participationId}`,
+        `teams/${teamId}/club/presence_events/${eventId}/participations/${participationId}`,
         participation
     );
 }
@@ -86,6 +80,6 @@ export async function deleteClubPresenceEventParticipation(
     participationId: ID
 ) {
     return await API.delete(
-        `teams/${teamId}/club/presence-events/${eventId}/participations/${participationId}`
+        `teams/${teamId}/club/presence_events/${eventId}/participations/${participationId}`
     );
 }

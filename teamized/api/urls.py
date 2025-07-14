@@ -120,27 +120,27 @@ urlpatterns = [
     ),
     # Club presence API views
     path(
-        "teams/<team>/club/presence-events",
+        "teams/<team>/club/presence_events",
         ep.club_presence.endpoint_presence_events,
         name="api-club-presence-events",
     ),
     path(
-        "teams/<team>/club/presence-events/<presence_event>",
+        "teams/<team>/club/presence_events/<presence_event>",
         ep.club_presence.endpoint_presence_event,
         name="api-club-presence-event",
     ),
     path(
-        "teams/<team>/club/presence-events/<presence_event>/participations",
+        "teams/<team>/club/presence_events/<presence_event>/participations",
         ep.club_presence.endpoint_presence_event_participation_list,
         name="api-club-presence-event-participations",
     ),
     path(
-        "teams/<team>/club/presence-events/<presence_event>/participations/bulk-create",
+        "teams/<team>/club/presence_events/<presence_event>/participations/bulk-create",
         ep.club_presence.endpoint_presence_event_participation_bulk_create,
         name="api-club-presence-event-participation-bulk-create",
     ),
     path(
-        "teams/<team>/club/presence-events/<presence_event>/participations/<participation>",
+        "teams/<team>/club/presence_events/<presence_event>/participations/<participation>",
         ep.club_presence.endpoint_presence_event_participation,
         name="api-club-presence-event-participation",
     ),

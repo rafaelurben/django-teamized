@@ -88,5 +88,5 @@ export async function acceptInvite(token: string) {
 // Item category
 
 export async function getItemsOfCategory<T>(teamId: ID, category: string) {
-    return await API.get<T>(`teams/${teamId}/${category.replaceAll('_', '/')}`);
+    return await API.get<T>(`teams/${teamId}/${category.replace('_', '/')}`);
 }
