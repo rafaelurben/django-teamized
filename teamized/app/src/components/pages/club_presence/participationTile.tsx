@@ -13,20 +13,25 @@ interface Props {
     team: Team;
     selectedEvent: ClubPresenceEvent;
     isAdmin: boolean;
+    ref: React.RefObject<HTMLDivElement | null>;
 }
 
-export function ParticipationTile({ team, selectedEvent, isAdmin }: Props) {
+export function ParticipationTile({
+    team,
+    selectedEvent,
+    isAdmin,
+    ref,
+}: Props) {
     const [participations, setParticipations] = useState<
         ClubPresenceEventParticipation[] | null
     >(null);
 
     useEffect(() => {
-        setParticipations(null);
         ClubPresenceService.getClubPresenceEventParticipations(
             team.id,
             selectedEvent.id
         ).then(setParticipations);
-    }, [team.id, selectedEvent.id]);
+    }, [team, selectedEvent]);
 
     const handleParticipationDelete = (participationId: ID) => {
         setParticipations((prev) =>
@@ -60,6 +65,7 @@ export function ParticipationTile({ team, selectedEvent, isAdmin }: Props) {
             title={'Ereignis: ' + selectedEvent.title}
             help="Verwalte die Anwesenheit für dieses Ereignis."
             loading={participations === null}
+            ref={ref}
         >
             {participations !== null && (
                 <>

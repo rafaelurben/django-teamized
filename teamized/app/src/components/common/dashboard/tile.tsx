@@ -9,6 +9,7 @@ interface Props {
     className: string;
     children: React.ReactNode;
     loading: boolean;
+    ref: React.Ref<HTMLDivElement> | null;
 }
 
 export default function Tile({
@@ -18,6 +19,7 @@ export default function Tile({
     className = '',
     children = null,
     loading = false,
+    ref = null,
 }: Partial<Props>) {
     let fullClassName = `dashboard-tile row border border-dark rounded mx-2 mb-3 mt-0 flex-column ${className}`;
 
@@ -26,7 +28,7 @@ export default function Tile({
     }
 
     return (
-        <div className={fullClassName}>
+        <div className={fullClassName} ref={ref}>
             {title && (
                 <>
                     <h5
@@ -43,7 +45,7 @@ export default function Tile({
             )}
             <div className="p-2 w-100 overflow-auto flex-grow-1">
                 {loading ? (
-                    <div className="text-center">
+                    <div className="text-center my-5">
                         <i className="fa-solid fa-spinner fa-spin" />
                         <span className="ms-2">Daten werden geladen...</span>
                     </div>

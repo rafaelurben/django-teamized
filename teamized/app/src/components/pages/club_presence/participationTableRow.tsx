@@ -158,7 +158,7 @@ export default function ParticipationTableRow({
             </td>
             <td>
                 {editable ? (
-                    <div className="d-flex gap-1">
+                    <div className="d-flex gap-1 flex-column flex-xl-row">
                         <div className="form-check form-check-inline">
                             <input
                                 className="form-check-input"
@@ -240,7 +240,7 @@ export default function ParticipationTableRow({
             </td>
             <td>
                 {editable ? (
-                    <div className="d-flex gap-2">
+                    <div className="d-flex gap-1 flex-column flex-xl-row">
                         <div className="form-check form-check-inline">
                             <input
                                 className="form-check-input"

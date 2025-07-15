@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
 import * as ClubPresenceService from '../../../service/clubPresence.service';
@@ -14,6 +14,8 @@ export default function ClubPresencePage() {
     const refreshData = useAppdataRefresh();
 
     const [selectedEventId, setSelectedEventId] = useState<ID | null>(null);
+
+    const participationTileRef = useRef<HTMLDivElement>(null);
 
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
@@ -49,6 +51,11 @@ export default function ClubPresencePage() {
         }
     };
 
+    const selectEvent = (eventId: ID | null) => {
+        setSelectedEventId(eventId);
+        participationTileRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     const selectedEvent = eventsMap[selectedEventId!];
 
     return (
@@ -57,7 +64,7 @@ export default function ClubPresencePage() {
             subtitle="Verwalte die Anwesenheit von Vereinsmitgliedern"
             loading={loading}
         >
-            <Dashboard.Column sizes={{ lg: 4 }}>
+            <Dashboard.Column sizes={{ xl: 4 }}>
                 <Dashboard.Tile
                     title="Ereignisübersicht"
                     help="Wähle ein Ereignis aus, um die Anwesenheit zu verwalten oder erstelle ein neues."
@@ -66,7 +73,7 @@ export default function ClubPresencePage() {
                         team={team}
                         events={events}
                         selectedEvent={selectedEvent}
-                        onEventSelect={setSelectedEventId}
+                        onEventSelect={selectEvent}
                         isAdmin={isAdmin}
                     />
                 </Dashboard.Tile>
@@ -81,12 +88,14 @@ export default function ClubPresencePage() {
                     />
                 </Dashboard.Tile>
             </Dashboard.Column>
-            <Dashboard.Column sizes={{ lg: 8 }}>
+            <Dashboard.Column sizes={{ xl: 8 }}>
                 {selectedEvent ? (
                     <ParticipationTile
                         team={team}
                         selectedEvent={selectedEvent}
                         isAdmin={isAdmin}
+                        ref={participationTileRef}
+                        key={selectedEvent.id} // Ensure re-render on event change
                     />
                 ) : (
                     <Dashboard.Tile

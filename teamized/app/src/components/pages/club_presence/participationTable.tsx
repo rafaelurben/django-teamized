@@ -35,7 +35,7 @@ export default function ParticipationTable({
             <thead>
                 {isAdmin && (
                     <tr>
-                        <th colSpan={10} className="text-end">
+                        <th colSpan={10} className="text-start">
                             <div className="form-check form-switch d-inline-flex align-items-center">
                                 <input
                                     className="form-check-input"
