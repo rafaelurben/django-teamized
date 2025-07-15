@@ -69,7 +69,7 @@ export async function createAttendanceEventPopup(team: Team) {
             const description = <string>$('#swal-input-description').val();
             const dt_start = <string>$('#swal-input-dt_start').val();
             const dt_end = <string>$('#swal-input-dt_end').val();
-            const points = <number>$('#swal-input-points').val();
+            const points = Number($('#swal-input-points').val());
             const participating_by_default = <boolean>(
                 $('#swal-input-participating_by_default').prop('checked')
             );
