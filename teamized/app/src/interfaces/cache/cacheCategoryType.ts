@@ -1,4 +1,5 @@
 import { Calendar } from '../calendar/calendar';
+import { ClubAttendanceEvent } from '../club/clubAttendanceEvent';
 import { ClubGroup } from '../club/clubGroup';
 import { ClubMember } from '../club/clubMember';
 import { Invite } from '../teams/invite';
@@ -13,4 +14,5 @@ export type CacheCategoryType =
     | Todolist
     | Worksession
     | ClubMember
-    | ClubGroup;
+    | ClubGroup
+    | ClubAttendanceEvent;

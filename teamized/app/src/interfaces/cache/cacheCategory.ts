@@ -6,4 +6,5 @@ export enum CacheCategory {
     ME_WORKSESSIONS = 'me_worksessions',
     CLUB_MEMBERS = 'club_members',
     CLUB_GROUPS = 'club_groups',
+    CLUB_ATTENDANCE_EVENTS = 'club_attendance_events',
 }

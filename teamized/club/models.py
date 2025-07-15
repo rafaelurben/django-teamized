@@ -554,6 +554,198 @@ class ClubMemberGroupMembership(models.Model):
         unique_together = [["group", "member"]]
 
 
+class ClubAttendanceEvent(models.Model):
+    uid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+    )
+    club = models.ForeignKey(
+        Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="attendance_events"
+    )
+
+    title = models.CharField(max_length=50, verbose_name=_("Titel"))
+    description = models.TextField(verbose_name=_("Beschreibung"), blank=True)
+
+    participating_by_default = models.BooleanField(
+        verbose_name=_("Teilnahme standardmäßig"),
+        default=True,
+        help_text=_(
+            "Wenn gesetzt, sind zugewiesene Mitglieder standardmäßig für die Teilnahme eingetragen."
+        ),
+    )
+
+    dt_start = models.DateTimeField(verbose_name=_("Beginn"))
+    dt_end = models.DateTimeField(verbose_name=_("Ende"))
+
+    points = models.PositiveIntegerField(
+        verbose_name=_("Punkte"),
+        default=1,
+        help_text=_("Punkte, die für die Teilnahme vergeben werden."),
+    )
+
+    locked = models.BooleanField(
+        verbose_name=_("Gesperrt?"),
+        default=False,
+        help_text=_("Wenn gesetzt, können Teilnahmen nicht mehr geändert werden."),
+    )
+
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Anwesenheitsereignis")
+        verbose_name_plural = _("Anwesenheitsereignisse")
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.title
+
+    def as_dict(self):
+        return {
+            "id": str(self.uid),
+            "title": self.title,
+            "description": self.description,
+            "participating_by_default": self.participating_by_default,
+            "dt_start": self.dt_start.isoformat(),
+            "dt_end": self.dt_end.isoformat(),
+            "points": self.points,
+            "locked": self.locked,
+        }
+
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, club: Club) -> "ClubAttendanceEvent":
+        """Create a new object from POST data"""
+
+        return cls.objects.create(
+            club=club,
+            title=validation.text(data, "title", True),
+            description=validation.text(data, "description", False, default=""),
+            participating_by_default=validation.boolean(
+                data, "participating_by_default", False, default=True
+            ),
+            dt_start=validation.datetime(data, "dt_start", True),
+            dt_end=validation.datetime(data, "dt_end", True),
+            points=validation.integer(data, "points", False, default=1),
+            locked=False,
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        self.title = validation.text(data, "title", False, default=self.title)
+        self.description = validation.text(data, "description", False, default=self.description)
+        self.participating_by_default = validation.boolean(
+            data, "participating_by_default", False, default=self.participating_by_default
+        )
+        self.dt_start = validation.datetime(data, "dt_start", False, default=self.dt_start)
+        self.dt_end = validation.datetime(data, "dt_end", False, default=self.dt_end)
+        self.points = validation.integer(data, "points", False, default=self.points)
+        self.save()
+
+
+class ClubAttendanceEventParticipation(models.Model):
+    class MemberResponseChoices(models.TextChoices):
+        YES = "yes", _("Ja")
+        NO = "no", _("Nein")
+        MAYBE = "maybe", _("Vielleicht")
+        UNKNOWN = "unknown", _("Unbekannt")
+
+    uid = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+    )
+
+    event = models.ForeignKey(
+        ClubAttendanceEvent,
+        on_delete=models.CASCADE,
+        verbose_name=_("Anwesenheitsereignis"),
+        related_name="participations",
+    )
+    member = models.ForeignKey(
+        ClubMember,
+        on_delete=models.CASCADE,
+        verbose_name=_("Mitglied"),
+        related_name="attendance_event_participations",
+    )
+
+    # Member response
+    member_response = models.CharField(
+        verbose_name=_("Antwort des Mitglieds"),
+        max_length=10,
+        choices=MemberResponseChoices.choices,
+        default=MemberResponseChoices.UNKNOWN,
+    )
+    member_notes = models.TextField(
+        verbose_name=_("Grund der An-/Abmeldung"),
+        blank=True,
+        default="",
+    )
+
+    # Attendance check
+    has_attended = models.BooleanField(
+        verbose_name=_("Am Event teilgenommen?"),
+        default=None,
+        null=True,
+    )
+
+    # Admin notes
+    admin_notes = models.TextField(
+        verbose_name=_("Admin-Notizen"),
+        blank=True,
+        default="",
+    )
+
+    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("Anwesenheitsteilnahme")
+        verbose_name_plural = _("Anwesenheitsteilnahmen")
+        unique_together = [["event", "member"]]
+
+    objects = models.Manager()
+
+    def as_dict(self):
+        return {
+            "id": str(self.uid),
+            "event_id": self.event_id,
+            "member_id": self.member_id,
+            "member_response": self.member_response,
+            "member_notes": self.member_notes,
+            "has_attended": self.has_attended,
+            "admin_notes": self.admin_notes,
+        }
+
+    @classmethod
+    def create(
+        cls, event: ClubAttendanceEvent, member: ClubMember
+    ) -> "ClubAttendanceEventParticipation":
+        """Create a new object"""
+
+        return cls.objects.create(
+            event=event,
+            member=member,
+            member_response=(
+                cls.MemberResponseChoices.YES
+                if event.participating_by_default
+                else cls.MemberResponseChoices.UNKNOWN
+            ),
+        )
+
+    @decorators.validation_func()
+    def update_from_post_data(self, data: dict):
+        """Update the participation from POST data"""
+
+        self.member_response = validation.text(
+            data, "member_response", False, default=self.member_response
+        )
+        self.member_notes = validation.text(data, "member_notes", False, default=self.member_notes)
+        self.has_attended = validation.boolean(
+            data, "has_attended", False, default=self.has_attended
+        )
+        self.admin_notes = validation.text(data, "admin_notes", False, default=self.admin_notes)
+        self.save()
+
+
 # class ClubPoll(models.Model):
 #     uid = models.UUIDField(
 #         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False

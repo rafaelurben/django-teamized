@@ -109,6 +109,20 @@ export default function AppSidebar({ user }: Props) {
                                 Verein
                             </a>
                         </li>
+                        <li>
+                            <a
+                                href={getPageURL('club_attendance')}
+                                className={getLinkClass('club_attendance')}
+                                onClick={selectPage('club_attendance')}
+                            >
+                                <i className="fas fa-fw fa-table-list" />
+                                Anwesenheit
+                                {/* New badge - remove later */}
+                                <span className="badge text-bg-warning ms-2">
+                                    Beta
+                                </span>
+                            </a>
+                        </li>
                     </>
                 )}
             </ul>
