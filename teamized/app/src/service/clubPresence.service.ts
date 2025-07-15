@@ -100,3 +100,17 @@ export async function getClubPresenceEventParticipations(
         eventId
     ).then((data) => data.participations);
 }
+
+export async function bulkCreateClubPresenceEventParticipations(
+    teamId: ID,
+    eventId: ID,
+    memberIds: ID[]
+) {
+    return await ClubPresenceAPI.bulkCreateClubPresenceEventParticipations(
+        teamId,
+        eventId,
+        memberIds
+    ).then((data) => {
+        return data.participations;
+    });
+}
