@@ -250,8 +250,8 @@ def endpoint_attendance_event_participation(
                 "success": True,
                 "participation": participation.as_dict(),
                 "alert": {
-                    "title": _("Zuweisung aktualisiert"),
-                    "text": _("Die Zuweisung wurde erfolgreich aktualisiert."),
+                    "title": _("Teilnahme aktualisiert"),
+                    "text": _("Die Teilnahme wurde erfolgreich aktualisiert."),
                 },
             }
         )
@@ -261,8 +261,8 @@ def endpoint_attendance_event_participation(
             {
                 "success": True,
                 "alert": {
-                    "title": _("Zuweisung gelöscht"),
-                    "text": _("Die Zuweisung wurde erfolgreich gelöscht."),
+                    "title": _("Teilnahme gelöscht"),
+                    "text": _("Die Teilnahme wurde erfolgreich gelöscht."),
                 },
             }
         )
