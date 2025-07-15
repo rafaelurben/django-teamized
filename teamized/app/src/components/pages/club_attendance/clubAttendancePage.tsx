@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { ID } from '../../../interfaces/common';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
@@ -10,7 +10,7 @@ import EventInfo from './eventInfo';
 import EventSelector from './eventSelector';
 import { ParticipationTile } from './participationTile';
 
-export default function ClubPresencePage() {
+export default function ClubAttendancePage() {
     const refreshData = useAppdataRefresh();
 
     const [selectedEventId, setSelectedEventId] = useState<ID | null>(null);
@@ -20,11 +20,11 @@ export default function ClubPresencePage() {
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
-    const eventsMap = teamData.club_presence_events;
+    const eventsMap = teamData.club_attendance_events;
     const events = Object.values(eventsMap).toSorted((a, b) => {
         return new Date(a.dt_start).getTime() - new Date(b.dt_start).getTime();
     });
-    const loading = teamData._state.club_presence_events._initial;
+    const loading = teamData._state.club_attendance_events._initial;
 
     const isAdmin = team.member!.is_admin;
 
@@ -32,7 +32,9 @@ export default function ClubPresencePage() {
         ensureValidEventId();
 
         if (loading) {
-            ClubPresenceService.getPresenceEvents(team.id).then(refreshData);
+            ClubAttendanceService.getAttendanceEvents(team.id).then(
+                refreshData
+            );
         }
 
         if (teamData._state.club_members._initial) {

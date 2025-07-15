@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import Tooltip from '../../common/tooltips/tooltip';
 import EventSelectorRow from './eventSelectorRow';
 
 interface Props {
     team: Team;
-    events: ClubPresenceEvent[];
-    selectedEvent: ClubPresenceEvent;
+    events: ClubAttendanceEvent[];
+    selectedEvent: ClubAttendanceEvent;
     onEventSelect: (eventId: ID) => unknown;
     isAdmin: boolean;
 }
@@ -23,11 +23,13 @@ export default function EventSelector({
     isAdmin,
 }: Props) {
     const createEvent = () => {
-        ClubPresenceService.createPresenceEventPopup(team).then((result) => {
-            if (result.isConfirmed) {
-                onEventSelect(result.value!.id);
+        ClubAttendanceService.createAttendanceEventPopup(team).then(
+            (result) => {
+                if (result.isConfirmed) {
+                    onEventSelect(result.value!.id);
+                }
             }
-        });
+        );
     };
 
     return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
-import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import Dashboard from '../../common/dashboard';
@@ -9,14 +9,14 @@ import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
 
 interface Props {
-    participations: ClubPresenceEventParticipation[];
+    participations: ClubAttendanceEventParticipation[];
     isAdmin: boolean;
     team: Team;
-    event: ClubPresenceEvent;
+    event: ClubAttendanceEvent;
     handleDelete: (participationId: ID) => void;
     handleUpdate: (
         participationId: ID,
-        updatedParticipation: ClubPresenceEventParticipation
+        updatedParticipation: ClubAttendanceEventParticipation
     ) => void;
 }
 

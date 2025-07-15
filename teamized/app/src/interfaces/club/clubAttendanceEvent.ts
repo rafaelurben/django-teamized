@@ -1,6 +1,6 @@
 import { DateTimeString, ID } from '../common';
 
-export interface ClubPresenceEvent {
+export interface ClubAttendanceEvent {
     id: ID;
     title: string;
     description: string;
@@ -11,7 +11,7 @@ export interface ClubPresenceEvent {
     locked: boolean;
 }
 
-export interface ClubPresenceEventRequestDTO {
+export interface ClubAttendanceEventRequestDTO {
     title: string;
     description: string;
     participating_by_default: boolean;

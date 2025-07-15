@@ -1,4 +1,4 @@
-"""Club presence API endpoint"""
+"""Club attendance API endpoint"""
 
 import logging
 
@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from teamized.api.utils.constants import NO_PERMISSION, ENDPOINT_NOT_FOUND, OBJ_NOT_FOUND
 from teamized.api.utils.decorators import api_view, require_objects
-from teamized.club.models import Club, ClubPresenceEvent, ClubPresenceEventParticipation
+from teamized.club.models import Club, ClubAttendanceEvent, ClubAttendanceEventParticipation
 from teamized.decorators import teamized_prep
 from teamized.models import Team, User
 
@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
-def endpoint_presence_events(request, team: Team):
+def endpoint_attendance_events(request, team: Team):
     """
-    Endpoint for listing and creating presence events for a team.
+    Endpoint for listing and creating attendance events for a team.
     """
 
     user: User = request.teamized_user
@@ -34,19 +34,19 @@ def endpoint_presence_events(request, team: Team):
     club: Club = team.linked_club
 
     if request.method == "GET":
-        presence_events = club.presence_events.order_by("-dt_start")
+        attendance_events = club.attendance_events.order_by("-dt_start")
 
-        return JsonResponse({"presence_events": [event.as_dict() for event in presence_events]})
+        return JsonResponse({"attendance_events": [event.as_dict() for event in attendance_events]})
     if request.method == "POST":
         if not team.user_is_admin(user):
             return NO_PERMISSION
 
-        presence_event = ClubPresenceEvent.from_post_data(request.POST, club=club)
+        attendance_event = ClubAttendanceEvent.from_post_data(request.POST, club=club)
 
         return JsonResponse(
             {
                 "success": True,
-                "presence_event": presence_event.as_dict(),
+                "attendance_event": attendance_event.as_dict(),
                 "alert": {
                     "title": _("Ereignis erstellt"),
                     "text": _("Das Ereignis wurde erfolgreich hinzugefügt."),
@@ -59,10 +59,12 @@ def endpoint_presence_events(request, team: Team):
 @api_view(["post", "delete"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("presence_event", ClubPresenceEvent, "presence_event")])
-def endpoint_presence_event(request, team: Team, presence_event: ClubPresenceEvent):
+@require_objects(
+    [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
+)
+def endpoint_attendance_event(request, team: Team, attendance_event: ClubAttendanceEvent):
     """
-    Endpoint for editing and deleting a club presence event
+    Endpoint for editing and deleting a club attendance event
     """
 
     user: User = request.teamized_user
@@ -73,19 +75,19 @@ def endpoint_presence_event(request, team: Team, presence_event: ClubPresenceEve
         return ENDPOINT_NOT_FOUND
     club: Club = team.linked_club
 
-    # Check if presence_event corresponds to club
-    if presence_event.club != club:
+    # Check if attendance_event corresponds to club
+    if attendance_event.club != club:
         return OBJ_NOT_FOUND
 
     # Methods
     if request.method == "POST":
-        presence_event.update_from_post_data(request.POST)
-        presence_event.save()
+        attendance_event.update_from_post_data(request.POST)
+        attendance_event.save()
         return JsonResponse(
             {
                 "success": True,
-                "id": presence_event.uid,
-                "presence_event": presence_event.as_dict(),
+                "id": attendance_event.uid,
+                "attendance_event": attendance_event.as_dict(),
                 "alert": {
                     "title": _("Ereignis aktualisiert"),
                     "text": _("Das Ereignis wurde erfolgreich aktualisiert."),
@@ -94,7 +96,7 @@ def endpoint_presence_event(request, team: Team, presence_event: ClubPresenceEve
         )
 
     if request.method == "DELETE":
-        presence_event.delete()
+        attendance_event.delete()
         return JsonResponse(
             {
                 "success": True,
@@ -110,12 +112,14 @@ def endpoint_presence_event(request, team: Team, presence_event: ClubPresenceEve
 @api_view(["get"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("presence_event", ClubPresenceEvent, "presence_event")])
-def endpoint_presence_event_participation_list(
-    request, team: Team, presence_event: ClubPresenceEvent
+@require_objects(
+    [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
+)
+def endpoint_attendance_event_participation_list(
+    request, team: Team, attendance_event: ClubAttendanceEvent
 ):
     """
-    Endpoint for listing participation assignments for a club presence event.
+    Endpoint for listing participation assignments for a club attendance event.
     """
 
     user: User = request.teamized_user
@@ -126,12 +130,12 @@ def endpoint_presence_event_participation_list(
         return ENDPOINT_NOT_FOUND
     club: Club = team.linked_club
 
-    # Check if presence_event corresponds to club
-    if presence_event.club != club:
+    # Check if attendance_event corresponds to club
+    if attendance_event.club != club:
         return OBJ_NOT_FOUND
 
     if request.method == "GET":
-        participations = presence_event.participations.order_by(
+        participations = attendance_event.participations.order_by(
             "member__first_name", "member__last_name"
         )
 
@@ -142,12 +146,14 @@ def endpoint_presence_event_participation_list(
 @api_view(["post"])
 @csrf_exempt
 @teamized_prep()
-@require_objects([("team", Team, "team"), ("presence_event", ClubPresenceEvent, "presence_event")])
-def endpoint_presence_event_participation_bulk_create(
-    request, team: Team, presence_event: ClubPresenceEvent
+@require_objects(
+    [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
+)
+def endpoint_attendance_event_participation_bulk_create(
+    request, team: Team, attendance_event: ClubAttendanceEvent
 ):
     """
-    Endpoint for adding participation assignments for a club presence event.
+    Endpoint for adding participation assignments for a club attendance event.
     """
 
     user: User = request.teamized_user
@@ -158,8 +164,8 @@ def endpoint_presence_event_participation_bulk_create(
         return ENDPOINT_NOT_FOUND
     club: Club = team.linked_club
 
-    # Check if presence_event corresponds to club
-    if presence_event.club != club:
+    # Check if attendance_event corresponds to club
+    if attendance_event.club != club:
         return OBJ_NOT_FOUND
 
     if request.method == "POST":
@@ -170,14 +176,14 @@ def endpoint_presence_event_participation_bulk_create(
         created_participations = []
         for member in members:
             try:
-                participation = ClubPresenceEventParticipation.create(
-                    event=presence_event, member=member
+                participation = ClubAttendanceEventParticipation.create(
+                    event=attendance_event, member=member
                 )
             except IntegrityError:
                 logger.warning(
                     "Tried to create a participation for member %s in event %s, but it already exists.",
                     member.uid,
-                    presence_event.uid,
+                    attendance_event.uid,
                 )
                 continue
             created_participations.append(participation)
@@ -206,18 +212,18 @@ def endpoint_presence_event_participation_bulk_create(
 @require_objects(
     [
         ("team", Team, "team"),
-        ("presence_event", ClubPresenceEvent, "presence_event"),
-        ("participation", ClubPresenceEventParticipation, "participation"),
+        ("attendance_event", ClubAttendanceEvent, "attendance_event"),
+        ("participation", ClubAttendanceEventParticipation, "participation"),
     ]
 )
-def endpoint_presence_event_participation(
+def endpoint_attendance_event_participation(
     request,
     team: Team,
-    presence_event: ClubPresenceEvent,
-    participation: ClubPresenceEventParticipation,
+    attendance_event: ClubAttendanceEvent,
+    participation: ClubAttendanceEventParticipation,
 ):
     """
-    Endpoint for updating and deleting participation assignments for a club presence event.
+    Endpoint for updating and deleting participation assignments for a club attendance event.
     """
 
     user: User = request.teamized_user
@@ -228,11 +234,11 @@ def endpoint_presence_event_participation(
         return ENDPOINT_NOT_FOUND
     club: Club = team.linked_club
 
-    # Check if presence_event corresponds to club
-    if presence_event.club != club:
+    # Check if attendance_event corresponds to club
+    if attendance_event.club != club:
         return OBJ_NOT_FOUND
-    # Check if participation corresponds to presence_event
-    if participation.event != presence_event:
+    # Check if participation corresponds to attendance_event
+    if participation.event != attendance_event:
         return OBJ_NOT_FOUND
 
     if request.method == "POST":

@@ -554,12 +554,12 @@ class ClubMemberGroupMembership(models.Model):
         unique_together = [["group", "member"]]
 
 
-class ClubPresenceEvent(models.Model):
+class ClubAttendanceEvent(models.Model):
     uid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
     )
     club = models.ForeignKey(
-        Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="presence_events"
+        Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="attendance_events"
     )
 
     title = models.CharField(max_length=50, verbose_name=_("Titel"))
@@ -614,7 +614,7 @@ class ClubPresenceEvent(models.Model):
 
     @classmethod
     @decorators.validation_func()
-    def from_post_data(cls, data: dict, club: Club) -> "ClubPresenceEvent":
+    def from_post_data(cls, data: dict, club: Club) -> "ClubAttendanceEvent":
         """Create a new object from POST data"""
 
         return cls.objects.create(
@@ -643,7 +643,7 @@ class ClubPresenceEvent(models.Model):
         self.save()
 
 
-class ClubPresenceEventParticipation(models.Model):
+class ClubAttendanceEventParticipation(models.Model):
     class MemberResponseChoices(models.TextChoices):
         YES = "yes", _("Ja")
         NO = "no", _("Nein")
@@ -655,7 +655,7 @@ class ClubPresenceEventParticipation(models.Model):
     )
 
     event = models.ForeignKey(
-        ClubPresenceEvent,
+        ClubAttendanceEvent,
         on_delete=models.CASCADE,
         verbose_name=_("Anwesenheitsereignis"),
         related_name="participations",
@@ -664,7 +664,7 @@ class ClubPresenceEventParticipation(models.Model):
         ClubMember,
         on_delete=models.CASCADE,
         verbose_name=_("Mitglied"),
-        related_name="presence_event_participations",
+        related_name="attendance_event_participations",
     )
 
     # Member response
@@ -680,7 +680,7 @@ class ClubPresenceEventParticipation(models.Model):
         default="",
     )
 
-    # Presence check
+    # Attendance check
     has_attended = models.BooleanField(
         verbose_name=_("Am Event teilgenommen?"),
         default=None,
@@ -717,8 +717,8 @@ class ClubPresenceEventParticipation(models.Model):
 
     @classmethod
     def create(
-        cls, event: ClubPresenceEvent, member: ClubMember
-    ) -> "ClubPresenceEventParticipation":
+        cls, event: ClubAttendanceEvent, member: ClubMember
+    ) -> "ClubAttendanceEventParticipation":
         """Create a new object"""
 
         return cls.objects.create(

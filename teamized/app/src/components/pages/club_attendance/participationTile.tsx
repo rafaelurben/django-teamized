@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
-import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import Dashboard from '../../common/dashboard';
 import { ParticipationAdder } from './participationAdder';
 import ParticipationTable from './participationTable';
 
 interface Props {
     team: Team;
-    selectedEvent: ClubPresenceEvent;
+    selectedEvent: ClubAttendanceEvent;
     isAdmin: boolean;
     ref: React.RefObject<HTMLDivElement | null>;
 }
@@ -23,11 +23,11 @@ export function ParticipationTile({
     ref,
 }: Props) {
     const [participations, setParticipations] = useState<
-        ClubPresenceEventParticipation[] | null
+        ClubAttendanceEventParticipation[] | null
     >(null);
 
     useEffect(() => {
-        ClubPresenceService.getClubPresenceEventParticipations(
+        ClubAttendanceService.getClubAttendanceEventParticipations(
             team.id,
             selectedEvent.id
         ).then(setParticipations);
@@ -41,7 +41,7 @@ export function ParticipationTile({
 
     const handleParticipationUpdate = (
         participationId: ID,
-        updatedParticipation: ClubPresenceEventParticipation
+        updatedParticipation: ClubAttendanceEventParticipation
     ) => {
         setParticipations((prev) =>
             prev
@@ -53,7 +53,7 @@ export function ParticipationTile({
     };
 
     const handleParticipationsCreate = (
-        participations: ClubPresenceEventParticipation[]
+        participations: ClubAttendanceEventParticipation[]
     ) => {
         setParticipations((prev) =>
             prev ? [...prev, ...participations] : participations

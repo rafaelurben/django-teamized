@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { Team } from '../../../interfaces/teams/team';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getDateTimeString } from '../../../utils/datetime';
 import Dashboard from '../../common/dashboard';
@@ -11,7 +11,7 @@ import Urlize from '../../common/utils/urlize';
 
 interface Props {
     team: Team;
-    selectedEvent: ClubPresenceEvent | null;
+    selectedEvent: ClubAttendanceEvent | null;
     isAdmin: boolean;
 }
 
@@ -19,21 +19,23 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
     const refreshData = useAppdataRefresh();
 
     const editEvent = () => {
-        ClubPresenceService.editPresenceEventPopup(team, selectedEvent!).then(
-            (result) => {
-                if (result.isConfirmed) refreshData();
-            }
-        );
+        ClubAttendanceService.editAttendanceEventPopup(
+            team,
+            selectedEvent!
+        ).then((result) => {
+            if (result.isConfirmed) refreshData();
+        });
     };
 
     const deleteEvent = () => {
-        ClubPresenceService.deletePresenceEventPopup(team, selectedEvent!).then(
-            (result) => {
-                if (result.isConfirmed) {
-                    refreshData();
-                }
+        ClubAttendanceService.deleteAttendanceEventPopup(
+            team,
+            selectedEvent!
+        ).then((result) => {
+            if (result.isConfirmed) {
+                refreshData();
             }
-        );
+        });
     };
 
     if (!selectedEvent) {

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
-import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { Team } from '../../../interfaces/teams/team';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import { ClubMemberSelector } from './clubMemberSelector';
 
 interface Props {
     team: Team;
-    event: ClubPresenceEvent;
-    participations: ClubPresenceEventParticipation[];
-    handleCreate: (participations: ClubPresenceEventParticipation[]) => void;
+    event: ClubAttendanceEvent;
+    participations: ClubAttendanceEventParticipation[];
+    handleCreate: (participations: ClubAttendanceEventParticipation[]) => void;
 }
 
 export function ParticipationAdder({
@@ -32,7 +32,7 @@ export function ParticipationAdder({
                     memberIdsUnavailable={memberIdsUnavailable}
                     groups={Object.values(teamData.club_groups)}
                     onMembersSelected={(members) => {
-                        ClubPresenceService.bulkCreateClubPresenceEventParticipations(
+                        ClubAttendanceService.bulkCreateClubAttendanceEventParticipations(
                             team.id,
                             event.id,
                             members.map((member) => member.id)

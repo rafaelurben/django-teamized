@@ -1,47 +1,48 @@
 /**
- * Utils for the club presence features
+ * Utils for the club attendance features
  */
 
 import $ from 'jquery';
 
-import * as ClubPresenceAPI from '../api/clubPresence';
+import * as ClubAttendanceAPI from '../api/clubAttendance';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import {
-    ClubPresenceEvent,
-    ClubPresenceEventRequestDTO,
-} from '../interfaces/club/clubPresenceEvent';
-import { ClubPresenceEventParticipation } from '../interfaces/club/clubPresenceEventParticipation';
+    ClubAttendanceEvent,
+    ClubAttendanceEventRequestDTO,
+} from '../interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
 import { confirmAlert, fireAlert, Swal } from '../utils/alerts';
 import { isoFormat, localInputFormat } from '../utils/datetime';
 import * as CacheService from './cache.service';
 
-// Presence events
+// Attendance events
 
-export async function getPresenceEvents(teamId: ID) {
+export async function getAttendanceEvents(teamId: ID) {
     return await CacheService.refreshTeamCacheCategory(
         teamId,
-        CacheCategory.CLUB_PRESENCE_EVENTS
+        CacheCategory.CLUB_ATTENDANCE_EVENTS
     );
 }
 
-export async function createPresenceEvent(
+export async function createAttendanceEvent(
     teamId: ID,
-    event: ClubPresenceEventRequestDTO
+    event: ClubAttendanceEventRequestDTO
 ) {
-    return await ClubPresenceAPI.createClubPresenceEvent(teamId, event).then(
-        (data) => {
-            CacheService.getTeamData(teamId).club_presence_events[
-                data.presence_event.id
-            ] = data.presence_event;
-            return data.presence_event;
-        }
-    );
+    return await ClubAttendanceAPI.createClubAttendanceEvent(
+        teamId,
+        event
+    ).then((data) => {
+        CacheService.getTeamData(teamId).club_attendance_events[
+            data.attendance_event.id
+        ] = data.attendance_event;
+        return data.attendance_event;
+    });
 }
 
-export async function createPresenceEventPopup(team: Team) {
-    return await fireAlert<ClubPresenceEvent>({
+export async function createAttendanceEventPopup(team: Team) {
+    return await fireAlert<ClubAttendanceEvent>({
         title: 'Anwesenheitsevent erstellen',
         html: `
             <label class="swal2-input-label" for="swal-input-title">Titel:</label>
@@ -81,7 +82,7 @@ export async function createPresenceEventPopup(team: Team) {
             }
 
             Swal.showLoading();
-            return await createPresenceEvent(team.id, {
+            return await createAttendanceEvent(team.id, {
                 title,
                 description,
                 dt_start: isoFormat(dt_start),
@@ -94,31 +95,31 @@ export async function createPresenceEventPopup(team: Team) {
     });
 }
 
-export async function editPresenceEvent(
+export async function editAttendanceEvent(
     teamId: ID,
     eventId: ID,
-    event: Partial<ClubPresenceEventRequestDTO>
+    event: Partial<ClubAttendanceEventRequestDTO>
 ) {
-    return await ClubPresenceAPI.updateClubPresenceEvent(
+    return await ClubAttendanceAPI.updateClubAttendanceEvent(
         teamId,
         eventId,
         event
     ).then((data) => {
-        CacheService.getTeamData(teamId).club_presence_events[
-            data.presence_event.id
-        ] = data.presence_event;
-        return data.presence_event;
+        CacheService.getTeamData(teamId).club_attendance_events[
+            data.attendance_event.id
+        ] = data.attendance_event;
+        return data.attendance_event;
     });
 }
 
-export async function editPresenceEventPopup(
+export async function editAttendanceEventPopup(
     team: Team,
-    event: ClubPresenceEvent
+    event: ClubAttendanceEvent
 ) {
     const dt_start = localInputFormat(event.dt_start);
     const dt_end = localInputFormat(event.dt_end);
 
-    return await fireAlert<ClubPresenceEvent>({
+    return await fireAlert<ClubAttendanceEvent>({
         title: 'Anwesenheitsevent bearbeiten',
         html: `
             <label class="swal2-input-label" for="swal-input-title">Titel:</label>
@@ -163,7 +164,7 @@ export async function editPresenceEventPopup(
             }
 
             Swal.showLoading();
-            return await editPresenceEvent(team.id, event.id, {
+            return await editAttendanceEvent(team.id, event.id, {
                 title,
                 description,
                 dt_start: isoFormat(dt_start),
@@ -176,44 +177,43 @@ export async function editPresenceEventPopup(
     });
 }
 
-export async function deletePresenceEvent(teamId: ID, eventId: ID) {
-    return await ClubPresenceAPI.deleteClubPresenceEvent(teamId, eventId).then(
-        () => {
-            delete CacheService.getTeamData(teamId).club_presence_events[
-                eventId
-            ];
-        }
-    );
+export async function deleteAttendanceEvent(teamId: ID, eventId: ID) {
+    return await ClubAttendanceAPI.deleteClubAttendanceEvent(
+        teamId,
+        eventId
+    ).then(() => {
+        delete CacheService.getTeamData(teamId).club_attendance_events[eventId];
+    });
 }
 
-export async function deletePresenceEventPopup(
+export async function deleteAttendanceEventPopup(
     team: Team,
-    event: ClubPresenceEvent
+    event: ClubAttendanceEvent
 ) {
     return await confirmAlert(
         `Willst du das Anwesenheitsevent '<b>${event.title}</b>' wirklich löschen?`,
-        async () => await deletePresenceEvent(team.id, event.id)
+        async () => await deleteAttendanceEvent(team.id, event.id)
     );
 }
 
 // Participations
 
-export async function getClubPresenceEventParticipations(
+export async function getClubAttendanceEventParticipations(
     teamId: ID,
     eventId: ID
 ) {
-    return await ClubPresenceAPI.getClubPresenceEventParticipations(
+    return await ClubAttendanceAPI.getClubAttendanceEventParticipations(
         teamId,
         eventId
     ).then((data) => data.participations);
 }
 
-export async function bulkCreateClubPresenceEventParticipations(
+export async function bulkCreateClubAttendanceEventParticipations(
     teamId: ID,
     eventId: ID,
     memberIds: ID[]
 ) {
-    return await ClubPresenceAPI.bulkCreateClubPresenceEventParticipations(
+    return await ClubAttendanceAPI.bulkCreateClubAttendanceEventParticipations(
         teamId,
         eventId,
         memberIds
@@ -222,13 +222,13 @@ export async function bulkCreateClubPresenceEventParticipations(
     });
 }
 
-export async function updateClubPresenceEventParticipation(
+export async function updateClubAttendanceEventParticipation(
     teamId: ID,
     eventId: ID,
     participationId: ID,
-    participation: Partial<ClubPresenceEventParticipation>
+    participation: Partial<ClubAttendanceEventParticipation>
 ) {
-    return await ClubPresenceAPI.updateClubPresenceEventParticipation(
+    return await ClubAttendanceAPI.updateClubAttendanceEventParticipation(
         teamId,
         eventId,
         participationId,
@@ -238,12 +238,12 @@ export async function updateClubPresenceEventParticipation(
     });
 }
 
-export async function deleteClubPresenceEventParticipation(
+export async function deleteClubAttendanceEventParticipation(
     teamId: ID,
     eventId: ID,
     participationId: ID
 ) {
-    return await ClubPresenceAPI.deleteClubPresenceEventParticipation(
+    return await ClubAttendanceAPI.deleteClubAttendanceEventParticipation(
         teamId,
         eventId,
         participationId
@@ -252,15 +252,15 @@ export async function deleteClubPresenceEventParticipation(
     });
 }
 
-export async function deleteClubPresenceEventParticipationPopup(
+export async function deleteClubAttendanceEventParticipationPopup(
     team: Team,
-    event: ClubPresenceEvent,
-    participation: ClubPresenceEventParticipation
+    event: ClubAttendanceEvent,
+    participation: ClubAttendanceEventParticipation
 ) {
     return await confirmAlert(
         'Willst du die Teilnahme wirklich löschen?',
         async () =>
-            await deleteClubPresenceEventParticipation(
+            await deleteClubAttendanceEventParticipation(
                 team.id,
                 event.id,
                 participation.id

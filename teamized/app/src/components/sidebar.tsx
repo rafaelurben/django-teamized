@@ -111,9 +111,9 @@ export default function AppSidebar({ user }: Props) {
                         </li>
                         <li>
                             <a
-                                href={getPageURL('club_presence')}
-                                className={getLinkClass('club_presence')}
-                                onClick={selectPage('club_presence')}
+                                href={getPageURL('club_attendance')}
+                                className={getLinkClass('club_attendance')}
+                                onClick={selectPage('club_attendance')}
                             >
                                 <i className="fas fa-fw fa-table-list" />
                                 Anwesenheit

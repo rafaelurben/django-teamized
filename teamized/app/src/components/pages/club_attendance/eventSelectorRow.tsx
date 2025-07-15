@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ID } from '../../../interfaces/common';
 import { getDateTimeString } from '../../../utils/datetime';
 
 interface Props {
     isSelected: boolean;
     onSelect: (id: ID) => unknown;
-    event: ClubPresenceEvent;
+    event: ClubAttendanceEvent;
 }
 
 export default function EventSelectorRow({

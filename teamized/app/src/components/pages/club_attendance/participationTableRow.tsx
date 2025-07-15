@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 
-import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
+import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import {
-    ClubPresenceEventParticipation,
-    ClubPresenceMemberResponseChoice,
-} from '../../../interfaces/club/clubPresenceEventParticipation';
+    ClubAttendanceEventParticipation,
+    ClubAttendanceMemberResponseChoice,
+} from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import * as ClubPresenceService from '../../../service/clubPresence.service';
+import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
 function getResponseStatusIcon(
-    response: ClubPresenceMemberResponseChoice,
+    response: ClubAttendanceMemberResponseChoice,
     withColor: boolean = true
 ) {
     switch (response) {
-        case ClubPresenceMemberResponseChoice.YES:
+        case ClubAttendanceMemberResponseChoice.YES:
             return (
                 <IconTooltip
                     icon="fa-regular fa-square-check"
@@ -24,7 +24,7 @@ function getResponseStatusIcon(
                     className={withColor ? 'text-success' : undefined}
                 />
             );
-        case ClubPresenceMemberResponseChoice.NO:
+        case ClubAttendanceMemberResponseChoice.NO:
             return (
                 <IconTooltip
                     icon="fa-regular fa-circle-xmark"
@@ -32,7 +32,7 @@ function getResponseStatusIcon(
                     className={withColor ? 'text-danger' : undefined}
                 />
             );
-        case ClubPresenceMemberResponseChoice.MAYBE:
+        case ClubAttendanceMemberResponseChoice.MAYBE:
             return (
                 <IconTooltip
                     icon="fa-regular fa-square-minus"
@@ -40,7 +40,7 @@ function getResponseStatusIcon(
                     className={withColor ? 'text-warning' : undefined}
                 />
             );
-        case ClubPresenceMemberResponseChoice.UNKNOWN:
+        case ClubAttendanceMemberResponseChoice.UNKNOWN:
             return (
                 <IconTooltip
                     icon="fa-regular fa-circle-question"
@@ -50,7 +50,7 @@ function getResponseStatusIcon(
     }
 }
 
-function getPresenceStatusIcon(
+function getAttendanceStatusIcon(
     attended: boolean | null,
     withColor: boolean = true
 ) {
@@ -82,14 +82,14 @@ function getPresenceStatusIcon(
 }
 
 interface Props {
-    participation: ClubPresenceEventParticipation;
+    participation: ClubAttendanceEventParticipation;
     isAdmin: boolean;
     team: Team;
-    event: ClubPresenceEvent;
+    event: ClubAttendanceEvent;
     onDelete: (participationId: ID) => void;
     onUpdate: (
         participationId: ID,
-        updatedParticipation: ClubPresenceEventParticipation
+        updatedParticipation: ClubAttendanceEventParticipation
     ) => void;
     editable: boolean;
 }
@@ -113,12 +113,12 @@ export default function ParticipationTableRow({
     }, [participation]);
 
     const updateParticipation = (
-        changes: Partial<ClubPresenceEventParticipation>
+        changes: Partial<ClubAttendanceEventParticipation>
     ) => {
         const updated = { ...localParticipation, ...changes };
         setLocalParticipation(updated);
         onUpdate(participation.id, updated);
-        ClubPresenceService.updateClubPresenceEventParticipation(
+        ClubAttendanceService.updateClubAttendanceEventParticipation(
             team.id,
             event.id,
             participation.id,
@@ -127,7 +127,7 @@ export default function ParticipationTableRow({
     };
 
     const handleMemberResponseChange = (
-        value: ClubPresenceMemberResponseChoice
+        value: ClubAttendanceMemberResponseChoice
     ) => {
         updateParticipation({ member_response: value });
     };
@@ -142,7 +142,7 @@ export default function ParticipationTableRow({
     };
 
     const handleDelete = async () => {
-        await ClubPresenceService.deleteClubPresenceEventParticipationPopup(
+        await ClubAttendanceService.deleteClubAttendanceEventParticipationPopup(
             team,
             event,
             participation
@@ -167,11 +167,11 @@ export default function ParticipationTableRow({
                                 value="YES"
                                 checked={
                                     localParticipation.member_response ===
-                                    ClubPresenceMemberResponseChoice.YES
+                                    ClubAttendanceMemberResponseChoice.YES
                                 }
                                 onChange={() =>
                                     handleMemberResponseChange(
-                                        ClubPresenceMemberResponseChoice.YES
+                                        ClubAttendanceMemberResponseChoice.YES
                                     )
                                 }
                             />
@@ -185,11 +185,11 @@ export default function ParticipationTableRow({
                                 value="NO"
                                 checked={
                                     localParticipation.member_response ===
-                                    ClubPresenceMemberResponseChoice.NO
+                                    ClubAttendanceMemberResponseChoice.NO
                                 }
                                 onChange={() =>
                                     handleMemberResponseChange(
-                                        ClubPresenceMemberResponseChoice.NO
+                                        ClubAttendanceMemberResponseChoice.NO
                                     )
                                 }
                             />
@@ -203,11 +203,11 @@ export default function ParticipationTableRow({
                                 value="MAYBE"
                                 checked={
                                     localParticipation.member_response ===
-                                    ClubPresenceMemberResponseChoice.MAYBE
+                                    ClubAttendanceMemberResponseChoice.MAYBE
                                 }
                                 onChange={() =>
                                     handleMemberResponseChange(
-                                        ClubPresenceMemberResponseChoice.MAYBE
+                                        ClubAttendanceMemberResponseChoice.MAYBE
                                     )
                                 }
                             />
@@ -269,7 +269,7 @@ export default function ParticipationTableRow({
                         </div>
                     </div>
                 ) : (
-                    getPresenceStatusIcon(participation.has_attended)
+                    getAttendanceStatusIcon(participation.has_attended)
                 )}
             </td>
             {isAdmin && (

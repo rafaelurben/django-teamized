@@ -118,31 +118,31 @@ urlpatterns = [
         ep.club.endpoint_group,
         name="api-club-group",
     ),
-    # Club presence API views
+    # Club attendance API views
     path(
-        "teams/<team>/club/presence_events",
-        ep.club_presence.endpoint_presence_events,
-        name="api-club-presence-events",
+        "teams/<team>/club/attendance_events",
+        ep.club_attendance.endpoint_attendance_events,
+        name="api-club-attendance-events",
     ),
     path(
-        "teams/<team>/club/presence_events/<presence_event>",
-        ep.club_presence.endpoint_presence_event,
-        name="api-club-presence-event",
+        "teams/<team>/club/attendance_events/<attendance_event>",
+        ep.club_attendance.endpoint_attendance_event,
+        name="api-club-attendance-event",
     ),
     path(
-        "teams/<team>/club/presence_events/<presence_event>/participations",
-        ep.club_presence.endpoint_presence_event_participation_list,
-        name="api-club-presence-event-participations",
+        "teams/<team>/club/attendance_events/<attendance_event>/participations",
+        ep.club_attendance.endpoint_attendance_event_participation_list,
+        name="api-club-attendance-event-participations",
     ),
     path(
-        "teams/<team>/club/presence_events/<presence_event>/participations/bulk-create",
-        ep.club_presence.endpoint_presence_event_participation_bulk_create,
-        name="api-club-presence-event-participation-bulk-create",
+        "teams/<team>/club/attendance_events/<attendance_event>/participations/bulk-create",
+        ep.club_attendance.endpoint_attendance_event_participation_bulk_create,
+        name="api-club-attendance-event-participation-bulk-create",
     ),
     path(
-        "teams/<team>/club/presence_events/<presence_event>/participations/<participation>",
-        ep.club_presence.endpoint_presence_event_participation,
-        name="api-club-presence-event-participation",
+        "teams/<team>/club/attendance_events/<attendance_event>/participations/<participation>",
+        ep.club_attendance.endpoint_attendance_event_participation,
+        name="api-club-attendance-event-participation",
     ),
     # Catch-all error view for 404 JSON responses
     re_path(".*", ep.endpoint_not_found, name="api-not-found"),
