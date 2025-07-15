@@ -33,7 +33,13 @@ def app_debug(request):
 
 def manifest(request):
     """Render the manifest.json file"""
-    response = render(request, "teamized/manifest.json", {})
+    response = render(
+        request,
+        "teamized/manifest.json",
+        {
+            "add_debug": request.GET.get("debug", "false") == "true",
+        },
+    )
     response["Content-Type"] = "text/json"
     response["Service-Worker-Allowed"] = reverse("teamized:home")
     return response
