@@ -1,9 +1,12 @@
 import React from 'react';
 
+import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import {
     ClubPresenceEventParticipation,
     ClubPresenceMemberResponseChoice,
 } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { Team } from '../../../interfaces/teams/team';
+import { deleteClubPresenceEventParticipationPopup } from '../../../service/clubPresence.service';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
@@ -80,14 +83,27 @@ function getPresenceStatusIcon(
 interface Props {
     participation: ClubPresenceEventParticipation;
     isAdmin: boolean;
+    team: Team;
+    event: ClubPresenceEvent;
 }
 
 export default function ParticipationTableRow({
     participation,
     isAdmin,
+    team,
+    event,
 }: Props) {
     const teamData = useCurrentTeamData();
     const member = teamData.club_members[participation.member_id];
+
+    const handleDelete = async () => {
+        await deleteClubPresenceEventParticipationPopup(
+            team,
+            event,
+            participation
+        );
+        // TODO: trigger a refresh or callback if needed
+    };
 
     return (
         <tr>
@@ -98,6 +114,18 @@ export default function ParticipationTableRow({
             <td>{participation.member_notes}</td>
             <td>{getPresenceStatusIcon(participation.has_attended)}</td>
             {isAdmin && <td>{participation.admin_notes}</td>}
+            {isAdmin && (
+                <td style={{ width: '1px' }}>
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger"
+                        title="Teilnahme löschen"
+                        onClick={handleDelete}
+                    >
+                        <i className="fa-solid fa-trash fa-sm" />
+                    </button>
+                </td>
+            )}
             <td className="debug-only">{participation.id}</td>
         </tr>
     );

@@ -1,6 +1,8 @@
 import React, { use } from 'react';
 
+import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { Team } from '../../../interfaces/teams/team';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
@@ -8,11 +10,15 @@ import ParticipationTableRow from './participationTableRow';
 interface Props {
     participationsPromise: Promise<ClubPresenceEventParticipation[]>;
     isAdmin: boolean;
+    team: Team;
+    event: ClubPresenceEvent;
 }
 
 export default function ParticipationTable({
     participationsPromise,
     isAdmin,
+    team,
+    event,
 }: Props) {
     const participations = use(participationsPromise);
 
@@ -34,6 +40,7 @@ export default function ParticipationTable({
                             />
                         </th>
                     )}
+                    {isAdmin && <th></th>}
                     <th className="debug-only">ID</th>
                 </tr>
             </thead>
@@ -44,6 +51,8 @@ export default function ParticipationTable({
                             key={participation.id}
                             participation={participation}
                             isAdmin={isAdmin}
+                            team={team}
+                            event={event}
                         />
                     ))
                 ) : (

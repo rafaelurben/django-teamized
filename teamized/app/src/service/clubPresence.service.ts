@@ -10,6 +10,7 @@ import {
     ClubPresenceEvent,
     ClubPresenceEventRequestDTO,
 } from '../interfaces/club/clubPresenceEvent';
+import { ClubPresenceEventParticipation } from '../interfaces/club/clubPresenceEventParticipation';
 import { ID } from '../interfaces/common';
 import { Team } from '../interfaces/teams/team';
 import { confirmAlert, fireAlert, Swal } from '../utils/alerts';
@@ -219,4 +220,34 @@ export async function bulkCreateClubPresenceEventParticipations(
     ).then((data) => {
         return data.participations;
     });
+}
+
+export async function deleteClubPresenceEventParticipation(
+    teamId: ID,
+    eventId: ID,
+    participationId: ID
+) {
+    return await ClubPresenceAPI.deleteClubPresenceEventParticipation(
+        teamId,
+        eventId,
+        participationId
+    ).then(() => {
+        return null;
+    });
+}
+
+export async function deleteClubPresenceEventParticipationPopup(
+    team: Team,
+    event: ClubPresenceEvent,
+    participation: ClubPresenceEventParticipation
+) {
+    return await confirmAlert(
+        'Willst du die Teilnahme wirklich löschen?',
+        async () =>
+            await deleteClubPresenceEventParticipation(
+                team.id,
+                event.id,
+                participation.id
+            )
+    );
 }

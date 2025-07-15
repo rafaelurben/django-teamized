@@ -32,6 +32,8 @@ export function ParticipationTile({ team, selectedEvent, isAdmin }: Props) {
                 <ParticipationTable
                     participationsPromise={participationsPromise}
                     isAdmin={isAdmin}
+                    team={team}
+                    event={selectedEvent}
                 />
                 {isAdmin && (
                     <ParticipationAdder
