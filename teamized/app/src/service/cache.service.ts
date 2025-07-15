@@ -43,7 +43,7 @@ function updateTeam(
 }
 
 export function addTeam(team: Team) {
-    const newTeamCache = { team: team, _state: {} };
+    const newTeamCache = <TeamCache>{ team: team, _state: {} };
     for (const category of Object.values(CacheCategory)) {
         newTeamCache[category] = {};
         newTeamCache._state[category] = {
@@ -51,7 +51,7 @@ export function addTeam(team: Team) {
             _refreshing: false,
         };
     }
-    window.appdata.teamCache[team.id] = <TeamCache>newTeamCache;
+    window.appdata.teamCache[team.id] = newTeamCache;
     updateTeam(team);
 }
 

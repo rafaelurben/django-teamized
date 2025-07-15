@@ -32,7 +32,7 @@ export default function CalendarEventPickerRow({
             borderLeftColor: event.calendar!.color,
             cursor: 'pointer',
             opacity: isSelected ? 0.75 : 1,
-        } as React.CSSProperties;
+        } satisfies React.CSSProperties;
     };
 
     const getDateDisplay = () => {

@@ -19,7 +19,7 @@ import TeamlistPage from './pages/teamlist/teamlistPage';
 import TodoPage from './pages/todo/todoPage';
 import WorkingtimePage from './pages/workingtime/workingtimePage';
 
-export const PAGE_NAMES = {
+export const PAGE_NAMES: { [index: string]: string | undefined } = {
     home: 'Startseite',
     club: 'Verein',
     club_presence: 'Anwesenheit',

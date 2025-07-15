@@ -1,3 +1,3 @@
 import type { SweetAlertOptions } from 'sweetalert2';
 
-export type Alert = Partial<SweetAlertOptions>;
+export type Alert = SweetAlertOptions;

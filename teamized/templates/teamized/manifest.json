@@ -1,8 +1,8 @@
 {
-    "name": "{% load static %}Teamized",
-    "short_name": "Teamized",
-    "id": "{{ request.build_absolute_uri }}",
-    "start_url": "{% url 'teamized:app' %}",
+    "name": "{% load static %}Teamized{% if add_debug %} (Debug){% endif %}",
+    "short_name": "Teamized{% if add_debug %} (Debug){% endif %}",
+    "id": "{% url 'teamized:app' %}{% if add_debug %}?debug{% endif %}",
+    "start_url": "{% url 'teamized:app' %}{% if add_debug %}?debug{% endif %}",
     "scope": "{% url 'teamized:home' %}",
     "display": "standalone",
     "background_color": "#fff",
