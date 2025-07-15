@@ -84,7 +84,7 @@ export default function CalendarInfo({
                         ></i>
                     </td>
                 </tr>
-                <tr className="debug-only">
+                <tr className="debug-id">
                     <th>ID:</th>
                     <td>{selectedCalendar.id}</td>
                 </tr>

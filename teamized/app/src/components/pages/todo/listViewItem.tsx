@@ -71,7 +71,7 @@ export default function ListViewItem({ team, list, item }: Props) {
                     <i className="fas fa-fw fa-trash"></i>
                 </a>
             </td>
-            <td className="debug-only">{item.id}</td>
+            <td className="debug-id">{item.id}</td>
         </tr>
     );
 }

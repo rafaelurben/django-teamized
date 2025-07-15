@@ -75,7 +75,7 @@ export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
                 </>
             )}
             {/* ID */}
-            <td className="debug-only">{group.id}</td>
+            <td className="debug-id">{group.id}</td>
         </tr>
     );
 }

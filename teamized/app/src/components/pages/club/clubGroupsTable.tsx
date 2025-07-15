@@ -35,7 +35,7 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
                             <th style={{ width: '1px' }}></th>
                         </>
                     )}
-                    <th className="debug-only">ID</th>
+                    <th className="debug-id">ID</th>
                 </tr>
             </thead>
             <tbody>

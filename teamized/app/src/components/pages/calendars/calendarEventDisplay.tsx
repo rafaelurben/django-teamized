@@ -114,7 +114,7 @@ export default function CalendarEventDisplay({
                         {event.calendar?.name}
                     </td>
                 </tr>
-                <tr className="debug-only">
+                <tr className="debug-id">
                     <th>ID:</th>
                     <td>{event.id}</td>
                 </tr>

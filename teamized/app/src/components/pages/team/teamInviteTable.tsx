@@ -47,7 +47,7 @@ export default function TeamInviteTable({ teamData }: Props) {
                     </th>
                     <th style={{ width: '1px' }}></th>
                     <th style={{ width: '1px' }}></th>
-                    <th className="debug-only">ID</th>
+                    <th className="debug-id">ID</th>
                 </tr>
             </thead>
             <tbody>

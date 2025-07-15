@@ -91,7 +91,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                         <th className="p-0"></th>
                         <th className="p-0" style={{ width: '1px' }}></th>
                         <th className="p-0" style={{ width: '1px' }}></th>
-                        <th className="p-0 debug-only"></th>
+                        <th className="p-0 debug-id"></th>
                     </tr>
                 </thead>
                 <tbody>

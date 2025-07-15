@@ -73,7 +73,7 @@ export default function ClubPage() {
                                 <th>Mitglieder:</th>
                                 <td>{club.membercount}</td>
                             </tr>
-                            <tr className="debug-only">
+                            <tr className="debug-id">
                                 <th>ID:</th>
                                 <td>{club.id}</td>
                             </tr>

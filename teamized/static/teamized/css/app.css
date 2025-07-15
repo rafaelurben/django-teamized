@@ -85,12 +85,14 @@ body.swal2-shown:not(.swal2-no-backdrop) {
 
 /* DEBUG */
 
-body:not(.debug) .debug-only {
+body:not(.debug) .debug-only,
+body:not(.debug) .debug-id,
+body:not(.show-debug-ids) .debug-id {
     display: none;
 }
 
-body.debug td.debug-only,
-body.debug th.debug-only {
+body.debug.show-debug-ids td.debug-id,
+body.debug.show-debug-ids th.debug-id {
     width: 1px;
     white-space: nowrap;
 }

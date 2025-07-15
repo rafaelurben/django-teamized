@@ -130,7 +130,7 @@ export default function ClubMembersTableRow({
             )}
 
             {/* ID */}
-            <td className="debug-only">{clubMember.id}</td>
+            <td className="debug-id">{clubMember.id}</td>
         </tr>
     );
 }

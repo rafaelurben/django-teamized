@@ -186,6 +186,17 @@ export default function AppMenubar({ teams, user }: Props) {
                                     <a
                                         className="dropdown-item"
                                         href="#"
+                                        onClick={() =>
+                                            GeneralUtils.toggleDebugIds()
+                                        }
+                                    >
+                                        Toggle Debug-IDs
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        className="dropdown-item"
+                                        href="#"
                                         onClick={() => window.location.reload()}
                                     >
                                         location.reload()

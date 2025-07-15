@@ -102,7 +102,7 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
                 </a>
             </td>
             {/* ID */}
-            <td className="debug-only">{invite.id}</td>
+            <td className="debug-id">{invite.id}</td>
         </tr>
     );
 }

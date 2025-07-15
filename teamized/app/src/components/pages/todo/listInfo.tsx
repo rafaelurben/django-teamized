@@ -76,7 +76,7 @@ export default function ListInfo({
                         ></i>
                     </td>
                 </tr>
-                <tr className="debug-only">
+                <tr className="debug-id">
                     <th>ID:</th>
                     <td>{selectedList.id}</td>
                 </tr>

@@ -88,7 +88,7 @@ export default function TeamPage() {
                                 <th>Mitglieder:</th>
                                 <td>{team.membercount}</td>
                             </tr>
-                            <tr className="debug-only">
+                            <tr className="debug-id">
                                 <th>ID:</th>
                                 <td>{team.id}</td>
                             </tr>

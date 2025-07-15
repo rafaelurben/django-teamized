@@ -21,7 +21,7 @@ export default function WorksessionTable({ sessions, team, loading }: Props) {
                     <th style={{ minWidth: '15rem' }}>Notiz</th>
                     <th style={{ width: '1px' }}></th>
                     <th style={{ width: '1px' }}></th>
-                    <th className="debug-only">ID</th>
+                    <th className="debug-id">ID</th>
                 </tr>
             </thead>
             <tbody>

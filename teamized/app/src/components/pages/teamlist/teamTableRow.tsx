@@ -119,7 +119,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                 </td>
             )}
             {/* ID */}
-            <td className="debug-only">{team.id}</td>
+            <td className="debug-id">{team.id}</td>
         </tr>
     );
 }

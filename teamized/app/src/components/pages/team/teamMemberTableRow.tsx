@@ -130,7 +130,7 @@ export default function TeamMemberTableRow({
                 <td></td>
             )}
             {/* ID */}
-            <td className="debug-only">{member.id}</td>
+            <td className="debug-id">{member.id}</td>
         </tr>
     );
 }

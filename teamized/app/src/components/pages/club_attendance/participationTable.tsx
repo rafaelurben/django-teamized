@@ -71,7 +71,7 @@ export default function ParticipationTable({
                         </th>
                     )}
                     {isAdmin && editMode && <th></th>}
-                    <th className="debug-only">ID</th>
+                    <th className="debug-id">ID</th>
                 </tr>
             </thead>
             <tbody>

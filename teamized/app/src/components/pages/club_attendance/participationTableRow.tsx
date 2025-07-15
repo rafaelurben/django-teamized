@@ -306,7 +306,7 @@ export default function ParticipationTableRow({
                     </button>
                 </td>
             )}
-            <td className="debug-only">{participation.id}</td>
+            <td className="debug-id">{participation.id}</td>
         </tr>
     );
 }

@@ -81,7 +81,7 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
                     <th>Gesperrt:</th>
                     <td>{selectedEvent.locked ? 'Ja' : 'Nein'}</td>
                 </tr>
-                <tr className="debug-only">
+                <tr className="debug-id">
                     <th>ID:</th>
                     <td>{selectedEvent.id}</td>
                 </tr>

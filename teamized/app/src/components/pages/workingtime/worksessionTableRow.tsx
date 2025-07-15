@@ -85,7 +85,7 @@ export default function WorksessionTableRow({ team, session }: Props) {
                 </a>
             </td>
             {/* ID */}
-            <td className="debug-only">{session.id}</td>
+            <td className="debug-id">{session.id}</td>
         </tr>
     );
 }
