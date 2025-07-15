@@ -25,7 +25,7 @@ export default function ListSelectorRow({ list, isSelected, onSelect }: Props) {
             cursor: 'pointer',
             opacity: isSelected ? 1 : 0.75,
             fontWeight: isSelected ? 'bold' : 'normal',
-        } as React.CSSProperties;
+        } satisfies React.CSSProperties;
     };
 
     return (

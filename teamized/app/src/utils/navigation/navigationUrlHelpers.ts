@@ -4,7 +4,7 @@ import {
     saveNavigationStateToLocalStorage,
 } from './navigationStorageHelpers';
 
-const SHORT_KEYS = {
+const SHORT_KEYS: { [key: string]: string | undefined } = {
     selectedPage: 'p',
     selectedTeamId: 't',
 };

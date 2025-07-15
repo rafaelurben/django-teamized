@@ -78,7 +78,7 @@ export function apiRequestSuccessAlert(data: SuccessfulResponse) {
         timer: 3000,
         timerProgressBar: true,
         ...data.alert,
-    } as SweetAlertOptions);
+    } satisfies SweetAlertOptions);
 }
 
 // Informational alerts
@@ -93,14 +93,14 @@ export function apiRequestSuccessAlert(data: SuccessfulResponse) {
 export function errorAlert(
     title: string,
     message: string,
-    options: Partial<SweetAlertOptions> = {}
+    options: SweetAlertOptions = {}
 ) {
     return fireAlert({
         title: title,
         html: message,
         icon: 'error',
         ...options,
-    } as SweetAlertOptions);
+    } satisfies SweetAlertOptions);
 }
 
 /**
@@ -113,14 +113,14 @@ export function errorAlert(
 export function infoAlert(
     title: string,
     message: string,
-    options: Partial<SweetAlertOptions> = {}
+    options: SweetAlertOptions = {}
 ) {
     return fireAlert({
         title: title,
         html: message,
         icon: 'info',
         ...options,
-    } as SweetAlertOptions);
+    } satisfies SweetAlertOptions);
 }
 
 /**
@@ -129,10 +129,7 @@ export function infoAlert(
  * @param {String} text
  * @param {object} options
  */
-export function waitingAlert(
-    text: string,
-    options: Partial<SweetAlertOptions> = {}
-) {
+export function waitingAlert(text: string, options: SweetAlertOptions = {}) {
     return fireAlert({
         title: 'In Bearbeitung...',
         text: text,
@@ -141,7 +138,7 @@ export function waitingAlert(
         position: 'top-right',
         showConfirmButton: false,
         ...options,
-    } as SweetAlertOptions);
+    } satisfies SweetAlertOptions);
 }
 
 /**
@@ -154,7 +151,7 @@ export function waitingAlert(
 export function successAlert(
     text: string,
     title: string,
-    options: Partial<SweetAlertOptions> = {}
+    options: SweetAlertOptions = {}
 ) {
     return fireAlert({
         toast: true,
@@ -166,7 +163,7 @@ export function successAlert(
         title: title || 'Aktion erfolgreich!',
         text: text,
         ...options,
-    } as SweetAlertOptions);
+    } satisfies SweetAlertOptions);
 }
 
 // Interactive alerts
@@ -184,7 +181,7 @@ export async function confirmAlert<T>(
     html: string,
     preConfirm: (() => Promise<T>) | null,
     title: string = '',
-    options: Partial<SweetAlertOptions> = {}
+    options: SweetAlertOptions = {}
 ) {
     const data: SweetAlertOptions = {
         theme: getSwalTheme(),
@@ -196,7 +193,7 @@ export async function confirmAlert<T>(
         confirmButtonText: 'Ja',
         cancelButtonText: 'Nein, abbrechen',
         ...options,
-    } as SweetAlertOptions;
+    } satisfies SweetAlertOptions;
 
     if (preConfirm !== undefined && preConfirm !== null) {
         data.preConfirm = preConfirm;
