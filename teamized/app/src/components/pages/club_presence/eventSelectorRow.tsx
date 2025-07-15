@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import { ID } from '../../../interfaces/common';
+import { getDateTimeString } from '../../../utils/datetime';
 
 interface Props {
     isSelected: boolean;
@@ -32,22 +33,13 @@ export default function EventSelectorRow({
         } satisfies React.CSSProperties;
     };
 
-    const dateTimeFmt = (date_str: string) => {
-        return new Date(date_str).toLocaleDateString('de-CH', {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    };
-
     return (
         <div className="py-1 mb-1" style={getStyle()} onClick={handleSelect}>
             <span className="d-flex w-100 flex-column">
                 <span>{event.title}</span>
                 <span className="text-muted">
-                    {dateTimeFmt(event.dt_start)} - {dateTimeFmt(event.dt_end)}
+                    {getDateTimeString(new Date(event.dt_start))} -{' '}
+                    {getDateTimeString(new Date(event.dt_end))}
                 </span>
             </span>
         </div>

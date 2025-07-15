@@ -6,6 +6,7 @@ import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
+import EventInfo from './eventInfo';
 import EventSelector from './eventSelector';
 import { ParticipationTile } from './participationTile';
 
@@ -66,6 +67,16 @@ export default function ClubPresencePage() {
                         events={events}
                         selectedEvent={selectedEvent}
                         onEventSelect={setSelectedEventId}
+                        isAdmin={isAdmin}
+                    />
+                </Dashboard.Tile>
+                <Dashboard.Tile
+                    title="Ereignisdetails"
+                    help="Wähle ein Ereignis aus, um dieses zu bearbeiten oder zu löschen."
+                >
+                    <EventInfo
+                        team={team}
+                        selectedEvent={selectedEvent}
                         isAdmin={isAdmin}
                     />
                 </Dashboard.Tile>

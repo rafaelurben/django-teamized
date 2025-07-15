@@ -15,7 +15,7 @@ function getResponseStatusIcon(
         case ClubPresenceMemberResponseChoice.YES:
             return (
                 <IconTooltip
-                    icon="fa-regular fa-rectangle-check"
+                    icon="fa-regular fa-square-check"
                     title="Angemeldet"
                     className={withColor ? 'text-success' : undefined}
                 />
@@ -54,7 +54,7 @@ function getPresenceStatusIcon(
         case true:
             return (
                 <IconTooltip
-                    icon="fa-solid fa-rectangle-check"
+                    icon="fa-solid fa-square-check"
                     title="Anwesend"
                     className={withColor ? 'text-success' : undefined}
                 />
