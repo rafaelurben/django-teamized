@@ -8,6 +8,7 @@ interface Props {
     grow: boolean;
     className: string;
     children: React.ReactNode;
+    loading: boolean;
 }
 
 export default function Tile({
@@ -16,6 +17,7 @@ export default function Tile({
     grow = false,
     className = '',
     children = null,
+    loading = false,
 }: Partial<Props>) {
     let fullClassName = `dashboard-tile row border border-dark rounded mx-2 mb-3 mt-0 flex-column ${className}`;
 
@@ -40,7 +42,14 @@ export default function Tile({
                 </>
             )}
             <div className="p-2 w-100 overflow-auto flex-grow-1">
-                {children}
+                {loading ? (
+                    <div className="text-center">
+                        <i className="fa-solid fa-spinner fa-spin" />
+                        <span className="ms-2">Daten werden geladen...</span>
+                    </div>
+                ) : (
+                    children
+                )}
             </div>
         </div>
     );

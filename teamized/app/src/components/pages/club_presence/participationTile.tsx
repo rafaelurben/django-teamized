@@ -1,10 +1,11 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
+import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubPresenceService from '../../../service/clubPresence.service';
 import Dashboard from '../../common/dashboard';
-import DataLoadingBoundary from '../../common/utils/dataLoadingBoundary';
 import { ParticipationAdder } from './participationAdder';
 import ParticipationTable from './participationTable';
 
@@ -15,35 +16,71 @@ interface Props {
 }
 
 export function ParticipationTile({ team, selectedEvent, isAdmin }: Props) {
-    const [, forceUpdate] = useReducer((x) => x + 1, 0);
+    const [participations, setParticipations] = useState<
+        ClubPresenceEventParticipation[] | null
+    >(null);
 
-    const participationsPromise =
+    useEffect(() => {
+        setParticipations(null);
         ClubPresenceService.getClubPresenceEventParticipations(
             team.id,
             selectedEvent.id
+        ).then(setParticipations);
+    }, [team.id, selectedEvent.id]);
+
+    const handleParticipationDelete = (participationId: ID) => {
+        setParticipations((prev) =>
+            prev ? prev.filter((p) => p.id !== participationId) : null
         );
+    };
+
+    const handleParticipationUpdate = (
+        participationId: ID,
+        updatedParticipation: ClubPresenceEventParticipation
+    ) => {
+        setParticipations((prev) =>
+            prev
+                ? prev.map((p) =>
+                      p.id === participationId ? updatedParticipation : p
+                  )
+                : null
+        );
+    };
+
+    const handleParticipationsCreate = (
+        participations: ClubPresenceEventParticipation[]
+    ) => {
+        setParticipations((prev) =>
+            prev ? [...prev, ...participations] : participations
+        );
+    };
 
     return (
         <Dashboard.Tile
             title={'Ereignis: ' + selectedEvent.title}
             help="Verwalte die Anwesenheit für dieses Ereignis."
+            loading={participations === null}
         >
-            <DataLoadingBoundary>
-                <ParticipationTable
-                    participationsPromise={participationsPromise}
-                    isAdmin={isAdmin}
-                    team={team}
-                    event={selectedEvent}
-                />
-                {isAdmin && (
-                    <ParticipationAdder
+            {participations !== null && (
+                <>
+                    <ParticipationTable
+                        participations={participations}
+                        isAdmin={isAdmin}
                         team={team}
                         event={selectedEvent}
-                        participationsPromise={participationsPromise}
-                        onAdded={forceUpdate}
+                        handleDelete={handleParticipationDelete}
+                        handleUpdate={handleParticipationUpdate}
                     />
-                )}
-            </DataLoadingBoundary>
+                    {isAdmin && (
+                        <ParticipationAdder
+                            team={team}
+                            event={selectedEvent}
+                            participations={participations}
+                            handleCreate={handleParticipationsCreate}
+                        />
+                    )}
+                </>
+            )}
         </Dashboard.Tile>
     );
 }

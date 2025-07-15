@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
@@ -10,21 +10,18 @@ import { ClubMemberSelector } from './clubMemberSelector';
 interface Props {
     team: Team;
     event: ClubPresenceEvent;
-    participationsPromise: Promise<ClubPresenceEventParticipation[]>;
-    onAdded: () => void;
+    participations: ClubPresenceEventParticipation[];
+    handleCreate: (participations: ClubPresenceEventParticipation[]) => void;
 }
 
 export function ParticipationAdder({
     team,
     event,
-    participationsPromise,
-    onAdded,
+    participations,
+    handleCreate,
 }: Props) {
     const teamData = useCurrentTeamData();
-
     const [formVisible, setFormVisible] = useState(false);
-
-    const participations = use(participationsPromise);
     const memberIdsUnavailable = participations.map((p) => p.member_id);
 
     if (formVisible) {
@@ -39,8 +36,8 @@ export function ParticipationAdder({
                             team.id,
                             event.id,
                             members.map((member) => member.id)
-                        ).then(() => {
-                            onAdded();
+                        ).then((newParticipations) => {
+                            handleCreate(newParticipations);
                         });
                         setFormVisible(false);
                     }}

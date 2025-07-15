@@ -1,27 +1,33 @@
-import React, { use } from 'react';
+import React from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
 
 interface Props {
-    participationsPromise: Promise<ClubPresenceEventParticipation[]>;
+    participations: ClubPresenceEventParticipation[];
     isAdmin: boolean;
     team: Team;
     event: ClubPresenceEvent;
+    handleDelete: (participationId: ID) => void;
+    handleUpdate: (
+        participationId: ID,
+        updatedParticipation: ClubPresenceEventParticipation
+    ) => void;
 }
 
 export default function ParticipationTable({
-    participationsPromise,
+    participations,
     isAdmin,
     team,
     event,
+    handleDelete,
+    handleUpdate,
 }: Props) {
-    const participations = use(participationsPromise);
-
     return (
         <Dashboard.Table>
             <thead>
@@ -53,6 +59,7 @@ export default function ParticipationTable({
                             isAdmin={isAdmin}
                             team={team}
                             event={event}
+                            onDelete={handleDelete}
                         />
                     ))
                 ) : (

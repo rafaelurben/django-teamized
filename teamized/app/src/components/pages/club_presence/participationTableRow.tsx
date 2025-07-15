@@ -5,6 +5,7 @@ import {
     ClubPresenceEventParticipation,
     ClubPresenceMemberResponseChoice,
 } from '../../../interfaces/club/clubPresenceEventParticipation';
+import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import { deleteClubPresenceEventParticipationPopup } from '../../../service/clubPresence.service';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
@@ -85,6 +86,7 @@ interface Props {
     isAdmin: boolean;
     team: Team;
     event: ClubPresenceEvent;
+    onDelete: (participationId: ID) => void;
 }
 
 export default function ParticipationTableRow({
@@ -92,6 +94,7 @@ export default function ParticipationTableRow({
     isAdmin,
     team,
     event,
+    onDelete,
 }: Props) {
     const teamData = useCurrentTeamData();
     const member = teamData.club_members[participation.member_id];
@@ -102,7 +105,7 @@ export default function ParticipationTableRow({
             event,
             participation
         );
-        // TODO: trigger a refresh or callback if needed
+        onDelete(participation.id);
     };
 
     return (
