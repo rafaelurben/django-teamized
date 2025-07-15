@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import {
@@ -7,7 +7,7 @@ import {
 } from '../../../interfaces/club/clubPresenceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import { deleteClubPresenceEventParticipationPopup } from '../../../service/clubPresence.service';
+import * as ClubPresenceService from '../../../service/clubPresence.service';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
@@ -87,6 +87,11 @@ interface Props {
     team: Team;
     event: ClubPresenceEvent;
     onDelete: (participationId: ID) => void;
+    onUpdate: (
+        participationId: ID,
+        updatedParticipation: ClubPresenceEventParticipation
+    ) => void;
+    editable: boolean;
 }
 
 export default function ParticipationTableRow({
@@ -95,17 +100,55 @@ export default function ParticipationTableRow({
     team,
     event,
     onDelete,
+    onUpdate,
+    editable,
 }: Props) {
     const teamData = useCurrentTeamData();
     const member = teamData.club_members[participation.member_id];
 
+    const [localParticipation, setLocalParticipation] = useState(participation);
+
+    useEffect(() => {
+        setLocalParticipation(participation);
+    }, [participation]);
+
+    const updateParticipation = (
+        changes: Partial<ClubPresenceEventParticipation>
+    ) => {
+        const updated = { ...localParticipation, ...changes };
+        setLocalParticipation(updated);
+        onUpdate(participation.id, updated);
+        ClubPresenceService.updateClubPresenceEventParticipation(
+            team.id,
+            event.id,
+            participation.id,
+            changes
+        );
+    };
+
+    const handleMemberResponseChange = (
+        value: ClubPresenceMemberResponseChoice
+    ) => {
+        updateParticipation({ member_response: value });
+    };
+    const handleMemberNotesChange = (value: string) => {
+        updateParticipation({ member_notes: value });
+    };
+    const handleHasAttendedChange = (value: boolean | null) => {
+        updateParticipation({ has_attended: value });
+    };
+    const handleAdminNotesChange = (value: string) => {
+        updateParticipation({ admin_notes: value });
+    };
+
     const handleDelete = async () => {
-        await deleteClubPresenceEventParticipationPopup(
+        await ClubPresenceService.deleteClubPresenceEventParticipationPopup(
             team,
             event,
             participation
-        );
-        onDelete(participation.id);
+        ).then((result) => {
+            if (result.isConfirmed) onDelete(participation.id);
+        });
     };
 
     return (
@@ -113,11 +156,145 @@ export default function ParticipationTableRow({
             <td>
                 {member.first_name} {member.last_name}
             </td>
-            <td>{getResponseStatusIcon(participation.member_response)}</td>
-            <td>{participation.member_notes}</td>
-            <td>{getPresenceStatusIcon(participation.has_attended)}</td>
-            {isAdmin && <td>{participation.admin_notes}</td>}
+            <td>
+                {editable ? (
+                    <div className="d-flex gap-1">
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`response-${participation.id}`}
+                                value="YES"
+                                checked={
+                                    localParticipation.member_response ===
+                                    ClubPresenceMemberResponseChoice.YES
+                                }
+                                onChange={() =>
+                                    handleMemberResponseChange(
+                                        ClubPresenceMemberResponseChoice.YES
+                                    )
+                                }
+                            />
+                            <label className="form-check-label">Ja</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`response-${participation.id}`}
+                                value="NO"
+                                checked={
+                                    localParticipation.member_response ===
+                                    ClubPresenceMemberResponseChoice.NO
+                                }
+                                onChange={() =>
+                                    handleMemberResponseChange(
+                                        ClubPresenceMemberResponseChoice.NO
+                                    )
+                                }
+                            />
+                            <label className="form-check-label">Nein</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`response-${participation.id}`}
+                                value="MAYBE"
+                                checked={
+                                    localParticipation.member_response ===
+                                    ClubPresenceMemberResponseChoice.MAYBE
+                                }
+                                onChange={() =>
+                                    handleMemberResponseChange(
+                                        ClubPresenceMemberResponseChoice.MAYBE
+                                    )
+                                }
+                            />
+                            <label className="form-check-label">
+                                Vielleicht
+                            </label>
+                        </div>
+                    </div>
+                ) : (
+                    getResponseStatusIcon(participation.member_response)
+                )}
+            </td>
+            <td>
+                {editable ? (
+                    <textarea
+                        className="form-control form-control-sm"
+                        style={{ minHeight: '1.5em', resize: 'vertical' }}
+                        rows={
+                            localParticipation.member_notes.split('\n')
+                                .length || 1
+                        }
+                        defaultValue={localParticipation.member_notes}
+                        onBlur={(e) => handleMemberNotesChange(e.target.value)}
+                    />
+                ) : (
+                    <span style={{ whiteSpace: 'pre-line' }}>
+                        {participation.member_notes}
+                    </span>
+                )}
+            </td>
+            <td>
+                {editable ? (
+                    <div className="d-flex gap-2">
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`attended-${participation.id}`}
+                                value="yes"
+                                checked={
+                                    localParticipation.has_attended === true
+                                }
+                                onChange={() => handleHasAttendedChange(true)}
+                            />
+                            <label className="form-check-label">Ja</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`attended-${participation.id}`}
+                                value="no"
+                                checked={
+                                    localParticipation.has_attended === false
+                                }
+                                onChange={() => handleHasAttendedChange(false)}
+                            />
+                            <label className="form-check-label">Nein</label>
+                        </div>
+                    </div>
+                ) : (
+                    getPresenceStatusIcon(participation.has_attended)
+                )}
+            </td>
             {isAdmin && (
+                <td>
+                    {editable ? (
+                        <textarea
+                            className="form-control form-control-sm"
+                            style={{ minHeight: '1.5em', resize: 'vertical' }}
+                            rows={
+                                localParticipation.admin_notes.split('\n')
+                                    .length || 1
+                            }
+                            defaultValue={localParticipation.admin_notes}
+                            onBlur={(e) =>
+                                handleAdminNotesChange(e.target.value)
+                            }
+                        />
+                    ) : (
+                        <span style={{ whiteSpace: 'pre-line' }}>
+                            {participation.admin_notes}
+                        </span>
+                    )}
+                </td>
+            )}
+            {isAdmin && editable && (
                 <td style={{ width: '1px' }}>
                     <button
                         type="button"

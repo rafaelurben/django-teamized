@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ClubPresenceEvent } from '../../../interfaces/club/clubPresenceEvent';
 import { ClubPresenceEventParticipation } from '../../../interfaces/club/clubPresenceEventParticipation';
@@ -28,9 +28,33 @@ export default function ParticipationTable({
     handleDelete,
     handleUpdate,
 }: Props) {
+    const [editMode, setEditMode] = useState(false);
+
     return (
         <Dashboard.Table>
             <thead>
+                {isAdmin && (
+                    <tr>
+                        <th colSpan={10} className="text-end">
+                            <div className="form-check form-switch d-inline-flex align-items-center">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id="editModeSwitch"
+                                    checked={editMode}
+                                    onChange={() => setEditMode((v) => !v)}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                                <label
+                                    className="form-check-label ms-2"
+                                    htmlFor="editModeSwitch"
+                                >
+                                    Bearbeitungsmodus
+                                </label>
+                            </div>
+                        </th>
+                    </tr>
+                )}
                 <tr>
                     <th>Mitglied</th>
                     <th style={{ width: '1px' }}>Antwort</th>
@@ -46,7 +70,7 @@ export default function ParticipationTable({
                             />
                         </th>
                     )}
-                    {isAdmin && <th></th>}
+                    {isAdmin && editMode && <th></th>}
                     <th className="debug-only">ID</th>
                 </tr>
             </thead>
@@ -60,6 +84,8 @@ export default function ParticipationTable({
                             team={team}
                             event={event}
                             onDelete={handleDelete}
+                            onUpdate={handleUpdate}
+                            editable={editMode}
                         />
                     ))
                 ) : (

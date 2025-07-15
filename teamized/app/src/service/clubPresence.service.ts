@@ -222,6 +222,22 @@ export async function bulkCreateClubPresenceEventParticipations(
     });
 }
 
+export async function updateClubPresenceEventParticipation(
+    teamId: ID,
+    eventId: ID,
+    participationId: ID,
+    participation: Partial<ClubPresenceEventParticipation>
+) {
+    return await ClubPresenceAPI.updateClubPresenceEventParticipation(
+        teamId,
+        eventId,
+        participationId,
+        participation
+    ).then((data) => {
+        return data.participation;
+    });
+}
+
 export async function deleteClubPresenceEventParticipation(
     teamId: ID,
     eventId: ID,
