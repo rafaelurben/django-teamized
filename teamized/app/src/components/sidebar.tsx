@@ -118,7 +118,9 @@ export default function AppSidebar({ user }: Props) {
                                 <i className="fas fa-fw fa-table-list" />
                                 Anwesenheit
                                 {/* New badge - remove later */}
-                                <span className="badge bg-info ms-2">Neu</span>
+                                <span className="badge text-bg-warning ms-2">
+                                    Beta
+                                </span>
                             </a>
                         </li>
                     </>
