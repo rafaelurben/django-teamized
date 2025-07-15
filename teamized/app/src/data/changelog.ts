@@ -8,6 +8,13 @@ export interface ChangelogItem {
 
 export const CHANGELOG: ChangelogItem[] = [
     {
+        date: '2025-07-15',
+        changes: [
+            'WICHTIG: Teamized ist nun auf teamized.ch erreichbar. Aktualisiere deine Lesezeichen oder App-Verknüpfungen.',
+            'Links in Beschreibungen sind nun klickbar',
+        ],
+    },
+    {
         date: '2025-07-09',
         changes: [
             'Die zuletzt geöffnete Seite und das zuletzt ausgewählte Team werden nun gespeichert',
