@@ -46,6 +46,18 @@ export default function TeamPage() {
         });
     };
 
+    let canBeDeleted = true;
+    let cannotBeDeletedTooltipReason = '';
+    if (team.club) {
+        canBeDeleted = false;
+        cannotBeDeletedTooltipReason =
+            'Das Team kann nicht gelöscht werden, solange der Vereinsmodus aktiv ist.';
+    } else if (team.membercount > 1) {
+        canBeDeleted = false;
+        cannotBeDeletedTooltipReason =
+            'Das Team kann nicht gelöscht werden, solange du nicht das einzige Mitglied bist.';
+    }
+
     return (
         <Dashboard.Page
             title="Dein Team"
@@ -104,26 +116,15 @@ export default function TeamPage() {
                             >
                                 Team&nbsp;bearbeiten
                             </button>
-                            {!team.club ? (
-                                team.membercount === 1 ? (
-                                    <button
-                                        className="btn btn-outline-danger border-1"
-                                        onClick={handleTeamDeleteButtonClick}
-                                    >
-                                        Team&nbsp;löschen
-                                    </button>
-                                ) : (
-                                    <Tooltip title="Das Team kann nicht gelöscht werden, solange noch Mitglieder vorhanden sind.">
-                                        <button
-                                            className="btn btn-outline-danger border-1"
-                                            disabled
-                                        >
-                                            Team&nbsp;löschen
-                                        </button>
-                                    </Tooltip>
-                                )
+                            {canBeDeleted ? (
+                                <button
+                                    className="btn btn-outline-danger border-1"
+                                    onClick={handleTeamDeleteButtonClick}
+                                >
+                                    Team&nbsp;löschen
+                                </button>
                             ) : (
-                                <Tooltip title="Das Team kann nicht gelöscht werden, solange der Vereinsmodus aktiv ist.">
+                                <Tooltip title={cannotBeDeletedTooltipReason}>
                                     <button
                                         className="btn btn-outline-danger border-1"
                                         disabled
