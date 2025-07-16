@@ -4,7 +4,7 @@ import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as ToDo from '../../../service/todo.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
@@ -53,35 +53,34 @@ export default function ListInfo({
     }
 
     return (
-        <Dashboard.Table vertical={true}>
-            <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{selectedList.name}</td>
-                </tr>
-                <tr>
-                    <th style={{ width: '1px' }} className="pe-3">
-                        Beschreibung:
-                    </th>
-                    <td>
-                        <Urlize text={selectedList.description} />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Farbe:</th>
-                    <td>
+        <Tables.VerticalDataTable
+            items={[
+                {
+                    label: 'Name',
+                    value: selectedList.name,
+                },
+                {
+                    label: 'Beschreibung',
+                    value: <Urlize text={selectedList.description} />,
+                    limitWidth: true,
+                },
+                {
+                    label: 'Farbe',
+                    value: (
                         <i
                             style={{ color: selectedList.color }}
                             className="fas fa-circle small"
                         ></i>
-                    </td>
-                </tr>
-                <tr className="debug-id">
-                    <th>ID:</th>
-                    <td>{selectedList.id}</td>
-                </tr>
-            </tbody>
-            <Dashboard.TableButtonFooter noTopBorder={true}>
+                    ),
+                },
+                {
+                    label: 'ID',
+                    value: selectedList.id,
+                    isDebugId: true,
+                },
+            ]}
+        >
+            <Tables.ButtonFooter noTopBorder={true}>
                 {isAdmin ? (
                     <>
                         <button
@@ -104,7 +103,7 @@ export default function ListInfo({
                         </button>
                     </Tooltip>
                 )}
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.VerticalDataTable>
     );
 }

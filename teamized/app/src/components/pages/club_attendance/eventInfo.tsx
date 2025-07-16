@@ -5,7 +5,7 @@ import { Team } from '../../../interfaces/teams/team';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getDateTimeString } from '../../../utils/datetime';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
 
@@ -43,50 +43,47 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
     }
 
     return (
-        <Dashboard.Table vertical={true}>
-            <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{selectedEvent.title}</td>
-                </tr>
-                <tr>
-                    <th style={{ width: '1px' }} className="pe-3">
-                        Beschreibung:
-                    </th>
-                    <td>
-                        <Urlize text={selectedEvent.description} />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Start:</th>
-                    <td>
-                        {getDateTimeString(new Date(selectedEvent.dt_start))}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Ende:</th>
-                    <td>{getDateTimeString(new Date(selectedEvent.dt_end))}</td>
-                </tr>
-                <tr>
-                    <th>Punkte:</th>
-                    <td>{selectedEvent.points}</td>
-                </tr>
-                <tr>
-                    <th>Standardmäßig teilnehmend:</th>
-                    <td>
-                        {selectedEvent.participating_by_default ? 'Ja' : 'Nein'}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Gesperrt:</th>
-                    <td>{selectedEvent.locked ? 'Ja' : 'Nein'}</td>
-                </tr>
-                <tr className="debug-id">
-                    <th>ID:</th>
-                    <td>{selectedEvent.id}</td>
-                </tr>
-            </tbody>
-            <Dashboard.TableButtonFooter noTopBorder={true}>
+        <Tables.VerticalDataTable
+            items={[
+                {
+                    label: 'Ereignis',
+                    value: selectedEvent.title,
+                },
+                {
+                    label: 'Beschreibung',
+                    value: <Urlize text={selectedEvent.description} />,
+                    limitWidth: true,
+                },
+                {
+                    label: 'Start',
+                    value: getDateTimeString(new Date(selectedEvent.dt_start)),
+                },
+                {
+                    label: 'Ende',
+                    value: getDateTimeString(new Date(selectedEvent.dt_end)),
+                },
+                {
+                    label: 'Punkte',
+                    value: selectedEvent.points,
+                },
+                {
+                    label: 'Standardmässig teilnehmend',
+                    value: selectedEvent.participating_by_default
+                        ? 'Ja'
+                        : 'Nein',
+                },
+                {
+                    label: 'Gesperrt',
+                    value: selectedEvent.locked ? 'Ja' : 'Nein',
+                },
+                {
+                    label: 'ID',
+                    value: selectedEvent.id,
+                    isDebugId: true,
+                },
+            ]}
+        >
+            <Tables.ButtonFooter noTopBorder={true}>
                 {isAdmin ? (
                     <>
                         <button
@@ -109,7 +106,7 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
                         </button>
                     </Tooltip>
                 )}
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.VerticalDataTable>
     );
 }

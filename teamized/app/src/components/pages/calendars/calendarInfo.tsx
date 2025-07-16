@@ -4,7 +4,7 @@ import { Calendar } from '../../../interfaces/calendar/calendar';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
@@ -61,35 +61,34 @@ export default function CalendarInfo({
     }
 
     return (
-        <Dashboard.Table>
-            <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{selectedCalendar.name}</td>
-                </tr>
-                <tr>
-                    <th style={{ width: '1px' }} className="pe-3">
-                        Beschreibung:
-                    </th>
-                    <td>
-                        <Urlize text={selectedCalendar.description} />
-                    </td>
-                </tr>
-                <tr>
-                    <th>Farbe:</th>
-                    <td>
+        <Tables.VerticalDataTable
+            items={[
+                {
+                    label: 'Name',
+                    value: selectedCalendar.name,
+                },
+                {
+                    label: 'Beschreibung',
+                    value: <Urlize text={selectedCalendar.description} />,
+                    limitWidth: true,
+                },
+                {
+                    label: 'Farbe',
+                    value: (
                         <i
                             style={{ color: selectedCalendar.color }}
                             className="fas fa-circle small"
                         ></i>
-                    </td>
-                </tr>
-                <tr className="debug-id">
-                    <th>ID:</th>
-                    <td>{selectedCalendar.id}</td>
-                </tr>
-            </tbody>
-            <Dashboard.TableButtonFooter noTopBorder={true}>
+                    ),
+                },
+                {
+                    label: 'ID',
+                    value: selectedCalendar.id,
+                    isDebugId: true,
+                },
+            ]}
+        >
+            <Tables.ButtonFooter noTopBorder={true}>
                 {isAdmin ? (
                     <>
                         <button
@@ -118,7 +117,7 @@ export default function CalendarInfo({
                 >
                     Abonnieren
                 </button>
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.VerticalDataTable>
     );
 }

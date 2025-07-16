@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import WorksessionTableRow from './worksessionTableRow';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 export default function WorksessionTable({ sessions, team, loading }: Props) {
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 <tr>
                     <th style={{ minWidth: '13rem' }}>Start &amp; Ende</th>
@@ -45,6 +45,6 @@ export default function WorksessionTable({ sessions, team, loading }: Props) {
                     ))
                 )}
             </tbody>
-        </Dashboard.Table>
+        </Tables.SimpleTable>
     );
 }

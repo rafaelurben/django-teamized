@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamTableRow from './teamTableRow';
 
@@ -13,7 +13,7 @@ interface Props {
 
 export default function TeamTable({ teams, selectedTeamId }: Props) {
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 <tr>
                     <th className="text-center" style={{ width: '1px' }}>
@@ -44,6 +44,6 @@ export default function TeamTable({ teams, selectedTeamId }: Props) {
                     />
                 ))}
             </tbody>
-        </Dashboard.Table>
+        </Tables.SimpleTable>
     );
 }

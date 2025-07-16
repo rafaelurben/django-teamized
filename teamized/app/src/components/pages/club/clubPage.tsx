@@ -7,6 +7,7 @@ import {
     usePageNavigator,
 } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import Urlize from '../../common/utils/urlize';
 import ClubMemberTileContent from './clubMemberTileContent';
 
@@ -43,15 +44,15 @@ export default function ClubPage() {
         >
             <Dashboard.Column>
                 <Dashboard.Tile title="Vereinsinfos">
-                    <Dashboard.Table vertical={true}>
-                        <tbody>
-                            <tr>
-                                <th>Name:</th>
-                                <td>{club.name}</td>
-                            </tr>
-                            <tr>
-                                <th>Login URL:</th>
-                                <td>
+                    <Tables.VerticalDataTable
+                        items={[
+                            {
+                                label: 'Name',
+                                value: club.name,
+                            },
+                            {
+                                label: 'Login URL',
+                                value: (
                                     <a
                                         target="_blank"
                                         href={club.url}
@@ -59,26 +60,25 @@ export default function ClubPage() {
                                     >
                                         {club.slug}
                                     </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style={{ width: '1px' }} className="pe-3">
-                                    Beschreibung:
-                                </th>
-                                <td>
-                                    <Urlize text={club.description} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Mitglieder:</th>
-                                <td>{club.membercount}</td>
-                            </tr>
-                            <tr className="debug-id">
-                                <th>ID:</th>
-                                <td>{club.id}</td>
-                            </tr>
-                        </tbody>
-                        <Dashboard.TableButtonFooter
+                                ),
+                            },
+                            {
+                                label: 'Beschreibung',
+                                value: <Urlize text={club.description} />,
+                                limitWidth: true,
+                            },
+                            {
+                                label: 'Mitglieder',
+                                value: club.membercount,
+                            },
+                            {
+                                label: 'ID',
+                                value: club.id,
+                                isDebugId: true,
+                            },
+                        ]}
+                    >
+                        <Tables.ButtonFooter
                             show={team.member!.is_owner}
                             noTopBorder={true}
                         >
@@ -94,8 +94,8 @@ export default function ClubPage() {
                             >
                                 Verein&nbsp;löschen
                             </button>
-                        </Dashboard.TableButtonFooter>
-                    </Dashboard.Table>
+                        </Tables.ButtonFooter>
+                    </Tables.VerticalDataTable>
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Vereinsmitglieder">

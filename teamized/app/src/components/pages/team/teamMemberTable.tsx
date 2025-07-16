@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamMembersTableRow from './teamMemberTableRow';
 
@@ -27,7 +27,7 @@ export default function TeamMemberTable({ teamData }: Props) {
     });
 
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 <tr>
                     <th style={{ width: '32px' }} className="text-center">
@@ -59,6 +59,6 @@ export default function TeamMemberTable({ teamData }: Props) {
                     ))
                 )}
             </tbody>
-        </Dashboard.Table>
+        </Tables.SimpleTable>
     );
 }

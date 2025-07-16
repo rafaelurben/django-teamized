@@ -8,6 +8,7 @@ import {
     usePageNavigator,
 } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
@@ -82,31 +83,29 @@ export default function TeamPage() {
                         )
                     }
                 >
-                    <Dashboard.Table vertical={true}>
-                        <tbody>
-                            <tr>
-                                <th>Name:</th>
-                                <td>{team.name}</td>
-                            </tr>
-                            <tr>
-                                <th style={{ width: '1px' }} className="pe-3">
-                                    Beschreibung:
-                                </th>
-                                <td>
-                                    <Urlize text={team.description} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Mitglieder:</th>
-                                <td>{team.membercount}</td>
-                            </tr>
-                            <tr className="debug-id">
-                                <th>ID:</th>
-                                <td>{team.id}</td>
-                            </tr>
-                        </tbody>
-
-                        <Dashboard.TableButtonFooter
+                    <Tables.VerticalDataTable
+                        items={[
+                            {
+                                label: 'Name',
+                                value: team.name,
+                            },
+                            {
+                                label: 'Beschreibung',
+                                value: <Urlize text={team.description} />,
+                                limitWidth: true,
+                            },
+                            {
+                                label: 'Mitglieder',
+                                value: team.membercount,
+                            },
+                            {
+                                label: 'ID',
+                                value: team.id,
+                                isDebugId: true,
+                            },
+                        ]}
+                    >
+                        <Tables.ButtonFooter
                             show={team.member!.is_owner}
                             noTopBorder={true}
                         >
@@ -141,8 +140,8 @@ export default function TeamPage() {
                                     Vereinsmodus&nbsp;aktivieren
                                 </button>
                             )}
-                        </Dashboard.TableButtonFooter>
-                    </Dashboard.Table>
+                        </Tables.ButtonFooter>
+                    </Tables.VerticalDataTable>
                 </Dashboard.Tile>
 
                 <Dashboard.Tile title="Mitglieder">

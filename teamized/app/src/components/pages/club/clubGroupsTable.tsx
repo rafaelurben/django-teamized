@@ -4,7 +4,7 @@ import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import ClubGroupsTableRow from './clubGroupsTableRow';
 
 interface Props {
@@ -23,7 +23,7 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
     };
 
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 <tr>
                     <th>Gruppenname</th>
@@ -48,7 +48,7 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
                     />
                 ))}
             </tbody>
-            <Dashboard.TableButtonFooter show={isAdmin}>
+            <Tables.ButtonFooter show={isAdmin}>
                 <button
                     type="button"
                     className="btn btn-outline-success border-1"
@@ -56,7 +56,7 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
                 >
                     Gruppe erstellen
                 </button>
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.SimpleTable>
     );
 }

@@ -5,7 +5,7 @@ import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as ToDo from '../../../service/todo.service';
 import { errorAlert } from '../../../utils/alerts';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ListViewItem from './listViewItem';
 
@@ -84,7 +84,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                 </label>
             </div>
 
-            <Dashboard.Table className="table-borderless">
+            <Tables.SimpleTable className="table-borderless">
                 <thead>
                     <tr>
                         <th className="p-0" style={{ width: '1px' }}></th>
@@ -133,7 +133,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                         </td>
                     </tr>
                 </tbody>
-            </Dashboard.Table>
+            </Tables.SimpleTable>
         </form>
     );
 }

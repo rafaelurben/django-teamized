@@ -2,20 +2,14 @@ import React from 'react';
 
 interface Props {
     className: string;
-    vertical: boolean;
     children: React.ReactNode;
 }
 
-export default function Table({
+export default function SimpleTable({
     className = '',
-    vertical = false,
     children,
 }: Partial<Props>) {
-    let fullClassName = `table mb-0 ${className}`;
-
-    if (!vertical) {
-        fullClassName += ' align-middle';
-    }
+    const fullClassName = `table mb-0 ${className}`;
 
     return <table className={fullClassName}>{children}</table>;
 }

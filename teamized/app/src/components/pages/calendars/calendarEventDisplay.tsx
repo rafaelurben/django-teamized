@@ -5,7 +5,7 @@ import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -74,53 +74,48 @@ export default function CalendarEventDisplay({
     }
 
     return (
-        <Dashboard.Table vertical={true}>
-            <tbody>
-                <tr>
-                    <th>Name:</th>
-                    <td>{event.name}</td>
-                </tr>
-                {event.description && (
-                    <tr>
-                        <th style={{ width: '1px' }} className="pe-3">
-                            Beschreibung:
-                        </th>
-                        <td>
-                            <Urlize text={event.description} />
-                        </td>
-                    </tr>
-                )}
-                {event.location && (
-                    <tr>
-                        <th>Ort:</th>
-                        <td>{event.location}</td>
-                    </tr>
-                )}
-                <tr>
-                    <th>Start:</th>
-                    <td>{eventStartDisplay}</td>
-                </tr>
-                <tr>
-                    <th>Ende:</th>
-                    <td>{eventEndDisplay}</td>
-                </tr>
-                <tr>
-                    <th>Kalender:</th>
-                    <td>
-                        <i
-                            style={{ color: event.calendar?.color }}
-                            className="fas fa-circle small me-2"
-                        ></i>
-                        {event.calendar?.name}
-                    </td>
-                </tr>
-                <tr className="debug-id">
-                    <th>ID:</th>
-                    <td>{event.id}</td>
-                </tr>
-            </tbody>
-
-            <Dashboard.TableButtonFooter noTopBorder={true}>
+        <Tables.VerticalDataTable
+            items={[
+                { label: 'Name', value: event.name },
+                {
+                    label: 'Beschreibung',
+                    value: <Urlize text={event.description} />,
+                    hide: !event.description,
+                    limitWidth: true,
+                },
+                {
+                    label: 'Ort',
+                    value: event.location,
+                    hide: !event.location,
+                },
+                {
+                    label: 'Start',
+                    value: eventStartDisplay,
+                },
+                {
+                    label: 'Ende',
+                    value: eventEndDisplay,
+                },
+                {
+                    label: 'Kalender',
+                    value: (
+                        <>
+                            <i
+                                style={{ color: event.calendar?.color }}
+                                className="fas fa-circle small me-2"
+                            ></i>
+                            {event.calendar?.name}
+                        </>
+                    ),
+                },
+                {
+                    label: 'ID',
+                    value: event.id,
+                    isDebugId: true,
+                },
+            ]}
+        >
+            <Tables.ButtonFooter noTopBorder={true}>
                 <button className="btn btn-outline-dark" onClick={editEvent}>
                     Bearbeiten
                 </button>
@@ -133,7 +128,7 @@ export default function CalendarEventDisplay({
                 >
                     Löschen
                 </button>
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.VerticalDataTable>
     );
 }

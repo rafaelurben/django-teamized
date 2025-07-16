@@ -4,7 +4,7 @@ import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEven
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
 
@@ -31,7 +31,7 @@ export default function ParticipationTable({
     const [editMode, setEditMode] = useState(false);
 
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 {isAdmin && (
                     <tr>
@@ -96,6 +96,6 @@ export default function ParticipationTable({
                     </tr>
                 )}
             </tbody>
-        </Dashboard.Table>
+        </Tables.SimpleTable>
     );
 }

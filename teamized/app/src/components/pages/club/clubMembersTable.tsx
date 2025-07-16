@@ -4,7 +4,7 @@ import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Dashboard from '../../common/dashboard';
+import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubMembersTableRow from './clubMembersTableRow';
 
@@ -30,7 +30,7 @@ export default function ClubMembersTable({
     };
 
     return (
-        <Dashboard.Table>
+        <Tables.SimpleTable>
             <thead>
                 <tr>
                     <th>Vorname</th>
@@ -71,7 +71,7 @@ export default function ClubMembersTable({
                 ))}
             </tbody>
 
-            <Dashboard.TableButtonFooter show={isAdmin}>
+            <Tables.ButtonFooter show={isAdmin}>
                 <button
                     type="button"
                     className="btn btn-outline-success border-1"
@@ -79,7 +79,7 @@ export default function ClubMembersTable({
                 >
                     Mitglied erstellen
                 </button>
-            </Dashboard.TableButtonFooter>
-        </Dashboard.Table>
+            </Tables.ButtonFooter>
+        </Tables.SimpleTable>
     );
 }

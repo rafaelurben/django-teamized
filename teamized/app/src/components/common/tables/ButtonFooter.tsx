@@ -6,7 +6,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export default function TableButtonFooter({
+export default function ButtonFooter({
     show = true,
     noTopBorder = false,
     children,
