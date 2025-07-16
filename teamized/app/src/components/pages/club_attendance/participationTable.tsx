@@ -57,9 +57,9 @@ export default function ParticipationTable({
                 )}
                 <tr>
                     <th>Mitglied</th>
+                    <th style={{ width: '1px' }}>Anwesend?</th>
                     <th style={{ width: '1px' }}>Antwort</th>
                     <th>Begründung</th>
-                    <th style={{ width: '1px' }}>Anwesend?</th>
                     {isAdmin && (
                         <th>
                             Notiz

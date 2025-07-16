@@ -163,6 +163,40 @@ export default function ParticipationTableRow({
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                name={`attended-${participation.id}`}
+                                value="yes"
+                                checked={
+                                    localParticipation.has_attended === true
+                                }
+                                onChange={() => handleHasAttendedChange(true)}
+                            />
+                            <label className="form-check-label">Ja</label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={`attended-${participation.id}`}
+                                value="no"
+                                checked={
+                                    localParticipation.has_attended === false
+                                }
+                                onChange={() => handleHasAttendedChange(false)}
+                            />
+                            <label className="form-check-label">Nein</label>
+                        </div>
+                    </div>
+                ) : (
+                    getAttendanceStatusIcon(participation.has_attended)
+                )}
+            </td>
+            <td>
+                {editable ? (
+                    <div className="d-flex gap-1 flex-column flex-xl-row">
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
                                 name={`response-${participation.id}`}
                                 value="YES"
                                 checked={
@@ -236,40 +270,6 @@ export default function ParticipationTableRow({
                     <span style={{ whiteSpace: 'pre-line' }}>
                         {participation.member_notes}
                     </span>
-                )}
-            </td>
-            <td>
-                {editable ? (
-                    <div className="d-flex gap-1 flex-column flex-xl-row">
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name={`attended-${participation.id}`}
-                                value="yes"
-                                checked={
-                                    localParticipation.has_attended === true
-                                }
-                                onChange={() => handleHasAttendedChange(true)}
-                            />
-                            <label className="form-check-label">Ja</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name={`attended-${participation.id}`}
-                                value="no"
-                                checked={
-                                    localParticipation.has_attended === false
-                                }
-                                onChange={() => handleHasAttendedChange(false)}
-                            />
-                            <label className="form-check-label">Nein</label>
-                        </div>
-                    </div>
-                ) : (
-                    getAttendanceStatusIcon(participation.has_attended)
                 )}
             </td>
             {isAdmin && (
