@@ -163,6 +163,7 @@ export default function ParticipationTableRow({
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                id={`attended-yes-${participation.id}`}
                                 name={`attended-${participation.id}`}
                                 value="yes"
                                 checked={
@@ -170,12 +171,18 @@ export default function ParticipationTableRow({
                                 }
                                 onChange={() => handleHasAttendedChange(true)}
                             />
-                            <label className="form-check-label">Ja</label>
+                            <label
+                                className="form-check-label"
+                                htmlFor={`attended-yes-${participation.id}`}
+                            >
+                                Ja
+                            </label>
                         </div>
                         <div className="form-check form-check-inline">
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                id={`attended-no-${participation.id}`}
                                 name={`attended-${participation.id}`}
                                 value="no"
                                 checked={
@@ -183,7 +190,12 @@ export default function ParticipationTableRow({
                                 }
                                 onChange={() => handleHasAttendedChange(false)}
                             />
-                            <label className="form-check-label">Nein</label>
+                            <label
+                                className="form-check-label"
+                                htmlFor={`attended-no-${participation.id}`}
+                            >
+                                Nein
+                            </label>
                         </div>
                     </div>
                 ) : (
@@ -197,6 +209,7 @@ export default function ParticipationTableRow({
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                id={`response-yes-${participation.id}`}
                                 name={`response-${participation.id}`}
                                 value="YES"
                                 checked={
@@ -209,12 +222,18 @@ export default function ParticipationTableRow({
                                     )
                                 }
                             />
-                            <label className="form-check-label">Ja</label>
+                            <label
+                                className="form-check-label"
+                                htmlFor={`response-yes-${participation.id}`}
+                            >
+                                Ja
+                            </label>
                         </div>
                         <div className="form-check form-check-inline">
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                id={`response-no-${participation.id}`}
                                 name={`response-${participation.id}`}
                                 value="NO"
                                 checked={
@@ -227,12 +246,18 @@ export default function ParticipationTableRow({
                                     )
                                 }
                             />
-                            <label className="form-check-label">Nein</label>
+                            <label
+                                className="form-check-label"
+                                htmlFor={`response-no-${participation.id}`}
+                            >
+                                Nein
+                            </label>
                         </div>
                         <div className="form-check form-check-inline">
                             <input
                                 className="form-check-input"
                                 type="radio"
+                                id={`response-maybe-${participation.id}`}
                                 name={`response-${participation.id}`}
                                 value="MAYBE"
                                 checked={
@@ -245,7 +270,10 @@ export default function ParticipationTableRow({
                                     )
                                 }
                             />
-                            <label className="form-check-label">
+                            <label
+                                className="form-check-label"
+                                htmlFor={`response-maybe-${participation.id}`}
+                            >
                                 Vielleicht
                             </label>
                         </div>
