@@ -57,18 +57,35 @@ export default function ParticipationTable({
                 )}
                 <tr>
                     <th>Mitglied</th>
-                    <th style={{ width: '1px' }}>Anwesend?</th>
-                    <th style={{ width: '1px' }}>Antwort</th>
+                    <th style={{ width: '1px' }}>
+                        {editMode ? (
+                            <span>Anwesend?</span>
+                        ) : (
+                            <IconTooltip
+                                title="Anwesenheitsstatus"
+                                icon="fa-solid fa-clipboard-check"
+                            />
+                        )}
+                    </th>
+                    <th style={{ width: '1px' }}>
+                        {editMode ? (
+                            <span>Angemeldet?</span>
+                        ) : (
+                            <IconTooltip
+                                title="Anmeldestatus"
+                                icon="fa-solid fa-reply"
+                            />
+                        )}
+                    </th>
                     <th>Begründung</th>
                     {isAdmin && (
-                        <th>
-                            Notiz
+                        <Tables.Th noWrapFlex={true}>
+                            <span>Notiz</span>
                             <IconTooltip
                                 icon="fa-solid fa-shield"
                                 title="Für Mitglied nicht sichtbar"
-                                className="ms-1"
                             />
-                        </th>
+                        </Tables.Th>
                     )}
                     {isAdmin && editMode && <th></th>}
                     <th className="debug-id">ID</th>

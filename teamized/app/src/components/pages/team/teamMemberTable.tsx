@@ -34,7 +34,9 @@ export default function TeamMemberTable({ teamData }: Props) {
                         <IconTooltip title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" />
                     </th>
                     <th>Name</th>
-                    <th>Benutzername&nbsp;&amp;&nbsp;E-Mail</th>
+                    <Tables.Th noWrapFlex={true}>
+                        Benutzername &amp; E-Mail
+                    </Tables.Th>
                     <th>Rolle</th>
                     {loggedInMember.is_owner && (
                         <th style={{ width: '1px' }}></th>

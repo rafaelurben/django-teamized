@@ -36,15 +36,15 @@ export default function TeamInviteTable({ teamData }: Props) {
             <thead>
                 <tr>
                     <th>Notiz</th>
-                    <th style={{ minWidth: '5.5rem' }}>
-                        Teilen{' '}
+                    <Tables.Th noWrapFlex={true}>
+                        <span>Teilen</span>
                         <IconTooltip title="Auf Icons klicken, um Token bzw. Link zu kopieren" />
-                    </th>
+                    </Tables.Th>
                     <th style={{ minWidth: '6rem' }}>Gültig bis</th>
-                    <th style={{ minWidth: '10rem' }}>
-                        Verwendungen{' '}
+                    <Tables.Th noWrapFlex={true}>
+                        <span>Verwendungen</span>
                         <IconTooltip title="Bereits verwendet / noch verfügbar" />
-                    </th>
+                    </Tables.Th>
                     <th style={{ width: '1px' }}></th>
                     <th style={{ width: '1px' }}></th>
                     <th className="debug-id">ID</th>

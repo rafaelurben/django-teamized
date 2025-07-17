@@ -36,13 +36,13 @@ export default function ClubMembersTable({
                     <th>Vorname</th>
                     <th>Nachname</th>
                     <th>Geburtsdatum</th>
-                    <th style={{ minWidth: '15rem' }}>
-                        E-Mail-Adresse{' '}
+                    <Tables.Th noWrapFlex={true}>
+                        <span>E-Mail-Adresse</span>
                         <IconTooltip
                             title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
                             icon="fas fa-circle-exclamation text-warning"
                         />
-                    </th>
+                    </Tables.Th>
                     {isOwner && (
                         <>
                             <th style={{ width: '1px' }}></th>
