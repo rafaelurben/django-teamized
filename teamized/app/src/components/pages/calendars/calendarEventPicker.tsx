@@ -87,7 +87,9 @@ export default function CalendarEventPicker({
         </>
     ) : (
         <p className="ms-1 mb-0">
-            Im ausgewählten Team ist noch kein Kalender vorhanden.{' '}
+            <span className="me-1">
+                Im ausgewählten Team ist noch kein Kalender vorhanden.
+            </span>
             {isAdmin ? (
                 <IconTooltip title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></IconTooltip>
             ) : (

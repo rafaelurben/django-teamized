@@ -51,7 +51,9 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
     if (!selectedList) {
         return (
             <p className="ms-1 mb-0">
-                Im ausgewählten Team ist noch keine To-do-Liste vorhanden.{' '}
+                <span className="me-1">
+                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.
+                </span>
                 {isAdmin ? (
                     <IconTooltip title='Du kannst mit den "Liste erstellen"-Knopf eine neue Liste erstellen.'></IconTooltip>
                 ) : (

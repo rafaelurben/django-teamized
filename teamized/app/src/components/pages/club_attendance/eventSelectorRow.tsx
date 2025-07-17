@@ -38,7 +38,8 @@ export default function EventSelectorRow({
             <span className="d-flex w-100 flex-column">
                 <span>{event.title}</span>
                 <span className="text-muted">
-                    {getDateTimeString(new Date(event.dt_start))} -{' '}
+                    {getDateTimeString(new Date(event.dt_start))}
+                    {' - '}
                     {getDateTimeString(new Date(event.dt_end))}
                 </span>
             </span>

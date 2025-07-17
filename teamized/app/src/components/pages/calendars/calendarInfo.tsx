@@ -50,7 +50,9 @@ export default function CalendarInfo({
     if (!selectedCalendar) {
         return (
             <p className="ms-1 mb-0">
-                Im ausgewählten Team ist noch kein Kalender vorhanden.{' '}
+                <span className="me-1">
+                    Im ausgewählten Team ist noch kein Kalender vorhanden.
+                </span>
                 {isAdmin ? (
                     <IconTooltip title='Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
                 ) : (
