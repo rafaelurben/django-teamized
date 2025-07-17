@@ -29,7 +29,7 @@ export default function Page({
                     <div className="spinner-border mb-3" role="status">
                         <span className="visually-hidden">Laden...</span>
                     </div>
-                    <p>Seite wird geladen...</p>
+                    <p>Seiteninhalt wird geladen...</p>
                 </div>
             ) : (
                 <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">

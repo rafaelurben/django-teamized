@@ -2,7 +2,7 @@
  *  This component is used to render the pages.
  */
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 
 import * as TeamsService from '../service/teams.service';
 import { useAppdata } from '../utils/appdataProvider';
@@ -10,14 +10,19 @@ import {
     useCurrentTeamData,
     useNavigationState,
 } from '../utils/navigation/navigationProvider';
-import CalendarsPage from './pages/calendars/calendarsPage';
-import ClubPage from './pages/club/clubPage';
-import ClubAttendancePage from './pages/club_attendance/clubAttendancePage';
-import HomePage from './pages/home/homePage';
-import TeamPage from './pages/team/teamPage';
-import TeamlistPage from './pages/teamlist/teamlistPage';
-import TodoPage from './pages/todo/todoPage';
-import WorkingtimePage from './pages/workingtime/workingtimePage';
+
+const CalendarsPage = lazy(() => import('./pages/calendars/calendarsPage'));
+const ClubPage = lazy(() => import('./pages/club/clubPage'));
+const ClubAttendancePage = lazy(
+    () => import('./pages/club_attendance/clubAttendancePage')
+);
+const HomePage = lazy(() => import('./pages/home/homePage'));
+const TeamPage = lazy(() => import('./pages/team/teamPage'));
+const TeamlistPage = lazy(() => import('./pages/teamlist/teamlistPage'));
+const TodoPage = lazy(() => import('./pages/todo/todoPage'));
+const WorkingtimePage = lazy(
+    () => import('./pages/workingtime/workingtimePage')
+);
 
 export const PAGE_NAMES: { [index: string]: string | undefined } = {
     home: 'Startseite',
@@ -65,36 +70,55 @@ export function PageLoader() {
         );
     }
 
-    switch (selectedPage) {
-        case 'home':
-            return <HomePage user={appdata.user} settings={appdata.settings} />;
-        case 'teamlist':
-            return <TeamlistPage teams={TeamsService.getTeamsList()} />;
-        case 'team':
-            return <TeamPage />;
-        case 'workingtime':
-            return <WorkingtimePage />;
-        case 'calendars':
-            return <CalendarsPage />;
-        case 'todo':
-            return <TodoPage />;
-        case 'club':
-            return <ClubPage />;
-        case 'club_attendance':
-            return <ClubAttendancePage />;
-        default:
-            return (
-                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
-                    <div className="text-danger mb-4" role="status">
-                        <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
+    const getPage = () => {
+        switch (selectedPage) {
+            case 'home':
+                return (
+                    <HomePage user={appdata.user} settings={appdata.settings} />
+                );
+            case 'teamlist':
+                return <TeamlistPage teams={TeamsService.getTeamsList()} />;
+            case 'team':
+                return <TeamPage />;
+            case 'workingtime':
+                return <WorkingtimePage />;
+            case 'calendars':
+                return <CalendarsPage />;
+            case 'todo':
+                return <TodoPage />;
+            case 'club':
+                return <ClubPage />;
+            case 'club_attendance':
+                return <ClubAttendancePage />;
+            default:
+                return (
+                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
+                        <div className="text-danger mb-4" role="status">
+                            <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
+                        </div>
+                        <h3>404 Nicht gefunden</h3>
+                        <p>
+                            Diese Seite wurde leider nicht gefunden. Vielleicht
+                            findest du die gesuchte Seite ja links in der
+                            Navigation?
+                        </p>
                     </div>
-                    <h3>404 Nicht gefunden</h3>
-                    <p>
-                        Diese Seite wurde leider nicht gefunden. Vielleicht
-                        findest du die gesuchte Seite ja links in der
-                        Navigation?
-                    </p>
+                );
+        }
+    };
+
+    return (
+        <Suspense
+            fallback={
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                    <div className="spinner-border mb-3" role="status">
+                        <span className="visually-hidden">Laden...</span>
+                    </div>
+                    <p>Seite wird geladen...</p>
                 </div>
-            );
-    }
+            }
+        >
+            {getPage()}
+        </Suspense>
+    );
 }
