@@ -49,7 +49,7 @@ export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
                             onClick={handleSharePortfolioButtonClick}
                             title="Mitgliederportfolios teilen (API)"
                         >
-                            <i className="fas fa-fw fa-share"></i>
+                            <i className="fa-solid fa-share"></i>
                         </a>
                     </td>
                     {/* Action: Edit */}
@@ -59,7 +59,7 @@ export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
                             onClick={handleEditButtonClick}
                             title="Gruppe bearbeiten"
                         >
-                            <i className="fas fa-fw fa-pen-to-square"></i>
+                            <i className="fa-solid fa-pen-to-square"></i>
                         </a>
                     </td>
                     {/* Action: Delete */}
@@ -69,7 +69,7 @@ export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
                             onClick={handleRemoveButtonClick}
                             title="Gruppe löschen"
                         >
-                            <i className="fas fa-fw fa-trash"></i>
+                            <i className="fa-solid fa-trash"></i>
                         </a>
                     </td>
                 </>

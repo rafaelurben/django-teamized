@@ -18,7 +18,7 @@ export default function TeamTable({ teams, selectedTeamId }: Props) {
                 <tr>
                     <th className="text-center" style={{ width: '1px' }}>
                         <IconTooltip
-                            icon="fa-solid fa-fw fa-users"
+                            icon="fa-solid fa-users"
                             title="Anzahl Mitglieder"
                         />
                     </th>

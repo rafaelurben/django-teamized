@@ -102,7 +102,7 @@ export default function CalendarEventDisplay({
                         <>
                             <i
                                 style={{ color: event.calendar?.color }}
-                                className="fas fa-circle small me-2"
+                                className="fa-solid fa-circle small me-2"
                             ></i>
                             {event.calendar?.name}
                         </>

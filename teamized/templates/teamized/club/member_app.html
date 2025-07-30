@@ -8,7 +8,7 @@
 {% block menubar_items %}
     <li class="nav-item border-lg rounded border-secondary ms-2">
         <a class="nav-link ms-1 me-1" href="{% url 'teamized:club_login' clubslug=club.slug %}" title="Vereinsseite">
-            <i class="fas fa-fw fa-home"></i>
+            <i class="fa-solid fa-home"></i>
             <span class="d-lg-none ms-2">Vereinsseite</span>
         </a>
     </li>
@@ -16,7 +16,7 @@
         <form method="post" action="{% url 'teamized:club_member_logout' clubslug=club.slug memberuid=member.uid %}">
             {% csrf_token %}
             <button class="btn nav-link ms-1 me-1" type="submit" title="Logout">
-                <i class="fas fa-fw fa-sign-out-alt"></i>
+                <i class="fa-solid fa-sign-out-alt"></i>
                 <span class="d-lg-none ms-2">Logout</span>
             </button>
         </form>

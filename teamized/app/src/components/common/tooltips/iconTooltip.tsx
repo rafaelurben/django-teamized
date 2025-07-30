@@ -10,12 +10,12 @@ interface Props {
 
 export default function IconTooltip({
     title,
-    icon = 'fas fa-info-circle',
+    icon = 'fa-solid fa-info-circle',
     className = '',
 }: Partial<Props>) {
     return (
         <Tooltip className={className} title={title}>
-            <i className={'fa-fw ' + icon}></i>
+            <i className={icon}></i>
         </Tooltip>
     );
 }

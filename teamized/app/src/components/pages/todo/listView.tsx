@@ -110,7 +110,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                     <tr>
                         <td>
                             <a className="btn btn-outline-success border-1 disabled">
-                                <i className="far fa-fw fa-circle-check"></i>
+                                <i className="fa-regular fa-circle-check"></i>
                             </a>
                         </td>
                         <td>
@@ -130,7 +130,7 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                                 disabled={isCreating}
                                 title="Erstellen"
                             >
-                                <i className="fas fa-fw fa-plus"></i>
+                                <i className="fa-solid fa-plus"></i>
                             </button>
                         </td>
                     </tr>

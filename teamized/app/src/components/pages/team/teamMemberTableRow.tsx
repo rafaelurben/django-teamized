@@ -109,7 +109,7 @@ export default function TeamMemberTableRow({
                             onClick={handleLeaveButtonClick}
                             title="Team verlassen"
                         >
-                            <i className="fas fa-fw fa-right-from-bracket"></i>
+                            <i className="fa-solid fa-right-from-bracket"></i>
                         </a>
                     </td>
                 ) : (
@@ -123,7 +123,7 @@ export default function TeamMemberTableRow({
                         onClick={handleRemoveButtonClick}
                         title="Mitglied entfernen"
                     >
-                        <i className="fas fa-fw fa-trash"></i>
+                        <i className="fa-solid fa-trash"></i>
                     </a>
                 </td>
             ) : (

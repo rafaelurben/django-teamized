@@ -60,7 +60,7 @@ export default function CalendarOverview({
                         className="btn btn-outline-dark"
                         onClick={go2prevMonth}
                     >
-                        <i className="fas fa-arrow-left" />
+                        <i className="fa-solid fa-arrow-left" />
                     </button>
                     <button
                         type="button"
@@ -78,7 +78,7 @@ export default function CalendarOverview({
                         className="btn btn-outline-dark"
                         onClick={go2nextMonth}
                     >
-                        <i className="fas fa-arrow-right" />
+                        <i className="fa-solid fa-arrow-right" />
                     </button>
                 </div>
             </div>

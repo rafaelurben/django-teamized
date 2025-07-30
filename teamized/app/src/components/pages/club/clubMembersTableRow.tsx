@@ -78,7 +78,7 @@ export default function ClubMembersTableRow({
                             onClick={handleCreateMagicLinkButtonClick}
                             title="Magischer Link erstellen"
                         >
-                            <i className="fas fa-fw fa-key"></i>
+                            <i className="fa-solid fa-key"></i>
                         </a>
                     </td>
                 </>
@@ -93,7 +93,7 @@ export default function ClubMembersTableRow({
                             onClick={handleEditButtonClick}
                             title="Mitglied bearbeiten"
                         >
-                            <i className="fas fa-fw fa-user-pen"></i>
+                            <i className="fa-solid fa-user-pen"></i>
                         </a>
                     </td>
                     {/* Action: Portfolio Edit */}
@@ -103,7 +103,7 @@ export default function ClubMembersTableRow({
                             onClick={handlePortfolioEditButtonClick}
                             title="Portfolio bearbeiten"
                         >
-                            <i className="fas fa-fw fa-file-pen"></i>
+                            <i className="fa-solid fa-file-pen"></i>
                         </a>
                     </td>
                     {/* Action: Manage groups */}
@@ -113,7 +113,7 @@ export default function ClubMembersTableRow({
                             onClick={handleGroupEditButtonClick}
                             title="Gruppen anpassen"
                         >
-                            <i className="fas fa-fw fa-users-rectangle"></i>
+                            <i className="fa-solid fa-users-rectangle"></i>
                         </a>
                     </td>
                     {/* Action: Delete */}
@@ -123,7 +123,7 @@ export default function ClubMembersTableRow({
                             onClick={handleRemoveButtonClick}
                             title="Mitglied entfernen"
                         >
-                            <i className="fas fa-fw fa-trash"></i>
+                            <i className="fa-solid fa-trash"></i>
                         </a>
                     </td>
                 </>

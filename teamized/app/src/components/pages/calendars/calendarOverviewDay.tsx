@@ -60,7 +60,7 @@ export default function CalendarOverviewDay({
                     <span style={{ fontSize: '0.4rem', height: '0.4rem' }}>
                         {colors.map((color) => (
                             <span key={color} style={{ color: color }}>
-                                <i className="fas fa-circle"></i>
+                                <i className="fa-solid fa-circle"></i>
                             </span>
                         ))}
                     </span>

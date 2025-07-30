@@ -38,7 +38,7 @@ export default function ListViewItem({ team, list, item }: Props) {
             <td>
                 {item.done ? (
                     <a className="btn btn-success disabled" title="Erledigt">
-                        <i className="fas fa-fw fa-circle-check"></i>
+                        <i className="fa-solid fa-circle-check"></i>
                     </a>
                 ) : (
                     <a
@@ -46,7 +46,7 @@ export default function ListViewItem({ team, list, item }: Props) {
                         onClick={markDone}
                         title="Als erledigt markieren"
                     >
-                        <i className="far fa-fw fa-circle-check"></i>
+                        <i className="fa-regular fa-circle-check"></i>
                     </a>
                 )}
             </td>
@@ -59,7 +59,7 @@ export default function ListViewItem({ team, list, item }: Props) {
                     onClick={viewItem}
                     title="Ansehen oder bearbeiten"
                 >
-                    <i className="fas fa-fw fa-eye"></i>
+                    <i className="fa-solid fa-eye"></i>
                 </a>
             </td>
             <td>
@@ -68,7 +68,7 @@ export default function ListViewItem({ team, list, item }: Props) {
                     onClick={deleteItem}
                     title="Löschen"
                 >
-                    <i className="fas fa-fw fa-trash"></i>
+                    <i className="fa-solid fa-trash"></i>
                 </a>
             </td>
             <td className="debug-id">{item.id}</td>

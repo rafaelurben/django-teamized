@@ -64,13 +64,13 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                         onClick={handleSwitchToButtonClick}
                         title="Zu Team wechseln"
                     >
-                        <i className="far fa-fw fa-circle-check"></i>
+                        <i className="fa-regular fa-circle-check"></i>
                     </a>
                 </td>
             ) : (
                 <td>
                     <a className="btn btn-success disabled" title="Ausgewählt">
-                        <i className="fas fa-fw fa-circle-check"></i>
+                        <i className="fa-solid fa-circle-check"></i>
                     </a>
                 </td>
             )}
@@ -82,7 +82,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                         onClick={handleManageButtonClick}
                         title="Verwalten"
                     >
-                        <i className="fas fa-fw fa-pen-to-square"></i>
+                        <i className="fa-solid fa-pen-to-square"></i>
                     </a>
                 </td>
             ) : (
@@ -92,7 +92,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                         onClick={handleManageButtonClick}
                         title="Ansehen"
                     >
-                        <i className="fas fa-fw fa-eye"></i>
+                        <i className="fa-solid fa-eye"></i>
                     </a>
                 </td>
             )}
@@ -104,7 +104,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                         onClick={handleDeleteButtonClick}
                         title="Team löschen"
                     >
-                        <i className="fas fa-fw fa-trash"></i>
+                        <i className="fa-solid fa-trash"></i>
                     </a>
                 </td>
             ) : (
@@ -114,7 +114,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
                         onClick={handleLeaveButtonClick}
                         title="Team verlassen"
                     >
-                        <i className="fas fa-fw fa-right-from-bracket"></i>
+                        <i className="fa-solid fa-right-from-bracket"></i>
                     </a>
                 </td>
             )}
