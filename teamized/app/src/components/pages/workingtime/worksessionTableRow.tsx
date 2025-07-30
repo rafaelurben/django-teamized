@@ -45,13 +45,13 @@ export default function WorksessionTableRow({ team, session }: Props) {
                     {new Date(session.time_end!).toLocaleString()}
                     {session.is_created_via_tracking ? (
                         <IconTooltip
-                            icon="fas fa-stopwatch"
+                            icon="fa-solid fa-stopwatch"
                             title="Diese Sitzung wurde via Aufzeichnung erstellt."
                             className="ms-1"
                         ></IconTooltip>
                     ) : (
                         <IconTooltip
-                            icon="fas fa-pencil"
+                            icon="fa-solid fa-pencil"
                             title="Diese Sitzung wurde manuell erfasst."
                             className="ms-1"
                         ></IconTooltip>
@@ -71,7 +71,7 @@ export default function WorksessionTableRow({ team, session }: Props) {
                     onClick={handleEditButtonClick}
                     title="Sitzung bearbeiten"
                 >
-                    <i className="fas fa-fw fa-pen-to-square"></i>
+                    <i className="fa-solid fa-pen-to-square"></i>
                 </a>
             </td>
             {/* Action: Delete */}
@@ -81,7 +81,7 @@ export default function WorksessionTableRow({ team, session }: Props) {
                     onClick={handleDeleteButtonClick}
                     title="Sitzung löschen"
                 >
-                    <i className="fas fa-fw fa-trash"></i>
+                    <i className="fa-solid fa-trash"></i>
                 </a>
             </td>
             {/* ID */}

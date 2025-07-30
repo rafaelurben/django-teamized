@@ -71,7 +71,7 @@ export default function ListInfo({
                     value: (
                         <i
                             style={{ color: selectedList.color }}
-                            className="fas fa-circle small"
+                            className="fa-solid fa-circle small"
                         ></i>
                     ),
                 },

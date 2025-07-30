@@ -79,7 +79,7 @@ export default function CalendarInfo({
                     value: (
                         <i
                             style={{ color: selectedCalendar.color }}
-                            className="fas fa-circle small"
+                            className="fa-solid fa-circle small"
                         ></i>
                     ),
                 },

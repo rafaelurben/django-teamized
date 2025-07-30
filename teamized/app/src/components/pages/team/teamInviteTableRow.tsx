@@ -61,10 +61,10 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
             {/* Share */}
             <td>
                 <abbr title={invite.token} className="me-1" onClick={copyToken}>
-                    <i className="fas fa-key"></i>
+                    <i className="fa-solid fa-key"></i>
                 </abbr>
                 <abbr title={inviteURL} onClick={copyURL}>
-                    <i className="fas fa-link"></i>
+                    <i className="fa-solid fa-link"></i>
                 </abbr>
             </td>
             {/* Valid until */}
@@ -88,7 +88,7 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
                     onClick={handleEditButtonClick}
                     title="Einladung bearbeiten"
                 >
-                    <i className="fas fa-fw fa-pen-to-square"></i>
+                    <i className="fa-solid fa-pen-to-square"></i>
                 </a>
             </td>
             {/* Action: Delete */}
@@ -98,7 +98,7 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
                     onClick={handleDeleteButtonClick}
                     title="Einladung löschen"
                 >
-                    <i className="fas fa-fw fa-trash"></i>
+                    <i className="fa-solid fa-trash"></i>
                 </a>
             </td>
             {/* ID */}

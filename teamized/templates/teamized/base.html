@@ -62,7 +62,7 @@
                                 <li class="nav-item border-lg rounded border-secondary ms-2">
                                     <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}"
                                        title="{% translate "Startseite" %}">
-                                        <i class="fas fa-fw fa-home"></i>
+                                        <i class="fa-solid fa-home"></i>
                                         <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
                                     </a>
                                 </li>
@@ -70,7 +70,7 @@
                                     <a class="nav-link ms-1 me-1"
                                        href="{% url 'account:login' %}?next={% url 'teamized:app' %}"
                                        title="{% translate "Login" %}">
-                                        <i class="fas fa-fw fa-sign-in-alt"></i>
+                                        <i class="fa-solid fa-sign-in-alt"></i>
                                         <span class="d-lg-none ms-2">{% translate "Login" %}</span>
                                     </a>
                                 </li>
@@ -79,7 +79,7 @@
                                     <a class="nav-link ms-1 me-1"
                                        href="{% url 'account:home' %}?next={% url 'teamized:app' %}"
                                        title="{% translate "Account" %}">
-                                        <i class="fas fa-fw fa-user"></i>
+                                        <i class="fa-solid fa-user"></i>
                                         <span class="d-lg-none ms-2">{% translate "Account" %}:</span>
                                         <span class="navbar-text ms-0 ms-lg-2">{{ user.username }}</span>
                                     </a>
@@ -87,7 +87,7 @@
                                 <li class="nav-item border-lg rounded border-secondary ms-2">
                                     <a class="nav-link ms-1 me-1" href="{% url 'teamized:home' %}"
                                        title="{% translate "Startseite" %}">
-                                        <i class="fas fa-fw fa-home"></i>
+                                        <i class="fa-solid fa-home"></i>
                                         <span class="d-lg-none ms-2">{% translate "Startseite" %}</span>
                                     </a>
                                 </li>
@@ -97,7 +97,7 @@
                                         {% csrf_token %}
                                         <button class="btn nav-link ms-1 me-1" type="submit"
                                                 title="{% translate "Logout" %}">
-                                            <i class="fas fa-fw fa-sign-out-alt"></i>
+                                            <i class="fa-solid fa-sign-out-alt"></i>
                                             <span class="d-lg-none ms-2">{% translate "Logout" %}</span>
                                         </button>
                                     </form>

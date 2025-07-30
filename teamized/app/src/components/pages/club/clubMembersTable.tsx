@@ -40,7 +40,7 @@ export default function ClubMembersTable({
                         <span>E-Mail-Adresse</span>
                         <IconTooltip
                             title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
-                            icon="fas fa-circle-exclamation text-warning"
+                            icon="fa-solid fa-circle-exclamation text-warning"
                         />
                     </Tables.Th>
                     {isOwner && (

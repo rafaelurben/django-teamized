@@ -41,7 +41,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('home')}
                         onClick={selectPage('home')}
                     >
-                        <i className="fas fa-fw fa-home" />
+                        <i className="fa-solid fa-home" />
                         Startseite
                     </a>
                 </li>
@@ -51,7 +51,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('teamlist')}
                         onClick={selectPage('teamlist')}
                     >
-                        <i className="fas fa-fw fa-user-group" />
+                        <i className="fa-solid fa-user-group" />
                         Teams
                     </a>
                 </li>
@@ -62,7 +62,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('team')}
                         onClick={selectPage('team')}
                     >
-                        <i className="fas fa-fw fa-users-viewfinder" />
+                        <i className="fa-solid fa-users-viewfinder" />
                         Team
                     </a>
                 </li>
@@ -72,7 +72,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('workingtime')}
                         onClick={selectPage('workingtime')}
                     >
-                        <i className="fas fa-fw fa-business-time" />
+                        <i className="fa-solid fa-business-time" />
                         Arbeitszeit
                     </a>
                 </li>
@@ -82,7 +82,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('calendars')}
                         onClick={selectPage('calendars')}
                     >
-                        <i className="fas fa-fw fa-calendar-days" />
+                        <i className="fa-solid fa-calendar-days" />
                         Kalender
                     </a>
                 </li>
@@ -92,7 +92,7 @@ export default function AppSidebar({ user }: Props) {
                         className={getLinkClass('todo')}
                         onClick={selectPage('todo')}
                     >
-                        <i className="fas fa-fw fa-tasks" />
+                        <i className="fa-solid fa-tasks" />
                         To-do-Listen
                     </a>
                 </li>
@@ -105,7 +105,7 @@ export default function AppSidebar({ user }: Props) {
                                 className={getLinkClass('club')}
                                 onClick={selectPage('club')}
                             >
-                                <i className="fas fa-fw fa-people-group" />
+                                <i className="fa-solid fa-people-group" />
                                 Verein
                             </a>
                         </li>
@@ -115,7 +115,7 @@ export default function AppSidebar({ user }: Props) {
                                 className={getLinkClass('club_attendance')}
                                 onClick={selectPage('club_attendance')}
                             >
-                                <i className="fas fa-fw fa-table-list" />
+                                <i className="fa-solid fa-table-list" />
                                 Anwesenheit
                                 {/* New badge - remove later */}
                                 <span className="badge text-bg-warning ms-2">
@@ -153,7 +153,7 @@ export default function AppSidebar({ user }: Props) {
                             className="dropdown-item"
                             href={window.teamized_globals.account_url}
                         >
-                            <i className="me-2 fas fa-fw fa-user"></i>
+                            <i className="me-2 fa-solid fa-user"></i>
                             Account
                         </a>
                     </li>
@@ -164,7 +164,7 @@ export default function AppSidebar({ user }: Props) {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <i className="me-2 fas fa-fw fa-arrow-up-right-from-square"></i>
+                            <i className="me-2 fa-solid fa-arrow-up-right-from-square"></i>
                             Avatar
                         </a>
                     </li>
@@ -176,7 +176,7 @@ export default function AppSidebar({ user }: Props) {
                             className="dropdown-item"
                             href={window.teamized_globals.logout_url}
                         >
-                            <i className="me-2 fas fa-fw fa-arrow-right-from-bracket"></i>
+                            <i className="me-2 fa-solid fa-arrow-right-from-bracket"></i>
                             Ausloggen
                         </a>
                     </li>

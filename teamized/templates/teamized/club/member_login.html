@@ -7,7 +7,7 @@
 {% block menubar_items %}
     <li class="nav-item border-lg rounded border-secondary ms-2">
         <a class="nav-link ms-1 me-1" href="{% url 'teamized:club_login' clubslug=club.slug %}" title="Vereinsseite">
-            <i class="fas fa-fw fa-home"></i>
+            <i class="fa-solid fa-home"></i>
             <span class="d-lg-none ms-2">Vereinsseite</span>
         </a>
     </li>
@@ -23,7 +23,7 @@
         {% if can_login %}
             <p>Bitte klicke auf den Knopf, um dich einzuloggen:</p>
             <button class="btn btn-success" type="submit">
-                <i class="fas fa-fw fa-sign-in-alt"></i>
+                <i class="fa-solid fa-sign-in-alt"></i>
                 <span class="ms-2">Einloggen</span>
             </button>
         {% else %}
@@ -32,7 +32,7 @@
                 Bitte klicke auf den Knopf, um einen magischen Login-Link zu erhalten:
             </p>
             <button class="btn btn-primary" type="submit">
-                <i class="fas fa-fw fa-envelope"></i>
+                <i class="fa-solid fa-envelope"></i>
                 <span class="ms-2">Magischen Link anfordern</span>
             </button>
         {% endif %}

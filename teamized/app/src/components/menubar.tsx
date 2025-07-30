@@ -51,8 +51,8 @@ export default function AppMenubar({ teams, user }: Props) {
                         GeneralUtils.toggleSidebar();
                     }}
                 >
-                    <i className="fa-fw fa-solid fa-square-caret-left when-open"></i>
-                    <i className="fa-fw fa-solid fa-square-caret-right when-closed"></i>
+                    <i className="fa-solid fa-square-caret-left when-open"></i>
+                    <i className="fa-solid fa-square-caret-right when-closed"></i>
                     <span className="ms-1">Teamized</span>
                 </a>
                 {/* Navbar toggle for small devices */}
@@ -83,7 +83,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                     title="Zur Teamliste"
                                     href="#"
                                 >
-                                    <i className="fas fa-fw fa-user-group"></i>
+                                    <i className="fa-solid fa-user-group"></i>
                                 </a>
                             </li>
 
@@ -115,7 +115,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                     title="Zur Teamseite"
                                     href="#"
                                 >
-                                    <i className="fas fa-fw fa-users-viewfinder"></i>
+                                    <i className="fa-solid fa-users-viewfinder"></i>
                                 </a>
                             </li>
                         </div>
@@ -132,8 +132,8 @@ export default function AppMenubar({ teams, user }: Props) {
                                 <i
                                     className={
                                         appdata.loadInProgress
-                                            ? 'fas fa-fw fa-rotate fa-spin'
-                                            : 'fas fa-fw fa-rotate'
+                                            ? 'fa-solid fa-rotate fa-spin'
+                                            : 'fa-solid fa-rotate'
                                     }
                                 ></i>
                                 <span className="d-lg-none ms-2">
@@ -150,7 +150,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                 role="button"
                                 data-bs-toggle="dropdown"
                             >
-                                <i className="fas fa-fw fa-bug"></i>
+                                <i className="fa-solid fa-bug"></i>
                                 <span className="d-lg-none ms-2">
                                     DEBUG MENU
                                 </span>
@@ -210,7 +210,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                 href={globals.account_url}
                                 title="Account"
                             >
-                                <i className="fas fa-fw fa-user"></i>
+                                <i className="fa-solid fa-user"></i>
                                 <span className="d-lg-none ms-2">Account:</span>
                                 <span className="navbar-text ms-0 ms-lg-2">
                                     {user.username}
@@ -223,7 +223,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                 href={globals.home_url}
                                 title="Startseite"
                             >
-                                <i className="fas fa-fw fa-home"></i>
+                                <i className="fa-solid fa-home"></i>
                                 <span className="d-lg-none ms-2">
                                     Startseite
                                 </span>
@@ -235,7 +235,7 @@ export default function AppMenubar({ teams, user }: Props) {
                                 href={globals.logout_url}
                                 title="Logout"
                             >
-                                <i className="fas fa-fw fa-sign-out-alt"></i>
+                                <i className="fa-solid fa-sign-out-alt"></i>
                                 <span className="d-lg-none ms-2">Logout</span>
                             </a>
                         </li>

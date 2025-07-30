@@ -8,7 +8,7 @@
 
     {{ club.description | linebreaks | urlize }}
 
-    <hr/>
+    <hr />
 
 
     {% if logged_in_members %}
@@ -16,12 +16,12 @@
         <div class="d-flex flex-row gap-2">
             {% for data in logged_in_members %}
                 <a class="btn btn-success" href="{{ data.url }}">
-                    <i class="fas fa-fw fa-user"></i>
+                    <i class="fa-solid fa-user"></i>
                     <span class="ms-2">{{ data.member.first_name }} {{ data.member.last_name }}</span>
                 </a>
             {% endfor %}
         </div>
-        <hr/>
+        <hr />
     {% endif %}
 
     <h5>Mitglieder-Login</h5>
@@ -35,15 +35,15 @@
 
         <div class="col-12">
             <button class="btn btn-primary" type="submit">
-                <i class="fas fa-fw fa-envelope"></i>
+                <i class="fa-solid fa-envelope"></i>
                 <span class="ms-2">Magischen Link anfordern</span>
             </button>
         </div>
     </form>
 
-    <hr/>
+    <hr />
 
     <p class="mt-4">Auf der Suche nach dem Adminbereich? <a
-            href="{% url 'teamized:app' %}?p=club&t={{ club.team.uid }}">Hier entlang!</a></p>
+        href="{% url 'teamized:app' %}?p=club&t={{ club.team.uid }}">Hier entlang!</a></p>
 
 {% endblock content %}
