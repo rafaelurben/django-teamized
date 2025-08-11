@@ -41,7 +41,10 @@ Funding = "https://github.com/sponsors/rafaelurben"
 
 [tool.setuptools]
 include-package-data = true
-package-dir = { "" = "teamized" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["teamized*"]
 
 [tool.setuptools.dynamic]
 version = { file = ["_version.txt"] }
