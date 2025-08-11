@@ -1,3 +1,6 @@
 include LICENSE
 include README.md
 recursive-include teamized/ *
+recursive-exclude teamized/app/ *
+global-exclude __pycache__/*
+global-exclude *.pyc

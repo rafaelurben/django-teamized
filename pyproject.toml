@@ -8,7 +8,7 @@ description = "Ein Tool für Zeitmanagement und Projektplanung"
 readme = "README.md"
 authors = [{ name = "Rafael Urben", email = "github@rafaelurben.ch" }]
 maintainers = [{ name = "Rafael Urben", email = "github@rafaelurben.ch" }]
-license = { file = "LICENSE" }
+license-files = ["LICENSE"]
 classifiers = [
     "Environment :: Web Environment",
     "Framework :: Django",
@@ -17,7 +17,6 @@ classifiers = [
     "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -42,9 +41,7 @@ Funding = "https://github.com/sponsors/rafaelurben"
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.packages]
-find = { namespaces = false }
+package-dir = { "" = "teamized" }
 
 [tool.setuptools.dynamic]
 version = { file = ["_version.txt"] }
