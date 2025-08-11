@@ -18,7 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
-      - name: Build frontend
+      - name: "[Frontend] Install npm dependencies"
+        working-directory: teamized/app
+        run: npm ci
+      - name: "[Frontend] Build frontend"
         working-directory: teamized/app
         run: npm run build
       - name: Install python build dependencies
