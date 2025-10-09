@@ -31,7 +31,7 @@
     "eslint-plugin-simple-import-sort": "~12.1.1",
     "globals": "~16.4.0",
     "prettier": "~3.6.0",
-    "sweetalert2": "11.23.0",
+    "sweetalert2": "11.24.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.0",
@@ -40,7 +40,7 @@
     "webpack-cli": "~6.0.0"
   },
   "dependencies": {
-    "@types/react": "19.2.0",
+    "@types/react": "19.2.1",
     "@types/react-dom": "19.2.0",
     "bootstrap": "5.3.8",
     "jquery": "3.7.1",
