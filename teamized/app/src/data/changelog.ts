@@ -9,7 +9,10 @@ export interface ChangelogItem {
 export const CHANGELOG: ChangelogItem[] = [
     {
         date: '2025-11-02',
-        changes: ['NEU: Arbeitszeiten-Report als PDF'],
+        changes: [
+            'NEU: Arbeitszeiten-Report als PDF',
+            'Sicherheitsupdates & Bugfixes',
+        ],
     },
     {
         date: '2025-07-16',

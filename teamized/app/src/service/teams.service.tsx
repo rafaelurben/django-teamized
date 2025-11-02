@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import React from 'react';
 
 import * as TeamsAPI from '../api/teams';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
@@ -46,19 +47,40 @@ export async function createTeam(team: TeamRequestDTO) {
 export async function createTeamPopup() {
     return await fireAlert<Team>({
         title: 'Team erstellen',
-        html: `
-          <label class="swal2-input-label mt-0" for="swal-input-name">Name:</label>
-          <input type="text" id="swal-input-name" class="swal2-input" placeholder="Teamname">
-          <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-          <textarea id="swal-input-description" class="swal2-textarea" placeholder="Teambeschreibung"></textarea>
-        `,
+        html: (
+            <>
+                <label
+                    className="swal2-input-label mt-0"
+                    htmlFor="swal-input-name"
+                >
+                    Name:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-name"
+                    className="swal2-input"
+                    placeholder="Teamname"
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-description"
+                >
+                    Beschreibung:
+                </label>
+                <textarea
+                    id="swal-input-description"
+                    className="swal2-textarea"
+                    placeholder="Teambeschreibung"
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Erstellen',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const name = <string>$('#swal-input-name').val();
-            const description = <string>$('#swal-input-description').val();
+            const name = $('#swal-input-name').val() as string;
+            const description = $('#swal-input-description').val() as string;
 
             if (!name || !description) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
@@ -83,20 +105,41 @@ export async function editTeam(teamId: ID, team: Partial<TeamRequestDTO>) {
 export async function editTeamPopup(team: Team) {
     return await fireAlert<Team>({
         title: 'Team bearbeiten',
-        html: `
-          <p>Team: ${team.name}</p><hr />
-          <label class="swal2-input-label" for="swal-input-name">Name:</label>
-          <input type="text" id="swal-input-name" class="swal2-input" placeholder="${team.name}" value="${team.name}">
-          <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-          <textarea id="swal-input-description" class="swal2-textarea" placeholder="${team.description}">${team.description}</textarea>
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-name">
+                    Name:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-name"
+                    className="swal2-input"
+                    placeholder={team.name}
+                    defaultValue={team.name}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-description"
+                >
+                    Beschreibung:
+                </label>
+                <textarea
+                    id="swal-input-description"
+                    className="swal2-textarea"
+                    placeholder={team.description ?? ''}
+                    defaultValue={team.description ?? ''}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Aktualisieren',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const name = <string>$('#swal-input-name').val();
-            const description = <string>$('#swal-input-description').val();
+            const name = $('#swal-input-name').val() as string;
+            const description = $('#swal-input-description').val() as string;
 
             if (!name || !description) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
@@ -119,8 +162,16 @@ export async function deleteTeam(teamId: ID) {
 
 export async function deleteTeamPopup(team: Team) {
     return await doubleConfirmAlert(
-        'Willst du folgendes Team wirklich löschen?<br /><br />' +
-            `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br /><b>ID:</b> ${team.id}`,
+        <>
+            Willst du folgendes Team wirklich löschen?
+            <br />
+            <br />
+            <b>Name:</b> {team.name}
+            <br />
+            <b>Beschreibung:</b> {team.description}
+            <br />
+            <b>ID:</b> {team.id}
+        </>,
         async () => await deleteTeam(team.id)
     );
 }
@@ -135,8 +186,16 @@ export async function leaveTeam(teamId: ID) {
 
 export async function leaveTeamPopup(team: Team) {
     return await confirmAlert(
-        'Willst du folgendes Team wirklich verlassen?<br /><br />' +
-            `<b>Name:</b> ${team.name}<br /><b>Beschreibung: </b>${team.description}<br /><b>ID:</b> ${team.id}`,
+        <>
+            Willst du folgendes Team wirklich verlassen?
+            <br />
+            <br />
+            <b>Name:</b> {team.name}
+            <br />
+            <b>Beschreibung: </b> {team.description}
+            <br />
+            <b>ID:</b> {team.id}
+        </>,
         async () => await leaveTeam(team.id)
     );
 }
@@ -169,14 +228,29 @@ export async function editMember(
 
 export async function promoteMemberPopup(team: Team, member: Member) {
     return await confirmAlert(
-        `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) zu einem Administrator des Teams ${team.name} befördern?`,
+        <>
+            Willst du das Mitglied{' '}
+            <b>
+                {member.user.username} ({member.user.last_name}{' '}
+                {member.user.first_name})
+            </b>{' '}
+            zu einem Administrator des Teams <b>{team.name}</b> befördern?
+        </>,
         async () => await editMember(team.id, member.id, { role: 'admin' })
     );
 }
 
 export async function demoteMemberPopup(team: Team, member: Member) {
     return await confirmAlert(
-        `Willst du '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) von einem Administrator zu einem Mitglied des Teams ${team.name} degradieren?`,
+        <>
+            Willst du{' '}
+            <b>
+                {member.user.username} ({member.user.last_name}{' '}
+                {member.user.first_name})
+            </b>{' '}
+            von einem Administrator zu einem Mitglied des Teams {team.name}{' '}
+            degradieren?
+        </>,
         async () => await editMember(team.id, member.id, { role: 'member' })
     );
 }
@@ -193,7 +267,14 @@ export async function deleteMember(teamId: ID, memberId: ID) {
 
 export async function deleteMemberPopup(team: Team, member: Member) {
     return await confirmAlert(
-        `Willst du das Mitglied '${member.user.username}' (${member.user.last_name} ${member.user.first_name}) aus dem Team ${team.name} entfernen?`,
+        <>
+            Willst du das Mitglied{' '}
+            <b>
+                {member.user.username} ({member.user.last_name}{' '}
+                {member.user.first_name})
+            </b>{' '}
+            aus dem Team {team.name} entfernen?
+        </>,
         async () => await deleteMember(team.id, member.id)
     );
 }
@@ -219,23 +300,53 @@ export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
 export async function createInvitePopup(team: Team) {
     return await fireAlert<Invite>({
         title: `Einladung erstellen`,
-        html: `
-          <p>Team: ${team.name}</p><hr />
-          <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
-          <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="z.B. Namen der Empfänger"></textarea>
-          <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
-          <input type="number" id="swal-input-uses_left" class="swal2-input" value="1">
-          <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
-          <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-note">
+                    Notizen:
+                </label>
+                <textarea
+                    id="swal-input-note"
+                    className="swal2-textarea"
+                    autoFocus
+                    placeholder="z.B. Namen der Empfänger"
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-uses_left"
+                >
+                    Anzahl Benutzungen:
+                </label>
+                <input
+                    type="number"
+                    id="swal-input-uses_left"
+                    className="swal2-input"
+                    defaultValue={1}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-valid_until"
+                >
+                    Gültig bis:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-valid_until"
+                    className="swal2-input"
+                    defaultValue={''}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Erstellen',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const note = <string>$('#swal-input-note').val();
-            const uses_left = <number>$('#swal-input-uses_left').val();
-            const valid_until = <string>$('#swal-input-valid_until').val();
+            const note = $('#swal-input-note').val() as string;
+            const uses_left = $('#swal-input-uses_left').val() as number;
+            const valid_until = $('#swal-input-valid_until').val() as string;
 
             if (!uses_left || !note) {
                 Swal.showValidationMessage(
@@ -273,23 +384,54 @@ export async function editInvite(
 export async function editInvitePopup(team: Team, invite: Invite) {
     return await fireAlert({
         title: 'Einladung bearbeiten',
-        html: `
-          <p>Team: ${team.name}</p><hr />
-          <label class="swal2-input-label" for="swal-input-note">Notizen:</label>
-          <textarea id="swal-input-note" class="swal2-textarea" autofocus placeholder="${invite.note}">${invite.note}</textarea>
-          <label class="swal2-input-label" for="swal-input-uses_left">Anzahl Benutzungen:</label>
-          <input type="number" id="swal-input-uses_left" class="swal2-input" value="${invite.uses_left}" placeholder="${invite.uses_left}">
-          <label class="swal2-input-label" for="swal-input-valid_until">Gültig bis:</label>
-          <input type="datetime-local" id="swal-input-valid_until" class="swal2-input" value="${localInputFormat(invite.valid_until)}">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-note">
+                    Notizen:
+                </label>
+                <textarea
+                    id="swal-input-note"
+                    className="swal2-textarea"
+                    autoFocus
+                    placeholder={invite.note}
+                    defaultValue={invite.note}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-uses_left"
+                >
+                    Anzahl Benutzungen:
+                </label>
+                <input
+                    type="number"
+                    id="swal-input-uses_left"
+                    className="swal2-input"
+                    defaultValue={invite.uses_left}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-valid_until"
+                >
+                    Gültig bis:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-valid_until"
+                    className="swal2-input"
+                    defaultValue={localInputFormat(invite.valid_until)}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Aktualisieren',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const note = <string>$('#swal-input-note').val();
-            const uses_left = <number>$('#swal-input-uses_left').val();
-            const valid_until = <string>$('#swal-input-valid_until').val();
+            const note = $('#swal-input-note').val() as string;
+            const uses_left = $('#swal-input-uses_left').val() as number;
+            const valid_until = $('#swal-input-valid_until').val() as string;
 
             if (!uses_left || !note) {
                 Swal.showValidationMessage(
@@ -318,8 +460,14 @@ export async function deleteInvite(teamId: ID, inviteId: ID) {
 
 export async function deleteInvitePopup(team: Team, invite: Invite) {
     return await confirmAlert(
-        'Willst du folgende Einladung wirklich löschen?<br /><br />' +
-            `<b>Notiz:</b> ${invite.note} <br /><b>Token: </b>${invite.token}`,
+        <>
+            Willst du folgende Einladung wirklich löschen?
+            <br />
+            <br />
+            <b>Notiz:</b> {invite.note}
+            <br />
+            <b>Token:</b> {invite.token}
+        </>,
         async () => await deleteInvite(team.id, invite.id)
     );
 }
@@ -348,10 +496,19 @@ export async function checkInvitePopup(token: string) {
     if (data.status === 'invite-valid') {
         const team = data.team;
         return await confirmAlert(
-            `Möchtest du folgendem Team beitreten?<br /><br />
-              <b>Name:</b> ${team.name}<br />
-              <b>Beschreibung: </b>${team.description}<br />
-              <b>Anzahl Mitglieder: </b>${team.membercount}<br />`,
+            <>
+                Möchtest du folgendem Team beitreten?
+                <br />
+                <br />
+                <b>Name:</b> {team.name}
+                <br />
+                <b>Beschreibung: </b>
+                {team.description}
+                <br />
+                <b>Anzahl Mitglieder: </b>
+                {team.membercount}
+                <br />
+            </>,
             async () => {
                 return await acceptInvite(token);
             },

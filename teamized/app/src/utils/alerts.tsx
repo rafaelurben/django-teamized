@@ -3,14 +3,23 @@
  * https://sweetalert2.github.io/
  */
 
-import type { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
-import Swal from 'sweetalert2';
+import type { ReactNode } from 'react';
+import React from 'react';
+import type {
+    SweetAlertOptions as BaseSweetAlertOptions,
+    SweetAlertResult,
+} from 'sweetalert2';
+import { default as OrigSwal } from 'sweetalert2';
+import withReactContent, {
+    ReactSweetAlertOptions as SweetAlertOptions,
+} from 'sweetalert2-react-content';
 
 import { ErrorResponse } from '../interfaces/responses/errorResponse';
 import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
 import { getSwalTheme } from '../service/settings.service';
 
-export { Swal, SweetAlertOptions, SweetAlertResult };
+export const Swal = withReactContent(OrigSwal);
+export type { SweetAlertOptions, SweetAlertResult };
 
 /**
  * Wrapper for Swal.fire() to set the theme
@@ -19,7 +28,7 @@ export function fireAlert<T>(options: SweetAlertOptions = {}) {
     return Swal.fire<T>({
         theme: getSwalTheme(),
         ...options,
-    });
+    } as BaseSweetAlertOptions); // due to typing issues with sweetalert2-react-content
 }
 
 /**
@@ -97,7 +106,7 @@ export function errorAlert(
 ) {
     return fireAlert({
         title: title,
-        html: message,
+        text: message,
         icon: 'error',
         ...options,
     } satisfies SweetAlertOptions);
@@ -117,7 +126,7 @@ export function infoAlert(
 ) {
     return fireAlert({
         title: title,
-        html: message,
+        text: message,
         icon: 'info',
         ...options,
     } satisfies SweetAlertOptions);
@@ -171,14 +180,14 @@ export function successAlert(
 /**
  * Create a confirmation alert (action required)
  *
- * @param {*} html content of the alert
+ * @param {*} content content of the alert
  * @param {*} preConfirm function that is called when the user confirms the alert
  * @param {String} title
  * @param {object} options
  * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
  */
 export async function confirmAlert<T>(
-    html: string,
+    content: ReactNode,
     preConfirm: (() => Promise<T>) | null,
     title: string = '',
     options: SweetAlertOptions = {}
@@ -186,7 +195,7 @@ export async function confirmAlert<T>(
     const data: SweetAlertOptions = {
         theme: getSwalTheme(),
         title: title || 'Sicher?',
-        html: html,
+        html: content as string,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -206,19 +215,23 @@ export async function confirmAlert<T>(
 /**
  * Same as confirmAlert, but asks twice for confirmation
  *
- * @param {*} html
+ * @param {*} content
  * @param {*} preConfirm function that is called when the user confirms the alert twice
  * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
  */
 export async function doubleConfirmAlert<T>(
-    html: string,
+    content: ReactNode,
     preConfirm: () => Promise<T>
 ) {
-    const firstAlertResult = await confirmAlert<null>(html, null, 'Sicher?');
+    const firstAlertResult = await confirmAlert<null>(content, null, 'Sicher?');
     if (firstAlertResult.isConfirmed) {
         return await confirmAlert<T>(
-            html +
-                "<br /><br /><b class='text-danger'>ES GIBT KEIN ZURÜCK!</b>",
+            <>
+                {content}
+                <br />
+                <br />
+                <b className="text-danger">ES GIBT KEIN ZURÜCK!</b>
+            </>,
             preConfirm,
             'Absolut sicher?'
         );

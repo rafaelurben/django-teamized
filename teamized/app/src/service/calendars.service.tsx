@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import React from 'react';
 
 import * as CalendarAPI from '../api/calendar';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
@@ -112,29 +113,56 @@ export async function createCalendar(teamId: ID, calendar: CalendarRequestDTO) {
 export async function createCalendarPopup(team: Team) {
     return await fireAlert<Calendar>({
         title: `Kalender erstellen`,
-        html: `
-            <p>Team: ${team.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-name">Name:</label>
-            <input type="text" id="swal-input-name" class="swal2-input" placeholder="Kalendername">
-            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-            <textarea id="swal-input-description" class="swal2-textarea" placeholder="Kalenderbeschreibung"></textarea>
-            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-name">
+                    Name:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-name"
+                    className="swal2-input"
+                    placeholder="Kalendername"
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-description"
+                >
+                    Beschreibung:
+                </label>
+                <textarea
+                    id="swal-input-description"
+                    className="swal2-textarea"
+                    placeholder="Kalenderbeschreibung"
+                ></textarea>
+                <label className="swal2-input-label" htmlFor="swal-input-color">
+                    Farbe:
+                </label>
+                <input
+                    type="color"
+                    id="swal-input-color"
+                    className="swal2-input form-control-color"
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Erstellen',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const name = (<HTMLInputElement>(
-                document.getElementById('swal-input-name')
-            )).value;
-            const description = (<HTMLInputElement>(
-                document.getElementById('swal-input-description')
-            )).value;
-            const color = (<HTMLInputElement>(
-                document.getElementById('swal-input-color')
-            )).value;
+            const name = (
+                document.getElementById('swal-input-name') as HTMLInputElement
+            ).value;
+            const description = (
+                document.getElementById(
+                    'swal-input-description'
+                ) as HTMLTextAreaElement
+            ).value;
+            const color = (
+                document.getElementById('swal-input-color') as HTMLInputElement
+            ).value;
 
             if (!name) {
                 Swal.showValidationMessage('Bitte gib einen Namen ein');
@@ -170,29 +198,59 @@ export async function editCalendar(
 export async function editCalendarPopup(team: Team, calendar: Calendar) {
     return await fireAlert<Calendar>({
         title: `Kalender bearbeiten`,
-        html: `
-            <p>Team: ${team.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-name">Name:</label>
-            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${calendar.name}" value="${calendar.name}">
-            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${calendar.description}">${calendar.description}</textarea>
-            <label class="swal2-input-label" for="swal-input-color">Farbe:</label>
-            <input type="color" id="swal-input-color" class="swal2-input form-control-color" value="${calendar.color}">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-name">
+                    Name:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-name"
+                    className="swal2-input"
+                    placeholder={calendar.name}
+                    defaultValue={calendar.name}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-description"
+                >
+                    Beschreibung:
+                </label>
+                <textarea
+                    id="swal-input-description"
+                    className="swal2-textarea"
+                    placeholder={calendar.description}
+                    defaultValue={calendar.description}
+                />
+                <label className="swal2-input-label" htmlFor="swal-input-color">
+                    Farbe:
+                </label>
+                <input
+                    type="color"
+                    id="swal-input-color"
+                    className="swal2-input form-control-color"
+                    defaultValue={calendar.color}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Speichern',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const name = (<HTMLInputElement>(
-                document.getElementById('swal-input-name')
-            )).value;
-            const description = (<HTMLInputElement>(
-                document.getElementById('swal-input-description')
-            )).value;
-            const color = (<HTMLInputElement>(
-                document.getElementById('swal-input-color')
-            )).value;
+            const name = (
+                document.getElementById('swal-input-name') as HTMLInputElement
+            ).value;
+            const description = (
+                document.getElementById(
+                    'swal-input-description'
+                ) as HTMLTextAreaElement
+            ).value;
+            const color = (
+                document.getElementById('swal-input-color') as HTMLInputElement
+            ).value;
 
             if (!name) {
                 Swal.showValidationMessage('Bitte gib einen Namen ein!');
@@ -219,11 +277,14 @@ export async function deleteCalendar(teamId: ID, calendarId: ID) {
 
 export async function deleteCalendarPopup(team: Team, calendar: Calendar) {
     return await doubleConfirmAlert(
-        `Willst du folgenden Kalender wirklich löschen?<br /><br />
-            <b>Name:</b> ${calendar.name} <br />
-            <b>Beschreibung: </b>${calendar.description} <br />
-            <b>Anzahl Events: </b>${Object.keys(calendar.events).length}
-        `,
+        <>
+            Willst du folgenden Kalender wirklich löschen?
+            <br />
+            <br />
+            <b>Name:</b> {calendar.name} <br />
+            <b>Beschreibung: </b> {calendar.description} <br />
+            <b>Anzahl Events: </b> {Object.keys(calendar.events).length}
+        </>,
         async () => await deleteCalendar(team.id, calendar.id)
     );
 }
@@ -236,19 +297,43 @@ export async function showCalendarSubscriptionPopup(calendar: Calendar) {
 
     fireAlert({
         title: 'Kalender abonnieren',
-        html: `
-    Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
-    <hr>
-    <h5>1) Webcal-Link</h5>
-    <p>Auf allen Apple-Geräten sowie weiteren unterstützten Geräten kannst du Webcal-Links direkt in deiner Kalender-App
-    öffnen. Bei manchen anderen Apps (z. B. Google Calendar) musst du den Link kopieren und manuell einfügen.</p>
-    <a href="${urlWebcal}" target="_blank" class="btn btn-outline-info">Webcal-URL</a>
-    <hr>
-    <h5>2) HTTP(S)-Link</h5>
-    <p>Falls dein Gerät oder deine App Webcal-Links nicht unterstützt, kannst du auch folgenden Link verwenden. Füge
-    diesen im "Kalender abonnieren"-Dialog (o. ä.) deiner Kalenderapp ein.</p>
-    <input class="swal2-input" type="url" readonly value="${urlHTTP}">
-  `,
+        html: (
+            <>
+                <p>
+                    Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
+                </p>
+                <hr />
+                <h5>1) Webcal-Link</h5>
+                <p>
+                    Auf allen Apple-Geräten sowie weiteren unterstützten Geräten
+                    kannst du Webcal-Links direkt in deiner Kalender-App öffnen.
+                    Bei manchen anderen Apps (z. B. Google Calendar) musst du
+                    den Link kopieren und manuell einfügen.
+                </p>
+                <a
+                    href={urlWebcal}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-outline-info"
+                >
+                    Webcal-URL
+                </a>
+                <hr />
+                <h5>2) HTTP(S)-Link</h5>
+                <p>
+                    Falls dein Gerät oder deine App Webcal-Links nicht
+                    unterstützt, kannst du auch folgenden Link verwenden. Füge
+                    diesen im &#34;Kalender abonnieren&#34;-Dialog (o. ä.)
+                    deiner Kalenderapp ein.
+                </p>
+                <input
+                    className="swal2-input"
+                    type="url"
+                    readOnly
+                    defaultValue={urlHTTP}
+                />
+            </>
+        ),
         showCancelButton: true,
         showConfirmButton: false,
         cancelButtonText: 'Schliessen',
@@ -258,16 +343,16 @@ export async function showCalendarSubscriptionPopup(calendar: Calendar) {
 // Event SWAL utils
 
 function _updateFullDayToggle(noDateUpdate: boolean = false) {
-    const fullDay = <boolean>$('#swal-input-fullday').prop('checked');
+    const fullDay = $('#swal-input-fullday').prop('checked') as boolean;
     if (fullDay) {
         $('.fullday-only').show();
         $('.partday-only').hide();
         if (!noDateUpdate) {
             $('#swal-input-dstart').val(
-                localInputFormat(<string>$('#swal-input-dtstart').val(), true)
+                localInputFormat($('#swal-input-dtstart').val() as string, true)
             );
             $('#swal-input-dend').val(
-                localInputFormat(<string>$('#swal-input-dtend').val(), true)
+                localInputFormat($('#swal-input-dtend').val() as string, true)
             );
         }
     } else {
@@ -276,13 +361,13 @@ function _updateFullDayToggle(noDateUpdate: boolean = false) {
         if (!noDateUpdate) {
             $('#swal-input-dtstart').val(
                 localInputFormat(
-                    isoFormat(<string>$('#swal-input-dstart').val()),
+                    isoFormat($('#swal-input-dstart').val() as string),
                     false
                 )
             );
             $('#swal-input-dtend').val(
                 localInputFormat(
-                    isoFormat(<string>$('#swal-input-dend').val()),
+                    isoFormat($('#swal-input-dend').val() as string),
                     false
                 )
             );
@@ -325,29 +410,125 @@ async function generalizedEventPopup({
 
     return await fireAlert<CalendarEvent>({
         title: titleText,
-        html: `
-            <p>Team: ${team.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-calendar">Kalender:</label>
-            <select id="swal-input-calendar" class="swal2-input swal2-select"></select><hr />
-            <label class="swal2-input-label" for="swal-input-name">Name:</label>
-            <input type="text" id="swal-input-name" class="swal2-input" placeholder="${prefilledEvent.name}" value="${prefilledEvent.name}">
-            <label class="swal2-input-label" for="swal-input-description">Beschreibung:</label>
-            <textarea id="swal-input-description" class="swal2-textarea" placeholder="${prefilledEvent.description}">${prefilledEvent.description}</textarea>
-            <label class="swal2-input-label" for="swal-input-location">Ort:</label>
-            <input type="text" id="swal-input-location" class="swal2-input" placeholder="${prefilledEvent.location}" value="${prefilledEvent.location}">
-            <label for="swal-input-fullday" class="swal2-checkbox d-flex">
-                <input type="checkbox" ${prefilledEvent.fullday ? 'checked' : ''} id="swal-input-fullday">
-                <span class="swal2-label">Ganztägig</span>
-            </label><hr />
-            <label class="swal2-input-label fullday-only" for="swal-input-dstart">Von:</label>
-            <input type="date" id="swal-input-dstart" class="swal2-input fullday-only" value="${dstart}">
-            <label class="swal2-input-label fullday-only" for="swal-input-dend">Bis:</label>
-            <input type="date" id="swal-input-dend" class="swal2-input fullday-only" value="${dend}">
-            <label class="swal2-input-label partday-only" for="swal-input-dtstart">Von:</label>
-            <input type="datetime-local" id="swal-input-dtstart" class="swal2-input partday-only" value="${dtstart}">
-            <label class="swal2-input-label partday-only" for="swal-input-dtend">Bis:</label>
-            <input type="datetime-local" id="swal-input-dtend" class="swal2-input partday-only" value="${dtend}">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-calendar"
+                >
+                    Kalender:
+                </label>
+                <select
+                    id="swal-input-calendar"
+                    className="swal2-input swal2-select"
+                    defaultValue={selectedCalendarId}
+                >
+                    {calendars.map((calendar) => (
+                        <option key={calendar.id} value={calendar.id}>
+                            {calendar.name}
+                        </option>
+                    ))}
+                </select>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-name">
+                    Name:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-name"
+                    className="swal2-input"
+                    placeholder={prefilledEvent.name}
+                    defaultValue={prefilledEvent.name}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-description"
+                >
+                    Beschreibung:
+                </label>
+                <textarea
+                    id="swal-input-description"
+                    className="swal2-textarea"
+                    placeholder={prefilledEvent.description}
+                    defaultValue={prefilledEvent.description}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-location"
+                >
+                    Ort:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-location"
+                    className="swal2-input"
+                    placeholder={prefilledEvent.location}
+                    defaultValue={prefilledEvent.location}
+                />
+                <label
+                    htmlFor="swal-input-fullday"
+                    className="swal2-checkbox d-flex"
+                >
+                    <input
+                        type="checkbox"
+                        id="swal-input-fullday"
+                        defaultChecked={prefilledEvent.fullday}
+                    />
+                    <span className="swal2-label">Ganztägig</span>
+                </label>
+                <hr />
+                <label
+                    className="swal2-input-label fullday-only"
+                    htmlFor="swal-input-dstart"
+                >
+                    Von:
+                </label>
+                <input
+                    type="date"
+                    id="swal-input-dstart"
+                    className="swal2-input fullday-only"
+                    defaultValue={dstart}
+                />
+                <label
+                    className="swal2-input-label fullday-only"
+                    htmlFor="swal-input-dend"
+                >
+                    Bis:
+                </label>
+                <input
+                    type="date"
+                    id="swal-input-dend"
+                    className="swal2-input fullday-only"
+                    defaultValue={dend}
+                />
+                <label
+                    className="swal2-input-label partday-only"
+                    htmlFor="swal-input-dtstart"
+                >
+                    Von:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-dtstart"
+                    className="swal2-input partday-only"
+                    defaultValue={dtstart}
+                />
+                <label
+                    className="swal2-input-label partday-only"
+                    htmlFor="swal-input-dtend"
+                >
+                    Bis:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-dtend"
+                    className="swal2-input partday-only"
+                    defaultValue={dtend}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: confirmButtonText,
@@ -355,27 +536,13 @@ async function generalizedEventPopup({
         didOpen: () => {
             _updateFullDayToggle(true);
             $('#swal-input-fullday').on('change', () => _updateFullDayToggle());
-
-            const $calendarsInput = $('#swal-input-calendar');
-            $calendarsInput.html(
-                calendars
-                    .map(
-                        (calendar) => `
-                                <option value="${calendar.id}">
-                                    ${calendar.name}
-                                </option>
-                            `
-                    )
-                    .join('')
-            );
-            $calendarsInput.val(selectedCalendarId);
         },
         preConfirm: async () => {
-            const calendarId = <ID>$('#swal-input-calendar').val();
-            const name = <string>$('#swal-input-name').val();
-            const description = <string>$('#swal-input-description').val();
-            const location = <string>$('#swal-input-location').val();
-            const fullday = <boolean>$('#swal-input-fullday').prop('checked');
+            const calendarId = $('#swal-input-calendar').val() as ID;
+            const name = $('#swal-input-name').val() as string;
+            const description = $('#swal-input-description').val() as string;
+            const location = $('#swal-input-location').val() as string;
+            const fullday = $('#swal-input-fullday').prop('checked') as boolean;
 
             if (!name) {
                 Swal.showValidationMessage('Es wird ein Name benötigt!');
@@ -383,8 +550,8 @@ async function generalizedEventPopup({
             }
 
             if (fullday) {
-                const dstart = <string>$('#swal-input-dstart').val();
-                const dend = <string>$('#swal-input-dend').val();
+                const dstart = $('#swal-input-dstart').val() as string;
+                const dend = $('#swal-input-dend').val() as string;
 
                 if (!dstart || !dend) {
                     Swal.showValidationMessage(
@@ -413,8 +580,8 @@ async function generalizedEventPopup({
                 Swal.showLoading();
                 return await action(calendarId, newEvent);
             } else {
-                const dtstart = <string>$('#swal-input-dtstart').val();
-                const dtend = <string>$('#swal-input-dtend').val();
+                const dtstart = $('#swal-input-dtstart').val() as string;
+                const dtend = $('#swal-input-dtend').val() as string;
 
                 if (!dtstart || !dtend) {
                     Swal.showValidationMessage(
@@ -590,8 +757,14 @@ export async function deleteEventPopup(
     event: CalendarEvent
 ) {
     return await confirmAlert(
-        'Willst du folgendes Ereignis wirklich löschen?<br /><br />' +
-            `<b>Name:</b> ${event.name} <br /><b>Beschreibung: </b>${event.description}`,
+        <>
+            Willst du folgendes Ereignis wirklich löschen?
+            <br />
+            <br />
+            <b>Name:</b> {event.name} <br />
+            <b>Beschreibung: </b>
+            {event.description}
+        </>,
         async () => await deleteEvent(team.id, calendar.id, event.id)
     );
 }

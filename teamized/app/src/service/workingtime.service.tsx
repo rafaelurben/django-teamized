@@ -3,6 +3,7 @@
  */
 
 import $ from 'jquery';
+import React from 'react';
 
 import * as WorkingtimeAPI from '../api/workingtime';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
@@ -54,29 +55,58 @@ export async function createWorkSessionPopup(team: Team) {
     const _dt = localInputFormat(new Date());
     return await fireAlert<Worksession>({
         title: `Sitzung erstellen`,
-        html: `
-            <p>Team: ${team.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-note">Notiz:</label>
-            <textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz"></textarea>
-            <label class="swal2-input-label" for="swal-input-dtstart">Von:</label>
-            <input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${_dt}">
-            <label class="swal2-input-label" for="swal-input-dtend">Bis:</label>
-            <input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${_dt}">
-        `,
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-note">
+                    Notiz:
+                </label>
+                <textarea
+                    id="swal-input-note"
+                    className="swal2-textarea"
+                    placeholder="Notiz"
+                    defaultValue={''}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-dtstart"
+                >
+                    Von:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-dtstart"
+                    className="swal2-input"
+                    defaultValue={_dt}
+                />
+                <label className="swal2-input-label" htmlFor="swal-input-dtend">
+                    Bis:
+                </label>
+                <input
+                    type="datetime-local"
+                    id="swal-input-dtend"
+                    className="swal2-input"
+                    defaultValue={_dt}
+                />
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Erstellen',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const note = (<HTMLInputElement>(
-                document.getElementById('swal-input-note')
-            )).value;
-            const dtstart = (<HTMLInputElement>(
-                document.getElementById('swal-input-dtstart')
-            )).value;
-            const dtend = (<HTMLInputElement>(
-                document.getElementById('swal-input-dtend')
-            )).value;
+            const note = (
+                document.getElementById('swal-input-note') as HTMLInputElement
+            ).value;
+            const dtstart = (
+                document.getElementById(
+                    'swal-input-dtstart'
+                ) as HTMLInputElement
+            ).value;
+            const dtend = (
+                document.getElementById('swal-input-dtend') as HTMLInputElement
+            ).value;
 
             if (!dtstart || !dtend) {
                 Swal.showValidationMessage(
@@ -119,35 +149,77 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
         session.time_end !== null ? localInputFormat(session.time_end) : '';
     return await fireAlert<Worksession>({
         title: `Sitzung bearbeiten`,
-        html:
-            `
-            <p>Team: ${team.name}</p><hr />
-            <label class="swal2-input-label" for="swal-input-note">Notiz:</label>
-            <textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>` +
-            (session.is_created_via_tracking
-                ? '<hr><p class="swal2-text mt-3 mb-0 small opacity-50 px-3">Start- und Endzeit können nur bei manuell erfassten Sitzungen geändert werden.</p>'
-                : `
-                    <label class="swal2-input-label" for="swal-input-dtstart">Von:</label>
-                    <input type="datetime-local" id="swal-input-dtstart" class="swal2-input" value="${dtstart}">
-                    <label class="swal2-input-label" for="swal-input-dtend">Bis:</label>
-                    <input type="datetime-local" id="swal-input-dtend" class="swal2-input" value="${dtend}">
-                    `),
+        html: (
+            <>
+                <p>Team: {team.name}</p>
+                <hr />
+                <label className="swal2-input-label" htmlFor="swal-input-note">
+                    Notiz:
+                </label>
+                <textarea
+                    id="swal-input-note"
+                    className="swal2-textarea"
+                    placeholder="Notiz"
+                    defaultValue={session.note}
+                />
+                {session.is_created_via_tracking ? (
+                    <>
+                        <hr />
+                        <p className="swal2-text mt-3 mb-0 small opacity-50 px-3">
+                            Start- und Endzeit können nur bei manuell erfassten
+                            Sitzungen geändert werden.
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <label
+                            className="swal2-input-label"
+                            htmlFor="swal-input-dtstart"
+                        >
+                            Von:
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="swal-input-dtstart"
+                            className="swal2-input"
+                            defaultValue={dtstart}
+                        />
+                        <label
+                            className="swal2-input-label"
+                            htmlFor="swal-input-dtend"
+                        >
+                            Bis:
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="swal-input-dtend"
+                            className="swal2-input"
+                            defaultValue={dtend}
+                        />
+                    </>
+                )}
+            </>
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Speichern',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const note = (<HTMLInputElement>(
-                document.getElementById('swal-input-note')
-            )).value;
+            const note = (
+                document.getElementById('swal-input-note') as HTMLInputElement
+            ).value;
 
             if (!session.is_created_via_tracking) {
-                dtstart = (<HTMLInputElement>(
-                    document.getElementById('swal-input-dtstart')
-                )).value;
-                dtend = (<HTMLInputElement>(
-                    document.getElementById('swal-input-dtend')
-                )).value;
+                dtstart = (
+                    document.getElementById(
+                        'swal-input-dtstart'
+                    ) as HTMLInputElement
+                ).value;
+                dtend = (
+                    document.getElementById(
+                        'swal-input-dtend'
+                    ) as HTMLInputElement
+                ).value;
                 if (!dtstart || !dtend) {
                     Swal.showValidationMessage(
                         'Start- und Endzeit sind Pflichtfelder!'
@@ -178,8 +250,12 @@ export async function deleteWorkSession(teamId: ID, sessionId: ID) {
 
 export async function deleteWorkSessionPopup(team: Team, session: Worksession) {
     return await confirmAlert(
-        'Willst du folgende Sitzung wirklich löschen?<br /><br />' +
-            `<b>Notiz:</b> ${session.note}`,
+        <>
+            Willst du folgende Sitzung wirklich löschen?
+            <br />
+            <br />
+            <b>Notiz:</b> {session.note}
+        </>,
         async () => await deleteWorkSession(team.id, session.id)
     );
 }
@@ -249,13 +325,20 @@ export async function renameWorkSession(
 export async function renameWorkSessionPopup(team: Team, session: Worksession) {
     return await fireAlert<Worksession>({
         title: `Sitzung umbenennen`,
-        html: `<textarea id="swal-input-note" class="swal2-textarea" placeholder="Notiz">${session.note}</textarea>`,
+        html: (
+            <textarea
+                id="swal-input-note"
+                className="swal2-textarea"
+                placeholder="Notiz"
+                defaultValue={session.note}
+            />
+        ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Speichern',
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
-            const note = <string>$('#swal-input-note').val();
+            const note = $('#swal-input-note').val() as string;
 
             Swal.showLoading();
             return await renameWorkSession(team.id, session.id, note);
