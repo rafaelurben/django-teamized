@@ -22,7 +22,7 @@ urlpatterns = [
     path("manifest.json", views.manifest, name="manifest"),
     path("api/", include("teamized.api.urls")),
     # Calendar .ics file (public, but must know uuid token)
-    path("calendar/<uuid:uuid>.ics", views.calendar_ics, name="calendar_ics"),
+    path("calendar/<uuid:ics_uuid>.ics", views.calendar_ics, name="calendar_ics"),
     # 404 error page
     re_path(".*", views.notfound),
 ]

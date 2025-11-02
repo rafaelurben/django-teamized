@@ -325,13 +325,16 @@ class Member(models.Model):
         return {
             "user": self.user.as_dict(),
             "team": self.team.as_dict(),
-            "sessions": [{
-                "time_start": s.time_start,
-                "time_end": s.time_end,
-                "duration_hours": s.duration / 3600,
-                "note": s.note,
-                "is_created_via_tracking": s.is_created_via_tracking,
-            } for s in sessions],
+            "sessions": [
+                {
+                    "time_start": s.time_start,
+                    "time_end": s.time_end,
+                    "duration_hours": s.duration / 3600,
+                    "note": s.note,
+                    "is_created_via_tracking": s.is_created_via_tracking,
+                }
+                for s in sessions
+            ],
             "total_hours": sum(s.duration for s in sessions) / 3600,
             "datetime_from": datetime_from,
             "datetime_to": datetime_to,

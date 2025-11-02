@@ -66,10 +66,15 @@ def workingtime_report(request, team_uuid: uuid.UUID):
             team_id=team_uuid,
         )
     except Member.DoesNotExist:
-        return render(request, "teamized/error.html", {
-            "title": "Mitglied nicht gefunden",
-            "description": "Du bist kein Mitglied dieses Teams oder das Team existiert nicht.",
-        }, status=404)
+        return render(
+            request,
+            "teamized/error.html",
+            {
+                "title": "Mitglied nicht gefunden",
+                "description": "Du bist kein Mitglied dieses Teams oder das Team existiert nicht.",
+            },
+            status=404,
+        )
 
     @validation_func()
     def get_date_range():
@@ -99,11 +104,11 @@ def workingtime_report(request, team_uuid: uuid.UUID):
 # Public URLs
 
 
-def calendar_ics(request, uuid):
+def calendar_ics(request, ics_uuid: uuid.UUID):
     """Get the .ics file for a public calendar"""
 
     try:
-        calendar: Calendar = Calendar.objects.get(ics_uid=uuid, is_public=True)
+        calendar: Calendar = Calendar.objects.get(ics_uid=ics_uuid, is_public=True)
     except Calendar.DoesNotExist:
         return render(request, "teamized/404.html", status=404)
 
