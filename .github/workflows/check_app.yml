@@ -3,7 +3,7 @@ name: Check frontend code
 on: [ push ]
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
   check:

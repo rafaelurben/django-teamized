@@ -3,10 +3,10 @@ name: Check python code
 on: [ push ]
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    check:
+  check:
     runs-on: ubuntu-latest
 
     strategy:
