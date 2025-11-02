@@ -12,4 +12,6 @@ declare global {
         };
         appdata: Appdata;
     }
+
+    const __TEAMIZED_VERSION__: string;
 }

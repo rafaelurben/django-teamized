@@ -1,4 +1,10 @@
+const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
+
+const version = fs
+    .readFileSync(path.resolve(__dirname, '../../_version.txt'), 'utf-8')
+    .trim();
 
 module.exports = [
     {
@@ -21,5 +27,10 @@ module.exports = [
                 },
             ],
         },
+        plugins: [
+            new webpack.DefinePlugin({
+                __TEAMIZED_VERSION__: JSON.stringify(version),
+            }),
+        ],
     },
 ];

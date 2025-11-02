@@ -126,6 +126,9 @@ export default function AppSidebar({ user }: Props) {
                     </>
                 )}
             </ul>
+            <span className="text-secondary">
+                Teamized v{__TEAMIZED_VERSION__}
+            </span>
             <hr />
             <div className="dropup">
                 <a

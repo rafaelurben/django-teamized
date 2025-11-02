@@ -137,13 +137,16 @@ export default function HomePage({ user, settings }: Props) {
                             <React.Fragment key={i}>
                                 <h6>
                                     <b>{getDateString(new Date(item.date))}</b>
-                                    {item.milestone ? (
+                                    {item.version && (
+                                        <span className="ms-2">
+                                            {item.version}
+                                        </span>
+                                    )}
+                                    {item.milestone && (
                                         <IconTooltip
                                             icon="fa-solid fa-flag ms-2 text-danger"
                                             title="Meilenstein"
                                         />
-                                    ) : (
-                                        ''
                                     )}
                                 </h6>
                                 <ul className="small">

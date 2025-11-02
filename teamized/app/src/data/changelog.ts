@@ -2,6 +2,7 @@ import { DateString } from '../interfaces/common';
 
 export interface ChangelogItem {
     date: DateString;
+    version?: string;
     changes: string[];
     milestone?: boolean;
 }
