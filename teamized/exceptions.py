@@ -1,6 +1,7 @@
 """Custom exceptions"""
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, HttpRequest
+from django.shortcuts import render
 
 
 class AlertException(Exception):
@@ -20,7 +21,7 @@ class AlertException(Exception):
         self._custom_errorname = errorname
         self._custom_status = status
 
-    def get_response(self) -> JsonResponse:
+    def get_json_response(self) -> JsonResponse:
         return JsonResponse(
             {
                 "error": str(self._custom_errorname),
@@ -29,6 +30,17 @@ class AlertException(Exception):
                     "title": str(self._custom_title),
                     "text": str(self._custom_text),
                 },
+            },
+            status=self._custom_status,
+        )
+
+    def get_html_response(self, request: HttpRequest) -> HttpResponse:
+        return render(
+            request,
+            "teamized/error.html",
+            {
+                "title": self._custom_title,
+                "description": self._custom_text,
             },
             status=self._custom_status,
         )

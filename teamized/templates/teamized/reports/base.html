@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <title>{% block title %}{{ title|default:'Report' }}{% endblock %} - Teamized</title>
+
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 25mm 15mm;
+
+            @top-left {
+                content: "{{ title|default:'Teamized Report' }}";
+                font-weight: bold;
+                font-size: 1.5em;
+            }
+
+            @top-right {
+                content: "Seite " counter(page) " von " counter(pages);
+            }
+
+            @bottom-right {
+                content: "Generiert am {% now "d.m.Y H:i" %}";
+                color: #000000a0;
+                font-size: 0.8em;
+            }
+
+            @bottom-left {
+                content: "Generiert mit Teamized von Rafael Urben";
+                color: #000000a0;
+                font-size: 0.8em;
+            }
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: {{ request.GET.font_size|default:"11pt" }};
+            break-inside: auto;
+
+            & tr {
+                break-inside: avoid;
+            }
+
+            & th, & td {
+                break-inside: avoid;
+                text-align: left;
+                padding: 5px;
+            }
+        }
+
+        .no-break {
+            white-space: nowrap;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            break-after: avoid-page;
+        }
+    </style>
+
+    {% block extrahead %}{% endblock %}
+</head>
+<body>
+
+{% block content %}{% endblock %}
+
+{% if not request.GET.native %}
+    <script src="https://unpkg.com/pagedjs@0.4.3/dist/paged.polyfill.js"
+            integrity="sha384-JkjBt3FPbcQ3WBc3qp+maUIw8YLoZxNNj8H+tn73mljkC1ba8aEPWlgwfCRPpAxV"
+            crossorigin="anonymous"></script>
+    <script>
+        class MyHandler extends Paged.Handler {
+            constructor(chunker, polisher, caller) {
+                super(chunker, polisher, caller);
+            }
+
+            afterPreview(pages) {
+                window.print();
+            }
+        }
+
+        Paged.registerHandlers(MyHandler);
+    </script>
+{% endif %}
+</body>
+</html>

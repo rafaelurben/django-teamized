@@ -61,6 +61,17 @@ export default function WorkingtimePage() {
         });
     };
 
+    const generateReport = () => {
+        window.open(
+            `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
+                new URLSearchParams({
+                    datetime_from: statsRangeStart.toISOString(),
+                    datetime_to: statsRangeEnd.toISOString(),
+                }).toString(),
+            '_blank'
+        );
+    };
+
     const allMyWorksessionsInCurrentTeam = Object.values(
         teamData.me_worksessions
     );
@@ -198,6 +209,14 @@ export default function WorkingtimePage() {
                         team={team}
                         loading={loading}
                     />
+                    {!loading && sessions.length > 0 && (
+                        <button
+                            className="btn btn-outline-success mt-2"
+                            onClick={generateReport}
+                        >
+                            PDF-Report generieren
+                        </button>
+                    )}
                 </Dashboard.Tile>
             </Dashboard.Column>
         </Dashboard.Page>

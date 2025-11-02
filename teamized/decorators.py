@@ -54,9 +54,9 @@ def validation_func():
 
     def decorator(function):
         @wraps(function)
-        def wrap(request, *args, **kwargs):
+        def wrap(*args, **kwargs):
             try:
-                return function(request, *args, **kwargs)
+                return function(*args, **kwargs)
             except exceptions.AlertException as exc:
                 # If the function already throws an alert exception, just reraise it
                 # Note: ValidationError is a subclass of AlertException and will also be reraised

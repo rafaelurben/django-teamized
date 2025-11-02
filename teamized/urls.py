@@ -14,6 +14,8 @@ urlpatterns = [
     # App pages (login required)
     path("app/", views.app, name="app"),
     path("app/debug", views.app_debug, name="app-debug"),
+    # Reports (login required)
+    path("reports/workingtime/<uuid:team_uuid>", views.workingtime_report),
     # Club pages (public)
     path("clubs/", include("teamized.club.urls")),
     # PWA manifest (public)

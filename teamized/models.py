@@ -3,17 +3,18 @@
 Django will handle the database itself. Only the models need to be defined here.
 """
 
-import uuid
 import hashlib
 import typing
+import uuid
+from datetime import datetime
 
-from django.db import models
 from django.conf import settings
 from django.contrib import admin
+from django.db import models
 from django.http import HttpResponse
-from django.utils.translation import gettext as _
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext as _
 
 import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
@@ -312,6 +313,29 @@ class Member(models.Model):
         Checks if the member is the owner
         """
         return self.role == enums.Roles.OWNER
+
+    def get_workingtime_report_data(self, datetime_from: datetime, datetime_to: datetime) -> dict:
+        """Get working time report data for this member"""
+
+        sessions = self.work_sessions.filter(
+            time_start__lt=datetime_to,
+            time_end__gt=datetime_from,
+        )
+
+        return {
+            "user": self.user.as_dict(),
+            "team": self.team.as_dict(),
+            "sessions": [{
+                "time_start": s.time_start,
+                "time_end": s.time_end,
+                "duration_hours": s.duration / 3600,
+                "note": s.note,
+                "is_created_via_tracking": s.is_created_via_tracking,
+            } for s in sessions],
+            "total_hours": sum(s.duration for s in sessions) / 3600,
+            "datetime_from": datetime_from,
+            "datetime_to": datetime_to,
+        }
 
 
 class Invite(models.Model):

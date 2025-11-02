@@ -1,0 +1,62 @@
+{% extends 'teamized/reports/base.html' %}
+
+{% block title %}Arbeitszeitbericht{% endblock %}
+
+{% block content %}
+    <b>Teamized-Instanz</b>: <a href="{% url 'teamized:app' %}">{{ request.get_host }}</a><br />
+    <b>Team</b>: {{ data.team.name }}<br />
+    <b>Mitglied</b>: {{ data.user.first_name }} {{ data.user.last_name }}<br />
+    <b>Zeitraum von</b>: {{ data.datetime_from }}<br />
+    <b>Zeitraum bis</b>: {{ data.datetime_to }}
+
+    <h4>Erfasste Zeiten</h4>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Zeitpunkt</th>
+            <th>Dauer</th>
+            <th>Beschreibung</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in data.sessions %}
+            <tr>
+                <td class="no-break">
+                    {{ s.time_start }} bis <br />
+                    {{ s.time_end }}
+                </td>
+                <td>{{ s.duration_hours|floatformat:2 }}h</td>
+                <td>{{ s.note }}</td>
+                <td>
+                    {% if s.is_created_via_tracking %}
+                        ⏱️
+                    {% else %}
+                        📝
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">Keine Einträge gefunden.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="1" style="text-align: right;">Total:</th>
+            <th>{{ data.total_hours|floatformat:2 }}h</th>
+            <th colspan="2"></th>
+        </tr>
+        </tfoot>
+    </table>
+
+    <h5>Legende</h5>
+
+    <ul>
+        <li>⏱️ Eintrag wurde über die Zeiterfassung erstellt.</li>
+        <li>📝 Eintrag wurde manuell hinzugefügt.</li>
+    </ul>
+
+{% endblock %}

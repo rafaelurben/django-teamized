@@ -72,7 +72,7 @@ def api_view(allowed_methods: list[str] = None, perms_required=tuple()):
 
                 return NOT_AUTHENTICATED
             except exceptions.AlertException as exc:
-                return exc.get_response()
+                return exc.get_json_response()
 
         return wrap
 
