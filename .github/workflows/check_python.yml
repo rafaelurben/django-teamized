@@ -2,12 +2,17 @@ name: Check python code
 
 on: [ push ]
 
+permissions:
+    contents: read
+
 jobs:
-  format:
+    check:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         python-version: [ "3.10", "3.13" ]
+
     steps:
       - uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}

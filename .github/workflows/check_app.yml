@@ -1,5 +1,9 @@
-name: check_app.yml
-on: [push]
+name: Check frontend code
+
+on: [ push ]
+
+permissions:
+    contents: read
 
 jobs:
   check:
