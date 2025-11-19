@@ -330,12 +330,14 @@ class Member(models.Model):
                     "time_start": s.time_start,
                     "time_end": s.time_end,
                     "duration_hours": s.duration / 3600,
+                    "unit_count": s.unit_count,
                     "note": s.note,
                     "is_created_via_tracking": s.is_created_via_tracking,
                 }
                 for s in sessions
             ],
             "total_hours": sum(s.duration for s in sessions) / 3600,
+            "total_units": sum(s.unit_count or 0 for s in sessions),
             "datetime_from": datetime_from,
             "datetime_to": datetime_to,
         }
@@ -519,6 +521,8 @@ class WorkSession(models.Model):
 
     note = models.TextField(blank=True, default="")
 
+    unit_count = models.FloatField(default=None, blank=True, null=True)
+
     @property
     @admin.display()
     def duration(self) -> float:
@@ -544,6 +548,7 @@ class WorkSession(models.Model):
             "is_ended": self.is_ended,
             "duration": self.duration,
             "note": self.note,
+            "unit_count": self.unit_count,
             "_team_id": self.team_id,
         }
 
@@ -580,6 +585,9 @@ class WorkSession(models.Model):
             note=validation.text(data, "note", False),
             time_start=validation.datetime(data, "time_start", True),
             time_end=validation.datetime(data, "time_end", True),
+            unit_count=validation.number(
+                data, "unit_count", False, default=None, null=True, min_value=0
+            ),
             is_ended=True,
         )
         session.validate()
@@ -589,6 +597,9 @@ class WorkSession(models.Model):
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.note = validation.text(data, "note", False, default=self.note)
+        self.unit_count = validation.number(
+            data, "unit_count", False, default=self.unit_count, null=True, min_value=0
+        )
         if not self.is_created_via_tracking:
             self.time_start = validation.datetime(
                 data, "time_start", False, default=self.time_start

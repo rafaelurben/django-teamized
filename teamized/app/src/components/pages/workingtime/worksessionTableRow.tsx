@@ -62,6 +62,9 @@ export default function WorksessionTableRow({ team, session }: Props) {
                 <span>{getDurationDisplay()}</span>
             </td>
             <td>
+                <span>{session.unit_count}</span>
+            </td>
+            <td>
                 <span>{session.note}</span>
             </td>
             {/* Action: Edit */}

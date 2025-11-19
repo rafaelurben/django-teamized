@@ -9,6 +9,11 @@ export interface ChangelogItem {
 
 export const CHANGELOG: ChangelogItem[] = [
     {
+        date: '2025-11-19',
+        version: 'next',
+        changes: ['[Arbeitszeit] Neu: Erfassung von verrechenbaren Einheiten'],
+    },
+    {
         date: '2025-11-02',
         version: '0.2.0',
         changes: [

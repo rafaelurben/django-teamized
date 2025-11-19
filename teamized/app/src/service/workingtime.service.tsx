@@ -70,6 +70,19 @@ export async function createWorkSessionPopup(team: Team) {
                 />
                 <label
                     className="swal2-input-label"
+                    htmlFor="swal-input-unit_count"
+                >
+                    Einheiten (optional):
+                </label>
+                <input
+                    type="number"
+                    min={0}
+                    id="swal-input-unit_count"
+                    className="swal2-input"
+                    defaultValue={''}
+                />
+                <label
+                    className="swal2-input-label"
                     htmlFor="swal-input-dtstart"
                 >
                     Von:
@@ -99,6 +112,12 @@ export async function createWorkSessionPopup(team: Team) {
             const note = (
                 document.getElementById('swal-input-note') as HTMLInputElement
             ).value;
+            const unit_count = (
+                document.getElementById(
+                    'swal-input-unit_count'
+                ) as HTMLInputElement
+            ).valueAsNumber;
+
             const dtstart = (
                 document.getElementById(
                     'swal-input-dtstart'
@@ -118,6 +137,7 @@ export async function createWorkSessionPopup(team: Team) {
             Swal.showLoading();
             return await createWorkSession(team.id, {
                 note,
+                unit_count: isNaN(unit_count) ? null : unit_count,
                 time_start: isoFormat(dtstart),
                 time_end: isoFormat(dtend),
             });
@@ -161,6 +181,19 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
                     className="swal2-textarea"
                     placeholder="Notiz"
                     defaultValue={session.note}
+                />
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-unit_count"
+                >
+                    Einheiten (optional):
+                </label>
+                <input
+                    type="number"
+                    min={0}
+                    id="swal-input-unit_count"
+                    className="swal2-input"
+                    defaultValue={session.unit_count ?? ''}
                 />
                 {session.is_created_via_tracking ? (
                     <>
@@ -208,6 +241,11 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
             const note = (
                 document.getElementById('swal-input-note') as HTMLInputElement
             ).value;
+            const unit_count = (
+                document.getElementById(
+                    'swal-input-unit_count'
+                ) as HTMLInputElement
+            ).valueAsNumber;
 
             if (!session.is_created_via_tracking) {
                 dtstart = (
@@ -231,6 +269,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
             Swal.showLoading();
             return await editWorkSession(team.id, session.id, {
                 note,
+                unit_count: isNaN(unit_count) ? null : unit_count,
                 time_start: isoFormat(dtstart),
                 time_end: isoFormat(dtend),
             });
@@ -444,9 +483,18 @@ export function chartDataByDays(
  * @returns {Number} duration in seconds
  */
 export function totalDuration(sessions: Worksession[]): number {
-    let total = 0;
-    sessions.forEach((session) => {
-        total += session.duration;
-    });
-    return total;
+    return sessions
+        .map((session) => session.duration)
+        .reduce((a, b) => a + b, 0);
+}
+
+/**
+ * Get the total unit count of all sessions in a list
+ * @returns {Number} total unit count
+ */
+export function totalUnitCount(sessions: Worksession[]): number {
+    return sessions
+        .map((session) => session.unit_count)
+        .filter((count) => count !== null)
+        .reduce((a, b) => a + b, 0);
 }

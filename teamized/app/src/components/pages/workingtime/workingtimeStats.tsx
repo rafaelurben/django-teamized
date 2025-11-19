@@ -13,13 +13,15 @@ interface Props {
 export default function WorkingtimeStats({ sessions, start, end }: Props) {
     const data = WorkingtimeService.chartDataByDays(sessions, start, end);
     const totalHours = WorkingtimeService.totalDuration(sessions) / 3600;
+    const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
 
     return (
         <>
             <div className="row row-cols-lg-auto m-1 g-2 align-items-center">
                 <div className="col-12 mt-0">
                     <span className="text-muted">
-                        Gesamtdauer: {totalHours.toFixed(2)}h
+                        Gesamtdauer: {totalHours.toFixed(2)}h / Anzahl
+                        Einheiten: {totalUnitCount}
                     </span>
                 </div>
             </div>

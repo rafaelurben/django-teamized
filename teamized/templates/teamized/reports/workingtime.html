@@ -16,6 +16,7 @@
         <tr>
             <th>Zeitpunkt</th>
             <th>Dauer</th>
+            <th>Einheiten</th>
             <th>Beschreibung</th>
             <th></th>
         </tr>
@@ -28,6 +29,7 @@
                     {{ s.time_end }}
                 </td>
                 <td>{{ s.duration_hours|floatformat:2 }}h</td>
+                <td>{% if s.unit_count %}{{ s.unit_count }}{% endif %}</td>
                 <td>{{ s.note }}</td>
                 <td>
                     {% if s.is_created_via_tracking %}
@@ -47,6 +49,7 @@
         <tr>
             <th colspan="1" style="text-align: right;">Total:</th>
             <th>{{ data.total_hours|floatformat:2 }}h</th>
+            <th>{{ data.total_units }}</th>
             <th colspan="2"></th>
         </tr>
         </tfoot>
@@ -54,7 +57,7 @@
 
     <h5>Legende</h5>
 
-    <ul>
+    <ul style="font-size: 0.8em;">
         <li>⏱️ Eintrag wurde über die Zeiterfassung erstellt.</li>
         <li>📝 Eintrag wurde manuell hinzugefügt.</li>
     </ul>

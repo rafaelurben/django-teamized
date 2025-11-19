@@ -11,6 +11,7 @@ from django.utils.translation import gettext as _
 
 from teamized.exceptions import ValidationError
 
+
 # Base validator class
 
 
@@ -97,7 +98,31 @@ class BooleanValidator(BaseValidator):
         return value
 
 
-class IntegerValidator(BaseValidator):
+class NumberValidator(BaseValidator):
+    @classmethod
+    def _convert(cls, value, **kwargs):
+        return float(value)
+
+    @classmethod
+    def _after_convert(
+        cls, value, min_value: float | None = None, max_value: float | None = None, **kwargs
+    ):
+        if min_value is not None and value < min_value:
+            raise ValidationError(
+                _("Der Wert '{}' ist kleiner als der erlaubte Minimalwert von {}!").format(
+                    value, min_value
+                )
+            )
+        if max_value is not None and value > max_value:
+            raise ValidationError(
+                _("Der Wert '{}' ist größer als der erlaubte Maximalwert von {}!").format(
+                    value, max_value
+                )
+            )
+        return value
+
+
+class IntegerValidator(NumberValidator):
     @classmethod
     def _convert(cls, value, **kwargs):
         return int(value)
@@ -150,8 +175,32 @@ def boolean(
     return BooleanValidator.validate(datadict, attr, required, default, null)
 
 
-def integer(datadict: dict, attr: str, required: bool = True, default: int = "", null=False) -> int:
-    return IntegerValidator.validate(datadict, attr, required, default, null)
+def number(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: float | None = None,
+    null=False,
+    min_value: float | None = None,
+    max_value: float | None = None,
+) -> float:
+    return NumberValidator.validate(
+        datadict, attr, required, default, null, min_value=min_value, max_value=max_value
+    )
+
+
+def integer(
+    datadict: dict,
+    attr: str,
+    required: bool = True,
+    default: int | None = None,
+    null=False,
+    min_value: float | None = None,
+    max_value: float | None = None,
+) -> int:
+    return IntegerValidator.validate(
+        datadict, attr, required, default, null, min_value=min_value, max_value=max_value
+    )
 
 
 def text(

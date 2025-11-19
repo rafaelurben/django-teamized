@@ -7,13 +7,10 @@ The admin interface is something only the developer will ever see.
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
+import teamized.api.utils.admin  # pylint: disable=unused-import # noqa # This is required for the apikey admin view
+import teamized.club.admin  # pylint: disable=unused-import # noqa # This is required for the club admin views
 from teamized import models
 
-# This is required for the club admin views
-import teamized.club.admin  # pylint: disable=unused-import
-
-# This is required for the apikey admin view
-import teamized.api.utils.admin  # pylint: disable=unused-import
 
 # Register your models here.
 
@@ -177,6 +174,7 @@ class WorkSessionAdmin(admin.ModelAdmin):
         "time_start",
         "time_end",
         "duration",
+        "unit_count",
         "is_ended",
         "is_created_via_tracking",
     ]
@@ -196,7 +194,7 @@ class WorkSessionAdmin(admin.ModelAdmin):
         (None, {"fields": ("uid",)}),
         ("Verbindungen", {"fields": ("user", "member", "team")}),
         ("Zeiten", {"fields": ("time_start", "time_end", "duration")}),
-        ("Notizen", {"fields": ("note",)}),
+        ("Weitere Angaben", {"fields": ("note", "unit_count")}),
         ("Status", {"fields": ("is_ended", "is_created_via_tracking")}),
     ]
 

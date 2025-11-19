@@ -18,6 +18,7 @@ export default function WorksessionTable({ sessions, team, loading }: Props) {
                 <tr>
                     <th style={{ minWidth: '13rem' }}>Start &amp; Ende</th>
                     <th style={{ minWidth: '8rem' }}>Dauer</th>
+                    <th style={{ minWidth: '5rem' }}>Einheiten</th>
                     <th style={{ minWidth: '15rem' }}>Notiz</th>
                     <th style={{ width: '1px' }}></th>
                     <th style={{ width: '1px' }}></th>
@@ -27,11 +28,11 @@ export default function WorksessionTable({ sessions, team, loading }: Props) {
             <tbody>
                 {loading ? (
                     <tr>
-                        <td colSpan={3}>Laden...</td>
+                        <td colSpan={6}>Laden...</td>
                     </tr>
                 ) : sessions.length === 0 ? (
                     <tr>
-                        <td colSpan={3}>
+                        <td colSpan={6}>
                             Noch keine Zeiten im ausgewählten Zeitraum erfasst.
                         </td>
                     </tr>
