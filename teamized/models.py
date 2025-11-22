@@ -320,7 +320,7 @@ class Member(models.Model):
         sessions = self.work_sessions.filter(
             time_start__lt=datetime_to,
             time_end__gt=datetime_from,
-        )
+        ).order_by("time_start")
 
         return {
             "user": self.user.as_dict(),
