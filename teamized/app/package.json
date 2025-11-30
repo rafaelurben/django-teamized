@@ -30,7 +30,7 @@
     "eslint-plugin-react-hooks": "~7.0.0",
     "eslint-plugin-simple-import-sort": "~12.1.1",
     "globals": "~16.5.0",
-    "prettier": "~3.6.0",
+    "prettier": "~3.7.0",
     "sweetalert2": "11.26.3",
     "sweetalert2-react-content": "~5.1.0",
     "ts-loader": "^9.5.1",
