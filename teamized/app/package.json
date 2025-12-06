@@ -45,8 +45,8 @@
     "@types/react-dom": "19.2.3",
     "bootstrap": "5.3.8",
     "jquery": "3.7.1",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
     "recharts": "3.5.1"
   }
 }
