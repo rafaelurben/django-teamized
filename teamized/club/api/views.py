@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, OBJ_NOT_FOUND
 from teamized.club.models import ClubMemberGroup
@@ -22,7 +21,6 @@ def shared_group_portfolios(request, uuid):
 # Catch-all error
 
 
-@csrf_exempt
 def endpoint_not_found(request):
     """
     Not found. Always returns a 404 error message with a error message in JSON format.

@@ -1,7 +1,6 @@
 """Calendar API endpoints"""
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
 from teamized.api.utils.constants import NO_PERMISSION, OBJ_NOT_FOUND
@@ -12,7 +11,6 @@ from teamized.models import Calendar, CalendarEvent, Team, User
 
 @api_view(["get", "post"])
 @teamized_prep()
-@csrf_exempt
 @require_objects([("team", Team, "team")])
 def endpoint_calendars(request, team: Team):
     """
@@ -52,7 +50,6 @@ def endpoint_calendars(request, team: Team):
 
 
 @api_view(["get", "post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("calendar", Calendar, "calendar")])
 def endpoint_calendar(request, team: Team, calendar: Calendar):
@@ -110,7 +107,6 @@ def endpoint_calendar(request, team: Team, calendar: Calendar):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("calendar", Calendar, "calendar")])
 def endpoint_events(request, team: Team, calendar: Calendar):
@@ -152,7 +148,6 @@ def endpoint_events(request, team: Team, calendar: Calendar):
 
 
 @api_view(["get", "post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [
@@ -213,7 +208,6 @@ def endpoint_event(request, team: Team, calendar: Calendar, event: CalendarEvent
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [

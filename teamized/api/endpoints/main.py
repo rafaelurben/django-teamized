@@ -3,7 +3,6 @@
 from django.db import models
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
-from django.views.decorators.csrf import csrf_exempt
 
 from teamized import enums, exceptions
 from teamized.api.utils.constants import (
@@ -31,7 +30,6 @@ def endpoint_profile(request):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 def endpoint_settings(request):
     """
@@ -48,7 +46,6 @@ def endpoint_settings(request):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 def endpoint_teams(request):
     """
@@ -118,7 +115,6 @@ def endpoint_teams(request):
 
 
 @api_view(["get", "post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_team(request, team: Team):
@@ -201,7 +197,6 @@ def endpoint_team(request, team: Team):
 
 
 @api_view(["get"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_members(request, team: Team):
@@ -224,7 +219,6 @@ def endpoint_members(request, team: Team):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("member", Member, "member")])
 def endpoint_member(request, team: Team, member: Member):
@@ -288,7 +282,6 @@ def endpoint_member(request, team: Team, member: Member):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_invites(request, team: Team):
@@ -327,7 +320,6 @@ def endpoint_invites(request, team: Team):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("invite", Invite, "invite")])
 def endpoint_invite(request, team: Team, invite: Invite):
@@ -373,7 +365,6 @@ def endpoint_invite(request, team: Team, invite: Invite):
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_team_leave(request, team: Team):
@@ -419,7 +410,6 @@ def endpoint_team_leave(request, team: Team):
 
 
 @api_view(["get"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("invite", Invite, "invite", "token")], allow_none=True)
 def endpoint_invite_info(request, invite: Invite):
@@ -444,7 +434,6 @@ def endpoint_invite_info(request, invite: Invite):
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("invite", Invite, "invite", "token")])
 def endpoint_invite_accept(request, invite: Invite):

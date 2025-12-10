@@ -5,7 +5,6 @@ import logging
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
-from django.views.decorators.csrf import csrf_exempt
 
 from teamized.api.utils.constants import NO_PERMISSION, ENDPOINT_NOT_FOUND, OBJ_NOT_FOUND
 from teamized.api.utils.decorators import api_view, require_objects
@@ -17,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_attendance_events(request, team: Team):
@@ -57,7 +55,6 @@ def endpoint_attendance_events(request, team: Team):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
@@ -110,7 +107,6 @@ def endpoint_attendance_event(request, team: Team, attendance_event: ClubAttenda
 
 
 @api_view(["get"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
@@ -144,7 +140,6 @@ def endpoint_attendance_event_participation_list(
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [("team", Team, "team"), ("attendance_event", ClubAttendanceEvent, "attendance_event")]
@@ -207,7 +202,6 @@ def endpoint_attendance_event_participation_bulk_create(
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [

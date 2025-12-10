@@ -14,6 +14,7 @@ import KeyboardListener from './components/keyboardListener';
 import { AppdataProvider } from './utils/appdataProvider';
 import * as GeneralUtils from './utils/general';
 import { NavigationProvider } from './utils/navigation/navigationProvider';
+import { setupCSRFToken } from './utils/security';
 
 // Initialize appdata
 
@@ -74,6 +75,8 @@ async function initialize() {
     if (new URL(window.location.href).searchParams.has('debug')) {
         GeneralUtils.toggleDebug(true);
     }
+
+    setupCSRFToken();
 
     GeneralUtils.showSidebarOnDesktop();
     render();

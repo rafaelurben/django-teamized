@@ -1,7 +1,6 @@
 """WorkTime API endpoints"""
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 
 from teamized import exceptions
@@ -12,7 +11,6 @@ from teamized.models import User, Team, WorkSession
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_worksessions(request, team: Team):
@@ -52,7 +50,6 @@ def endpoint_worksessions(request, team: Team):
 
 
 @api_view(["get", "post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("session", WorkSession, "session")])
 def endpoint_worksession(request, team: Team, session: WorkSession):
@@ -104,7 +101,6 @@ def endpoint_worksession(request, team: Team, session: WorkSession):
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_tracking_start(request, team: Team):
@@ -144,7 +140,6 @@ def endpoint_tracking_start(request, team: Team):
 
 
 @api_view(["get"])
-@csrf_exempt
 @teamized_prep()
 def endpoint_tracking_live(request):
     """
@@ -173,7 +168,6 @@ def endpoint_tracking_live(request):
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 def endpoint_tracking_stop(request):
     """

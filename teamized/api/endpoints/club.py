@@ -3,7 +3,6 @@
 from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
-from django.views.decorators.csrf import csrf_exempt
 
 from teamized.api.utils.constants import (
     ENDPOINT_NOT_FOUND,
@@ -18,7 +17,6 @@ from teamized.models import User, Team
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_create_club(request, team: Team):
@@ -51,7 +49,6 @@ def endpoint_create_club(request, team: Team):
 
 
 @api_view(["get", "post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_club(request, team: Team):
@@ -108,7 +105,6 @@ def endpoint_club(request, team: Team):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_members(request, team: Team):
@@ -148,7 +144,6 @@ def endpoint_members(request, team: Team):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
 def endpoint_member(request, team: Team, member: ClubMember):
@@ -198,7 +193,6 @@ def endpoint_member(request, team: Team, member: ClubMember):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
 def endpoint_member_portfolio(request, team: Team, member: ClubMember):
@@ -244,7 +238,6 @@ def endpoint_member_portfolio(request, team: Team, member: ClubMember):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects(
     [
@@ -309,7 +302,6 @@ def endpoint_member_groupmembership(
 
 
 @api_view(["post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("member", ClubMember, "member")])
 def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
@@ -354,7 +346,6 @@ def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
 
 
 @api_view(["get", "post"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team")])
 def endpoint_groups(request, team: Team):
@@ -398,7 +389,6 @@ def endpoint_groups(request, team: Team):
 
 
 @api_view(["post", "delete"])
-@csrf_exempt
 @teamized_prep()
 @require_objects([("team", Team, "team"), ("group", ClubMemberGroup, "group")])
 def endpoint_group(request, team: Team, group: ClubMemberGroup):
