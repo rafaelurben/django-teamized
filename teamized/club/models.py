@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from teamized import utils, decorators, validation
+from teamized.translations import TranslationConstants
 
 
 # Create your models here.
@@ -22,7 +23,7 @@ from teamized import utils, decorators, validation
 
 class Club(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     slug = models.SlugField(
         verbose_name=_("Slug"),
@@ -33,16 +34,20 @@ class Club(models.Model):
         default=None,
     )
 
-    name = models.CharField(max_length=50, verbose_name=_("Name"))
+    name = models.CharField(max_length=50, verbose_name=TranslationConstants.NAME)
     description = models.TextField(
-        verbose_name=_("Beschreibung"),
+        verbose_name=TranslationConstants.DESCRIPTION,
         blank=True,
         default="",
         help_text=_("Wird auf der Login-Seite angezeigt."),
     )
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Verein")
@@ -124,7 +129,7 @@ class Club(models.Model):
 
 class ClubMember(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     club = models.ForeignKey(
         Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="members"
@@ -147,8 +152,12 @@ class ClubMember(models.Model):
 
     notes = models.TextField(verbose_name=_("Notizen"), blank=True, default="")
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     portfolio_visible = models.BooleanField(verbose_name=_("Portfolio sichtbar?"), default=True)
     portfolio_image1_url = models.URLField(
@@ -363,7 +372,7 @@ class ClubMember(models.Model):
 
 class ClubMemberSession(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     member = models.ForeignKey(
         ClubMember,
@@ -374,8 +383,12 @@ class ClubMemberSession(models.Model):
 
     valid_until = models.DateTimeField(verbose_name=_("Gültig bis"), default=utils.now_plus_180d)
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Sitzung")
@@ -386,7 +399,7 @@ class ClubMemberSession(models.Model):
 
 class ClubMemberMagicLink(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     member = models.ForeignKey(
         ClubMember,
@@ -397,8 +410,12 @@ class ClubMemberMagicLink(models.Model):
 
     valid_until = models.DateTimeField(verbose_name=_("Verwendbar bis"), default=utils.now_plus_1w)
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Magischer Link")
@@ -442,14 +459,14 @@ class ClubMemberMagicLink(models.Model):
 
 class ClubMemberGroup(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     club = models.ForeignKey(
         Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="groups"
     )
 
-    name = models.CharField(max_length=50, verbose_name=_("Name"))
-    description = models.TextField(verbose_name=_("Beschreibung"), blank=True)
+    name = models.CharField(max_length=50, verbose_name=TranslationConstants.NAME)
+    description = models.TextField(verbose_name=TranslationConstants.DESCRIPTION, blank=True)
 
     members = models.ManyToManyField(
         to=ClubMember,
@@ -463,8 +480,12 @@ class ClubMemberGroup(models.Model):
         unique=True,
     )
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Vereinsmitgliedergruppe")
@@ -530,7 +551,7 @@ class ClubMemberGroup(models.Model):
 
 class ClubMemberGroupMembership(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     group = models.ForeignKey(
         to=ClubMemberGroup,
@@ -545,8 +566,12 @@ class ClubMemberGroupMembership(models.Model):
         related_name="group_memberships",
     )
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Gruppenmitgliedschaft")
@@ -556,14 +581,14 @@ class ClubMemberGroupMembership(models.Model):
 
 class ClubAttendanceEvent(models.Model):
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
     club = models.ForeignKey(
         Club, on_delete=models.CASCADE, verbose_name=_("Verein"), related_name="attendance_events"
     )
 
     title = models.CharField(max_length=50, verbose_name=_("Titel"))
-    description = models.TextField(verbose_name=_("Beschreibung"), blank=True)
+    description = models.TextField(verbose_name=TranslationConstants.DESCRIPTION, blank=True)
 
     participating_by_default = models.BooleanField(
         verbose_name=_("Teilnahme standardmäßig"),
@@ -588,8 +613,12 @@ class ClubAttendanceEvent(models.Model):
         help_text=_("Wenn gesetzt, können Teilnahmen nicht mehr geändert werden."),
     )
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Anwesenheitsereignis")
@@ -651,7 +680,7 @@ class ClubAttendanceEventParticipation(models.Model):
         UNKNOWN = "unknown", _("Unbekannt")
 
     uid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, verbose_name=_("UID"), editable=False
+        primary_key=True, default=uuid.uuid4, verbose_name=TranslationConstants.UID, editable=False
     )
 
     event = models.ForeignKey(
@@ -694,8 +723,12 @@ class ClubAttendanceEventParticipation(models.Model):
         default="",
     )
 
-    date_created = models.DateTimeField(verbose_name=_("Erstellt am"), auto_now_add=True)
-    date_modified = models.DateTimeField(verbose_name=_("Zuletzt geändert am"), auto_now=True)
+    date_created = models.DateTimeField(
+        verbose_name=TranslationConstants.CREATED_AT, auto_now_add=True
+    )
+    date_modified = models.DateTimeField(
+        verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
+    )
 
     class Meta:
         verbose_name = _("Anwesenheitsteilnahme")

@@ -18,6 +18,7 @@ from django.utils.translation import gettext as _
 
 import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
+from teamized.translations import TranslationConstants
 
 
 # Create your models here.
@@ -32,7 +33,7 @@ class User(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
-        verbose_name=_("UID"),
+        verbose_name=TranslationConstants.UID,
     )
 
     auth_user = models.OneToOneField(
@@ -151,6 +152,7 @@ class Team(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=TranslationConstants.UID,
     )
 
     name = models.CharField(
@@ -171,8 +173,10 @@ class Team(models.Model):
         verbose_name=_("Verlinkter Verein"),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=TranslationConstants.MODIFIED_AT)
 
     def __str__(self):
         return str(self.name)
@@ -251,9 +255,7 @@ class Member(models.Model):
     """Connection between User and Team"""
 
     uid = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
+        primary_key=True, default=uuid.uuid4, editable=False, verbose_name=TranslationConstants.UID
     )
 
     team = models.ForeignKey(
@@ -277,8 +279,10 @@ class Member(models.Model):
         default="",
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=TranslationConstants.MODIFIED_AT)
 
     def __str__(self):
         return f"{self.user} <-> {self.team}"
@@ -346,13 +350,16 @@ class Member(models.Model):
 class Invite(models.Model):
     """Invites for teams"""
 
-    NOT_FOUND_TITLE = _("Einladung ungültig")
+    INVALID_INVITE_TITLE = _("Einladung ungültig")
+
+    NOT_FOUND_TITLE = INVALID_INVITE_TITLE
     NOT_FOUND_TEXT = _("Eine Einladung mit dem angegebenen Token konnte nicht gefunden werden.")
 
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=TranslationConstants.UID,
     )
 
     token = models.UUIDField(
@@ -371,7 +378,9 @@ class Invite(models.Model):
 
     note = models.TextField(blank=True, default="")
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
     valid_until = models.DateTimeField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
@@ -421,19 +430,19 @@ class Invite(models.Model):
                 text=_("Du bist bereits Mitglied im Team {team_name}.").format(
                     team_name=self.team.name
                 ),
-                title=_("Einladung ungültig"),
+                title=Invite.INVALID_INVITE_TITLE,
                 errorname="invite-already-member",
             )
         if not self.is_valid_uses():
             raise exceptions.AlertException(
                 text=_("Diese Einladung hat ihre maximale Anzahl Benutzungen erreicht."),
-                title=_("Einladung ungültig"),
+                title=Invite.INVALID_INVITE_TITLE,
                 errorname="invite-max-uses-reached",
             )
         if not self.is_valid_time():
             raise exceptions.AlertException(
                 text=_("Diese Einladung ist abgelaufen."),
-                title=_("Einladung ungültig"),
+                title=Invite.INVALID_INVITE_TITLE,
                 errorname="invite-expired",
             )
         return True
@@ -487,6 +496,7 @@ class WorkSession(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=TranslationConstants.UID,
     )
 
     """ [Author's note]
@@ -667,7 +677,7 @@ class Calendar(models.Model):
             "color": self.color,
             "is_public": bool(self.is_public),
             "ics_url": self.get_ics_url(request),
-            "events": utils.iddict(map(lambda e: e.as_dict(), self.events.all())),
+            "events": utils.iddict([e.as_dict() for e in self.events.all()]),
         }
 
     def as_ics_text(self, request=None) -> str:
@@ -753,9 +763,7 @@ class CalendarEvent(models.Model):
     """
 
     uid = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
+        primary_key=True, default=uuid.uuid4, editable=False, verbose_name=TranslationConstants.UID
     )
 
     calendar = models.ForeignKey(
@@ -764,18 +772,22 @@ class CalendarEvent(models.Model):
         on_delete=models.CASCADE,
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=TranslationConstants.MODIFIED_AT)
 
     # event properties
 
     name = models.CharField(
         max_length=50,
+        verbose_name=TranslationConstants.NAME,
     )
 
     description = models.TextField(
         default="",
         blank=True,
+        verbose_name=TranslationConstants.DESCRIPTION,
     )
 
     dtstart = models.DateTimeField(null=True, blank=True, default=None)
@@ -924,6 +936,7 @@ class ToDoList(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=TranslationConstants.UID,
     )
 
     team = models.ForeignKey(
@@ -932,11 +945,15 @@ class ToDoList(models.Model):
         on_delete=models.CASCADE,
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=TranslationConstants.MODIFIED_AT)
 
-    name = models.CharField(max_length=50)
-    description = models.TextField(blank=True, default="")
+    name = models.CharField(max_length=50, verbose_name=TranslationConstants.NAME)
+    description = models.TextField(
+        blank=True, default="", verbose_name=TranslationConstants.DESCRIPTION
+    )
 
     color = models.CharField(max_length=20, blank=True, default="#FFFFFF")
 
@@ -956,9 +973,7 @@ class ToDoList(models.Model):
             "name": self.name,
             "description": self.description,
             "color": self.color,
-            "items": utils.iddict(
-                map(lambda i: i.as_dict(), self.items.all().order_by("done", "name"))
-            ),
+            "items": utils.iddict([i.as_dict() for i in self.items.all().order_by("done", "name")]),
         }
 
     @classmethod
@@ -988,6 +1003,7 @@ class ToDoListItem(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
+        verbose_name=TranslationConstants.UID,
     )
 
     todolist = models.ForeignKey(
@@ -996,13 +1012,17 @@ class ToDoListItem(models.Model):
         on_delete=models.CASCADE,
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name=TranslationConstants.CREATED_AT
+    )
     created_by = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, related_name="+")
 
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=TranslationConstants.MODIFIED_AT)
 
-    name = models.CharField(max_length=50)
-    description = models.TextField(blank=True, default="")
+    name = models.CharField(max_length=50, verbose_name=TranslationConstants.NAME)
+    description = models.TextField(
+        blank=True, default="", verbose_name=TranslationConstants.DESCRIPTION
+    )
 
     done = models.BooleanField(default=False)
     done_by = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, related_name="+")
@@ -1058,49 +1078,3 @@ class ToDoListItem(models.Model):
             self.done_at = None
 
         self.save()
-
-
-# This model is for future use
-
-# class TeamLog(models.Model):
-#     "Used for logging changes in a team"
-
-#     uid = models.UUIDField(
-#         primary_key=True,
-#         default=uuid.uuid4,
-#         editable=False,
-#     )
-
-#     team = models.ForeignKey(
-#         to='Team',
-#         related_name="logs",
-#         on_delete=models.CASCADE,
-#     )
-#     user = models.ForeignKey(
-#         to='User',
-#         related_name="teamized_logs",
-#         null=True,
-#         on_delete=models.SET_NULL,
-#     )
-
-#     scope = models.CharField(
-#         max_length=16,
-#         default=enums.Scopes.TEAM,
-#         choices=enums.Scopes.SCOPES,
-#     )
-#     action = models.CharField(
-#         max_length=16,
-#         default=enums.Actions.CREATE,
-#         choices=enums.Actions.ACTIONS,
-#     )
-#     data = models.JSONField(
-#     )
-
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     objects = models.Manager()
-
-#     class Meta:
-#         verbose_name = _("Log")
-#         verbose_name_plural = _("Logs")
-#         db_table = "teamized_teamlog"

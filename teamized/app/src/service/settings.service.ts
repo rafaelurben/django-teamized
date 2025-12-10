@@ -2,8 +2,6 @@
  * Utils for settings and profile
  */
 
-import $ from 'jquery';
-
 import * as GeneralAPI from '../api/general';
 import { render } from '../app';
 import { Settings } from '../interfaces/settings';
@@ -73,9 +71,9 @@ export async function editSettings(settings: Partial<Settings>) {
  */
 function setColorScheme(scheme: string) {
     if (scheme === 'dark') {
-        $('body').attr('data-bs-theme', 'dark');
+        document.body.dataset.bsTheme = 'dark';
     } else {
-        $('body').attr('data-bs-theme', 'light');
+        document.body.dataset.bsTheme = 'light';
     }
 }
 

@@ -488,41 +488,41 @@ export async function checkInvitePopup(token: string) {
             'Ungültiges Einladungsformat',
             'Diese Einladung liegt nicht im richtigen Format vor.'
         );
-        return Promise.reject(null);
+        throw new Error('invalid-invite-format');
     }
 
     const data = await TeamsAPI.checkInvite(token);
 
-    if (data.status === 'invite-valid') {
-        const team = data.team;
-        return await confirmAlert(
-            <>
-                Möchtest du folgendem Team beitreten?
-                <br />
-                <br />
-                <b>Name:</b> {team.name}
-                <br />
-                <b>Beschreibung: </b>
-                {team.description}
-                <br />
-                <b>Anzahl Mitglieder: </b>
-                {team.membercount}
-                <br />
-            </>,
-            async () => {
-                return await acceptInvite(token);
-            },
-            'Du wurdest eingeladen',
-            {
-                icon: 'info',
-                confirmButtonColor: 'green',
-                confirmButtonText: 'Einladung akzeptieren',
-                cancelButtonText: 'Nein, später',
-            }
-        );
-    } else {
-        return Promise.reject(null);
+    if (data.status !== 'invite-valid') {
+        throw new Error('invalid-invite');
     }
+
+    const team = data.team;
+    return await confirmAlert(
+        <>
+            Möchtest du folgendem Team beitreten?
+            <br />
+            <br />
+            <b>Name:</b> {team.name}
+            <br />
+            <b>Beschreibung: </b>
+            {team.description}
+            <br />
+            <b>Anzahl Mitglieder: </b>
+            {team.membercount}
+            <br />
+        </>,
+        async () => {
+            return await acceptInvite(token);
+        },
+        'Du wurdest eingeladen',
+        {
+            icon: 'info',
+            confirmButtonColor: 'green',
+            confirmButtonText: 'Einladung akzeptieren',
+            cancelButtonText: 'Nein, später',
+        }
+    );
 }
 
 // Invite from URL
