@@ -1,26 +1,6 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "config:recommended",
-        "security:minimumReleaseAgeNpm",
-        "group:allNonMajor",
-        ":automergeStableNonMajor"
-    ],
-    "packageRules": [
-        {
-            "description": "Don't automerge Django minor updates",
-            "matchPackageNames": [
-                "django"
-            ],
-            "matchUpdateTypes": [
-                "major",
-                "minor"
-            ],
-            "automerge": false
-        }
-    ],
-    "lockFileMaintenance": {
-        "enabled": true,
-        "automerge": true
-    }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>rafaelurben/renovate-config"
+  ]
 }
