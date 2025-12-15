@@ -43,6 +43,7 @@ jobs:
         run: npm run build
 
   check_backend:
+    name: Check backend code
     runs-on: ubuntu-latest
 
     strategy:
@@ -59,7 +60,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-              python -m pip install -r requirements.txt -r requirements-dev.txt
+          python -m pip install -r requirements.txt -r requirements-dev.txt
       - name: Check code formatting with black
         run: |
           python -m black --check .
@@ -83,7 +84,7 @@ jobs:
           echo "VERSION=$(cat _version.txt | tr -d '\r\n')" >> $GITHUB_OUTPUT
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v7
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7
         with:
           args: >
             -Dsonar.projectVersion=${{ steps.version.outputs.VERSION }}
