@@ -31,7 +31,7 @@ class Command(BaseCommand):
         os.chdir(newcwd)
 
         self.stdout.write("Installing Teamized app dependencies...")
-        code = os.system("npm install --ignore-scripts")
+        code = os.system("npm install")
 
         if code:
             self.stdout.write(
