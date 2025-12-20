@@ -1,5 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+/* eslint-disable @typescript-eslint/no-require-imports, no-undef */
+
+const fs = require('node:fs');
+const path = require('node:path');
 const webpack = require('webpack');
 
 const version = fs
@@ -17,6 +19,9 @@ module.exports = [
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.css'],
+            alias: {
+                '@/*': [path.resolve(__dirname, '*')],
+            },
         },
         module: {
             rules: [
