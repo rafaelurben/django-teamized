@@ -16,7 +16,7 @@ module.exports = [
             filename: 'mainapp.js',
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js'],
+            extensions: ['.ts', '.tsx', '.js', '.css'],
         },
         module: {
             rules: [
@@ -24,6 +24,22 @@ module.exports = [
                     test: /\.tsx?$/,
                     use: 'ts-loader',
                     exclude: /node_modules/,
+                },
+                {
+                    test: /\.css$/i,
+                    include: path.resolve(__dirname, 'src'),
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                postcssOptions: {
+                                    plugins: [['@tailwindcss/postcss']],
+                                },
+                            },
+                        },
+                    ],
                 },
             ],
         },

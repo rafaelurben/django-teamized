@@ -4,6 +4,7 @@
  */
 
 import './globals';
+import './styles.css';
 
 import $ from 'jquery';
 import React from 'react';
