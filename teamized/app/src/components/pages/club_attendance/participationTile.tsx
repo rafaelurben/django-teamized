@@ -61,7 +61,7 @@ export function ParticipationTile({
     };
 
     return (
-        <Dashboard.Tile
+        <Dashboard.CustomCard
             title={'Ereignis: ' + selectedEvent.title}
             help="Verwalte die Anwesenheit für dieses Ereignis."
             loading={participations === null}
@@ -87,6 +87,6 @@ export function ParticipationTile({
                     )}
                 </>
             )}
-        </Dashboard.Tile>
+        </Dashboard.CustomCard>
     );
 }

@@ -10,14 +10,16 @@ export default function Th({
     className = '',
     children,
     noWrapFlex = false,
-}: Props) {
+}: Readonly<Props>) {
     if (noWrapFlex) {
         return (
-            <th className={`text-nowrap {className}`}>
-                <div className="d-flex flex-nowrap gap-1">{children}</div>
+            <th className={`tw:whitespace-nowrap ${className}`}>
+                <div className="tw:flex tw:flex-nowrap tw:gap-1">
+                    {children}
+                </div>
             </th>
         );
     }
 
-    return <th className={className}>{children}</th>;
+    return <th className={`tw:text-left ${className}`}>{children}</th>;
 }

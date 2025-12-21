@@ -15,7 +15,10 @@ interface Props {
     children: React.ReactNode;
 }
 
-export default function VerticalDataTable({ items, children }: Props) {
+export default function VerticalDataTable({
+    items,
+    children,
+}: Readonly<Props>) {
     const slots: Record<string, React.ReactNode> = {
         head: null,
         foot: null,
@@ -42,7 +45,7 @@ export default function VerticalDataTable({ items, children }: Props) {
     });
 
     return (
-        <table className={`table mb-0`}>
+        <table className="tw:w-full tw:caption-bottom tw:text-sm">
             {slots.head}
             <tbody>
                 {items
@@ -55,7 +58,7 @@ export default function VerticalDataTable({ items, children }: Props) {
                         >
                             <th
                                 scope="row"
-                                className={item.limitWidth ? 'pe-3' : ''}
+                                className={item.limitWidth ? 'tw:pe-3' : ''}
                                 style={{
                                     width: item.limitWidth ? '1px' : undefined,
                                 }}

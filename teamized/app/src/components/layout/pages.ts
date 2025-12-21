@@ -1,13 +1,15 @@
-const PAGE_CONFIGS: {
+export const PAGE_CONFIGS: {
     [index: string]: {
         title: string;
         inheritFrom?: string;
         description?: string;
+        canHandleNoAppData?: boolean;
     };
 } = {
     home: {
         title: 'Startseite',
         description: 'Herzlich willkommen bei Teamized!',
+        canHandleNoAppData: true,
     },
     teamlist: {
         title: 'Teams',

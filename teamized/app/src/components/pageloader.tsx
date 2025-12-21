@@ -2,13 +2,17 @@
  *  This component is used to render the pages.
  */
 
+import { TriangleAlert } from 'lucide-react';
 import React, { lazy, Suspense } from 'react';
 
+import { Spinner } from '@/shadcn/components/ui/spinner';
 import AppHeader from '@/teamized/components/layout/AppHeader';
-import { calculateBreadcrumbs } from '@/teamized/components/layout/pages';
+import {
+    calculateBreadcrumbs,
+    PAGE_CONFIGS,
+} from '@/teamized/components/layout/pages';
 
 import * as TeamsService from '../service/teams.service';
-import { useAppdata } from '../utils/appdataProvider';
 import {
     useCurrentTeamData,
     useNavigationState,
@@ -28,46 +32,46 @@ const WorkingtimePage = lazy(
 );
 
 export function PageLoader() {
-    const appdata = useAppdata();
-
     const { selectedPage } = useNavigationState();
     const teamData = useCurrentTeamData();
 
-    if (!teamData) {
-        return (
-            <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-                <div className="spinner-border mb-3" role="status">
-                    <span className="visually-hidden">Laden...</span>
-                </div>
-                <p>Daten werden abgerufen...</p>
-            </div>
-        );
+    const pageData = PAGE_CONFIGS[selectedPage];
+
+    const pageName = pageData.title || '404 Nicht gefunden';
+    if (teamData?.team) {
+        document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
+    } else {
+        document.title = `${pageName} | Teamized App`;
     }
-
-    if (selectedPage.startsWith('club') && teamData.team.club === null) {
-        return (
-            <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
-                <div className="text-danger mb-4" role="status">
-                    <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
-                </div>
-                <p>
-                    Die Vereinsfunktionen sind in diesem Team noch nicht
-                    aktiviert! Bitte wähle ein anderes Team oder eine andere
-                    Seite.
-                </p>
-            </div>
-        );
-    }
-
-    const breadcrumbs = calculateBreadcrumbs(selectedPage);
-
-    const pageName = breadcrumbs.at(-1)?.label || '404 Nicht gefunden';
-    document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
 
     const getPage = () => {
+        if (!teamData && !pageData.canHandleNoAppData) {
+            return (
+                <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
+                    <Spinner className="tw:size-12 tw:mb-3 tw:text-muted-foreground" />
+                    <p className="tw:text-muted-foreground">
+                        Daten werden abgerufen...
+                    </p>
+                </div>
+            );
+        }
+
+        if (selectedPage.startsWith('club') && teamData?.team?.club === null) {
+            return (
+                <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
+                    <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
+                    <p>
+                        Die Vereinsfunktionen sind in diesem Team noch nicht
+                        aktiviert! Bitte wähle ein anderes Team oder eine andere
+                        Seite.
+                    </p>
+                </div>
+            );
+        }
+
         switch (selectedPage) {
             case 'home':
-                return <HomePage settings={appdata.settings} />;
+                return <HomePage />;
             case 'teamlist':
                 return <TeamlistPage teams={TeamsService.getTeamsList()} />;
             case 'team':
@@ -84,12 +88,12 @@ export function PageLoader() {
                 return <ClubAttendancePage />;
             default:
                 return (
-                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
-                        <div className="text-danger mb-4" role="status">
-                            <i className="fa-solid fa-triangle-exclamation fa-3x"></i>
-                        </div>
-                        <h3>404 Nicht gefunden</h3>
-                        <p>
+                    <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
+                        <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
+                        <h3 className="tw:text-xl tw:font-bold tw:mb-2">
+                            404 Nicht gefunden
+                        </h3>
+                        <p className="tw:text-muted-foreground">
                             Diese Seite wurde leider nicht gefunden. Vielleicht
                             findest du die gesuchte Seite ja links in der
                             Navigation?
@@ -101,14 +105,14 @@ export function PageLoader() {
 
     return (
         <>
-            <AppHeader breadcrumbs={breadcrumbs} />
+            <AppHeader breadcrumbs={calculateBreadcrumbs(selectedPage)} />
             <Suspense
                 fallback={
-                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-                        <div className="spinner-border mb-3" role="status">
-                            <span className="visually-hidden">Laden...</span>
-                        </div>
-                        <p>Seite wird geladen...</p>
+                    <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
+                        <Spinner className="tw:size-12 tw:mb-3 tw:text-muted-foreground" />
+                        <p className="tw:text-muted-foreground">
+                            Seite wird geladen...
+                        </p>
                     </div>
                 }
             >

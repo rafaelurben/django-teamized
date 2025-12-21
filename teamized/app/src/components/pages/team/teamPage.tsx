@@ -62,7 +62,7 @@ export default function TeamPage() {
     return (
         <Dashboard.Page>
             <Dashboard.Column>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title={
                         team.club === null ? (
                             'Teaminfos'
@@ -139,16 +139,16 @@ export default function TeamPage() {
                             )}
                         </Tables.ButtonFooter>
                     </Tables.VerticalDataTable>
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
 
-                <Dashboard.Tile title="Mitglieder">
+                <Dashboard.CustomCard title="Mitglieder">
                     <TeamMemberTable teamData={teamData} />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
 
                 {team.member!.is_owner && (
-                    <Dashboard.Tile title="Einladungen">
+                    <Dashboard.CustomCard title="Einladungen">
                         <TeamInviteTable teamData={teamData} />
-                    </Dashboard.Tile>
+                    </Dashboard.CustomCard>
                 )}
             </Dashboard.Column>
         </Dashboard.Page>

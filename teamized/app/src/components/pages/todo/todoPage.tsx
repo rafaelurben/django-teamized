@@ -52,7 +52,7 @@ export default function TodoPage() {
     return (
         <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 4 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Listenübersicht"
                     help="Wechsle zwischen den To-do-Listen deines Teams oder erstelle eine neue."
                 >
@@ -63,8 +63,8 @@ export default function TodoPage() {
                         onListSelect={setSelectedListId}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Listendetails"
                     help="Sieh dir Infos zur oben ausgewählten Liste an."
                 >
@@ -74,10 +74,10 @@ export default function TodoPage() {
                         onListDeleted={() => setSelectedListId(null)}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 8 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title={
                         selectedList
                             ? 'To-do-Liste: ' + selectedList.name
@@ -89,7 +89,7 @@ export default function TodoPage() {
                         selectedList={selectedList}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
     );

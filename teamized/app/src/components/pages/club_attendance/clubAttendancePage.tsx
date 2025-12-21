@@ -63,7 +63,7 @@ export default function ClubAttendancePage() {
     return (
         <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ xl: 4 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Ereignisübersicht"
                     help="Wähle ein Ereignis aus, um die Anwesenheit zu verwalten oder erstelle ein neues."
                 >
@@ -74,8 +74,8 @@ export default function ClubAttendancePage() {
                         onEventSelect={selectEvent}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Ereignisdetails"
                     help="Wähle ein Ereignis aus, um dieses zu bearbeiten oder zu löschen."
                 >
@@ -84,7 +84,7 @@ export default function ClubAttendancePage() {
                         selectedEvent={selectedEvent}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ xl: 8 }}>
                 {selectedEvent ? (
@@ -96,12 +96,12 @@ export default function ClubAttendancePage() {
                         key={selectedEvent.id} // Ensure re-render on event change
                     />
                 ) : (
-                    <Dashboard.Tile
+                    <Dashboard.CustomCard
                         title="Ausgewähltes Ereignis"
                         help="Bitte wähle ein Ereignis aus der linken Spalte."
                     >
                         <p className="ms-1 mb-0">Kein Ereignis ausgewählt.</p>
-                    </Dashboard.Tile>
+                    </Dashboard.CustomCard>
                 )}
             </Dashboard.Column>
         </Dashboard.Page>

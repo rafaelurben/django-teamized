@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { Ellipsis, LucideIcon } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -53,7 +53,8 @@ export default function AppSidebarSecondaryNavigation({
                             {item.dropdownItems && (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <SidebarMenuAction showOnHover>
+                                        <SidebarMenuAction>
+                                            <Ellipsis />
                                             <span className="tw:sr-only">
                                                 Mehr
                                             </span>
@@ -61,8 +62,8 @@ export default function AppSidebarSecondaryNavigation({
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent
                                         className="tw:w-48"
-                                        side={isMobile ? 'bottom' : 'right'}
-                                        align={isMobile ? 'end' : 'start'}
+                                        side={isMobile ? 'top' : 'right'}
+                                        align="end"
                                     >
                                         {item.dropdownItems.map(
                                             (dropdownItem) => (

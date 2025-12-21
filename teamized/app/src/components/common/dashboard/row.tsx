@@ -10,12 +10,8 @@ export default function Row({
     className = '',
     grow = false,
     children,
-}: Partial<Props>) {
-    let fullClassName = `dashboard-row row w-100 g-0 ${className}`;
-
-    if (grow) {
-        fullClassName += ' flex-grow-1';
-    }
+}: Readonly<Partial<Props>>) {
+    const fullClassName = `dashboard-row tw:flex tw:flex-wrap tw:w-full ${grow ? 'tw:flex-grow' : ''} ${className}`;
 
     return <div className={fullClassName}>{children}</div>;
 }

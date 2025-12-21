@@ -1,21 +1,22 @@
+import { Info } from 'lucide-react';
 import React from 'react';
 
 import Tooltip from './tooltip';
 
 interface Props {
     title: string;
-    icon: string;
+    icon: React.ReactNode;
     className: string;
 }
 
 export default function IconTooltip({
     title,
-    icon = 'fa-solid fa-info-circle',
+    icon = <Info className="tw:size-4" />,
     className = '',
-}: Partial<Props>) {
+}: Readonly<Partial<Props>>) {
     return (
         <Tooltip className={className} title={title}>
-            <i className={icon}></i>
+            {icon}
         </Tooltip>
     );
 }

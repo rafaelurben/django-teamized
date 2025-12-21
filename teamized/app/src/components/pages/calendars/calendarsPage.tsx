@@ -83,7 +83,7 @@ export default function CalendarsPage() {
     return (
         <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Ereignisübersicht"
                     help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
                 >
@@ -93,8 +93,8 @@ export default function CalendarsPage() {
                         selectedDate={selectedDate}
                         events={Object.values(eventMap)}
                     />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title={'Ereignisse am ' + dayDisplay}
                     help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln."
                 >
@@ -112,10 +112,10 @@ export default function CalendarsPage() {
                         team={team}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 6 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Ausgewähltes Ereignis"
                     help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
                     className="order-lg-3"
@@ -126,8 +126,8 @@ export default function CalendarsPage() {
                         team={team}
                         calendars={calendars}
                     />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Kalenderübersicht"
                     help="Wechsle zwischen den Kalendern deines Teams oder erstelle einen neuen. Diese Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
                 >
@@ -139,8 +139,8 @@ export default function CalendarsPage() {
                         selectedCalendar={selectedCalendar}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Kalenderdetails"
                     help="Sieh dir Infos zum oben ausgewählten Kalender an."
                 >
@@ -151,7 +151,7 @@ export default function CalendarsPage() {
                         onCalendarDeleted={() => setSelectedCalendarId(null)}
                         isAdmin={isAdmin}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
     );

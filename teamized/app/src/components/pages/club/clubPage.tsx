@@ -39,7 +39,7 @@ export default function ClubPage() {
     return (
         <Dashboard.Page loading={club === undefined}>
             <Dashboard.Column>
-                <Dashboard.Tile title="Vereinsinfos">
+                <Dashboard.CustomCard title="Vereinsinfos">
                     <Tables.VerticalDataTable
                         items={[
                             {
@@ -92,11 +92,11 @@ export default function ClubPage() {
                             </button>
                         </Tables.ButtonFooter>
                     </Tables.VerticalDataTable>
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
 
-                <Dashboard.Tile title="Vereinsmitglieder">
+                <Dashboard.CustomCard title="Vereinsmitglieder">
                     <ClubMemberTileContent teamData={teamData} />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
     );

@@ -26,7 +26,7 @@ export default function AppHeader({ breadcrumbs }: Readonly<Props>) {
     const getPageURL = usePageNavigatorURL();
 
     return (
-        <header className="tw:flex tw:items-center tw:h-16 tw:gap-2 tw:border-b tw:px-4">
+        <header className="tw:flex tw:items-center tw:h-10 tw:gap-2 tw:border-b tw:px-2">
             <SidebarTrigger />
             <Separator
                 orientation="vertical"
@@ -38,12 +38,12 @@ export default function AppHeader({ breadcrumbs }: Readonly<Props>) {
                         if (index === array.length - 1) {
                             return (
                                 <BreadcrumbItem key={crumb.page}>
-                                    <BreadcrumbPage>
+                                    <BreadcrumbPage className="tw:flex tw:items-center">
                                         {crumb.label}
                                         {crumb.description && (
                                             <IconTooltip
                                                 title={crumb.description}
-                                                className="tw:ml-1 tw:text-muted-foreground"
+                                                className="tw:ml-2 tw:text-muted-foreground"
                                             />
                                         )}
                                     </BreadcrumbPage>

@@ -99,21 +99,15 @@ export default function WorkingtimePage() {
         <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 3 }}>
                 <Dashboard.Row>
-                    <Dashboard.Column
-                        size={12}
-                        sizes={{ lg: 12, sm: 6, md: 6 }}
-                    >
-                        <Dashboard.Tile title="Sitzung aufzeichnen" grow>
+                    <Dashboard.Column sizes={{ lg: 12, sm: 6, md: 6 }}>
+                        <Dashboard.CustomCard title="Sitzung aufzeichnen" grow>
                             <WorksessionTrackingTileContent
                                 team={team}
                             ></WorksessionTrackingTileContent>
-                        </Dashboard.Tile>
+                        </Dashboard.CustomCard>
                     </Dashboard.Column>
-                    <Dashboard.Column
-                        size={12}
-                        sizes={{ lg: 12, sm: 6, md: 6 }}
-                    >
-                        <Dashboard.Tile title="Sitzung erfassen" grow>
+                    <Dashboard.Column sizes={{ lg: 12, sm: 6, md: 6 }}>
+                        <Dashboard.CustomCard title="Sitzung erfassen" grow>
                             <p className="ms-1">
                                 Aufzeichnung vergessen? Kein Problem. Hier
                                 können Sitzungen nachträglich manuell erfasst
@@ -127,12 +121,12 @@ export default function WorkingtimePage() {
                                     Sitzung hinzufügen
                                 </button>
                             </div>
-                        </Dashboard.Tile>
+                        </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
                 <Dashboard.Row>
                     <Dashboard.Column>
-                        <Dashboard.Tile title="Filter">
+                        <Dashboard.CustomCard title="Filter">
                             <div className="row m-2 g-2">
                                 <div className="input-group col-12 p-0 m-0">
                                     <div
@@ -177,12 +171,12 @@ export default function WorkingtimePage() {
                                     Anwenden
                                 </button>
                             </div>
-                        </Dashboard.Tile>
+                        </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 9 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Statistiken"
                     help="Statistiken für den ausgewählten Zeitraum."
                     grow
@@ -192,11 +186,11 @@ export default function WorkingtimePage() {
                         start={statsRangeStart}
                         end={statsRangeEnd}
                     />
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
 
             <Dashboard.Column>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Erfasste Zeiten"
                     help="Erfasste Zeiten im ausgewählten Zeitraum."
                 >
@@ -213,7 +207,7 @@ export default function WorkingtimePage() {
                             PDF-Report generieren
                         </button>
                     )}
-                </Dashboard.Tile>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
     );

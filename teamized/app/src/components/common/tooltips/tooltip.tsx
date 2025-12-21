@@ -1,5 +1,10 @@
-import { Tooltip as BSTooltip } from 'bootstrap';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+
+import {
+    Tooltip as ShadcnTooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/shadcn/components/ui/tooltip';
 
 interface Props {
     title: string;
@@ -11,23 +16,15 @@ export default function Tooltip({
     title,
     className = '',
     children,
-}: Partial<Props>) {
-    const tooltipRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        const tooltip = new BSTooltip(tooltipRef.current as HTMLElement);
-
-        return () => tooltip.dispose();
-    }, []);
-
+}: Readonly<Partial<Props>>) {
     return (
-        <abbr
-            className={className}
-            title={title}
-            data-bs-toggle="tooltip"
-            ref={tooltipRef}
-        >
-            {children}
-        </abbr>
+        <ShadcnTooltip>
+            <TooltipTrigger asChild>
+                <span className={className}>{children}</span>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>{title}</p>
+            </TooltipContent>
+        </ShadcnTooltip>
     );
 }

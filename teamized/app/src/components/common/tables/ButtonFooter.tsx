@@ -10,16 +10,16 @@ export default function ButtonFooter({
     show = true,
     noTopBorder = false,
     children,
-}: Partial<Props>) {
+}: Readonly<Partial<Props>>) {
     if (!show) {
         return null;
     }
 
     return (
-        <tfoot className={noTopBorder ? 'border-top-0' : ''}>
+        <tfoot className={noTopBorder ? 'tw:border-t-0' : ''}>
             <tr>
-                <td colSpan={100} className="border-bottom-0">
-                    <div className="w-100 d-inline-flex justify-content-end gap-2">
+                <td colSpan={100} className="tw:border-b-0">
+                    <div className="tw:w-full tw:inline-flex tw:justify-end tw:gap-2">
                         {children}
                     </div>
                 </td>

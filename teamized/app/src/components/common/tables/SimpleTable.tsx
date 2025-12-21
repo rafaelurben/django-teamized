@@ -8,8 +8,8 @@ interface Props {
 export default function SimpleTable({
     className = '',
     children,
-}: Partial<Props>) {
-    const fullClassName = `table mb-0 ${className}`;
+}: Readonly<Partial<Props>>) {
+    const fullClassName = `tw:w-full tw:caption-bottom tw:text-sm ${className}`;
 
     return <table className={fullClassName}>{children}</table>;
 }
