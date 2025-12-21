@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Table } from '@/shadcn/components/ui/table';
+
 interface Props {
     className: string;
     children: React.ReactNode;
@@ -11,5 +13,5 @@ export default function SimpleTable({
 }: Readonly<Partial<Props>>) {
     const fullClassName = `tw:w-full tw:caption-bottom tw:text-sm ${className}`;
 
-    return <table className={fullClassName}>{children}</table>;
+    return <Table className={fullClassName}>{children}</Table>;
 }

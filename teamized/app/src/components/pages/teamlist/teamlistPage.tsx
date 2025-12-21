@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
 import { CardContent } from '@/shadcn/components/ui/card';
+import { Input } from '@/shadcn/components/ui/input';
 
 import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
@@ -63,39 +65,44 @@ export default function TeamlistPage({ teams }: Readonly<Props>) {
         <Dashboard.Page>
             <Dashboard.Column>
                 <Dashboard.CustomCard title="Teamübersicht">
-                    <TeamTable teams={teams} selectedTeamId={selectedTeamId} />
+                    <CardContent>
+                        <TeamTable
+                            teams={teams}
+                            selectedTeamId={selectedTeamId}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
 
                 <Dashboard.CustomCard title="Team erstellen oder beitreten">
                     <CardContent>
-                        <p className="mx-1">
+                        <p className="tw:mb-4">
                             Klicke auf &quot;Team erstellen&quot;, um ein neues
                             Team zu erstellen oder gib einen Einladungstoken ein
                             und klicke auf &quot;Team beitreten&quot;, um einem
                             Team beizutreten.
                         </p>
-                        <div className="input-group my-2 px-1">
-                            <button
-                                type="button"
-                                className="btn btn-outline-success border-1"
+                        <div className="tw:flex tw:gap-2">
+                            <Button
+                                variant="outline"
                                 onClick={createTeam}
+                                className="tw:whitespace-nowrap"
                             >
                                 Team erstellen
-                            </button>
-                            <input
+                            </Button>
+                            <Input
                                 id="invite-token"
                                 type="text"
-                                className="form-control"
                                 placeholder="Token der Einladung"
                                 defaultValue={prefilledInviteToken}
+                                className="tw:flex-1"
                             />
-                            <button
-                                type="button"
-                                className="btn btn-outline-primary border-1"
+                            <Button
+                                variant="default"
                                 onClick={joinTeam}
+                                className="tw:whitespace-nowrap"
                             >
                                 Team beitreten
-                            </button>
+                            </Button>
                         </div>
                     </CardContent>
                 </Dashboard.CustomCard>
