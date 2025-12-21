@@ -96,11 +96,7 @@ export default function WorkingtimePage() {
     });
 
     return (
-        <Dashboard.Page
-            title="Deine Arbeitszeit"
-            subtitle="Erfasse und verwalte deine Arbeitszeit"
-            loading={loading}
-        >
+        <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 3 }}>
                 <Dashboard.Row>
                     <Dashboard.Column

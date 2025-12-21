@@ -20,7 +20,8 @@ module.exports = [
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.css'],
             alias: {
-                '@/*': [path.resolve(__dirname, '*')],
+                '@/shadcn/*': [path.resolve(__dirname, 'shadcn/*')],
+                '@/teamized/*': [path.resolve(__dirname, 'src/*')],
             },
         },
         module: {

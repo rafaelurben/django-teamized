@@ -81,11 +81,7 @@ export default function CalendarsPage() {
     const selectedEvent = eventMap[selectedEventId!];
 
     return (
-        <Dashboard.Page
-            title="Kalender"
-            subtitle="Kalender für dich und dein Team"
-            loading={loading}
-        >
+        <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
                 <Dashboard.Tile
                     title="Ereignisübersicht"

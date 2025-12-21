@@ -78,8 +78,6 @@ async function initialize() {
     }
 
     setupCSRFToken();
-
-    GeneralUtils.showSidebarOnDesktop();
     render();
 }
 

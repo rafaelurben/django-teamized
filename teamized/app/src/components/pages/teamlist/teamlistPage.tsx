@@ -14,7 +14,7 @@ interface Props {
     teams: Team[];
 }
 
-export default function TeamlistPage({ teams }: Props) {
+export default function TeamlistPage({ teams }: Readonly<Props>) {
     const { selectedTeamId } = useNavigationState();
     const updateNavigationState = useNavigationStateDispatch();
 
@@ -58,10 +58,7 @@ export default function TeamlistPage({ teams }: Props) {
         new URL(window.location.href).searchParams.get('invite') ?? '';
 
     return (
-        <Dashboard.Page
-            title="Deine Teams"
-            subtitle="Verwalte deine Teams, erstelle ein neues oder trete einem bei"
-        >
+        <Dashboard.Page>
             <Dashboard.Column>
                 <Dashboard.Tile title="Teamübersicht">
                     <TeamTable teams={teams} selectedTeamId={selectedTeamId} />

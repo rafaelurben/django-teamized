@@ -2,28 +2,15 @@ import React from 'react';
 
 interface Props {
     loading: boolean;
-    title: React.ReactNode | null;
-    subtitle: React.ReactNode | null;
-    text: React.ReactNode | null;
     children: React.ReactNode;
 }
 
 export default function Page({
     loading = false,
-    title = null,
-    subtitle = null,
-    text = null,
     children,
-}: Partial<Props>) {
+}: Readonly<Partial<Props>>) {
     return (
-        <div className="dashboard p-0 w-100 h-100 d-flex flex-column">
-            {title && (
-                <h4 className="dashboard-title pt-3 mx-3 text-bold">{title}</h4>
-            )}
-            {subtitle && (
-                <h5 className="dashboard-subtitle mt-2 mx-3">{subtitle}</h5>
-            )}
-            {text && <p className="dashboard-text mt-2 mx-3">{text}</p>}
+        <div className="dashboard p-0 w-100 d-flex flex-column">
             {loading ? (
                 <div className="w-100 flex-grow-1 d-flex flex-column align-items-center justify-content-center">
                     <div className="spinner-border mb-3" role="status">

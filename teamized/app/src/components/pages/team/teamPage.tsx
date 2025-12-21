@@ -60,10 +60,7 @@ export default function TeamPage() {
     }
 
     return (
-        <Dashboard.Page
-            title="Dein Team"
-            subtitle="Infos über dein ausgewähltes Team"
-        >
+        <Dashboard.Page>
             <Dashboard.Column>
                 <Dashboard.Tile
                     title={

@@ -4,17 +4,20 @@
 
 import React, { useEffect } from 'react';
 
-import * as SettingsService from '../service/settings.service';
-import * as TeamsService from '../service/teams.service';
-import * as WorkingtimeService from '../service/workingtime.service';
-import { useAppdata, useAppdataRefresh } from '../utils/appdataProvider';
+import { SidebarProvider } from '@/shadcn/components/ui/sidebar';
+import AppSidebar from '@/teamized/components/layout/AppSidebar';
+import { PageLoader } from '@/teamized/components/pageloader';
+import * as SettingsService from '@/teamized/service/settings.service';
+import * as TeamsService from '@/teamized/service/teams.service';
+import * as WorkingtimeService from '@/teamized/service/workingtime.service';
+import {
+    useAppdata,
+    useAppdataRefresh,
+} from '@/teamized/utils/appdataProvider';
 import {
     useNavigationState,
     useNavigationStateDispatch,
-} from '../utils/navigation/navigationProvider';
-import AppMenubar from './menubar';
-import { PageLoader } from './pageloader';
-import AppSidebar from './sidebar';
+} from '@/teamized/utils/navigation/navigationProvider';
 
 export default function App() {
     const { selectedTeamId } = useNavigationState();
@@ -42,7 +45,7 @@ export default function App() {
         // Check URL for invite
         TeamsService.checkURLInvite()
             .then((result) => {
-                if (result && result.isConfirmed) {
+                if (result?.isConfirmed) {
                     updateNavigationState({
                         update: { pageName: 'team', teamId: result.value!.id },
                         remove: ['invite'],
@@ -70,20 +73,11 @@ export default function App() {
     });
 
     return (
-        <>
-            <AppMenubar
-                teams={TeamsService.getTeamsList()}
-                user={appdata.user}
-            />
-
-            <div id="app-root" className="d-flex">
-                <div id="app-sidebar" data-bs-theme="dark">
-                    <AppSidebar user={appdata.user} />
-                </div>
-                <div id="app-maincontent" className="flex-grow-1 overflow-auto">
-                    <PageLoader />
-                </div>
-            </div>
-        </>
+        <SidebarProvider id="app-root">
+            <AppSidebar />
+            <main id="app-maincontent" className="tw:flex-1 tw:overflow-auto">
+                <PageLoader />
+            </main>
+        </SidebarProvider>
     );
 }

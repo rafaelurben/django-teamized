@@ -4,6 +4,9 @@
 
 import React, { lazy, Suspense } from 'react';
 
+import AppHeader from '@/teamized/components/layout/AppHeader';
+import { calculateBreadcrumbs } from '@/teamized/components/layout/pages';
+
 import * as TeamsService from '../service/teams.service';
 import { useAppdata } from '../utils/appdataProvider';
 import {
@@ -24,17 +27,6 @@ const WorkingtimePage = lazy(
     () => import('./pages/workingtime/workingtimePage')
 );
 
-export const PAGE_NAMES: { [index: string]: string | undefined } = {
-    home: 'Startseite',
-    club: 'Verein',
-    club_attendance: 'Anwesenheit',
-    calendars: 'Kalender',
-    team: 'Team',
-    teamlist: 'Teams',
-    workingtime: 'Arbeitszeit',
-    todo: 'To-do-Listen',
-};
-
 export function PageLoader() {
     const appdata = useAppdata();
 
@@ -52,9 +44,6 @@ export function PageLoader() {
         );
     }
 
-    const pageName = PAGE_NAMES[selectedPage] || '404 Nicht gefunden';
-    document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
-
     if (selectedPage.startsWith('club') && teamData.team.club === null) {
         return (
             <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center p-4">
@@ -70,12 +59,15 @@ export function PageLoader() {
         );
     }
 
+    const breadcrumbs = calculateBreadcrumbs(selectedPage);
+
+    const pageName = breadcrumbs.at(-1)?.label || '404 Nicht gefunden';
+    document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
+
     const getPage = () => {
         switch (selectedPage) {
             case 'home':
-                return (
-                    <HomePage user={appdata.user} settings={appdata.settings} />
-                );
+                return <HomePage settings={appdata.settings} />;
             case 'teamlist':
                 return <TeamlistPage teams={TeamsService.getTeamsList()} />;
             case 'team':
@@ -108,17 +100,20 @@ export function PageLoader() {
     };
 
     return (
-        <Suspense
-            fallback={
-                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-                    <div className="spinner-border mb-3" role="status">
-                        <span className="visually-hidden">Laden...</span>
+        <>
+            <AppHeader breadcrumbs={breadcrumbs} />
+            <Suspense
+                fallback={
+                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <div className="spinner-border mb-3" role="status">
+                            <span className="visually-hidden">Laden...</span>
+                        </div>
+                        <p>Seite wird geladen...</p>
                     </div>
-                    <p>Seite wird geladen...</p>
-                </div>
-            }
-        >
-            {getPage()}
-        </Suspense>
+                }
+            >
+                {getPage()}
+            </Suspense>
+        </>
     );
 }

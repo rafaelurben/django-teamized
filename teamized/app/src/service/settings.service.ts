@@ -24,12 +24,10 @@ function applySettings(settings: Settings) {
         setColorScheme('dark');
     } else if (settings.darkmode === false) {
         setColorScheme('light');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setColorScheme('dark');
     } else {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setColorScheme('dark');
-        } else {
-            setColorScheme('light');
-        }
+        setColorScheme('light');
     }
     // Rerender the page to apply the changes
     render();
@@ -72,8 +70,10 @@ export async function editSettings(settings: Partial<Settings>) {
 function setColorScheme(scheme: string) {
     if (scheme === 'dark') {
         document.body.dataset.bsTheme = 'dark';
+        document.body.dataset.tailwindTheme = 'dark';
     } else {
         document.body.dataset.bsTheme = 'light';
+        document.body.dataset.tailwindTheme = 'light';
     }
 }
 

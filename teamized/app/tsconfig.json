@@ -20,7 +20,8 @@
         /* shadcn/ui */
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./*"]
+            "@/shadcn/*": ["./shadcn/*"],
+            "@/teamized/*": ["./src/*"]
         }
     },
     "exclude": ["node_modules", "*.config.js"],

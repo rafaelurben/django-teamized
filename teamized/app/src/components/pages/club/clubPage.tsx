@@ -37,11 +37,7 @@ export default function ClubPage() {
     const club = team.club!;
 
     return (
-        <Dashboard.Page
-            title="Verein"
-            subtitle="Verwalte deinen Verein"
-            loading={club === undefined}
-        >
+        <Dashboard.Page loading={club === undefined}>
             <Dashboard.Column>
                 <Dashboard.Tile title="Vereinsinfos">
                     <Tables.VerticalDataTable

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { CHANGELOG } from '../../../data/changelog';
 import { Settings } from '../../../interfaces/settings';
-import { User } from '../../../interfaces/user';
 import * as SettingsService from '../../../service/settings.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getDateString } from '../../../utils/datetime';
@@ -11,11 +10,10 @@ import Dashboard from '../../common/dashboard';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
-    user: User;
     settings: Settings;
 }
 
-export default function HomePage({ user, settings }: Props) {
+export default function HomePage({ settings }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const [changelogAmount, setChangelogAmount] = useState(5);
@@ -31,11 +29,7 @@ export default function HomePage({ user, settings }: Props) {
     };
 
     return (
-        <Dashboard.Page
-            title="Startseite"
-            subtitle={`Hallo ${user.first_name}`}
-            loading={settings === undefined}
-        >
+        <Dashboard.Page loading={settings === undefined}>
             <Dashboard.Column sizes={{ lg: 8 }}>
                 <Dashboard.Tile title="Willkommen">
                     <p className="ms-1 mb-1">
@@ -133,8 +127,8 @@ export default function HomePage({ user, settings }: Props) {
                     help="Neue Funktionen, Bugfixes und Änderungen"
                 >
                     <div className="m-1">
-                        {changelogItems.map((item, i) => (
-                            <React.Fragment key={i}>
+                        {changelogItems.map((item) => (
+                            <React.Fragment key={item.date}>
                                 <h6>
                                     <b>{getDateString(new Date(item.date))}</b>
                                     {item.version && (

@@ -61,11 +61,7 @@ export default function ClubAttendancePage() {
     const selectedEvent = eventsMap[selectedEventId!];
 
     return (
-        <Dashboard.Page
-            title="Anwesenheit"
-            subtitle="Verwalte die Anwesenheit von Vereinsmitgliedern"
-            loading={loading}
-        >
+        <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ xl: 4 }}>
                 <Dashboard.Tile
                     title="Ereignisübersicht"

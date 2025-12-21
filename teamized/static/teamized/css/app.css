@@ -15,51 +15,6 @@ body {
     min-height: 0; /* Prevent app from exceeding parent height; no clue why it works tho */
 }
 
-#app-sidebar .nav-link {
-    /* Sidebar links */
-    white-space: nowrap;
-}
-
-#app-sidebar .nav-link > i {
-    /* Sidebar icons */
-    margin-right: 0.5rem;
-    font-size: 0.8rem;
-    bottom: 0.1rem;
-    position: relative
-}
-
-/* Sidebar */
-
-body:not(.sidebar-visible) #app-sidebar {
-    display: none;
-}
-
-/* Sidebar toggle */
-
-body:not(.sidebar-visible) .sidebar-toggle .when-open {
-    display: none;
-}
-
-body.sidebar-visible .sidebar-toggle .when-closed {
-    display: none;
-}
-
-@media (max-width: 991px) {
-    /* CSS overrides on smaller screens where the menu is collapsible */
-    #app-menubar {
-        padding-top: 0.6rem;
-        padding-bottom: 0.3rem;
-    }
-
-    body.sidebar-visible #app-maincontent {
-        display: none;
-    }
-
-    body.sidebar-visible #app-sidebar {
-        width: 100vw;
-    }
-}
-
 /* SweetAlert overrides */
 
 body.swal2-shown:not(.swal2-no-backdrop) {

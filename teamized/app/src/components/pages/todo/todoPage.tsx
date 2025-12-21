@@ -50,11 +50,7 @@ export default function TodoPage() {
         teamData.todolists[selectedListId]) as Todolist | null;
 
     return (
-        <Dashboard.Page
-            title="To-do-Listen"
-            subtitle="Behalte den Überblick über die Aufgaben deines Teams"
-            loading={loading}
-        >
+        <Dashboard.Page loading={loading}>
             <Dashboard.Column sizes={{ lg: 4 }}>
                 <Dashboard.Tile
                     title="Listenübersicht"
