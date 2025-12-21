@@ -26,6 +26,10 @@
     --destructive-foreground: oklch(0.577 0.245 27.325);
     --warning: oklch(0.75 0.2 90);
     --warning-foreground: oklch(0.145 0 0);
+    --success: oklch(0.569 0.211 134.4);
+    --success-foreground: oklch(1 0 89.876);
+    --info: oklch(0.569 0.211 264.376);
+    --info-foreground: oklch(1 0 0);
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
@@ -60,10 +64,14 @@
     --muted-foreground: oklch(0.708 0 0);
     --accent: oklch(0.269 0 0);
     --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.396 0.141 25.723);
+    --destructive: oklch(0.564 0.228 28.808);
     --destructive-foreground: oklch(0.637 0.237 25.331);
     --warning: oklch(0.439 0.147 91.2);
     --warning-foreground: oklch(0.985 0 0);
+    --success: oklch(0.329 0.178 134.4);
+    --success-foreground: oklch(0.985 0 0);
+    --info: oklch(0.329 0.178 264.376);
+    --info-foreground: oklch(0.985 0 0);
     --border: oklch(0.269 0 0);
     --input: oklch(0.269 0 0);
     --ring: oklch(0.439 0 0);
@@ -101,6 +109,10 @@
     --color-destructive-foreground: var(--destructive-foreground);
     --color-warning: var(--warning);
     --color-warning-foreground: var(--warning-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
@@ -130,5 +142,11 @@
 
     body {
         @apply tw:bg-background tw:text-foreground;
+    }
+
+    /* Bring back pointer cursor */
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
     }
 }

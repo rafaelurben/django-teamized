@@ -89,7 +89,7 @@ export default function HomePage() {
                                 ))}
                             </div>
                         </ScrollArea>
-                        <div className="tw:pointer-events-none tw:absolute tw:bottom-0 tw:left-0 tw:right-0 tw:h-16 tw:bg-gradient-to-t tw:from-card tw:to-transparent" />
+                        <div className="tw:pointer-events-none tw:absolute tw:bottom-2 tw:left-0 tw:right-0 tw:h-16 tw:bg-gradient-to-t tw:from-card tw:to-transparent" />
                     </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>

@@ -5,7 +5,10 @@ interface Props {
     preserveLineBreaks?: boolean;
 }
 
-export default function Urlize({ text, preserveLineBreaks = true }: Props) {
+export default function Urlize({
+    text,
+    preserveLineBreaks = true,
+}: Readonly<Props>) {
     const urlRegex = /((?:https?:\/\/|www\.)[^\s/$.?#].\S*)/gi;
 
     const parts = text.split(urlRegex);
@@ -25,6 +28,7 @@ export default function Urlize({ text, preserveLineBreaks = true }: Props) {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="tw:underline"
                         >
                             {part}
                         </a>

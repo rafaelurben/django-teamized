@@ -1,5 +1,14 @@
 import React from 'react';
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import { cn } from '@/shadcn/lib/utils';
+
 import ButtonFooter from './ButtonFooter';
 
 interface DataItem {
@@ -45,31 +54,31 @@ export default function VerticalDataTable({
     });
 
     return (
-        <table className="tw:w-full tw:caption-bottom tw:text-sm">
+        <Table>
             {slots.head}
-            <tbody>
+            <TableBody>
                 {items
                     .map((item, index) => ({ item, index }))
                     .filter(({ item }) => !item.hide)
                     .map(({ item, index }) => (
-                        <tr
+                        <TableRow
                             key={index}
                             className={item.isDebugId ? 'debug-id' : ''}
                         >
-                            <th
+                            <TableHead
                                 scope="row"
-                                className={item.limitWidth ? 'tw:pe-3' : ''}
-                                style={{
-                                    width: item.limitWidth ? '1px' : undefined,
-                                }}
+                                className={cn(
+                                    'tw:font-bold',
+                                    item.limitWidth ? 'tw:pe-3 tw:w-[1px]' : ''
+                                )}
                             >
                                 {item.label}:
-                            </th>
-                            <td>{item.value}</td>
-                        </tr>
+                            </TableHead>
+                            <TableCell>{item.value}</TableCell>
+                        </TableRow>
                     ))}
-            </tbody>
+            </TableBody>
             {slots.foot}
-        </table>
+        </Table>
     );
 }

@@ -37,7 +37,7 @@ export function PageLoader() {
 
     const pageData = PAGE_CONFIGS[selectedPage];
 
-    const pageName = pageData.title || '404 Nicht gefunden';
+    const pageName = pageData?.title || '404 Nicht gefunden';
     if (teamData?.team) {
         document.title = `${pageName} - ${teamData.team.name} | Teamized App`;
     } else {
@@ -45,6 +45,22 @@ export function PageLoader() {
     }
 
     const getPage = () => {
+        if (!pageData) {
+            return (
+                <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
+                    <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
+                    <h3 className="tw:text-xl tw:font-bold tw:mb-2">
+                        404 Nicht gefunden
+                    </h3>
+                    <p className="tw:text-muted-foreground">
+                        Diese Seite wurde leider nicht gefunden. Vielleicht
+                        findest du die gesuchte Seite ja links in der
+                        Navigation?
+                    </p>
+                </div>
+            );
+        }
+
         if (!teamData && !pageData.canHandleNoAppData) {
             return (
                 <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
@@ -91,12 +107,11 @@ export function PageLoader() {
                     <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
                         <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
                         <h3 className="tw:text-xl tw:font-bold tw:mb-2">
-                            404 Nicht gefunden
+                            UUPS! Seite nicht gefunden.
                         </h3>
                         <p className="tw:text-muted-foreground">
-                            Diese Seite wurde leider nicht gefunden. Vielleicht
-                            findest du die gesuchte Seite ja links in der
-                            Navigation?
+                            Etwas ist schiefgelaufen. Die angeforderte Seite
+                            konnte nicht geladen werden.
                         </p>
                     </div>
                 );
@@ -109,10 +124,8 @@ export function PageLoader() {
             <Suspense
                 fallback={
                     <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
-                        <Spinner className="tw:size-12 tw:mb-3 tw:text-muted-foreground" />
-                        <p className="tw:text-muted-foreground">
-                            Seite wird geladen...
-                        </p>
+                        <Spinner className="tw:size-12 tw:mb-3" />
+                        <p>Seite wird geladen...</p>
                     </div>
                 }
             >

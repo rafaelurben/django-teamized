@@ -21,7 +21,11 @@ export default function IconTooltip({
     const data = { icon }; // Wrap in an object to use as a component
     return (
         <Tooltip className={className} title={title}>
-            <data.icon className={cn('tw:size-4', iconClassName)} />
+            {typeof data.icon === 'string' ? (
+                <i className={data.icon} />
+            ) : (
+                <data.icon className={cn('tw:size-4', iconClassName)} />
+            )}
         </Tooltip>
     );
 }

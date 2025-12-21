@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { Badge } from '@/shadcn/components/ui/badge';
+import { Button } from '@/shadcn/components/ui/button';
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import * as ClubService from '../../../service/clubs.service';
 import * as TeamsService from '../../../service/teams.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
@@ -67,87 +71,89 @@ export default function TeamPage() {
                         team.club === null ? (
                             'Teaminfos'
                         ) : (
-                            <div>
+                            <div className="tw:flex tw:items-center tw:gap-3">
                                 Teaminfos
-                                <div className="badge bg-info ms-2">
+                                <Badge variant="info">
                                     Vereinsmodus aktiviert
-                                    <IconTooltip
-                                        title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar."
-                                        className="ms-1"
-                                    />
-                                </div>
+                                    <IconTooltip title="In diesem Team sind erweiterte Vereinsfunktionen verfügbar." />
+                                </Badge>
                             </div>
                         )
                     }
                 >
-                    <Tables.VerticalDataTable
-                        items={[
-                            {
-                                label: 'Name',
-                                value: team.name,
-                            },
-                            {
-                                label: 'Beschreibung',
-                                value: <Urlize text={team.description} />,
-                                limitWidth: true,
-                            },
-                            {
-                                label: 'Mitglieder',
-                                value: team.membercount,
-                            },
-                            {
-                                label: 'ID',
-                                value: team.id,
-                                isDebugId: true,
-                            },
-                        ]}
-                    >
-                        <Tables.ButtonFooter
-                            show={team.member!.is_owner}
-                            noTopBorder={true}
+                    <CardContent>
+                        <Tables.VerticalDataTable
+                            items={[
+                                {
+                                    label: 'Name',
+                                    value: team.name,
+                                },
+                                {
+                                    label: 'Beschreibung',
+                                    value: <Urlize text={team.description} />,
+                                    limitWidth: true,
+                                },
+                                {
+                                    label: 'Mitglieder',
+                                    value: team.membercount,
+                                },
+                                {
+                                    label: 'ID',
+                                    value: team.id,
+                                    isDebugId: true,
+                                },
+                            ]}
                         >
-                            <button
-                                className="btn btn-outline-dark border-1"
-                                onClick={handleTeamEditButtonClick}
+                            <Tables.ButtonFooter
+                                show={team.member!.is_owner}
+                                noTopBorder={true}
                             >
-                                Team&nbsp;bearbeiten
-                            </button>
-                            {canBeDeleted ? (
-                                <button
-                                    className="btn btn-outline-danger border-1"
-                                    onClick={handleTeamDeleteButtonClick}
+                                <Button
+                                    variant="outline"
+                                    onClick={handleTeamEditButtonClick}
                                 >
-                                    Team&nbsp;löschen
-                                </button>
-                            ) : (
-                                <Tooltip title={cannotBeDeletedTooltipReason}>
-                                    <button
-                                        className="btn btn-outline-danger border-1"
-                                        disabled
+                                    Team&nbsp;bearbeiten
+                                </Button>
+                                {canBeDeleted ? (
+                                    <Button
+                                        variant="destructive"
+                                        onClick={handleTeamDeleteButtonClick}
                                     >
                                         Team&nbsp;löschen
-                                    </button>
-                                </Tooltip>
-                            )}
-                            {!team.club && (
-                                <button
-                                    className="btn btn-outline-info border-1"
-                                    onClick={handleClubCreateButtonClick}
-                                >
-                                    Vereinsmodus&nbsp;aktivieren
-                                </button>
-                            )}
-                        </Tables.ButtonFooter>
-                    </Tables.VerticalDataTable>
+                                    </Button>
+                                ) : (
+                                    <Tooltip
+                                        title={cannotBeDeletedTooltipReason}
+                                    >
+                                        <Button variant="destructive" disabled>
+                                            Team&nbsp;löschen
+                                        </Button>
+                                    </Tooltip>
+                                )}
+                                {!team.club && (
+                                    <Button
+                                        variant="info"
+                                        onClick={handleClubCreateButtonClick}
+                                    >
+                                        Vereinsmodus&nbsp;aktivieren
+                                    </Button>
+                                )}
+                            </Tables.ButtonFooter>
+                        </Tables.VerticalDataTable>
+                    </CardContent>
                 </Dashboard.CustomCard>
 
                 <Dashboard.CustomCard title="Mitglieder">
-                    <TeamMemberTable teamData={teamData} />
+                    <CardContent>
+                        <TeamMemberTable teamData={teamData} />
+                    </CardContent>
                 </Dashboard.CustomCard>
 
                 {team.member!.is_owner && (
                     <Dashboard.CustomCard title="Einladungen">
-                        <TeamInviteTable teamData={teamData} />
+                        <CardContent>
+                            <TeamInviteTable teamData={teamData} />
+                        </CardContent>
                     </Dashboard.CustomCard>
                 )}
             </Dashboard.Column>

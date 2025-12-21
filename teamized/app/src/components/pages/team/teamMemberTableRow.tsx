@@ -1,4 +1,25 @@
+import {
+    LogOut,
+    MoreVertical,
+    Trash2,
+    TrendingDown,
+    TrendingUp,
+} from 'lucide-react';
 import React from 'react';
+
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/shadcn/components/ui/avatar';
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 
 import { Member } from '../../../interfaces/teams/member';
 import { Team } from '../../../interfaces/teams/team';
@@ -16,9 +37,17 @@ export default function TeamMemberTableRow({
     team,
     member,
     loggedInMember,
-}: Props) {
+}: Readonly<Props>) {
     const selectPage = usePageNavigator();
     const refreshData = useAppdataRefresh();
+
+    const isLoggedInMember = member.id === loggedInMember.id;
+    const canChangeMemberRole = !isLoggedInMember && loggedInMember.is_owner;
+    const canLeave = isLoggedInMember && !loggedInMember.is_owner;
+    const canKickMember =
+        !isLoggedInMember &&
+        (loggedInMember.is_owner ||
+            (loggedInMember.is_admin && !member.is_admin));
 
     const handlePromoteButtonClick = () => {
         TeamsService.promoteMemberPopup(team, member).then((result) => {
@@ -48,89 +77,95 @@ export default function TeamMemberTableRow({
     };
 
     return (
-        <tr>
+        <TableRow>
             {/* Avatar */}
-            <td>
-                <img
-                    src={member.user.avatar_url}
-                    alt={`Avatar von ${member.user.username}`}
-                    width="32"
-                    height="32"
-                    className="rounded-circle"
-                />
-            </td>
-            {/* Name and description */}
-            <td>
+            <TableCell>
+                <Avatar className="tw:size-8">
+                    <AvatarImage
+                        src={member.user.avatar_url}
+                        alt={`Avatar von ${member.user.username}`}
+                    />
+                    <AvatarFallback>
+                        {member.user.first_name?.[0]}
+                        {member.user.last_name?.[0]}
+                    </AvatarFallback>
+                </Avatar>
+            </TableCell>
+            {/* Name */}
+            <TableCell>
                 <span>
                     {member.user.first_name} {member.user.last_name}
                 </span>
-            </td>
+            </TableCell>
             {/* Username and email */}
-            <td className="py-2">
-                <span>{member.user.username}</span>
-                <br />
-                <a href={'mailto:' + member.user.email}>{member.user.email}</a>
-            </td>
-            {/* Member role */}
-            <td>
-                <span>{member.role_text}</span>
-            </td>
-            {/* Action: Promote/Demote */}
-            {loggedInMember.is_owner &&
-                (!member.is_owner ? (
-                    !member.is_admin ? (
-                        <td>
-                            <a
-                                className="btn btn-outline-dark border-1"
-                                onClick={handlePromoteButtonClick}
-                            >
-                                Befördern
-                            </a>
-                        </td>
-                    ) : (
-                        <td>
-                            <a
-                                className="btn btn-outline-dark border-1"
-                                onClick={handleDemoteButtonClick}
-                            >
-                                Degradieren
-                            </a>
-                        </td>
-                    )
-                ) : (
-                    <td></td>
-                ))}
-            {/* Action: Leave / remove member */}
-            {member.id === loggedInMember.id ? (
-                !loggedInMember.is_owner ? (
-                    <td>
-                        <a
-                            className="btn btn-outline-danger border-1"
-                            onClick={handleLeaveButtonClick}
-                            title="Team verlassen"
-                        >
-                            <i className="fa-solid fa-right-from-bracket"></i>
-                        </a>
-                    </td>
-                ) : (
-                    <td></td>
-                )
-            ) : loggedInMember.is_owner ||
-              (loggedInMember.is_admin && !member.is_admin) ? (
-                <td>
+            <TableCell>
+                <div className="tw:flex tw:flex-col tw:gap-0.5">
+                    <span>{member.user.username}</span>
                     <a
-                        className="btn btn-outline-danger border-1"
-                        onClick={handleRemoveButtonClick}
-                        title="Mitglied entfernen"
+                        href={'mailto:' + member.user.email}
+                        target="_blank"
+                        className="tw:text-sm tw:text-muted-foreground tw:hover:text-foreground tw:transition-colors"
+                        rel="noreferrer noopener"
                     >
-                        <i className="fa-solid fa-trash"></i>
+                        {member.user.email}
                     </a>
-                </td>
-            ) : (
-                <td></td>
-            )}
+                </div>
+            </TableCell>
+            {/* Member role */}
+            <TableCell>
+                <span>{member.role_text}</span>
+            </TableCell>
+            {/* Actions dropdown */}
+            <TableCell>
+                {(canChangeMemberRole || canKickMember || canLeave) && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon-sm">
+                                <MoreVertical className="tw:size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {canChangeMemberRole &&
+                                (member.is_admin ? (
+                                    <DropdownMenuItem
+                                        onClick={handleDemoteButtonClick}
+                                    >
+                                        <TrendingDown className="tw:size-4" />
+                                        Degradieren
+                                    </DropdownMenuItem>
+                                ) : (
+                                    <DropdownMenuItem
+                                        onClick={handlePromoteButtonClick}
+                                    >
+                                        <TrendingUp className="tw:size-4" />
+                                        Befördern
+                                    </DropdownMenuItem>
+                                ))}
+                            {isLoggedInMember && (
+                                <DropdownMenuItem
+                                    onClick={handleLeaveButtonClick}
+                                    variant="destructive"
+                                    disabled={loggedInMember.is_owner}
+                                >
+                                    <LogOut className="tw:size-4" />
+                                    Team verlassen
+                                </DropdownMenuItem>
+                            )}
+                            {canKickMember && (
+                                <DropdownMenuItem
+                                    onClick={handleRemoveButtonClick}
+                                    variant="destructive"
+                                >
+                                    <Trash2 className="tw:size-4" />
+                                    Mitglied entfernen
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+            </TableCell>
             {/* ID */}
-            <td className="debug-id">{member.id}</td>
-        </tr>
+            <TableCell className="debug-id">{member.id}</TableCell>
+        </TableRow>
     );
 }

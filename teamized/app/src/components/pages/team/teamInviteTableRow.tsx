@@ -1,4 +1,16 @@
+import { Key, Link, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import Tooltip from '@/teamized/components/common/tooltips/tooltip';
 
 import { Invite } from '../../../interfaces/teams/invite';
 import { Team } from '../../../interfaces/teams/team';
@@ -12,11 +24,10 @@ interface Props {
     invite: Invite;
 }
 
-export default function TeamInviteTableRow({ team, invite }: Props) {
+export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
-    const inviteURL =
-        window.location.href.split('?')[0] + '?invite=' + invite.token;
+    const inviteURL = location.href.split('?')[0] + '?invite=' + invite.token;
 
     const handleDeleteButtonClick = () => {
         TeamsService.deleteInvitePopup(team, invite).then((result) => {
@@ -53,56 +64,66 @@ export default function TeamInviteTableRow({ team, invite }: Props) {
     };
 
     return (
-        <tr>
+        <TableRow>
             {/* Note */}
-            <td>
+            <TableCell>
                 <Urlize text={invite.note} />
-            </td>
-            {/* Share */}
-            <td>
-                <abbr title={invite.token} className="me-1" onClick={copyToken}>
-                    <i className="fa-solid fa-key"></i>
-                </abbr>
-                <abbr title={inviteURL} onClick={copyURL}>
-                    <i className="fa-solid fa-link"></i>
-                </abbr>
-            </td>
+            </TableCell>
+            {/* Token */}
+            <TableCell>
+                <Tooltip title={invite.token}>
+                    {invite.token.slice(0, 10)}...
+                </Tooltip>
+            </TableCell>
             {/* Valid until */}
-            <td>
+            <TableCell>
                 <span>
                     {invite.valid_until
                         ? new Date(invite.valid_until).toLocaleString()
                         : '\u221e'}
                 </span>
-            </td>
+            </TableCell>
             {/* Uses */}
-            <td className="text-align-end">
+            <TableCell>
                 <span>
                     {invite.uses_used}/{invite.uses_left}
                 </span>
-            </td>
-            {/* Action: Edit */}
-            <td>
-                <a
-                    className="btn btn-outline-dark border-1"
-                    onClick={handleEditButtonClick}
-                    title="Einladung bearbeiten"
-                >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                </a>
-            </td>
-            {/* Action: Delete */}
-            <td>
-                <a
-                    className="btn btn-outline-danger border-1"
-                    onClick={handleDeleteButtonClick}
-                    title="Einladung löschen"
-                >
-                    <i className="fa-solid fa-trash"></i>
-                </a>
-            </td>
+            </TableCell>
+            {/* Actions dropdown */}
+            <TableCell>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVertical className="tw:size-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={copyToken}>
+                            <Key className="tw:size-4" />
+                            Token kopieren
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={copyURL}>
+                            <Link className="tw:size-4" />
+                            Einladungslink kopieren
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={handleEditButtonClick}>
+                            <Pencil className="tw:size-4" />
+                            Einladung bearbeiten
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                            onClick={handleDeleteButtonClick}
+                            variant="destructive"
+                        >
+                            <Trash2 className="tw:size-4" />
+                            Einladung löschen
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
             {/* ID */}
-            <td className="debug-id">{invite.id}</td>
-        </tr>
+            <TableCell className="debug-id">{invite.id}</TableCell>
+        </TableRow>
     );
 }
