@@ -1,5 +1,14 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
@@ -13,9 +22,15 @@ interface Props {
     team: Team;
     selectedEvent: ClubAttendanceEvent | null;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
-export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
+export default function EventInfo({
+    team,
+    selectedEvent,
+    isAdmin,
+    loading = false,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const editEvent = () => {
@@ -38,8 +53,47 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
         });
     };
 
+    if (loading) {
+        return (
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableCell className="tw:font-medium">
+                            <Skeleton className="tw:h-4 tw:w-20" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="tw:h-4 tw:w-full" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell className="tw:font-medium">
+                            <Skeleton className="tw:h-4 tw:w-24" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="tw:h-4 tw:w-full" />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell className="tw:font-medium">
+                            <Skeleton className="tw:h-4 tw:w-16" />
+                        </TableCell>
+                        <TableCell>
+                            <Skeleton className="tw:h-4 tw:w-32" />
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+                <Tables.ButtonFooter>
+                    <div className="tw:flex tw:gap-2 tw:mt-3">
+                        <Skeleton className="tw:h-9 tw:w-28" />
+                        <Skeleton className="tw:h-9 tw:w-20" />
+                    </div>
+                </Tables.ButtonFooter>
+            </Table>
+        );
+    }
+
     if (!selectedEvent) {
-        return <p className="ms-1 mb-0">Kein Ereignis ausgewählt.</p>;
+        return <span>Kein Ereignis ausgewählt.</span>;
     }
 
     return (
@@ -86,24 +140,18 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
             <Tables.ButtonFooter noTopBorder={true}>
                 {isAdmin ? (
                     <>
-                        <button
-                            className="btn btn-outline-dark me-2"
-                            onClick={editEvent}
-                        >
+                        <Button variant="outline" onClick={editEvent}>
                             Bearbeiten
-                        </button>
-                        <button
-                            className="btn btn-outline-danger"
-                            onClick={deleteEvent}
-                        >
+                        </Button>
+                        <Button variant="destructive" onClick={deleteEvent}>
                             Löschen
-                        </button>
+                        </Button>
                     </>
                 ) : (
                     <CustomTooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
-                        <button className="btn btn-outline-dark disabled">
+                        <Button variant="outline" disabled>
                             Bearbeiten/Löschen
-                        </button>
+                        </Button>
                     </CustomTooltip>
                 )}
             </Tables.ButtonFooter>

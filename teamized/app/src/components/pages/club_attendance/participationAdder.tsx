@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { Team } from '../../../interfaces/teams/team';
@@ -19,14 +21,14 @@ export function ParticipationAdder({
     event,
     participations,
     handleCreate,
-}: Props) {
+}: Readonly<Props>) {
     const teamData = useCurrentTeamData();
     const [formVisible, setFormVisible] = useState(false);
     const memberIdsUnavailable = participations.map((p) => p.member_id);
 
     if (formVisible) {
         return (
-            <div className="p-1 p-md-2 p-lg-3">
+            <div className="tw:p-1 md:tw:p-2 lg:tw:p-3">
                 <ClubMemberSelector
                     members={Object.values(teamData.club_members)}
                     memberIdsUnavailable={memberIdsUnavailable}
@@ -49,13 +51,10 @@ export function ParticipationAdder({
         );
     } else {
         return (
-            <div className="d-flex justify-content-end mt-2">
-                <button
-                    className="btn btn-outline-success"
-                    onClick={() => setFormVisible(true)}
-                >
+            <div className="tw:flex tw:justify-end tw:mt-2">
+                <Button variant="success" onClick={() => setFormVisible(true)}>
                     Mitglieder hinzufügen
-                </button>
+                </Button>
             </div>
         );
     }

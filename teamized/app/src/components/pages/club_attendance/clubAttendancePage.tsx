@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import { ID } from '../../../interfaces/common';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import * as ClubService from '../../../service/clubs.service';
@@ -67,23 +69,29 @@ export default function ClubAttendancePage() {
                     title="Ereignisübersicht"
                     help="Wähle ein Ereignis aus, um die Anwesenheit zu verwalten oder erstelle ein neues."
                 >
-                    <EventSelector
-                        team={team}
-                        events={events}
-                        selectedEvent={selectedEvent}
-                        onEventSelect={selectEvent}
-                        isAdmin={isAdmin}
-                    />
+                    <CardContent>
+                        <EventSelector
+                            team={team}
+                            events={events}
+                            selectedEvent={selectedEvent}
+                            onEventSelect={selectEvent}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title="Ereignisdetails"
                     help="Wähle ein Ereignis aus, um dieses zu bearbeiten oder zu löschen."
                 >
-                    <EventInfo
-                        team={team}
-                        selectedEvent={selectedEvent}
-                        isAdmin={isAdmin}
-                    />
+                    <CardContent>
+                        <EventInfo
+                            team={team}
+                            selectedEvent={selectedEvent}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ xl: 8 }}>
@@ -100,7 +108,9 @@ export default function ClubAttendancePage() {
                         title="Ausgewähltes Ereignis"
                         help="Bitte wähle ein Ereignis aus der linken Spalte."
                     >
-                        <p className="ms-1 mb-0">Kein Ereignis ausgewählt.</p>
+                        <CardContent>
+                            <span>Kein Ereignis ausgewählt.</span>
+                        </CardContent>
                     </Dashboard.CustomCard>
                 )}
             </Dashboard.Column>

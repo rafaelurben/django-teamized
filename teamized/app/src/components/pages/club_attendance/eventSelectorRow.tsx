@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/shadcn/lib/utils';
+
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ID } from '../../../interfaces/common';
 import { getDateTimeString } from '../../../utils/datetime';
@@ -14,35 +16,33 @@ export default function EventSelectorRow({
     isSelected,
     onSelect,
     event,
-}: Props) {
+}: Readonly<Props>) {
     const handleSelect = () => {
         if (!isSelected) {
             onSelect(event.id);
         }
     };
 
-    const getStyle = () => {
-        return {
-            paddingLeft: isSelected ? '.5rem' : 'calc(.5rem + 3px)',
-            borderLeftWidth: isSelected ? '8px' : '5px',
-            borderLeftColor: 'white',
-            borderLeftStyle: 'solid',
-            cursor: 'pointer',
-            opacity: isSelected ? 1 : 0.75,
-            fontWeight: isSelected ? 'bold' : 'normal',
-        } satisfies React.CSSProperties;
-    };
-
     return (
-        <div className="py-1 mb-1" style={getStyle()} onClick={handleSelect}>
-            <span className="d-flex w-100 flex-column">
+        <button
+            className={cn(
+                'tw:py-1 tw:mb-1 tw:cursor-pointer tw:transition-opacity tw:text-left',
+                isSelected
+                    ? 'tw:pl-2 tw:border-l-8 tw:opacity-100 tw:font-bold'
+                    : 'tw:pl-2.75 tw:border-l-[5px] tw:opacity-75 tw:font-normal',
+                'tw:border-l-foreground'
+            )}
+            onClick={handleSelect}
+            tabIndex={0}
+        >
+            <span className="tw:flex tw:w-full tw:flex-col">
                 <span>{event.title}</span>
-                <span className="text-muted">
+                <span className="tw:text-muted-foreground">
                     {getDateTimeString(new Date(event.dt_start))}
                     {' - '}
                     {getDateTimeString(new Date(event.dt_end))}
                 </span>
             </span>
-        </div>
+        </button>
     );
 }

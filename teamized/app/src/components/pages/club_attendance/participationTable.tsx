@@ -1,10 +1,21 @@
+import { ClipboardCheckIcon, ReplyIcon, ShieldIcon } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Label } from '@/shadcn/components/ui/label';
+import { Switch } from '@/shadcn/components/ui/switch';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
 
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
 
@@ -27,71 +38,70 @@ export default function ParticipationTable({
     event,
     handleDelete,
     handleUpdate,
-}: Props) {
+}: Readonly<Props>) {
     const [editMode, setEditMode] = useState(false);
 
     return (
-        <Tables.SimpleTable>
-            <thead>
+        <Table>
+            <TableHeader>
                 {isAdmin && (
-                    <tr>
-                        <th colSpan={10} className="text-start">
-                            <div className="form-check form-switch d-inline-flex align-items-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
+                    <TableRow>
+                        <TableHead colSpan={10} className="tw:text-start">
+                            <div className="tw:inline-flex tw:items-center tw:gap-2">
+                                <Switch
                                     id="editModeSwitch"
                                     checked={editMode}
-                                    onChange={() => setEditMode((v) => !v)}
-                                    style={{ cursor: 'pointer' }}
+                                    onCheckedChange={setEditMode}
                                 />
-                                <label
-                                    className="form-check-label ms-2"
+                                <Label
                                     htmlFor="editModeSwitch"
+                                    className="tw:cursor-pointer"
                                 >
                                     Bearbeitungsmodus
-                                </label>
+                                </Label>
                             </div>
-                        </th>
-                    </tr>
+                        </TableHead>
+                    </TableRow>
                 )}
-                <tr>
-                    <th>Mitglied</th>
-                    <th style={{ width: '1px' }}>
+                <TableRow>
+                    <TableHead>Mitglied</TableHead>
+                    <TableHead className="tw:w-px">
                         {editMode ? (
                             <span>Anwesend?</span>
                         ) : (
                             <IconTooltip
                                 title="Anwesenheitsstatus"
-                                icon="fa-solid fa-clipboard-check"
+                                icon={ClipboardCheckIcon}
                             />
                         )}
-                    </th>
-                    <th style={{ width: '1px' }}>
+                    </TableHead>
+                    <TableHead className="tw:w-px">
                         {editMode ? (
                             <span>Angemeldet?</span>
                         ) : (
                             <IconTooltip
                                 title="Anmeldestatus"
-                                icon="fa-solid fa-reply"
+                                icon={ReplyIcon}
                             />
                         )}
-                    </th>
-                    <th>Begründung</th>
+                    </TableHead>
+                    <TableHead>Begründung</TableHead>
                     {isAdmin && (
-                        <Tables.Th noWrapFlex={true}>
-                            <span>Notiz</span>
-                            <IconTooltip
-                                icon="fa-solid fa-shield"
-                                title="Für Mitglied nicht sichtbar"
-                            />
-                        </Tables.Th>
+                        <TableHead>
+                            <span className="tw:flex tw:items-center tw:gap-1 tw:whitespace-nowrap">
+                                <span>Notiz</span>
+                                <IconTooltip
+                                    icon={ShieldIcon}
+                                    title="Für Mitglied nicht sichtbar"
+                                />
+                            </span>
+                        </TableHead>
                     )}
-                    {isAdmin && editMode && <th></th>}
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
+                    {isAdmin && editMode && <TableHead></TableHead>}
+                    <TableHead className="debug-id">ID</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {participations.length > 0 ? (
                     participations.map((participation) => (
                         <ParticipationTableRow
@@ -106,13 +116,13 @@ export default function ParticipationTable({
                         />
                     ))
                 ) : (
-                    <tr>
-                        <td colSpan={10} className="text-center">
+                    <TableRow>
+                        <TableCell colSpan={10} className="tw:text-center">
                             Keine Teilnehmer erfasst.
-                        </td>
-                    </tr>
+                        </TableCell>
+                    </TableRow>
                 )}
-            </tbody>
-        </Tables.SimpleTable>
+            </TableBody>
+        </Table>
     );
 }
