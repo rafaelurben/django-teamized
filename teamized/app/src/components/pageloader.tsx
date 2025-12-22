@@ -64,10 +64,8 @@ export function PageLoader() {
         if (!teamData && !pageData.canHandleNoAppData) {
             return (
                 <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
-                    <Spinner className="tw:size-12 tw:mb-3 tw:text-muted-foreground" />
-                    <p className="tw:text-muted-foreground">
-                        Daten werden abgerufen...
-                    </p>
+                    <Spinner className="tw:size-12 tw:mb-3" />
+                    <p>Daten werden abgerufen...</p>
                 </div>
             );
         }

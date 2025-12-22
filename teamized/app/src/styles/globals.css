@@ -8,6 +8,10 @@
 @custom-variant dark (&:is([data-tailwind-theme="dark"] *));
 
 :root {
+    /* Tailwind overrides */
+    --tw-font-weight-medium: 600;
+
+    /* Color scheme */
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);

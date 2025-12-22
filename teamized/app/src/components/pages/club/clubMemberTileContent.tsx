@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from '@/shadcn/components/ui/tabs';
+
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import IconTooltip from '../../common/tooltips/iconTooltip';
-import ClubGroupsTable from './clubGroupsTable';
 import ClubMembersTable from './clubMembersTable';
 
 interface Props {
     teamData: TeamCache;
 }
 
-export default function ClubMemberTileContent({ teamData }: Props) {
+export default function ClubMemberTileContent({ teamData }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const [selectedTab, setSelectedTab] = useState('all');
@@ -35,87 +42,47 @@ export default function ClubMemberTileContent({ teamData }: Props) {
     });
 
     if (clubMembersLoading || clubGroupsLoading) {
-        return <p className="ms-2">Wird geladen...</p>;
+        return <Skeleton className="tw:w-full tw:h-48" />;
     }
 
     return (
-        <>
-            <div className="m-2 border-0">
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <button
-                            className={
-                                selectedTab === 'all'
-                                    ? 'nav-link active'
-                                    : 'nav-link'
-                            }
-                            onClick={() => setSelectedTab('all')}
-                        >
-                            Alle ({clubMembers.length})
-                        </button>
-                    </li>
-                    {clubGroups.map((clubGroup) => (
-                        <li key={clubGroup.id} className="nav-item">
-                            <button
-                                className={
-                                    selectedTab === clubGroup.id
-                                        ? 'nav-link active'
-                                        : 'nav-link'
-                                }
-                                onClick={() => setSelectedTab(clubGroup.id)}
-                            >
-                                {clubGroup.name} ({clubGroup.memberids.length})
-                                {clubGroup.description && (
-                                    <IconTooltip
-                                        className="ms-1"
-                                        title={clubGroup.description}
-                                    />
-                                )}
-                            </button>
-                        </li>
-                    ))}
-                    <li className="nav-item ms-auto">
-                        <button
-                            className={
-                                selectedTab === 'edit'
-                                    ? 'nav-link active'
-                                    : 'nav-link'
-                            }
-                            onClick={() => setSelectedTab('edit')}
-                        >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            {selectedTab === 'all' ? (
-                // All club members
+        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+            <TabsList className="tw:flex-wrap tw:gap-2 tw:h-auto">
+                <TabsTrigger value="all">
+                    Alle ({clubMembers.length})
+                </TabsTrigger>
+                {clubGroups.map((clubGroup) => (
+                    <TabsTrigger key={clubGroup.id} value={clubGroup.id}>
+                        {clubGroup.name} ({clubGroup.memberids.length})
+                        {clubGroup.description && (
+                            <IconTooltip title={clubGroup.description} />
+                        )}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+
+            <TabsContent value="all">
                 <ClubMembersTable
                     team={team}
                     clubMembers={clubMembers}
                     isAdmin={isAdmin}
                     isOwner={isOwner}
                 />
-            ) : selectedTab === 'edit' ? (
-                // Edit club groups
-                <ClubGroupsTable
-                    team={team}
-                    clubGroups={clubGroups}
-                    isAdmin={isAdmin}
-                />
-            ) : (
-                // Club members in selected group
-                <ClubMembersTable
-                    team={team}
-                    clubMembers={clubMembers.filter((cm) =>
-                        teamData.club_groups[selectedTab].memberids.includes(
-                            cm.id
-                        )
-                    )}
-                    isAdmin={isAdmin}
-                    isOwner={isOwner}
-                />
-            )}
-        </>
+            </TabsContent>
+
+            {clubGroups.map((clubGroup) => (
+                <TabsContent key={clubGroup.id} value={clubGroup.id}>
+                    <ClubMembersTable
+                        team={team}
+                        clubMembers={clubMembers.filter((cm) =>
+                            clubGroup.memberids.includes(cm.id)
+                        )}
+                        isAdmin={isAdmin}
+                        isOwner={isOwner}
+                        group={clubGroup}
+                    />
+                </TabsContent>
+            ))}
+        </Tabs>
     );
 }

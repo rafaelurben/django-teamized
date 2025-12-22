@@ -49,8 +49,8 @@ export default function CustomCard({
             {loading ? (
                 <CardContent className={grow ? 'tw:flex-grow' : ''}>
                     <div className="tw:flex tw:flex-col tw:items-center tw:justify-center tw:my-5 tw:gap-2">
-                        <Loader2 className="tw:size-6 tw:animate-spin tw:text-muted-foreground" />
-                        <span className="tw:text-sm tw:text-muted-foreground">
+                        <Loader2 className="tw:size-6 tw:animate-spin" />
+                        <span className="tw:text-sm">
                             Daten werden geladen...
                         </span>
                     </div>

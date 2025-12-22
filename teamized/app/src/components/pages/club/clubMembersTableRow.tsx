@@ -1,4 +1,22 @@
+import {
+    FileEdit,
+    Key,
+    MoreVertical,
+    Trash2,
+    UserPen,
+    UsersRound,
+} from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
@@ -18,7 +36,7 @@ export default function ClubMembersTableRow({
     clubMember,
     isAdmin,
     isOwner,
-}: Props) {
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const handleRemoveButtonClick = () => {
@@ -50,87 +68,86 @@ export default function ClubMembersTableRow({
     };
 
     return (
-        <tr>
-            <td>
+        <TableRow>
+            <TableCell>
                 <span>{clubMember.first_name}</span>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 <span>{clubMember.last_name}</span>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 {clubMember.birth_date === null ? null : (
                     <span>
                         {getDateString(new Date(clubMember.birth_date))} (
                         {getAge(clubMember.birth_date)})
                     </span>
                 )}
-            </td>
-            <td>
-                <a href={'mailto:' + clubMember.email}>{clubMember.email}</a>
-            </td>
+            </TableCell>
+            <TableCell>
+                <a
+                    href={'mailto:' + clubMember.email}
+                    className="tw:text-sm tw:text-muted-foreground hover:tw:text-foreground tw:transition-colors"
+                >
+                    {clubMember.email}
+                </a>
+            </TableCell>
 
-            {isOwner && (
-                <>
-                    {/* Action: Create magic link */}
-                    <td>
-                        <a
-                            className="btn btn-outline-primary border-1"
-                            onClick={handleCreateMagicLinkButtonClick}
-                            title="Magischer Link erstellen"
-                        >
-                            <i className="fa-solid fa-key"></i>
-                        </a>
-                    </td>
-                </>
-            )}
-
-            {isAdmin && (
-                <>
-                    {/* Action: Edit */}
-                    <td>
-                        <a
-                            className="btn btn-outline-dark border-1"
-                            onClick={handleEditButtonClick}
-                            title="Mitglied bearbeiten"
-                        >
-                            <i className="fa-solid fa-user-pen"></i>
-                        </a>
-                    </td>
-                    {/* Action: Portfolio Edit */}
-                    <td>
-                        <a
-                            className="btn btn-outline-dark border-1"
-                            onClick={handlePortfolioEditButtonClick}
-                            title="Portfolio bearbeiten"
-                        >
-                            <i className="fa-solid fa-file-pen"></i>
-                        </a>
-                    </td>
-                    {/* Action: Manage groups */}
-                    <td>
-                        <a
-                            className="btn btn-outline-dark border-1"
-                            onClick={handleGroupEditButtonClick}
-                            title="Gruppen anpassen"
-                        >
-                            <i className="fa-solid fa-users-rectangle"></i>
-                        </a>
-                    </td>
-                    {/* Action: Delete */}
-                    <td>
-                        <a
-                            className="btn btn-outline-danger border-1"
-                            onClick={handleRemoveButtonClick}
-                            title="Mitglied entfernen"
-                        >
-                            <i className="fa-solid fa-trash"></i>
-                        </a>
-                    </td>
-                </>
-            )}
+            {/* Actions dropdown */}
+            <TableCell>
+                {(isOwner || isAdmin) && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon-sm">
+                                <MoreVertical className="tw:size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {isOwner && (
+                                <DropdownMenuItem
+                                    onClick={handleCreateMagicLinkButtonClick}
+                                >
+                                    <Key className="tw:size-4" />
+                                    Magischen Link erstellen
+                                </DropdownMenuItem>
+                            )}
+                            {isAdmin && (
+                                <>
+                                    {isOwner && <DropdownMenuSeparator />}
+                                    <DropdownMenuItem
+                                        onClick={handleEditButtonClick}
+                                    >
+                                        <UserPen className="tw:size-4" />
+                                        Mitglied bearbeiten
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={handlePortfolioEditButtonClick}
+                                    >
+                                        <FileEdit className="tw:size-4" />
+                                        Portfolio bearbeiten
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={handleGroupEditButtonClick}
+                                    >
+                                        <UsersRound className="tw:size-4" />
+                                        Gruppen anpassen
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={handleRemoveButtonClick}
+                                        variant="destructive"
+                                    >
+                                        <Trash2 className="tw:size-4" />
+                                        Mitglied entfernen
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+            </TableCell>
 
             {/* ID */}
-            <td className="debug-id">{clubMember.id}</td>
-        </tr>
+            <TableCell className="debug-id">{clubMember.id}</TableCell>
+        </TableRow>
     );
 }

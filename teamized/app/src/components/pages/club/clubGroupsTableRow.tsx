@@ -1,4 +1,15 @@
+import { MoreVertical, Pencil, Share2, Trash2 } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
@@ -11,7 +22,11 @@ interface Props {
     isAdmin: boolean;
 }
 
-export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
+export default function ClubGroupsTableRow({
+    team,
+    group,
+    isAdmin,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const handleRemoveButtonClick = () => {
@@ -31,51 +46,49 @@ export default function ClubGroupsTableRow({ team, group, isAdmin }: Props) {
     };
 
     return (
-        <tr>
+        <TableRow>
             {/* Name */}
-            <td>
+            <TableCell>
                 <span>{group.name}</span>
-            </td>
+            </TableCell>
             {/* Beschreibung */}
-            <td>
-                <span>{group.description}</span>
-            </td>
-            {isAdmin && (
-                <>
-                    {/* Action: Share group portfolios */}
-                    <td>
-                        <a
-                            className="btn btn-outline-primary border-1"
-                            onClick={handleSharePortfolioButtonClick}
-                            title="Mitgliederportfolios teilen (API)"
-                        >
-                            <i className="fa-solid fa-share"></i>
-                        </a>
-                    </td>
-                    {/* Action: Edit */}
-                    <td>
-                        <a
-                            className="btn btn-outline-dark border-1"
-                            onClick={handleEditButtonClick}
-                            title="Gruppe bearbeiten"
-                        >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                        </a>
-                    </td>
-                    {/* Action: Delete */}
-                    <td>
-                        <a
-                            className="btn btn-outline-danger border-1"
-                            onClick={handleRemoveButtonClick}
-                            title="Gruppe löschen"
-                        >
-                            <i className="fa-solid fa-trash"></i>
-                        </a>
-                    </td>
-                </>
-            )}
+            <TableCell>
+                <p className="tw:whitespace-pre">{group.description}</p>
+            </TableCell>
+            {/* Actions dropdown */}
+            <TableCell>
+                {isAdmin && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon-sm">
+                                <MoreVertical className="tw:size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                onClick={handleSharePortfolioButtonClick}
+                            >
+                                <Share2 className="tw:size-4" />
+                                Mitgliederportfolios teilen (API)
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleEditButtonClick}>
+                                <Pencil className="tw:size-4" />
+                                Gruppe bearbeiten
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={handleRemoveButtonClick}
+                                variant="destructive"
+                            >
+                                <Trash2 className="tw:size-4" />
+                                Gruppe löschen
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+            </TableCell>
             {/* ID */}
-            <td className="debug-id">{group.id}</td>
-        </tr>
+            <TableCell className="debug-id">{group.id}</TableCell>
+        </TableRow>
     );
 }

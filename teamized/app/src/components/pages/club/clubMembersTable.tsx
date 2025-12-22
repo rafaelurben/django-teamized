@@ -1,4 +1,15 @@
+import { AlertCircle } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
 
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { Team } from '../../../interfaces/teams/team';
@@ -13,6 +24,7 @@ interface Props {
     clubMembers: ClubMember[];
     isAdmin: boolean;
     isOwner: boolean;
+    group?: ClubGroup;
 }
 
 export default function ClubMembersTable({
@@ -20,46 +32,46 @@ export default function ClubMembersTable({
     clubMembers,
     isAdmin,
     isOwner,
-}: Props) {
+    group,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const handleCreateButtonClick = () => {
-        ClubService.createClubMemberPopup(team).then((result) => {
-            if (result.isConfirmed) refreshData();
+        ClubService.createClubMemberPopup(team).then(async (result) => {
+            if (result.isConfirmed) {
+                if (group) {
+                    // If the table is shown for a specific group, add the new member to that group
+                    await ClubService.addClubMemberToGroup(
+                        team.id,
+                        result.value!.id,
+                        group.id
+                    );
+                }
+                refreshData();
+            }
         });
     };
 
     return (
-        <Tables.SimpleTable>
-            <thead>
-                <tr>
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th>Geburtsdatum</th>
-                    <Tables.Th noWrapFlex={true}>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Vorname</TableHead>
+                    <TableHead>Nachname</TableHead>
+                    <TableHead>Geburtsdatum</TableHead>
+                    <TableHead className="tw:whitespace-nowrap tw:flex tw:items-center tw:gap-1">
                         <span>E-Mail-Adresse</span>
                         <IconTooltip
                             title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
-                            icon="fa-solid fa-circle-exclamation text-warning"
+                            icon={AlertCircle}
+                            iconClassName="tw:text-yellow-600"
                         />
-                    </Tables.Th>
-                    {isOwner && (
-                        <>
-                            <th style={{ width: '1px' }}></th>
-                        </>
-                    )}
-                    {isAdmin && (
-                        <>
-                            <th style={{ width: '1px' }}></th>
-                            <th style={{ width: '1px' }}></th>
-                            <th style={{ width: '1px' }}></th>
-                            <th style={{ width: '1px' }}></th>
-                        </>
-                    )}
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
+                    </TableHead>
+                    <TableHead className="tw:w-[1px]"></TableHead>
+                    <TableHead className="debug-id">ID</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {clubMembers.map((clubMember) => (
                     <ClubMembersTableRow
                         key={clubMember.id}
@@ -69,17 +81,14 @@ export default function ClubMembersTable({
                         isOwner={isOwner}
                     />
                 ))}
-            </tbody>
-
-            <Tables.ButtonFooter show={isAdmin}>
-                <button
-                    type="button"
-                    className="btn btn-outline-success border-1"
-                    onClick={handleCreateButtonClick}
-                >
-                    Mitglied erstellen
-                </button>
-            </Tables.ButtonFooter>
-        </Tables.SimpleTable>
+            </TableBody>
+            {isAdmin && (
+                <Tables.ButtonFooter>
+                    <Button variant="success" onClick={handleCreateButtonClick}>
+                        Mitglied erstellen
+                    </Button>
+                </Tables.ButtonFooter>
+            )}
+        </Table>
     );
 }

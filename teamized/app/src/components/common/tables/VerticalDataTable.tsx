@@ -7,7 +7,6 @@ import {
     TableHead,
     TableRow,
 } from '@/shadcn/components/ui/table';
-import { cn } from '@/shadcn/lib/utils';
 
 import ButtonFooter from './ButtonFooter';
 
@@ -67,10 +66,9 @@ export default function VerticalDataTable({
                         >
                             <TableHead
                                 scope="row"
-                                className={cn(
-                                    'tw:font-bold',
+                                className={
                                     item.limitWidth ? 'tw:pe-3 tw:w-[1px]' : ''
-                                )}
+                                }
                             >
                                 {item.label}:
                             </TableHead>
