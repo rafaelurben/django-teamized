@@ -14,9 +14,7 @@ export default function Urlize({
     const parts = text.split(urlRegex);
 
     return (
-        <span
-            style={{ whiteSpace: preserveLineBreaks ? 'pre-wrap' : 'normal' }}
-        >
+        <span className={preserveLineBreaks ? 'tw:whitespace-pre-wrap' : ''}>
             {parts.map((part, index) => {
                 if (part.match(urlRegex)) {
                     const href = part.startsWith('http')

@@ -32,8 +32,7 @@ export default function HomePage() {
                             </span>
                             <a
                                 onClick={() => toggleDebug()}
-                                style={{ opacity: 0 }}
-                                className="tw:ms-1"
+                                className="tw:ms-1 tw:opacity-0"
                                 aria-hidden="true"
                             >
                                 DEBUG

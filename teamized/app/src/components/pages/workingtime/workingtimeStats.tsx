@@ -24,7 +24,7 @@ export default function WorkingtimeStats({
     const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
 
     if (loading) {
-        return <Skeleton className="tw:w-full tw:h-[90%]" />;
+        return <Skeleton className="tw:w-full tw:h-100" />;
     }
 
     return (

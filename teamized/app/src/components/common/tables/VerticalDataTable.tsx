@@ -68,9 +68,7 @@ export default function VerticalDataTable({
                             <TableHead
                                 scope="row"
                                 className={cn(
-                                    item.limitWidth
-                                        ? 'tw:pe-3 tw:w-px'
-                                        : 'tw:whitespace-normal',
+                                    item.limitWidth ? 'tw:pe-3 tw:w-px' : '',
                                     item.isDebugId
                                         ? 'tw:text-muted-foreground'
                                         : ''
@@ -79,7 +77,11 @@ export default function VerticalDataTable({
                                 {item.label}:
                             </TableHead>
                             <TableCell
-                                className={item.isDebugId ? 'tw:text-xs' : ''}
+                                className={
+                                    item.isDebugId
+                                        ? 'tw:text-xs tw:whitespace-nowrap'
+                                        : ''
+                                }
                             >
                                 {item.value}
                             </TableCell>

@@ -351,7 +351,7 @@ export async function viewToDoListItemPopup(
         title: item.name,
         html: (
             <>
-                <p style={{ whiteSpace: 'pre-line' }}>
+                <p className="tw:whitespace-pre-line">
                     {item.description ?? (
                         <i>Keine zusätzliche Notiz vorhanden</i>
                     )}

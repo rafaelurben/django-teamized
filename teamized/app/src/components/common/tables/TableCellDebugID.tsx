@@ -8,7 +8,7 @@ interface Props {
 
 export default function TableCellDebugID({ id }: Readonly<Props>) {
     return (
-        <TableCell className="debug-id tw:text-muted-foreground tw:text-xs">
+        <TableCell className="debug-id tw:text-muted-foreground tw:text-xs tw:whitespace-nowrap">
             {id}
         </TableCell>
     );

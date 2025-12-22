@@ -38,15 +38,11 @@ export default function WorksessionTable({
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead style={{ minWidth: '13rem' }}>
-                        Start &amp; Ende
-                    </TableHead>
-                    <TableHead style={{ minWidth: '8rem' }}>Dauer</TableHead>
-                    <TableHead style={{ minWidth: '5rem' }}>
-                        Einheiten
-                    </TableHead>
-                    <TableHead style={{ minWidth: '15rem' }}>Notiz</TableHead>
-                    <TableHead style={{ width: '1px' }}></TableHead>
+                    <TableHead>Start &amp; Ende</TableHead>
+                    <TableHead>Dauer</TableHead>
+                    <TableHead>Einheiten</TableHead>
+                    <TableHead>Notiz</TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHeadDebugID />
                 </TableRow>
             </TableHeader>

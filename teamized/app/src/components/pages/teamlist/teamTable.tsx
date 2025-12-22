@@ -25,10 +25,7 @@ export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead
-                        className="tw:text-center"
-                        style={{ width: '1px' }}
-                    >
+                    <TableHead className="tw:text-center tw:w-px">
                         <IconTooltip icon={Users} title="Anzahl Mitglieder" />
                     </TableHead>
                     <TableHead>
@@ -38,7 +35,7 @@ export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
                         </span>
                     </TableHead>
                     <TableHead>Deine Rolle</TableHead>
-                    <TableHead style={{ width: '1px' }} />
+                    <TableHead className="tw:w-px" />
                     <TableHeadDebugID />
                 </TableRow>
             </TableHeader>

@@ -46,12 +46,6 @@ body:not(.show-debug-ids) .debug-id {
     display: none;
 }
 
-body.debug.show-debug-ids td.debug-id,
-body.debug.show-debug-ids th.debug-id {
-    width: 1px;
-    white-space: nowrap;
-}
-
 body.debug .navbar-toggler {
     border-color: #dc3545;
 }
