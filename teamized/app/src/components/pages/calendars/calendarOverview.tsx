@@ -1,4 +1,7 @@
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import * as CalendarService from '../../../service/calendars.service';
@@ -17,7 +20,7 @@ export default function CalendarOverview({
     selectedDate,
     onDateSelect,
     events,
-}: Props) {
+}: Readonly<Props>) {
     const [selectedMonth, setSelectedMonth] = useState(
         CalendarService.roundMonths(new Date())
     );
@@ -52,44 +55,40 @@ export default function CalendarOverview({
 
     return (
         <div>
-            <div className="d-flex justify-content-between align-items-center">
-                <h4 className="mb-0 ms-1">{monthDisplay}</h4>
-                <div className="btn-group">
-                    <button
-                        type="button"
-                        className="btn btn-outline-dark"
+            <div className="tw:flex tw:justify-between tw:items-center">
+                <h4 className="tw:mb-0 tw:ml-1">{monthDisplay}</h4>
+                <div className="tw:flex tw:gap-0">
+                    <Button
+                        variant="outline"
+                        size="icon"
                         onClick={go2prevMonth}
+                        className="tw:rounded-r-none"
                     >
-                        <i className="fa-solid fa-arrow-left" />
-                    </button>
-                    <button
-                        type="button"
-                        className={
-                            todaySelectedInCurrentMonth
-                                ? 'btn btn-outline-dark disabled'
-                                : 'btn btn-outline-dark'
-                        }
+                        <ChevronLeftIcon />
+                    </Button>
+                    <Button
+                        variant="outline"
                         onClick={go2today}
+                        disabled={todaySelectedInCurrentMonth}
+                        className="tw:rounded-none"
                     >
                         Heute
-                    </button>
-                    <button
-                        type="button"
-                        className="btn btn-outline-dark"
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
                         onClick={go2nextMonth}
+                        className="tw:rounded-l-none"
                     >
-                        <i className="fa-solid fa-arrow-right" />
-                    </button>
+                        <ChevronRightIcon />
+                    </Button>
                 </div>
             </div>
-            <div className="mt-3">
-                <div className="d-flex justify-content-around my-3">
+            <div className="tw:mt-3">
+                <div className="tw:flex tw:justify-around tw:my-3">
                     {WEEKDAYS.map((day) => (
                         <div key={day}>
-                            <div
-                                className="d-flex justify-content-center align-items-center flex-column"
-                                style={{ width: '3em', height: '2em' }}
-                            >
+                            <div className="tw:flex tw:justify-center tw:items-center tw:flex-col tw:w-12 tw:h-8">
                                 <b>{day}</b>
                             </div>
                         </div>

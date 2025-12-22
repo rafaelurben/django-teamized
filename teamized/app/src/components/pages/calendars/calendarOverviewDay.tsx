@@ -1,4 +1,7 @@
+import { CircleIcon } from 'lucide-react';
 import React from 'react';
+
+import { cn } from '@/shadcn/lib/utils';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 
@@ -18,28 +21,29 @@ export default function CalendarOverviewDay({
     isInSelectedMonth,
     events,
     onSelect,
-}: Props) {
+}: Readonly<Props>) {
     const handleSelect = () => {
         onSelect(date);
     };
 
     const getDateClassName = () => {
-        let className =
-            'd-flex justify-content-center align-items-center flex-column rounded-circle dm-noinvert';
+        const classNames = [
+            'tw:flex tw:justify-center tw:items-center tw:flex-col tw:rounded-full tw:w-12 tw:h-12 tw:cursor-pointer',
+        ];
         if (isSelected && isToday) {
-            className += ' bg-danger fw-bold ';
+            classNames.push(
+                'tw:bg-destructive tw:font-bold tw:text-destructive-foreground'
+            );
         } else if (isSelected) {
-            className += ' bg-primary ';
+            classNames.push('tw:bg-primary tw:text-primary-foreground');
         } else if (isToday) {
-            className += ' text-danger fw-bold';
-        } else {
-            className += ' ';
+            classNames.push('tw:text-destructive tw:font-bold');
         }
 
         if (!isInSelectedMonth) {
-            className += ' opacity-50';
+            classNames.push('tw:opacity-50');
         }
-        return className;
+        return cn(...classNames);
     };
 
     const colors: string[] = [];
@@ -50,22 +54,21 @@ export default function CalendarOverviewDay({
     }
 
     return (
-        <div onClick={handleSelect}>
-            <div
-                className={getDateClassName()}
-                style={{ width: '3em', height: '3em', cursor: 'pointer' }}
-            >
+        <button onClick={handleSelect} tabIndex={0}>
+            <div className={getDateClassName()}>
                 <span>{date.getDate()}</span>
-                {isSelected ? null : (
-                    <span style={{ fontSize: '0.4rem', height: '0.4rem' }}>
+                {!isSelected && (
+                    <span className="tw:flex tw:gap-0.5">
                         {colors.map((color) => (
-                            <span key={color} style={{ color: color }}>
-                                <i className="fa-solid fa-circle"></i>
-                            </span>
+                            <CircleIcon
+                                key={color}
+                                className="tw:fill-current tw:w-2 tw:h-2"
+                                style={{ color: color }}
+                            />
                         ))}
                     </span>
                 )}
             </div>
-        </div>
+        </button>
     );
 }

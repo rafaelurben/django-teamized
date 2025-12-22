@@ -1,5 +1,14 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
@@ -14,6 +23,7 @@ interface Props {
     selectedCalendar: Calendar | null;
     onCalendarDeleted: () => unknown;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
 export default function CalendarInfo({
@@ -21,7 +31,8 @@ export default function CalendarInfo({
     selectedCalendar,
     onCalendarDeleted,
     isAdmin,
-}: Props) {
+    loading = false,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const editCalendar = () => {
@@ -47,17 +58,59 @@ export default function CalendarInfo({
         await CalendarService.showCalendarSubscriptionPopup(selectedCalendar!);
     };
 
+    if (loading) {
+        return (
+            <>
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-16" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-4 tw:w-full" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-24" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-4 tw:w-full" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-12" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-3 tw:w-3" />
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                <div className="tw:flex tw:gap-2 tw:mt-3">
+                    <Skeleton className="tw:h-9 tw:w-28" />
+                    <Skeleton className="tw:h-9 tw:w-20" />
+                    <Skeleton className="tw:h-9 tw:w-28" />
+                </div>
+            </>
+        );
+    }
+
     if (!selectedCalendar) {
         return (
-            <p className="ms-1 mb-0">
-                <span className="me-1">
+            <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
+                <span>
                     Im ausgewählten Team ist noch kein Kalender vorhanden.
                 </span>
-                {isAdmin ? (
-                    <IconTooltip title='Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
-                ) : (
-                    <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
-                )}
+                <IconTooltip
+                    title={
+                        isAdmin
+                            ? 'Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+                            : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
+                    }
+                />
             </p>
         );
     }
@@ -90,35 +143,26 @@ export default function CalendarInfo({
                 },
             ]}
         >
-            <Tables.ButtonFooter noTopBorder={true}>
+            <Tables.ButtonFooter>
                 {isAdmin ? (
                     <>
-                        <button
-                            className="btn btn-outline-dark"
-                            onClick={editCalendar}
-                        >
+                        <Button variant="outline" onClick={editCalendar}>
                             Bearbeiten
-                        </button>
-                        <button
-                            className="btn btn-outline-danger"
-                            onClick={deleteCalendar}
-                        >
+                        </Button>
+                        <Button variant="destructive" onClick={deleteCalendar}>
                             Löschen
-                        </button>
+                        </Button>
                     </>
                 ) : (
                     <CustomTooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
-                        <button className="btn btn-outline-dark disabled">
+                        <Button variant="outline" disabled>
                             Bearbeiten/Löschen
-                        </button>
+                        </Button>
                     </CustomTooltip>
                 )}
-                <button
-                    className="btn btn-outline-info"
-                    onClick={subscriptionPopup}
-                >
+                <Button variant="info" onClick={subscriptionPopup}>
                     Abonnieren
-                </button>
+                </Button>
             </Tables.ButtonFooter>
         </Tables.VerticalDataTable>
     );

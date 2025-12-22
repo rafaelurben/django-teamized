@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/shadcn/lib/utils';
+
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
 
@@ -13,28 +15,29 @@ export default function CalendarSelectorRow({
     isSelected,
     onSelect,
     calendar,
-}: Props) {
+}: Readonly<Props>) {
     const handleSelect = () => {
         if (!isSelected) {
             onSelect(calendar.id);
         }
     };
 
-    const getStyle = () => {
-        return {
-            paddingLeft: isSelected ? '.5rem' : 'calc(.5rem + 3px)',
-            borderLeftWidth: isSelected ? '8px' : '5px',
-            borderLeftColor: calendar.color,
-            borderLeftStyle: 'solid',
-            cursor: 'pointer',
-            opacity: isSelected ? 1 : 0.75,
-            fontWeight: isSelected ? 'bold' : 'normal',
-        } satisfies React.CSSProperties;
-    };
-
     return (
-        <div className="py-1 mb-1" style={getStyle()} onClick={handleSelect}>
-            <span className="d-inline-block w-100">{calendar.name}</span>
-        </div>
+        <button
+            className={cn(
+                'tw:py-1 tw:mb-1 tw:cursor-pointer tw:transition-opacity tw:text-left',
+                isSelected
+                    ? 'tw:pl-2 tw:border-l-8 tw:opacity-100 tw:font-bold'
+                    : 'tw:pl-2.75 tw:border-l-[5px] tw:opacity-75 tw:font-normal'
+            )}
+            style={{
+                borderLeftColor: calendar.color,
+                borderLeftStyle: 'solid',
+            }}
+            onClick={handleSelect}
+            tabIndex={0}
+        >
+            <span className="tw:inline-block tw:w-full">{calendar.name}</span>
+        </button>
     );
 }

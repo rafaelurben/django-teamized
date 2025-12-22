@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
@@ -29,7 +31,7 @@ export default function CalendarEventPicker({
     selectedCalendar,
     selectedDate,
     isAdmin,
-}: Props) {
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const createEvent = () => {
@@ -76,25 +78,24 @@ export default function CalendarEventPicker({
                     />
                 ))
             ) : (
-                <p className="ms-1 mb-1">Keine Ereignisse an diesem Datum.</p>
+                <p className="tw:ml-1 tw:mb-1">
+                    Keine Ereignisse an diesem Datum.
+                </p>
             )}
-            <button
-                className="btn btn-outline-success mt-2"
-                onClick={createEvent}
-            >
+            <Button variant="success" className="tw:mt-2" onClick={createEvent}>
                 Ereignis erstellen
-            </button>
+            </Button>
         </>
     ) : (
-        <p className="ms-1 mb-0">
-            <span className="me-1">
-                Im ausgewählten Team ist noch kein Kalender vorhanden.
-            </span>
-            {isAdmin ? (
-                <IconTooltip title='Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'></IconTooltip>
-            ) : (
-                <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen."></IconTooltip>
-            )}
+        <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
+            <span>Im ausgewählten Team ist noch kein Kalender vorhanden.</span>
+            <IconTooltip
+                title={
+                    isAdmin
+                        ? 'Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'
+                        : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
+                }
+            />
         </p>
     );
 }

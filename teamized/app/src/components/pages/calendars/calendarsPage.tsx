@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import { ID } from '../../../interfaces/common';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
@@ -82,75 +84,84 @@ export default function CalendarsPage() {
 
     return (
         <Dashboard.Page loading={loading}>
-            <Dashboard.Column sizes={{ lg: 6 }} className="order-lg-2">
+            <Dashboard.Column sizes={{ lg: 6 }} className="tw:lg:order-2">
                 <Dashboard.CustomCard
                     title="Ereignisübersicht"
                     help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
                 >
-                    {/* Calendar overview */}
-                    <CalendarOverview
-                        onDateSelect={handleDateSelect}
-                        selectedDate={selectedDate}
-                        events={Object.values(eventMap)}
-                    />
+                    <CardContent>
+                        <CalendarOverview
+                            onDateSelect={handleDateSelect}
+                            selectedDate={selectedDate}
+                            events={Object.values(eventMap)}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title={'Ereignisse am ' + dayDisplay}
                     help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln."
                 >
-                    {/* Events from the selected day & Create new event button */}
-                    <CalendarEventPicker
-                        onEventSelect={setSelectedEventId}
-                        selectedDate={selectedDate}
-                        selectedEvent={selectedEvent}
-                        selectedCalendar={selectedCalendar}
-                        calendars={calendars}
-                        events={CalendarService.filterCalendarEventsByDate(
-                            Object.values(eventMap),
-                            selectedDate
-                        )}
-                        team={team}
-                        isAdmin={isAdmin}
-                    />
+                    <CardContent>
+                        <CalendarEventPicker
+                            onEventSelect={setSelectedEventId}
+                            selectedDate={selectedDate}
+                            selectedEvent={selectedEvent}
+                            selectedCalendar={selectedCalendar}
+                            calendars={calendars}
+                            events={CalendarService.filterCalendarEventsByDate(
+                                Object.values(eventMap),
+                                selectedDate
+                            )}
+                            team={team}
+                            isAdmin={isAdmin}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 6 }}>
                 <Dashboard.CustomCard
                     title="Ausgewähltes Ereignis"
                     help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
-                    className="order-lg-3"
+                    className="tw:lg:order-3"
                 >
-                    {/* Selected event */}
-                    <CalendarEventDisplay
-                        event={selectedEvent}
-                        team={team}
-                        calendars={calendars}
-                    />
+                    <CardContent>
+                        <CalendarEventDisplay
+                            event={selectedEvent}
+                            team={team}
+                            calendars={calendars}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title="Kalenderübersicht"
                     help="Wechsle zwischen den Kalendern deines Teams oder erstelle einen neuen. Diese Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
                 >
-                    {/* Calendar selector/creator */}
-                    <CalendarSelector
-                        onCalendarSelect={setSelectedCalendarId}
-                        team={team}
-                        calendars={calendars}
-                        selectedCalendar={selectedCalendar}
-                        isAdmin={isAdmin}
-                    />
+                    <CardContent>
+                        <CalendarSelector
+                            onCalendarSelect={setSelectedCalendarId}
+                            team={team}
+                            calendars={calendars}
+                            selectedCalendar={selectedCalendar}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title="Kalenderdetails"
                     help="Sieh dir Infos zum oben ausgewählten Kalender an."
                 >
-                    {/* Calendar details */}
-                    <CalendarInfo
-                        team={team}
-                        selectedCalendar={selectedCalendar}
-                        onCalendarDeleted={() => setSelectedCalendarId(null)}
-                        isAdmin={isAdmin}
-                    />
+                    <CardContent>
+                        <CalendarInfo
+                            team={team}
+                            selectedCalendar={selectedCalendar}
+                            onCalendarDeleted={() =>
+                                setSelectedCalendarId(null)
+                            }
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>

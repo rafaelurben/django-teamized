@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
@@ -13,6 +16,7 @@ interface Props {
     selectedCalendar: Calendar;
     onCalendarSelect: (calendarId: ID) => unknown;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
 export default function CalendarSelector({
@@ -21,7 +25,8 @@ export default function CalendarSelector({
     selectedCalendar,
     onCalendarSelect,
     isAdmin,
-}: Props) {
+    loading = false,
+}: Readonly<Props>) {
     const createCalendar = () => {
         CalendarService.createCalendarPopup(team).then((result) => {
             if (result.isConfirmed) {
@@ -30,10 +35,23 @@ export default function CalendarSelector({
         });
     };
 
+    if (loading) {
+        return (
+            <>
+                <div className="tw:mb-2 tw:space-y-2">
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                </div>
+                <Skeleton className="tw:h-9 tw:w-full" />
+            </>
+        );
+    }
+
     return (
         <>
             {calendars.length > 0 && (
-                <div className="mb-2">
+                <div className="tw:mb-2 tw:flex tw:flex-col">
                     {calendars.map((calendar) => (
                         <CalendarSelectorRow
                             key={calendar.id}
@@ -45,17 +63,14 @@ export default function CalendarSelector({
                 </div>
             )}
             {isAdmin ? (
-                <button
-                    className="btn btn-outline-success"
-                    onClick={createCalendar}
-                >
+                <Button variant="success" onClick={createCalendar}>
                     Kalender erstellen
-                </button>
+                </Button>
             ) : (
                 <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
-                    <button className="btn btn-outline-dark disabled">
+                    <Button variant="outline" disabled>
                         Kalender erstellen
-                    </button>
+                    </Button>
                 </CustomTooltip>
             )}
         </>
