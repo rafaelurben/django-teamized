@@ -49,10 +49,7 @@ export async function createTeamPopup() {
         title: 'Team erstellen',
         html: (
             <>
-                <label
-                    className="swal2-input-label mt-0"
-                    htmlFor="swal-input-name"
-                >
+                <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
                 <input
@@ -108,7 +105,7 @@ export async function editTeamPopup(team: Team) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -303,7 +300,7 @@ export async function createInvitePopup(team: Team) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-note">
                     Notizen:
                 </label>
@@ -387,7 +384,7 @@ export async function editInvitePopup(team: Team, invite: Invite) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-note">
                     Notizen:
                 </label>

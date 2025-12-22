@@ -58,7 +58,7 @@ export async function createWorkSessionPopup(team: Team) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-note">
                     Notiz:
                 </label>
@@ -172,7 +172,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-note">
                     Notiz:
                 </label>
@@ -197,8 +197,8 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
                 />
                 {session.is_created_via_tracking ? (
                     <>
-                        <hr />
-                        <p className="swal2-text mt-3 mb-0 small opacity-50 px-3">
+                        <hr className="tw:my-2" />
+                        <p className="swal2-text tw:text-sm tw:opacity-50">
                             Start- und Endzeit können nur bei manuell erfassten
                             Sitzungen geändert werden.
                         </p>

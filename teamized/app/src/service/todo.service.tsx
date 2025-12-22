@@ -48,7 +48,7 @@ export async function createToDoListPopup(team: Team) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -75,7 +75,7 @@ export async function createToDoListPopup(team: Team) {
                 <input
                     type="color"
                     id="swal-input-color"
-                    className="swal2-input form-control-color"
+                    className="swal2-input tw:cursor-pointer tw:m-0!"
                 />
             </>
         ),
@@ -133,7 +133,7 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -162,7 +162,7 @@ export async function editToDoListPopup(team: Team, todolist: Todolist) {
                 <input
                     type="color"
                     id="swal-input-color"
-                    className="swal2-input form-control-color"
+                    className="swal2-input tw:cursor-pointer tw:m-0!"
                     defaultValue={todolist.color}
                 />
             </>
@@ -271,14 +271,14 @@ export async function editToDoListItemPopup(
             <>
                 <p>Team: {team.name}</p>
                 <p>Liste: {todolist.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Titel:
                 </label>
                 <input
                     type="text"
                     id="swal-input-name"
-                    className="swal2-input w-100"
+                    className="swal2-input"
                     placeholder={item.name}
                     defaultValue={item.name}
                 />
@@ -290,14 +290,14 @@ export async function editToDoListItemPopup(
                 </label>
                 <textarea
                     id="swal-input-description"
-                    className="swal2-textarea w-100"
+                    className="swal2-textarea"
                     placeholder={item.description}
                     defaultValue={item.description}
                 />
-                <hr />
+                <hr className="tw:my-2" />
                 <label
                     htmlFor="swal-input-done"
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                 >
                     <input
                         type="checkbox"
@@ -356,7 +356,7 @@ export async function viewToDoListItemPopup(
                         <i>Keine zusätzliche Notiz vorhanden</i>
                     )}
                 </p>
-                <hr />
+                <hr className="tw:my-2" />
                 <span className="swal2-label">
                     {item.done
                         ? 'Erledigt am ' + getDateString(new Date(item.done_at))

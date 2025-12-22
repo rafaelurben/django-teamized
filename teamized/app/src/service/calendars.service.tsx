@@ -5,6 +5,8 @@
 import $ from 'jquery';
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+
 import * as CalendarAPI from '../api/calendar';
 import { CacheCategory } from '../interfaces/cache/cacheCategory';
 import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
@@ -116,7 +118,7 @@ export async function createCalendarPopup(team: Team) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -143,7 +145,7 @@ export async function createCalendarPopup(team: Team) {
                 <input
                     type="color"
                     id="swal-input-color"
-                    className="swal2-input form-control-color"
+                    className="swal2-input tw:cursor-pointer tw:p-0!"
                 />
             </>
         ),
@@ -201,7 +203,7 @@ export async function editCalendarPopup(team: Team, calendar: Calendar) {
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -230,7 +232,7 @@ export async function editCalendarPopup(team: Team, calendar: Calendar) {
                 <input
                     type="color"
                     id="swal-input-color"
-                    className="swal2-input form-control-color"
+                    className="swal2-input tw:cursor-pointer tw:p-0!"
                     defaultValue={calendar.color}
                 />
             </>
@@ -302,24 +304,21 @@ export async function showCalendarSubscriptionPopup(calendar: Calendar) {
                 <p>
                     Um den Kalender zu abonnieren, hast du zwei Möglichkeiten:
                 </p>
-                <hr />
-                <h5>1) Webcal-Link</h5>
+                <hr className="tw:my-2" />
+                <h5 className="tw:text-lg">1) Webcal-Link</h5>
                 <p>
                     Auf allen Apple-Geräten sowie weiteren unterstützten Geräten
                     kannst du Webcal-Links direkt in deiner Kalender-App öffnen.
                     Bei manchen anderen Apps (z. B. Google Calendar) musst du
                     den Link kopieren und manuell einfügen.
                 </p>
-                <a
-                    href={urlWebcal}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn btn-outline-info"
-                >
-                    Webcal-URL
-                </a>
-                <hr />
-                <h5>2) HTTP(S)-Link</h5>
+                <Button asChild variant="info">
+                    <a href={urlWebcal} target="_blank" rel="noreferrer">
+                        Webcal-URL
+                    </a>
+                </Button>
+                <hr className="tw:my-2" />
+                <h5 className="tw:text-lg">2) HTTP(S)-Link</h5>
                 <p>
                     Falls dein Gerät oder deine App Webcal-Links nicht
                     unterstützt, kannst du auch folgenden Link verwenden. Füge
@@ -413,7 +412,7 @@ async function generalizedEventPopup({
         html: (
             <>
                 <p>Team: {team.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label
                     className="swal2-input-label"
                     htmlFor="swal-input-calendar"
@@ -431,7 +430,7 @@ async function generalizedEventPopup({
                         </option>
                     ))}
                 </select>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -469,7 +468,7 @@ async function generalizedEventPopup({
                 />
                 <label
                     htmlFor="swal-input-fullday"
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                 >
                     <input
                         type="checkbox"
@@ -478,7 +477,7 @@ async function generalizedEventPopup({
                     />
                     <span className="swal2-label">Ganztägig</span>
                 </label>
-                <hr />
+                <hr className="tw:my-2" />
                 <label
                     className="swal2-input-label fullday-only"
                     htmlFor="swal-input-dstart"

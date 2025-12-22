@@ -104,7 +104,7 @@ export async function createAttendanceEventPopup(team: Team) {
                     step={1}
                 />
                 <label
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                     htmlFor="swal-input-participating_by_default"
                 >
                     <input
@@ -240,7 +240,7 @@ export async function editAttendanceEventPopup(
                     step={1}
                 />
                 <label
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                     htmlFor="swal-input-participating_by_default"
                 >
                     <input
@@ -251,7 +251,7 @@ export async function editAttendanceEventPopup(
                     <span>Standardmäßig teilnehmend?</span>
                 </label>
                 <label
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                     htmlFor="swal-input-locked"
                 >
                     <input
