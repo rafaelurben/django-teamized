@@ -45,21 +45,21 @@
         }
 
         function debug_remove_teamcache() {
-            data.teamcache = "Aus Datenschutzgründen entfernt.";
+            data.teamCache = 'Aus Datenschutzgründen entfernt.';
             _debug_display();
         }
 
         function debug_remove_me() {
             data.user = "Aus Datenschutzgründen entfernt.";
-            for (let teamId in data.teamcache) {
-                data.teamcache[teamId].team.member.user = "Aus Datenschutzgründen entfernt.";
+            for (let teamId in data.teamCache) {
+                data.teamCache[teamId].team.member.user = 'Aus Datenschutzgründen entfernt.';
             }
             _debug_display();
         }
 
         function debug_remove_members() {
-            for (let teamId in data.teamcache) {
-                data.teamcache[teamId].members = "Aus Datenschutzgründen entfernt.";
+            for (let teamId in data.teamCache) {
+                data.teamCache[teamId].members = 'Aus Datenschutzgründen entfernt.';
             }
             _debug_display();
         }
