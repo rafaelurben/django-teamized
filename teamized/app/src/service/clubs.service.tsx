@@ -876,29 +876,23 @@ export async function updateClubMemberGroupsPopup(
                 </label>
                 <select
                     id="swal-input-groups"
-                    className="swal2-input h-auto py-3"
+                    className="swal2-select h-auto py-3"
                     multiple
                     size={groups.length}
-                ></select>
+                    value={currentGroupIds}
+                >
+                    {groups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                            {group.name}
+                        </option>
+                    ))}
+                </select>
             </>
         ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Aktualisieren',
         cancelButtonText: 'Abbrechen',
-        didOpen: () => {
-            const $groupsInput = $('#swal-input-groups');
-
-            $groupsInput.html(
-                groups
-                    .map(
-                        (group) =>
-                            `<option value="${group.id}">${group.name}</option>`
-                    )
-                    .join('')
-            );
-            $groupsInput.val(currentGroupIds);
-        },
         preConfirm: async () => {
             const selectedGroupIds = $('#swal-input-groups').val() as ID[];
 
