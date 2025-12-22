@@ -2,12 +2,7 @@ import React, { useEffect, useId, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
 import { CardContent } from '@/shadcn/components/ui/card';
-import {
-    Field,
-    FieldGroup,
-    FieldLabel,
-    FieldSet,
-} from '@/shadcn/components/ui/field';
+import { Field, FieldGroup, FieldLabel } from '@/shadcn/components/ui/field';
 import { Input } from '@/shadcn/components/ui/input';
 
 import { Worksession } from '../../../interfaces/workingtime/worksession';
@@ -71,17 +66,6 @@ export default function WorkingtimePage() {
         });
     };
 
-    const generateReport = () => {
-        window.open(
-            `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
-                new URLSearchParams({
-                    datetime_from: statsRangeStart.toISOString(),
-                    datetime_to: statsRangeEnd.toISOString(),
-                }).toString(),
-            '_blank'
-        );
-    };
-
     const allMyWorksessionsInCurrentTeam = Object.values(
         teamData.me_worksessions
     );
@@ -141,50 +125,44 @@ export default function WorkingtimePage() {
                     <Dashboard.Column>
                         <Dashboard.CustomCard title="Filter">
                             <CardContent>
-                                <FieldSet>
-                                    <FieldGroup>
-                                        <Field>
-                                            <FieldLabel
-                                                htmlFor={statsRangeStartId}
-                                            >
-                                                Von
-                                            </FieldLabel>
-                                            <Input
-                                                type="datetime-local"
-                                                id={statsRangeStartId}
-                                                required
-                                                min="2022-01-01T00:00"
-                                                defaultValue={localInputFormat(
-                                                    statsRangeStart
-                                                )}
-                                            />
-                                        </Field>
-                                        <Field>
-                                            <FieldLabel
-                                                htmlFor={statsRangeEndId}
-                                            >
-                                                Bis
-                                            </FieldLabel>
-                                            <Input
-                                                type="datetime-local"
-                                                id={statsRangeEndId}
-                                                required
-                                                min="2022-01-01T00:00"
-                                                defaultValue={localInputFormat(
-                                                    statsRangeEnd
-                                                )}
-                                            />
-                                        </Field>
-                                        <Field orientation="horizontal">
-                                            <Button
-                                                className="tw:w-full"
-                                                onClick={applyStatsRange}
-                                            >
-                                                Anwenden
-                                            </Button>
-                                        </Field>
-                                    </FieldGroup>
-                                </FieldSet>
+                                <FieldGroup className="tw:gap-3">
+                                    <Field>
+                                        <FieldLabel htmlFor={statsRangeStartId}>
+                                            Von
+                                        </FieldLabel>
+                                        <Input
+                                            type="datetime-local"
+                                            id={statsRangeStartId}
+                                            required
+                                            min="2022-01-01T00:00"
+                                            defaultValue={localInputFormat(
+                                                statsRangeStart
+                                            )}
+                                        />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor={statsRangeEndId}>
+                                            Bis
+                                        </FieldLabel>
+                                        <Input
+                                            type="datetime-local"
+                                            id={statsRangeEndId}
+                                            required
+                                            min="2022-01-01T00:00"
+                                            defaultValue={localInputFormat(
+                                                statsRangeEnd
+                                            )}
+                                        />
+                                    </Field>
+                                    <Field orientation="horizontal">
+                                        <Button
+                                            className="tw:w-full"
+                                            onClick={applyStatsRange}
+                                        >
+                                            Anwenden
+                                        </Button>
+                                    </Field>
+                                </FieldGroup>
                             </CardContent>
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
@@ -217,16 +195,15 @@ export default function WorkingtimePage() {
                             sessions={sessions}
                             team={team}
                             loading={loading}
+                            reportURL={
+                                `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
+                                new URLSearchParams({
+                                    datetime_from:
+                                        statsRangeStart.toISOString(),
+                                    datetime_to: statsRangeEnd.toISOString(),
+                                }).toString()
+                            }
                         />
-                        {!loading && sessions.length > 0 && (
-                            <Button
-                                variant="success"
-                                className="tw:mt-4"
-                                onClick={generateReport}
-                            >
-                                PDF-Report generieren
-                            </Button>
-                        )}
                     </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>

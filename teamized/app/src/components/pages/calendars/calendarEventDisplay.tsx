@@ -56,7 +56,7 @@ export default function CalendarEventDisplay({
     };
 
     if (!event) {
-        return <span>Kein Ereignis ausgewählt</span>;
+        return <span>Kein Ereignis ausgewählt.</span>;
     }
 
     let eventStartDisplay: string;

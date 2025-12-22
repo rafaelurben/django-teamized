@@ -58,7 +58,7 @@ export default function HomePage() {
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 4 }}>
                 <Dashboard.CustomCard
-                    className="tw:max-h-[600px]"
+                    className="tw:max-h-150"
                     title="Neuste Updates"
                     help="Neue Funktionen, Bugfixes und Änderungen"
                 >
@@ -89,7 +89,7 @@ export default function HomePage() {
                                 ))}
                             </div>
                         </ScrollArea>
-                        <div className="tw:pointer-events-none tw:absolute tw:bottom-2 tw:left-0 tw:right-0 tw:h-16 tw:bg-gradient-to-t tw:from-card tw:to-transparent" />
+                        <div className="tw:pointer-events-none tw:absolute tw:bottom-2 tw:left-0 tw:right-0 tw:h-16 tw:bg-linear-to-t tw:from-card tw:to-transparent" />
                     </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>

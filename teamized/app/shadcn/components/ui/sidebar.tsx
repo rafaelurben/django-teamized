@@ -236,7 +236,7 @@ function Sidebar({
                     'tw:group-data-[collapsible=offcanvas]:w-0',
                     'tw:group-data-[side=right]:rotate-180',
                     variant === 'floating' || variant === 'inset'
-                        ? 'tw:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
+                        ? 'tw:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--tw-spacing(4)))]'
                         : 'tw:group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
                 )}
             />
@@ -249,7 +249,7 @@ function Sidebar({
                         : 'tw:right-0 tw:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
                     // Adjust the padding for floating and inset variants.
                     variant === 'floating' || variant === 'inset'
-                        ? 'tw:p-2 tw:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
+                        ? 'tw:p-2 tw:group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--tw-spacing(4))+2px)]'
                         : 'tw:group-data-[collapsible=icon]:w-(--sidebar-width-icon) tw:group-data-[side=left]:border-r tw:group-data-[side=right]:border-l',
                     className
                 )}

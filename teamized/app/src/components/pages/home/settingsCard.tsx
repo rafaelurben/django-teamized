@@ -6,7 +6,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/shadcn/components/ui/card';
-import { Label } from '@/shadcn/components/ui/label';
+import {
+    Field,
+    FieldDescription,
+    FieldLabel,
+    FieldSet,
+} from '@/shadcn/components/ui/field';
 import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import Dashboard from '@/teamized/components/common/dashboard';
@@ -58,54 +63,54 @@ export default function SettingsCard({ settings }: Readonly<Props>) {
 
             {settings ? (
                 <CardContent>
-                    <div className="tw:space-y-4">
-                        <div className="tw:space-y-2">
-                            <Label htmlFor="appearance">Erscheinungsbild</Label>
+                    <FieldSet>
+                        <Field>
+                            <FieldLabel htmlFor="appearance">
+                                Erscheinungsbild
+                            </FieldLabel>
+                            <FieldDescription>
+                                &quot;Automatisch&quot; =
+                                Browser/System-Einstellung verwenden
+                            </FieldDescription>
                             <RadioGroup
                                 value={getAppearanceValue(settings.darkmode)}
                                 onValueChange={applyAppearance}
-                                orientation="horizontal"
-                                className="tw:flex tw:flex-row tw:gap-4"
+                                orientation="vertical"
                                 disabled={isSavingSettings}
                             >
-                                <div className="tw:flex tw:items-center tw:gap-2">
+                                <Field orientation="horizontal">
                                     <RadioGroupItem
                                         value="dark"
                                         id="appearance_dark"
                                         disabled={isSavingSettings}
                                     />
-                                    <Label htmlFor="appearance_dark">
+                                    <FieldLabel htmlFor="appearance_dark">
                                         Dunkel
-                                    </Label>
-                                </div>
-                                <div className="tw:flex tw:items-center tw:gap-2">
+                                    </FieldLabel>
+                                </Field>
+                                <Field orientation="horizontal">
                                     <RadioGroupItem
                                         value="auto"
                                         id="appearance_auto"
                                         disabled={isSavingSettings}
                                     />
-                                    <Label htmlFor="appearance_auto">
+                                    <FieldLabel htmlFor="appearance_auto">
                                         Automatisch
-                                    </Label>
-                                </div>
-                                <div className="tw:flex tw:items-center tw:gap-2">
+                                    </FieldLabel>
+                                </Field>
+                                <Field orientation="horizontal">
                                     <RadioGroupItem
                                         value="light"
                                         id="appearance_light"
                                         disabled={isSavingSettings}
                                     />
-                                    <Label htmlFor="appearance_light">
+                                    <FieldLabel htmlFor="appearance_light">
                                         Hell
-                                    </Label>
-                                </div>
+                                    </FieldLabel>
+                                </Field>
                             </RadioGroup>
-                            <p className="tw:text-sm tw:text-muted-foreground">
-                                Bei &quot;Automatisch&quot; wird das
-                                Erscheinungsbild automatisch dem des Systems
-                                oder Browsers angepasst.
-                            </p>
-                        </div>
-                    </div>
+                        </Field>
+                    </FieldSet>
                 </CardContent>
             ) : (
                 <CardContent>

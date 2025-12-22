@@ -96,7 +96,7 @@ export default function TodoPage() {
                         <ListView
                             team={team}
                             selectedList={selectedList}
-                            isAdmin={isAdmin}
+                            loading={loading}
                         />
                     </CardContent>
                 </Dashboard.CustomCard>

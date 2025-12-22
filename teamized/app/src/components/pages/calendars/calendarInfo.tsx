@@ -1,3 +1,4 @@
+import { CircleQuestionMark } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -8,6 +9,7 @@ import {
     TableCell,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import IconTooltipWithText from '@/teamized/components/common/tooltips/iconTooltipWithText';
 
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { Team } from '../../../interfaces/teams/team';
@@ -15,7 +17,6 @@ import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Tables from '../../common/tables';
 import CustomTooltip from '../../common/tooltips/customTooltip';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -100,18 +101,15 @@ export default function CalendarInfo({
 
     if (!selectedCalendar) {
         return (
-            <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
-                <span>
-                    Im ausgewählten Team ist noch kein Kalender vorhanden.
-                </span>
-                <IconTooltip
-                    title={
-                        isAdmin
-                            ? 'Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'
-                            : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
-                    }
-                />
-            </p>
+            <IconTooltipWithText
+                icon={CircleQuestionMark}
+                title={
+                    isAdmin
+                        ? 'Du kannst mit den "Kalender erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+                        : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
+                }
+                text="Im ausgewählten Team ist noch kein Kalender vorhanden."
+            />
         );
     }
 

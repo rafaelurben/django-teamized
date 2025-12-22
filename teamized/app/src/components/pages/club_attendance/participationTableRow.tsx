@@ -163,6 +163,7 @@ export default function ParticipationTableRow({
             <TableCell>
                 {editable ? (
                     <RadioGroup
+                        orientation="vertical"
                         value={
                             localParticipation.has_attended === true
                                 ? 'yes'
@@ -179,9 +180,8 @@ export default function ParticipationTableRow({
                                       : null
                             )
                         }
-                        className="tw:flex tw:gap-3 tw:flex-col xl:tw:flex-row"
                     >
-                        <div className="tw:flex tw:items-center tw:space-x-2">
+                        <div className="tw:flex tw:items-center tw:gap-2">
                             <RadioGroupItem
                                 value="yes"
                                 id={`attended-yes-${participation.id}`}
@@ -190,7 +190,7 @@ export default function ParticipationTableRow({
                                 Ja
                             </Label>
                         </div>
-                        <div className="tw:flex tw:items-center tw:space-x-2">
+                        <div className="tw:flex tw:items-center tw:gap-2">
                             <RadioGroupItem
                                 value="no"
                                 id={`attended-no-${participation.id}`}
@@ -207,15 +207,15 @@ export default function ParticipationTableRow({
             <TableCell>
                 {editable ? (
                     <RadioGroup
+                        orientation="vertical"
                         value={localParticipation.member_response}
                         onValueChange={(value) =>
                             handleMemberResponseChange(
                                 value as ClubAttendanceMemberResponseChoice
                             )
                         }
-                        className="tw:flex tw:gap-3 tw:flex-col xl:tw:flex-row"
                     >
-                        <div className="tw:flex tw:items-center tw:space-x-2">
+                        <div className="tw:flex tw:items-center tw:gap-2">
                             <RadioGroupItem
                                 value={ClubAttendanceMemberResponseChoice.YES}
                                 id={`response-yes-${participation.id}`}
@@ -224,7 +224,7 @@ export default function ParticipationTableRow({
                                 Ja
                             </Label>
                         </div>
-                        <div className="tw:flex tw:items-center tw:space-x-2">
+                        <div className="tw:flex tw:items-center tw:gap-2">
                             <RadioGroupItem
                                 value={ClubAttendanceMemberResponseChoice.NO}
                                 id={`response-no-${participation.id}`}
@@ -233,7 +233,7 @@ export default function ParticipationTableRow({
                                 Nein
                             </Label>
                         </div>
-                        <div className="tw:flex tw:items-center tw:space-x-2">
+                        <div className="tw:flex tw:items-center tw:gap-2">
                             <RadioGroupItem
                                 value={ClubAttendanceMemberResponseChoice.MAYBE}
                                 id={`response-maybe-${participation.id}`}

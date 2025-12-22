@@ -1,4 +1,4 @@
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { MoreVertical, Pencil, Timer, TimerOff, Trash2 } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -58,13 +58,13 @@ export default function WorksessionTableRow({
                     {new Date(session.time_end!).toLocaleString()}
                     {session.is_created_via_tracking ? (
                         <IconTooltip
-                            icon="fa-solid fa-stopwatch"
+                            icon={Timer}
                             title="Diese Sitzung wurde via Aufzeichnung erstellt."
                             className="tw:ms-1"
                         />
                     ) : (
                         <IconTooltip
-                            icon="fa-solid fa-pencil"
+                            icon={TimerOff}
                             title="Diese Sitzung wurde manuell erfasst."
                             className="tw:ms-1"
                         />

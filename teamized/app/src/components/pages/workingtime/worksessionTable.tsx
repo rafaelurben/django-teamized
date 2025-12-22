@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import {
     Table,
@@ -12,19 +13,26 @@ import {
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
+import Tables from '../../common/tables';
 import WorksessionTableRow from './worksessionTableRow';
 
 interface Props {
     team: Team;
     sessions: Worksession[];
     loading: boolean;
+    reportURL: string;
 }
 
 export default function WorksessionTable({
     sessions,
     team,
     loading,
+    reportURL,
 }: Readonly<Props>) {
+    const openReport = () => {
+        window.open(reportURL, '_blank');
+    };
+
     return (
         <Table>
             <TableHeader>
@@ -84,6 +92,13 @@ export default function WorksessionTable({
                     ))
                 )}
             </TableBody>
+            <Tables.ButtonFooter>
+                {!loading && sessions.length > 0 && (
+                    <Button variant="success" onClick={openReport}>
+                        PDF-Report generieren
+                    </Button>
+                )}
+            </Tables.ButtonFooter>
         </Table>
     );
 }

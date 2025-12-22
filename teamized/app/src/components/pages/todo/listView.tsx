@@ -4,6 +4,7 @@ import React, { useId, useState } from 'react';
 import { Button } from '@/shadcn/components/ui/button';
 import { Input } from '@/shadcn/components/ui/input';
 import { Label } from '@/shadcn/components/ui/label';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import { Switch } from '@/shadcn/components/ui/switch';
 import {
     Table,
@@ -11,7 +12,6 @@ import {
     TableCell,
     TableRow,
 } from '@/shadcn/components/ui/table';
-import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
@@ -23,13 +23,13 @@ import ListViewItem from './listViewItem';
 interface Props {
     team: Team;
     selectedList: Todolist | null;
-    isAdmin: boolean;
+    loading: boolean;
 }
 
 export default function ListView({
     team,
     selectedList,
-    isAdmin,
+    loading,
 }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
@@ -63,21 +63,12 @@ export default function ListView({
         }
     };
 
+    if (loading) {
+        return <Skeleton className="tw:h-32 tw-w-full" />;
+    }
+
     if (!selectedList) {
-        return (
-            <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
-                <span>
-                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.
-                </span>
-                <IconTooltip
-                    title={
-                        isAdmin
-                            ? 'Du kannst mit den "Liste erstellen"-Knopf eine neue Liste erstellen.'
-                            : 'Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen.'
-                    }
-                />
-            </p>
-        );
+        return <span>Du hast aktuell keine Liste ausgewählt.</span>;
     }
 
     let items = Object.values(selectedList.items);

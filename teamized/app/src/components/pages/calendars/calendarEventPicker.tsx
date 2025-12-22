@@ -1,6 +1,8 @@
+import { CircleQuestionMark } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
+import IconTooltipWithText from '@/teamized/components/common/tooltips/iconTooltipWithText';
 
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
@@ -8,7 +10,6 @@ import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import CalendarEventPickerRow from './calendarEventPickerRow';
 
 interface Props {
@@ -45,7 +46,7 @@ export default function CalendarEventPicker({
         });
     };
 
-    const sortedEvents = events.sort((a, b) => {
+    const sortedEvents = events.toSorted((a, b) => {
         if (a.fullday && b.fullday) {
             return new Date(a.dstart).getTime() - new Date(b.dstart).getTime();
         } else if (!a.fullday && !b.fullday) {
@@ -63,7 +64,21 @@ export default function CalendarEventPicker({
         selectedCalendar !== undefined && selectedCalendar !== null;
     const eventExists = events.length > 0;
 
-    return calendarExists ? (
+    if (!calendarExists) {
+        return (
+            <IconTooltipWithText
+                icon={CircleQuestionMark}
+                title={
+                    isAdmin
+                        ? 'Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'
+                        : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
+                }
+                text="Im ausgewählten Team ist noch kein Kalender vorhanden."
+            />
+        );
+    }
+
+    return (
         <>
             {eventExists ? (
                 sortedEvents.map((event) => (
@@ -78,24 +93,11 @@ export default function CalendarEventPicker({
                     />
                 ))
             ) : (
-                <p className="tw:ml-1 tw:mb-1">
-                    Keine Ereignisse an diesem Datum.
-                </p>
+                <p>Keine Ereignisse an diesem Datum.</p>
             )}
             <Button variant="success" className="tw:mt-2" onClick={createEvent}>
                 Ereignis erstellen
             </Button>
         </>
-    ) : (
-        <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
-            <span>Im ausgewählten Team ist noch kein Kalender vorhanden.</span>
-            <IconTooltip
-                title={
-                    isAdmin
-                        ? 'Du kannst mit den "Neu erstellen"-Knopf weiter unten einen neuen Kalender erstellen.'
-                        : 'Bitte wende dich an einen Admin dieses Teams, um einen neuen Kalender zu erstellen.'
-                }
-            />
-        </p>
     );
 }

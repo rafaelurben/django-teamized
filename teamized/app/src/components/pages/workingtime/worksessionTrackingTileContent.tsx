@@ -109,9 +109,9 @@ export default function WorksessionTrackingTileContent({
 
     return (
         <>
-            <h1 className="tw:text-center tw:text-4xl tw:font-bold tw:my-6">
+            <div className="tw:text-center tw:text-4xl tw:font-bold tw:mb-4">
                 {timeDisplay}
-            </h1>
+            </div>
 
             <div className="tw:flex tw:flex-col tw:gap-2">
                 {currentWorksession ? (

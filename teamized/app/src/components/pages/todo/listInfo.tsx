@@ -1,4 +1,4 @@
-import { CircleIcon } from 'lucide-react';
+import { CircleIcon, CircleQuestionMark } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -14,7 +14,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/shadcn/components/ui/tooltip';
-import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import IconTooltipWithText from '@/teamized/components/common/tooltips/iconTooltipWithText';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
@@ -96,18 +96,15 @@ export default function ListInfo({
 
     if (!selectedList) {
         return (
-            <p className="tw:ml-1 tw:mb-0 tw:flex tw:items-center tw:gap-1">
-                <span>
-                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.
-                </span>
-                <IconTooltip
-                    title={
-                        isAdmin
-                            ? 'Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
-                            : 'Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen.'
-                    }
-                />
-            </p>
+            <IconTooltipWithText
+                icon={CircleQuestionMark}
+                title={
+                    isAdmin
+                        ? 'Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+                        : 'Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen.'
+                }
+                text="Im ausgewählten Team ist noch keine To-do-Liste vorhanden."
+            />
         );
     }
 

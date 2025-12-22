@@ -64,7 +64,7 @@ export default function ClubMembersTable({
                         <IconTooltip
                             title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
                             icon={AlertCircle}
-                            iconClassName="tw:text-yellow-600"
+                            className="tw:text-yellow-600"
                         />
                     </TableHead>
                     <TableHead className="tw:w-px"></TableHead>

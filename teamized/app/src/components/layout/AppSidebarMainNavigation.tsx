@@ -9,10 +9,11 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/shadcn/components/ui/sidebar';
 import {
     useNavigationState,
-    usePageNavigatorAsEventHandler,
+    usePageNavigator,
     usePageNavigatorURL,
 } from '@/teamized/utils/navigation/navigationProvider';
 
@@ -32,9 +33,16 @@ interface Props {
 }
 
 export default function AppSidebarMainNavigation({ groups }: Readonly<Props>) {
-    const selectPage = usePageNavigatorAsEventHandler();
+    const { setOpenMobile } = useSidebar();
+    const selectPage = usePageNavigator();
     const getPageURL = usePageNavigatorURL();
     const { selectedPage } = useNavigationState();
+
+    const pageSelector = (page: string) => (e: React.UIEvent) => {
+        e.preventDefault();
+        selectPage(page);
+        setOpenMobile(false);
+    };
 
     return groups
         .filter((g) => !g.hidden)
@@ -54,7 +62,7 @@ export default function AppSidebarMainNavigation({ groups }: Readonly<Props>) {
                                 >
                                     <a
                                         href={getPageURL(item.page)}
-                                        onClick={selectPage(item.page)}
+                                        onClick={pageSelector(item.page)}
                                     >
                                         <item.icon />
                                         <span>{item.label}</span>

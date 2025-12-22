@@ -56,7 +56,7 @@ export default function CalendarOverview({
     return (
         <div>
             <div className="tw:flex tw:justify-between tw:items-center">
-                <h4 className="tw:mb-0 tw:ml-1">{monthDisplay}</h4>
+                <p className="tw:text-xl tw:font-medium">{monthDisplay}</p>
                 <div className="tw:flex tw:gap-0">
                     <Button
                         variant="outline"
