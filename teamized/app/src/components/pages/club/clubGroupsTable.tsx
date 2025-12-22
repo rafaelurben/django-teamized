@@ -41,7 +41,7 @@ export default function ClubGroupsTable({
                 <TableRow>
                     <TableHead>Gruppenname</TableHead>
                     <TableHead>Beschreibung</TableHead>
-                    <TableHead className="tw:w-[1px]"></TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHead className="debug-id">ID</TableHead>
                 </TableRow>
             </TableHeader>

@@ -48,7 +48,7 @@ export default function TeamMemberTable({ teamData }: Readonly<Props>) {
                         Benutzername &amp; E-Mail
                     </TableHead>
                     <TableHead>Rolle</TableHead>
-                    <TableHead className="tw:w-[1px]"></TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHead className="debug-id">ID</TableHead>
                 </TableRow>
             </TableHeader>

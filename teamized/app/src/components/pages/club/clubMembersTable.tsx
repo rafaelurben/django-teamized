@@ -67,7 +67,7 @@ export default function ClubMembersTable({
                             iconClassName="tw:text-yellow-600"
                         />
                     </TableHead>
-                    <TableHead className="tw:w-[1px]"></TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHead className="debug-id">ID</TableHead>
                 </TableRow>
             </TableHeader>

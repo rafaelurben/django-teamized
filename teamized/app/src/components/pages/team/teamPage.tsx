@@ -13,8 +13,8 @@ import {
 } from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import Tables from '../../common/tables';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import IconTooltip from '../../common/tooltips/iconTooltip';
-import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
 import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
@@ -122,13 +122,13 @@ export default function TeamPage() {
                                         Team&nbsp;löschen
                                     </Button>
                                 ) : (
-                                    <Tooltip
+                                    <CustomTooltip
                                         title={cannotBeDeletedTooltipReason}
                                     >
                                         <Button variant="destructive" disabled>
                                             Team&nbsp;löschen
                                         </Button>
-                                    </Tooltip>
+                                    </CustomTooltip>
                                 )}
                                 {!team.club && (
                                     <Button

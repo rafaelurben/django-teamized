@@ -3,7 +3,7 @@ import React from 'react';
 
 import { cn } from '@/shadcn/lib/utils';
 
-import Tooltip from './tooltip';
+import CustomTooltip from './customTooltip';
 
 interface Props {
     title: string;
@@ -20,12 +20,12 @@ export default function IconTooltip({
 }: Readonly<Partial<Props>>) {
     const data = { icon }; // Wrap in an object to use as a component
     return (
-        <Tooltip className={className} title={title}>
+        <CustomTooltip className={className} title={title}>
             {typeof data.icon === 'string' ? (
                 <i className={data.icon} />
             ) : (
                 <data.icon className={cn('tw:size-4', iconClassName)} />
             )}
-        </Tooltip>
+        </CustomTooltip>
     );
 }

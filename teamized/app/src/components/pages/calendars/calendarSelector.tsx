@@ -4,7 +4,7 @@ import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
-import Tooltip from '../../common/tooltips/tooltip';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import CalendarSelectorRow from './calendarSelectorRow';
 
 interface Props {
@@ -52,11 +52,11 @@ export default function CalendarSelector({
                     Kalender erstellen
                 </button>
             ) : (
-                <Tooltip title="Diese Aktion steht nur Admins zur Verfügung">
+                <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
                     <button className="btn btn-outline-dark disabled">
                         Kalender erstellen
                     </button>
-                </Tooltip>
+                </CustomTooltip>
             )}
         </>
     );

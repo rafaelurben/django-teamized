@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
-import Tooltip from '@/teamized/components/common/tooltips/tooltip';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
@@ -67,11 +67,11 @@ export default function ListSelector({
                     Liste erstellen
                 </Button>
             ) : (
-                <Tooltip title="Diese Aktion steht nur Admins zur Verfügung">
+                <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
                     <Button variant="outline" disabled>
                         Liste erstellen
                     </Button>
-                </Tooltip>
+                </CustomTooltip>
             )}
         </>
     );

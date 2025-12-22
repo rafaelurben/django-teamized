@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
-import Tooltip from '@/teamized/components/common/tooltips/tooltip';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
 
 import { Invite } from '../../../interfaces/teams/invite';
 import { Team } from '../../../interfaces/teams/team';
@@ -71,9 +71,9 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
             </TableCell>
             {/* Token */}
             <TableCell>
-                <Tooltip title={invite.token}>
+                <CustomTooltip title={invite.token}>
                     {invite.token.slice(0, 10)}...
-                </Tooltip>
+                </CustomTooltip>
             </TableCell>
             {/* Valid until */}
             <TableCell>

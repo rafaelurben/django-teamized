@@ -56,7 +56,7 @@ export default function TeamInviteTable({ teamData }: Readonly<Props>) {
                             <IconTooltip title="Bereits verwendet / noch verfügbar" />
                         </div>
                     </TableHead>
-                    <TableHead className="tw:w-[1px]"></TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHead className="debug-id">ID</TableHead>
                 </TableRow>
             </TableHeader>

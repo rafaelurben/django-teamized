@@ -12,7 +12,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export default function Tooltip({
+export default function CustomTooltip({
     title,
     className = '',
     children,

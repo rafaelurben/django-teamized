@@ -67,7 +67,7 @@ export default function VerticalDataTable({
                             <TableHead
                                 scope="row"
                                 className={
-                                    item.limitWidth ? 'tw:pe-3 tw:w-[1px]' : ''
+                                    item.limitWidth ? 'tw:pe-3 tw:w-px' : ''
                                 }
                             >
                                 {item.label}:

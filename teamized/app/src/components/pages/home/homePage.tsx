@@ -9,7 +9,7 @@ import {
 import { CardContent } from '@/shadcn/components/ui/card';
 import { ScrollArea } from '@/shadcn/components/ui/scroll-area';
 import Dashboard from '@/teamized/components/common/dashboard';
-import Tooltip from '@/teamized/components/common/tooltips/tooltip';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
 import SettingsCard from '@/teamized/components/pages/home/settingsCard';
 import { CHANGELOG } from '@/teamized/data/changelog';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
@@ -75,9 +75,9 @@ export default function HomePage() {
                                                 </span>
                                             )}
                                             {item.milestone && (
-                                                <Tooltip title="Meilenstein">
+                                                <CustomTooltip title="Meilenstein">
                                                     <Flag className="tw:size-4 tw:text-red-500" />
-                                                </Tooltip>
+                                                </CustomTooltip>
                                             )}
                                         </h6>
                                         <ul className="tw:text-sm tw:space-y-1 tw:list-disc tw:list-inside">

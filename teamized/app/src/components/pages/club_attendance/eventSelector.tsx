@@ -4,7 +4,7 @@ import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEven
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import Tooltip from '../../common/tooltips/tooltip';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import EventSelectorRow from './eventSelectorRow';
 
 interface Props {
@@ -54,11 +54,11 @@ export default function EventSelector({
                     Ereignis erstellen
                 </button>
             ) : (
-                <Tooltip title="Diese Aktion steht nur Admins zur Verfügung">
+                <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
                     <button className="btn btn-outline-dark disabled">
                         Ereignis erstellen
                     </button>
-                </Tooltip>
+                </CustomTooltip>
             )}
         </>
     );

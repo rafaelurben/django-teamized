@@ -6,7 +6,7 @@ import * as ClubAttendanceService from '../../../service/clubAttendance.service'
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { getDateTimeString } from '../../../utils/datetime';
 import Tables from '../../common/tables';
-import Tooltip from '../../common/tooltips/tooltip';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -100,11 +100,11 @@ export default function EventInfo({ team, selectedEvent, isAdmin }: Props) {
                         </button>
                     </>
                 ) : (
-                    <Tooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
+                    <CustomTooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
                         <button className="btn btn-outline-dark disabled">
                             Bearbeiten/Löschen
                         </button>
-                    </Tooltip>
+                    </CustomTooltip>
                 )}
             </Tables.ButtonFooter>
         </Tables.VerticalDataTable>

@@ -5,8 +5,8 @@ import { Team } from '../../../interfaces/teams/team';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Tables from '../../common/tables';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import IconTooltip from '../../common/tooltips/iconTooltip';
-import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -107,11 +107,11 @@ export default function CalendarInfo({
                         </button>
                     </>
                 ) : (
-                    <Tooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
+                    <CustomTooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
                         <button className="btn btn-outline-dark disabled">
                             Bearbeiten/Löschen
                         </button>
-                    </Tooltip>
+                    </CustomTooltip>
                 )}
                 <button
                     className="btn btn-outline-info"
