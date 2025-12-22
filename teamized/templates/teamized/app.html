@@ -84,6 +84,10 @@
     </script>
 
     <!-- Main app script -->
-    <script src="{% static 'teamized/app/mainapp.js' %}"></script>
+    {% if dev_server_host %}
+        <script src="{{ dev_server_host }}/mainapp.js"></script>
+    {% else %}
+        <script src="{% static 'teamized/app/mainapp.js' %}"></script>
+    {% endif %}
 
 {% endblock body %}

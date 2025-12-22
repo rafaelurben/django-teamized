@@ -7,6 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "npx --no -- webpack --mode production",
         "build-live": "npx --no -- webpack --mode development --watch --devtool eval-source-map",
+        "build-dev": "npx --no -- webpack serve --config webpack.dev.js",
         "prettier-check": "npx --no -- prettier . --check",
         "prettier-fix": "npx --no -- prettier . --write",
         "eslint-check": "npx --no -- eslint .",
@@ -45,7 +46,9 @@
         "typescript": "~5.9.0",
         "typescript-eslint": "~8.50.0",
         "webpack": "~5.104.0",
-        "webpack-cli": "~6.0.0"
+        "webpack-cli": "~6.0.0",
+        "webpack-dev-server": "^5.2.2",
+        "webpack-merge": "^6.0.1"
     },
     "dependencies": {
         "@radix-ui/react-avatar": "^1.1.11",

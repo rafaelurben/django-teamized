@@ -1,12 +1,13 @@
 """Views - the logic behind endpoints"""
-
+import os
 import uuid
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_safe
 
 from teamized import validation
 from teamized.decorators import teamized_prep, validation_func
@@ -16,6 +17,7 @@ from teamized.models import Calendar, Member
 # General views
 
 
+@require_safe
 def home(request):
     """Show the home page"""
     return render(request, "teamized/home.html")
@@ -25,18 +27,27 @@ def home(request):
 
 
 @login_required()
+@require_safe
 @teamized_prep()
 def app(request):
     """Show the app page"""
-    return render(request, "teamized/app.html")
+    return render(
+        request,
+        "teamized/app.html",
+        {
+            "dev_server_host": os.getenv("TEAMIZED_DEV_SERVER_HOST") if settings.DEBUG else None,
+        },
+    )
 
 
+@require_safe
 @login_required()
 def app_debug(request):
     """Show the debug page"""
     return render(request, "teamized/debug.html")
 
 
+@require_safe
 def manifest(request):
     """Render the manifest.json file"""
     response = render(
@@ -104,6 +115,7 @@ def workingtime_report(request, team_uuid: uuid.UUID):
 # Public URLs
 
 
+@require_safe
 def calendar_ics(request, ics_uuid: uuid.UUID):
     """Get the .ics file for a public calendar"""
 
