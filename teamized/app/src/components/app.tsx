@@ -75,7 +75,10 @@ export default function App() {
     return (
         <SidebarProvider id="app-root">
             <AppSidebar />
-            <main id="app-maincontent" className="tw:flex-1 tw:overflow-auto">
+            <main
+                id="app-maincontent"
+                className="tw:flex-1 tw:overflow-y-auto tw:overflow-x-hidden"
+            >
                 <PageLoader />
             </main>
         </SidebarProvider>

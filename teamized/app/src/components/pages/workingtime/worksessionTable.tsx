@@ -1,8 +1,17 @@
 import React from 'react';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
-import Tables from '../../common/tables';
 import WorksessionTableRow from './worksessionTableRow';
 
 interface Props {
@@ -11,31 +20,60 @@ interface Props {
     loading: boolean;
 }
 
-export default function WorksessionTable({ sessions, team, loading }: Props) {
+export default function WorksessionTable({
+    sessions,
+    team,
+    loading,
+}: Readonly<Props>) {
     return (
-        <Tables.SimpleTable>
-            <thead>
-                <tr>
-                    <th style={{ minWidth: '13rem' }}>Start &amp; Ende</th>
-                    <th style={{ minWidth: '8rem' }}>Dauer</th>
-                    <th style={{ minWidth: '5rem' }}>Einheiten</th>
-                    <th style={{ minWidth: '15rem' }}>Notiz</th>
-                    <th style={{ width: '1px' }}></th>
-                    <th style={{ width: '1px' }}></th>
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead style={{ minWidth: '13rem' }}>
+                        Start &amp; Ende
+                    </TableHead>
+                    <TableHead style={{ minWidth: '8rem' }}>Dauer</TableHead>
+                    <TableHead style={{ minWidth: '5rem' }}>
+                        Einheiten
+                    </TableHead>
+                    <TableHead style={{ minWidth: '15rem' }}>Notiz</TableHead>
+                    <TableHead style={{ width: '1px' }}></TableHead>
+                    <TableHead className="debug-id">ID</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {loading ? (
-                    <tr>
-                        <td colSpan={6}>Laden...</td>
-                    </tr>
+                    Array.from({ length: 3 }).map((_, i) => (
+                        <TableRow key={i}>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-10 tw:w-full" />
+                            </TableCell>
+                        </TableRow>
+                    ))
                 ) : sessions.length === 0 ? (
-                    <tr>
-                        <td colSpan={6}>
+                    <TableRow>
+                        <TableCell
+                            colSpan={6}
+                            className="tw:text-center tw:text-muted-foreground"
+                        >
                             Noch keine Zeiten im ausgewählten Zeitraum erfasst.
-                        </td>
-                    </tr>
+                        </TableCell>
+                    </TableRow>
                 ) : (
                     sessions.map((session) => (
                         <WorksessionTableRow
@@ -45,7 +83,7 @@ export default function WorksessionTable({ sessions, team, loading }: Props) {
                         />
                     ))
                 )}
-            </tbody>
-        </Tables.SimpleTable>
+            </TableBody>
+        </Table>
     );
 }
