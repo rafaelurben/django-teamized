@@ -69,10 +69,8 @@ export async function editSettings(settings: Partial<Settings>) {
  */
 function setColorScheme(scheme: string) {
     if (scheme === 'dark') {
-        document.body.dataset.bsTheme = 'dark';
         document.body.dataset.tailwindTheme = 'dark';
     } else {
-        document.body.dataset.bsTheme = 'light';
         document.body.dataset.tailwindTheme = 'light';
     }
 }

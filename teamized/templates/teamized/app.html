@@ -1,11 +1,11 @@
 {% extends 'teamized/base.html' %}
 {% load static i18n %}
 
-{% comment %} This is the main app page. All the action happens on this page.{% endcomment %}
+{% comment %}This is the main app page. All the action happens on this page.{% endcomment %}
 
 {% block title %}{% translate "App" %}{% endblock title %}
 
-{% block extrahead %}
+{% block stylesheets %}
     <!-- Custom stylesheets -->
     <link rel="stylesheet" href="{% static 'teamized/css/app.css' %}">
     <link rel="stylesheet" href="{% static 'teamized/css/darkmode.css' %}">
@@ -13,13 +13,58 @@
 
 {% block body %}
 
+    <style>
+        #react-root-fallback {
+            --fallback-fg: #000;
+            --fallback-bg: #fff;
+
+            background-color: var(--fallback-bg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100dvw;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            & .loading-spinner {
+                width: 3rem;
+                height: 3rem;
+                border: 0.25rem solid var(--fallback-fg);
+                border-top-color: var(--fallback-bg);
+                border-radius: 50%;
+                animation: spinner-rotate 0.75s linear infinite;
+                margin-bottom: 1rem;
+            }
+
+            & .loading-text {
+                margin: 0;
+                color: var(--fallback-fg);
+                font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            }
+        }
+
+        @keyframes spinner-rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            #react-root-fallback {
+                --fallback-fg: #fff;
+                --fallback-bg: #000;
+            }
+        }
+    </style>
+
     <div id="react-root">
         <!-- Filled by React / fallback content: -->
-        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-            <div class="spinner-border mb-3" role="status">
-                <span class="visually-hidden">Laden...</span>
-            </div>
-            <p>App wird geladen...</p>
+        <div id="react-root-fallback">
+            <div class="loading-spinner" role="status" aria-label="Laden..."></div>
+            <p class="loading-text">App wird geladen...</p>
         </div>
     </div>
 
@@ -32,6 +77,10 @@
             account_url: '{% url 'account:home' %}?next={% url 'teamized:app' %}',
             logout_url: '{% url 'account:logout' %}?next={% url 'teamized:home' %}',
         };
+
+        /* Prevent dark-mode flickering by setting the device-theme as default until settings are loaded */
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        document.body.dataset.tailwindTheme = prefersDarkScheme.matches ? 'dark' : 'light';
     </script>
 
     <!-- Main app script -->
