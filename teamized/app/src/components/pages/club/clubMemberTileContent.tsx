@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
-import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from '@/shadcn/components/ui/tabs';
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/shadcn/components/ui/select';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
 
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubMembersTable from './clubMembersTable';
 
 interface Props {
@@ -21,7 +23,7 @@ interface Props {
 export default function ClubMemberTileContent({ teamData }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
-    const [selectedTab, setSelectedTab] = useState('all');
+    const [selectedValue, setSelectedValue] = useState('all');
 
     const team = teamData.team;
     const isOwner = teamData.team.member!.is_owner;
@@ -45,44 +47,42 @@ export default function ClubMemberTileContent({ teamData }: Readonly<Props>) {
         return <Skeleton className="tw:w-full tw:h-48" />;
     }
 
+    const selectedGroup = clubGroups.find((g) => g.id === selectedValue);
+    const displayedMembers =
+        selectedValue === 'all'
+            ? clubMembers
+            : clubMembers.filter((cm) =>
+                  selectedGroup?.memberids.includes(cm.id)
+              );
+
     return (
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="tw:flex-wrap tw:gap-2 tw:h-auto">
-                <TabsTrigger value="all">
-                    Alle ({clubMembers.length})
-                </TabsTrigger>
-                {clubGroups.map((clubGroup) => (
-                    <TabsTrigger key={clubGroup.id} value={clubGroup.id}>
-                        {clubGroup.name} ({clubGroup.memberids.length})
-                        {clubGroup.description && (
-                            <IconTooltip title={clubGroup.description} />
-                        )}
-                    </TabsTrigger>
-                ))}
-            </TabsList>
+        <>
+            <Select value={selectedValue} onValueChange={setSelectedValue}>
+                <SelectTrigger className="tw:w-full tw:mb-4">
+                    <SelectValue placeholder="Wähle eine Gruppe" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="all">
+                        Alle Mitglieder ({clubMembers.length})
+                    </SelectItem>
+                    <SelectGroup>
+                        <SelectLabel>Gruppen</SelectLabel>
+                        {clubGroups.map((clubGroup) => (
+                            <SelectItem key={clubGroup.id} value={clubGroup.id}>
+                                {clubGroup.name} ({clubGroup.memberids.length})
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
 
-            <TabsContent value="all">
-                <ClubMembersTable
-                    team={team}
-                    clubMembers={clubMembers}
-                    isAdmin={isAdmin}
-                    isOwner={isOwner}
-                />
-            </TabsContent>
-
-            {clubGroups.map((clubGroup) => (
-                <TabsContent key={clubGroup.id} value={clubGroup.id}>
-                    <ClubMembersTable
-                        team={team}
-                        clubMembers={clubMembers.filter((cm) =>
-                            clubGroup.memberids.includes(cm.id)
-                        )}
-                        isAdmin={isAdmin}
-                        isOwner={isOwner}
-                        group={clubGroup}
-                    />
-                </TabsContent>
-            ))}
-        </Tabs>
+            <ClubMembersTable
+                team={team}
+                clubMembers={displayedMembers}
+                isAdmin={isAdmin}
+                isOwner={isOwner}
+                group={selectedGroup}
+            />
+        </>
     );
 }

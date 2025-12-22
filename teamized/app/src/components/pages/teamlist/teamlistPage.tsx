@@ -81,11 +81,11 @@ export default function TeamlistPage({ teams }: Readonly<Props>) {
                             und klicke auf &quot;Team beitreten&quot;, um einem
                             Team beizutreten.
                         </p>
-                        <div className="tw:flex tw:gap-2">
+                        <div className="tw:flex tw:gap-2 tw:flex-wrap">
                             <Button
                                 variant="outline"
                                 onClick={createTeam}
-                                className="tw:whitespace-nowrap"
+                                className="tw:whitespace-nowrap tw:w-full tw:md:w-auto"
                             >
                                 Team erstellen
                             </Button>
