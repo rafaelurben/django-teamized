@@ -81,17 +81,19 @@ export default function CalendarEventPicker({
     return (
         <>
             {eventExists ? (
-                sortedEvents.map((event) => (
-                    <CalendarEventPickerRow
-                        key={event.id}
-                        event={event}
-                        selectedDate={selectedDate}
-                        onSelect={onEventSelect}
-                        isSelected={
-                            !!selectedEvent && selectedEvent.id === event.id
-                        }
-                    />
-                ))
+                <div className="tw:mb-2 tw:flex tw:flex-col">
+                    {sortedEvents.map((event) => (
+                        <CalendarEventPickerRow
+                            key={event.id}
+                            event={event}
+                            selectedDate={selectedDate}
+                            onSelect={onEventSelect}
+                            isSelected={
+                                !!selectedEvent && selectedEvent.id === event.id
+                            }
+                        />
+                    ))}
+                </div>
             ) : (
                 <p>Keine Ereignisse an diesem Datum.</p>
             )}

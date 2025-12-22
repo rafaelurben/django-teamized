@@ -10,6 +10,7 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import Tables from '@/teamized/components/common/tables';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
@@ -57,7 +58,7 @@ export default function TeamInviteTable({ teamData }: Readonly<Props>) {
                         </div>
                     </TableHead>
                     <TableHead className="tw:w-px"></TableHead>
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>

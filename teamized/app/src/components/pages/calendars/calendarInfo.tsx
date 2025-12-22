@@ -1,4 +1,4 @@
-import { CircleQuestionMark } from 'lucide-react';
+import { CircleIcon, CircleQuestionMark } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -128,10 +128,10 @@ export default function CalendarInfo({
                 {
                     label: 'Farbe',
                     value: (
-                        <i
+                        <CircleIcon
+                            className="tw:size-3 tw:fill-current"
                             style={{ color: selectedCalendar.color }}
-                            className="fa-solid fa-circle small"
-                        ></i>
+                        />
                     ),
                 },
                 {

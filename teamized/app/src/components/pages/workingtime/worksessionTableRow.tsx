@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
@@ -60,13 +61,13 @@ export default function WorksessionTableRow({
                         <IconTooltip
                             icon={Timer}
                             title="Diese Sitzung wurde via Aufzeichnung erstellt."
-                            className="tw:ms-1"
+                            className="tw:ms-1 tw:inline-block"
                         />
                     ) : (
                         <IconTooltip
                             icon={TimerOff}
                             title="Diese Sitzung wurde manuell erfasst."
-                            className="tw:ms-1"
+                            className="tw:ms-1 tw:inline-block"
                         />
                     )}
                 </span>
@@ -102,7 +103,7 @@ export default function WorksessionTableRow({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </TableCell>
-            <TableCell className="debug-id">{session.id}</TableCell>
+            <TableCellDebugID id={session.id} />
         </TableRow>
     );
 }

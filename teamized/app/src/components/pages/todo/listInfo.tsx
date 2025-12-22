@@ -131,11 +131,7 @@ export default function ListInfo({
                 },
                 {
                     label: 'ID',
-                    value: (
-                        <span className="tw:text-muted-foreground tw:text-xs">
-                            {selectedList.id}
-                        </span>
-                    ),
+                    value: selectedList.id,
                     isDebugId: true,
                 },
             ]}

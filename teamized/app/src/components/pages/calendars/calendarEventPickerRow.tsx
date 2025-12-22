@@ -72,9 +72,9 @@ export default function CalendarEventPickerRow({
     };
 
     return (
-        <div
+        <button
             className={cn(
-                'tw:pl-2 tw:mb-1 tw:cursor-pointer tw:transition-opacity',
+                'tw:pl-2 tw:mb-1 tw:cursor-pointer tw:transition-opacity tw:text-left',
                 isSelected ? 'tw:opacity-75' : 'tw:opacity-100'
             )}
             style={{
@@ -83,14 +83,7 @@ export default function CalendarEventPickerRow({
                 borderLeftColor: event.calendar!.color,
             }}
             onClick={handleSelect}
-            role="button"
             tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleSelect();
-                }
-            }}
         >
             <b className="tw:inline-block tw:w-full">{event.name}</b>
             <span className="tw:inline-block tw:w-full">
@@ -99,6 +92,6 @@ export default function CalendarEventPickerRow({
             {event.location && (
                 <i className="tw:inline-block tw:w-full">{event.location}</i>
             )}
-        </div>
+        </button>
     );
 }

@@ -7,6 +7,7 @@ import {
     TableHead,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import { cn } from '@/shadcn/lib/utils';
 
 import ButtonFooter from './ButtonFooter';
 
@@ -66,15 +67,22 @@ export default function VerticalDataTable({
                         >
                             <TableHead
                                 scope="row"
-                                className={
+                                className={cn(
                                     item.limitWidth
                                         ? 'tw:pe-3 tw:w-px'
-                                        : 'tw:whitespace-normal'
-                                }
+                                        : 'tw:whitespace-normal',
+                                    item.isDebugId
+                                        ? 'tw:text-muted-foreground'
+                                        : ''
+                                )}
                             >
                                 {item.label}:
                             </TableHead>
-                            <TableCell>{item.value}</TableCell>
+                            <TableCell
+                                className={item.isDebugId ? 'tw:text-xs' : ''}
+                            >
+                                {item.value}
+                            </TableCell>
                         </TableRow>
                     ))}
             </TableBody>

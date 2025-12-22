@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
@@ -98,9 +99,7 @@ export default function ListViewItem({ team, list, item }: Readonly<Props>) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </TableCell>
-            <TableCell className="debug-id tw:text-muted-foreground tw:text-xs">
-                {item.id}
-            </TableCell>
+            <TableCellDebugID id={item.id} />
         </TableRow>
     );
 }

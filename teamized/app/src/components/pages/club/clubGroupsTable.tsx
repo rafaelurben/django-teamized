@@ -9,6 +9,7 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import Tables from '@/teamized/components/common/tables';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
@@ -42,7 +43,7 @@ export default function ClubGroupsTable({
                     <TableHead>Gruppenname</TableHead>
                     <TableHead>Beschreibung</TableHead>
                     <TableHead className="tw:w-px"></TableHead>
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>

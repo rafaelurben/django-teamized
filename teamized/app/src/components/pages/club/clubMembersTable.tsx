@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
 
 import { ClubMember } from '../../../interfaces/club/clubMember';
@@ -68,7 +69,7 @@ export default function ClubMembersTable({
                         />
                     </TableHead>
                     <TableHead className="tw:w-px"></TableHead>
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>

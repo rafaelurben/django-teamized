@@ -16,6 +16,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
@@ -125,7 +126,7 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
                 </DropdownMenu>
             </TableCell>
             {/* ID */}
-            <TableCell className="debug-id">{team.id}</TableCell>
+            <TableCellDebugID id={team.id} />
         </TableRow>
     );
 }

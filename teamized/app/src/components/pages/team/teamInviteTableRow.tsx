@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
 
 import { Invite } from '../../../interfaces/teams/invite';
@@ -123,7 +124,7 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
                 </DropdownMenu>
             </TableCell>
             {/* ID */}
-            <TableCell className="debug-id">{invite.id}</TableCell>
+            <TableCellDebugID id={invite.id} />
         </TableRow>
     );
 }

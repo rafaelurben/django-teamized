@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
@@ -38,7 +39,7 @@ export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
                     </TableHead>
                     <TableHead>Deine Rolle</TableHead>
                     <TableHead style={{ width: '1px' }} />
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>

@@ -13,6 +13,7 @@ import { Label } from '@/shadcn/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import { Textarea } from '@/shadcn/components/ui/textarea';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import {
@@ -301,9 +302,7 @@ export default function ParticipationTableRow({
                     </Button>
                 </TableCell>
             )}
-            <TableCell className="debug-id tw:text-muted-foreground tw:text-xs">
-                {participation.id}
-            </TableCell>
+            <TableCellDebugID id={participation.id} />
         </TableRow>
     );
 }

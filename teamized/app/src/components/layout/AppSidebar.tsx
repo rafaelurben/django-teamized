@@ -122,7 +122,7 @@ export default function AppSidebar() {
                             icon: Info,
                             onClick: () => {
                                 window.open(
-                                    'https://teamized.ch',
+                                    window.teamized_globals.home_url,
                                     '_blank',
                                     'noopener'
                                 );

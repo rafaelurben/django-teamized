@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger,
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
@@ -88,7 +89,7 @@ export default function ClubGroupsTableRow({
                 )}
             </TableCell>
             {/* ID */}
-            <TableCell className="debug-id">{group.id}</TableCell>
+            <TableCellDebugID id={group.id} />
         </TableRow>
     );
 }

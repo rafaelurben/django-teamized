@@ -10,6 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
@@ -46,7 +47,7 @@ export default function WorksessionTable({
                     </TableHead>
                     <TableHead style={{ minWidth: '15rem' }}>Notiz</TableHead>
                     <TableHead style={{ width: '1px' }}></TableHead>
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>

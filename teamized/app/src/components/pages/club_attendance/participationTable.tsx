@@ -11,6 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
@@ -98,7 +99,7 @@ export default function ParticipationTable({
                         </TableHead>
                     )}
                     {isAdmin && editMode && <TableHead></TableHead>}
-                    <TableHead className="debug-id">ID</TableHead>
+                    <TableHeadDebugID />
                 </TableRow>
             </TableHeader>
             <TableBody>
