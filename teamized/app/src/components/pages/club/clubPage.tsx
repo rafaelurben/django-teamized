@@ -41,7 +41,7 @@ export default function ClubPage() {
     const club = team.club!;
 
     return (
-        <Dashboard.Page loading={club === undefined}>
+        <Dashboard.Page>
             <Dashboard.Column>
                 <Dashboard.CustomCard title="Vereinsinfos">
                     <CardContent>

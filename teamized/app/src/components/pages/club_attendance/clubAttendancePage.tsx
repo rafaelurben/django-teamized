@@ -61,7 +61,7 @@ export default function ClubAttendancePage() {
     const selectedEvent = eventsMap[selectedEventId!];
 
     return (
-        <Dashboard.Page loading={loading}>
+        <Dashboard.Page>
             <Dashboard.Column sizes={{ xl: 4 }}>
                 <Dashboard.CustomCard
                     title="Ereignisübersicht"

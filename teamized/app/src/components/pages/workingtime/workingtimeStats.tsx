@@ -1,6 +1,8 @@
 import React from 'react';
 import * as Recharts from 'recharts';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+
 import { Worksession } from '../../../interfaces/workingtime/worksession';
 import * as WorkingtimeService from '../../../service/workingtime.service';
 
@@ -8,16 +10,22 @@ interface Props {
     sessions: Worksession[];
     start: Date;
     end: Date;
+    loading: boolean;
 }
 
 export default function WorkingtimeStats({
     sessions,
     start,
     end,
+    loading,
 }: Readonly<Props>) {
     const data = WorkingtimeService.chartDataByDays(sessions, start, end);
     const totalHours = WorkingtimeService.totalDuration(sessions) / 3600;
     const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
+
+    if (loading) {
+        return <Skeleton className="tw:w-full tw:h-[90%]" />;
+    }
 
     return (
         <>

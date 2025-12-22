@@ -83,7 +83,7 @@ export default function CalendarsPage() {
     const selectedEvent = eventMap[selectedEventId!];
 
     return (
-        <Dashboard.Page loading={loading}>
+        <Dashboard.Page>
             <Dashboard.Column sizes={{ lg: 6 }} className="tw:lg:order-2">
                 <Dashboard.CustomCard
                     title="Ereignisübersicht"

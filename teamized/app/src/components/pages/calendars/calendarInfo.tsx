@@ -89,7 +89,7 @@ export default function CalendarInfo({
                         </TableRow>
                     </TableBody>
                 </Table>
-                <div className="tw:flex tw:gap-2 tw:mt-3">
+                <div className="tw:flex tw:gap-2 tw:mt-3 tw:justify-end">
                     <Skeleton className="tw:h-9 tw:w-28" />
                     <Skeleton className="tw:h-9 tw:w-20" />
                     <Skeleton className="tw:h-9 tw:w-28" />

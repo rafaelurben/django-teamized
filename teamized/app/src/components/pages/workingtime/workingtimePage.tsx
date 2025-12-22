@@ -106,7 +106,7 @@ export default function WorkingtimePage() {
     });
 
     return (
-        <Dashboard.Page loading={loading}>
+        <Dashboard.Page>
             <Dashboard.Column sizes={{ xl: 4 }}>
                 <Dashboard.Row>
                     <Dashboard.Column sizes={{ xl: 12, sm: 6, md: 6 }}>
@@ -201,6 +201,7 @@ export default function WorkingtimePage() {
                             sessions={sessions}
                             start={statsRangeStart}
                             end={statsRangeEnd}
+                            loading={loading}
                         />
                     </CardContent>
                 </Dashboard.CustomCard>
