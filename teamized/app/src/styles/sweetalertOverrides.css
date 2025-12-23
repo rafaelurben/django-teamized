@@ -1,0 +1,22 @@
+/* SweetAlert2 overrides */
+
+body.swal2-shown:not(.swal2-no-backdrop) {
+    /* Use entire window height */
+    height: 100vh !important;
+}
+
+.swal2-input,
+.swal2-file,
+.swal2-textarea,
+.swal2-select,
+.swal2-radio,
+.swal2-checkbox {
+    /* Remove useless x-margins in SWALs that could show scrollbars on smaller devices */
+    margin: 1em 0 3px;
+}
+
+.swal2-input,
+.swal2-textarea {
+    /* Make input fields full width */
+    width: 100%;
+}

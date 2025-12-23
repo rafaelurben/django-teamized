@@ -6,14 +6,17 @@
 {% block title %}{% translate "App" %}{% endblock title %}
 
 {% block stylesheets %}
-    <!-- Custom stylesheets -->
-    <link rel="stylesheet" href="{% static 'teamized/css/app.css' %}">
-    <link rel="stylesheet" href="{% static 'teamized/css/darkmode.css' %}">
-{% endblock %}
-
-{% block body %}
-
     <style>
+        body {
+            height: 100vh;
+        }
+
+        #react-root {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         #react-root-fallback {
             --fallback-fg: #000;
             --fallback-bg: #fff;
@@ -59,6 +62,9 @@
             }
         }
     </style>
+{% endblock %}
+
+{% block body %}
 
     <div id="react-root">
         <!-- Filled by React / fallback content: -->
