@@ -90,7 +90,7 @@ export default function AppSidebar() {
                                     subitems: [
                                         {
                                             label: 'Ereignisse',
-                                            page: 'calendars',
+                                            page: 'calendars_events',
                                         },
                                         {
                                             label: 'Kalender verwalten',

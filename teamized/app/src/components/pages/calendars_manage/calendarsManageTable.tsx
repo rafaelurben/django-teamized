@@ -46,7 +46,7 @@ export default function CalendarsManageTable({
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="tw:w-px">Farbe</TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Beschreibung</TableHead>
                     <TableHead className="tw:w-px"></TableHead>

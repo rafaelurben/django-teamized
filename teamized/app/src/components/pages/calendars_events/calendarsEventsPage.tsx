@@ -9,11 +9,10 @@ import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider
 import Dashboard from '../../common/dashboard';
 import CalendarEventDisplay from './calendarEventDisplay';
 import CalendarEventPicker from './calendarEventPicker';
-import CalendarInfo from './calendarInfo';
 import CalendarOverview from './calendarOverview';
-import CalendarSelector from './calendarSelector';
+import CalendarTable from './calendarTable';
 
-export default function CalendarsPage() {
+export default function CalendarsEventsPage() {
     const refreshData = useAppdataRefresh();
 
     const [selectedDate, setSelectedDate] = useState(
@@ -23,6 +22,9 @@ export default function CalendarsPage() {
         null
     );
     const [selectedEventId, setSelectedEventId] = useState<ID | null>(null);
+    const [visibleCalendarIds, setVisibleCalendarIds] = useState<Set<ID>>(
+        new Set()
+    );
 
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
@@ -35,6 +37,11 @@ export default function CalendarsPage() {
 
     const eventMap = CalendarService.flattenCalendarEvents(calendars);
 
+    // Filter events by visible calendars
+    const visibleEvents = Object.values(eventMap).filter(
+        (event) => event.calendar && visibleCalendarIds.has(event.calendar.id)
+    );
+
     useEffect(() => {
         ensureValidCalendarId();
         ensureValidEventId();
@@ -43,6 +50,14 @@ export default function CalendarsPage() {
             CalendarService.getCalendars(team.id).then(refreshData);
         }
     });
+
+    // Initialize visible calendars when calendars are loaded
+    useEffect(() => {
+        if (!loading && calendars.length > 0 && visibleCalendarIds.size === 0) {
+            // Show all calendars by default
+            setVisibleCalendarIds(new Set(calendars.map((c) => c.id)));
+        }
+    }, [loading, calendars, visibleCalendarIds.size]);
 
     const handleDateSelect = (date: Date) => {
         setSelectedDate(CalendarService.roundDays(date));
@@ -53,6 +68,18 @@ export default function CalendarsPage() {
                 setSelectedEventId(null);
             }
         }
+    };
+
+    const handleVisibilityToggle = (calendarId: ID, visible: boolean) => {
+        setVisibleCalendarIds((prev) => {
+            const newSet = new Set(prev);
+            if (visible) {
+                newSet.add(calendarId);
+            } else {
+                newSet.delete(calendarId);
+            }
+            return newSet;
+        });
     };
 
     const ensureValidCalendarId = () => {
@@ -87,13 +114,13 @@ export default function CalendarsPage() {
             <Dashboard.Column sizes={{ lg: 6 }} className="tw:lg:order-2">
                 <Dashboard.CustomCard
                     title="Ereignisübersicht"
-                    help="Hier werden Ereignisse aus allen Kalendern des aktuellen Teams angezeigt"
+                    help="Hier werden Ereignisse aus allen sichtbaren Kalendern angezeigt"
                 >
                     <CardContent>
                         <CalendarOverview
                             onDateSelect={handleDateSelect}
                             selectedDate={selectedDate}
-                            events={Object.values(eventMap)}
+                            events={visibleEvents}
                         />
                     </CardContent>
                 </Dashboard.CustomCard>
@@ -109,7 +136,7 @@ export default function CalendarsPage() {
                             selectedCalendar={selectedCalendar}
                             calendars={calendars}
                             events={CalendarService.filterCalendarEventsByDate(
-                                Object.values(eventMap),
+                                visibleEvents,
                                 selectedDate
                             )}
                             team={team}
@@ -133,32 +160,16 @@ export default function CalendarsPage() {
                     </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
-                    title="Kalenderübersicht"
-                    help="Wechsle zwischen den Kalendern deines Teams oder erstelle einen neuen. Diese Auswahl hat keinen Einfluss auf die angezeigten Ereignisse."
+                    title="Kalender"
+                    help="Wähle aus, welche Kalender angezeigt werden sollen und welcher Kalender standardmäßig für neue Ereignisse verwendet wird."
                 >
                     <CardContent>
-                        <CalendarSelector
-                            onCalendarSelect={setSelectedCalendarId}
-                            team={team}
+                        <CalendarTable
                             calendars={calendars}
-                            selectedCalendar={selectedCalendar}
-                            isAdmin={isAdmin}
-                            loading={loading}
-                        />
-                    </CardContent>
-                </Dashboard.CustomCard>
-                <Dashboard.CustomCard
-                    title="Kalenderdetails"
-                    help="Sieh dir Infos zum oben ausgewählten Kalender an."
-                >
-                    <CardContent>
-                        <CalendarInfo
-                            team={team}
-                            selectedCalendar={selectedCalendar}
-                            onCalendarDeleted={() =>
-                                setSelectedCalendarId(null)
-                            }
-                            isAdmin={isAdmin}
+                            selectedCalendarId={selectedCalendarId}
+                            visibleCalendarIds={visibleCalendarIds}
+                            onCalendarSelect={setSelectedCalendarId}
+                            onVisibilityToggle={handleVisibilityToggle}
                             loading={loading}
                         />
                     </CardContent>

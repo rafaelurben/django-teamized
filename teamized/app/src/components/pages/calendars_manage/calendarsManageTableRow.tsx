@@ -52,7 +52,7 @@ export default function CalendarsManageTableRow({
         <TableRow>
             <TableCell>
                 <CircleIcon
-                    className="tw:size-6 tw:fill-current"
+                    className="tw:size-4 tw:fill-current"
                     style={{ color: calendar.color }}
                 />
             </TableCell>

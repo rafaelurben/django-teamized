@@ -18,7 +18,9 @@ import {
     useNavigationState,
 } from '../utils/navigation/navigationProvider';
 
-const CalendarsPage = lazy(() => import('./pages/calendars/calendarsPage'));
+const CalendarsEventsPage = lazy(
+    () => import('./pages/calendars_events/calendarsEventsPage')
+);
 const CalendarsManagePage = lazy(
     () => import('./pages/calendars_manage/calendarsManagePage')
 );
@@ -95,8 +97,8 @@ export function PageLoader() {
                 return <TeamPage />;
             case 'workingtime':
                 return <WorkingtimePage />;
-            case 'calendars':
-                return <CalendarsPage />;
+            case 'calendars_events':
+                return <CalendarsEventsPage />;
             case 'calendars_manage':
                 return <CalendarsManagePage />;
             case 'todo':
