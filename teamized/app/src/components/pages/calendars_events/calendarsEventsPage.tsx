@@ -100,7 +100,7 @@ export default function CalendarsEventsPage() {
 
     return (
         <Dashboard.Page>
-            <Dashboard.Column sizes={{ lg: 6 }}>
+            <Dashboard.Column sizes={{ lg: 6, xl: 4 }}>
                 <CalendarOverviewWithEventSelector
                     team={team}
                     calendars={visibleCalendars}
@@ -111,7 +111,7 @@ export default function CalendarsEventsPage() {
                     loading={loading}
                 ></CalendarOverviewWithEventSelector>
             </Dashboard.Column>
-            <Dashboard.Column sizes={{ lg: 6 }}>
+            <Dashboard.Column sizes={{ lg: 6, xl: 8 }}>
                 <Dashboard.CustomCard
                     title="Ausgewähltes Ereignis"
                     help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."

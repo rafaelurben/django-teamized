@@ -13,6 +13,7 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import Urlize from '@/teamized/components/common/utils/urlize';
 
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { ID } from '../../../interfaces/common';
@@ -52,6 +53,9 @@ export default function CalendarTable({
                     <TableRow>
                         <TableHead className="tw:w-px"></TableHead>
                         <TableHead>Titel</TableHead>
+                        <TableHead className="tw:hidden tw:xl:table-cell">
+                            Beschreibung
+                        </TableHead>
                         <TableHead className="tw:w-px">
                             <IconTooltip icon={Eye} title="Sichtbar?" />
                         </TableHead>
@@ -73,6 +77,9 @@ export default function CalendarTable({
                                   <TableCell>
                                       <Skeleton className="tw:h-6 tw:w-full" />
                                   </TableCell>
+                                  <TableCell className="tw:hidden tw:xl:table-cell">
+                                      <Skeleton className="tw:h-6 tw:w-full" />
+                                  </TableCell>
                                   <TableCell>
                                       <Skeleton className="tw:h-6 tw:w-10" />
                                   </TableCell>
@@ -90,6 +97,9 @@ export default function CalendarTable({
                                       />
                                   </TableCell>
                                   <TableCell>{calendar.name}</TableCell>
+                                  <TableCell className="tw:hidden tw:xl:table-cell">
+                                      <Urlize text={calendar.description} />
+                                  </TableCell>
                                   <TableCell>
                                       <Switch
                                           id={`show-${calendar.id}`}

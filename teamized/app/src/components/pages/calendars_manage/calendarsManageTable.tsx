@@ -11,6 +11,7 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
 import * as CalendarService from '@/teamized/service/calendars.service';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
@@ -91,13 +92,19 @@ export default function CalendarsManageTable({
                     ))
                 )}
             </TableBody>
-            {isAdmin && (
-                <Tables.ButtonFooter>
+            <Tables.ButtonFooter>
+                {isAdmin ? (
                     <Button variant="success" onClick={createCalendar}>
                         Kalender erstellen
                     </Button>
-                </Tables.ButtonFooter>
-            )}
+                ) : (
+                    <CustomTooltip title="Nur Admins können Kalender erstellen.">
+                        <Button variant="success" disabled>
+                            Kalender erstellen
+                        </Button>
+                    </CustomTooltip>
+                )}
+            </Tables.ButtonFooter>
         </Table>
     );
 }

@@ -134,7 +134,7 @@ export function CalendarOverviewWithEventSelector({
                     startMonth={new Date(2020, 0)}
                     endMonth={new Date(today.getFullYear() + 10, 11)}
                     captionLayout="dropdown"
-                    className="tw:bg-transparent tw:w-auto tw:mx-auto tw:px-0"
+                    className="tw:bg-transparent tw:w-auto tw:max-w-90 tw:mx-auto tw:px-0"
                     classNames={{
                         weekday:
                             'tw:font-medium tw:text-muted-foreground tw:rounded-md tw:flex-1 tw:text-[0.8rem] tw:select-none rdp-weekday',

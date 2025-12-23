@@ -27,7 +27,11 @@ export default function CalendarsManagePage() {
     return (
         <Dashboard.Page>
             <Dashboard.Column>
-                <Dashboard.CustomCard title="Kalender" wrapInCardContent>
+                <Dashboard.CustomCard
+                    title="Kalender"
+                    description="Alle Kalender deines Teams."
+                    wrapInCardContent
+                >
                     <CalendarsManageTable
                         team={team}
                         calendars={calendars}

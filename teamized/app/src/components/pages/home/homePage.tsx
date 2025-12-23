@@ -36,13 +36,13 @@ export default function HomePage() {
                             DEBUG
                         </a>
                     </p>
-                    <Alert variant="warning" className="md:tw:hidden tw:mt-2">
+                    <Alert variant="warning" className="tw:md:hidden tw:mt-2">
                         <Info className="tw:size-4" />
                         <AlertTitle>Hinweis</AlertTitle>
                         <AlertDescription>
-                            Diese Seite wurde zwar auch für mobile Geräte
-                            optimiert, funktioniert aber besser auf grösseren
-                            Geräten.
+                            Diese App wurde zwar auch für mobile Geräte
+                            optimiert, ist aber auf grösseren Geräten
+                            übersichtlicher.
                         </AlertDescription>
                     </Alert>
                 </Dashboard.CustomCard>
@@ -82,7 +82,7 @@ export default function HomePage() {
                                 ))}
                             </div>
                         </ScrollArea>
-                        <div className="tw:pointer-events-none tw:absolute tw:bottom-2 tw:left-0 tw:right-0 tw:h-16 tw:bg-linear-to-t tw:from-card tw:to-transparent" />
+                        <div className="tw:pointer-events-none tw:absolute tw:bottom-0 tw:left-0 tw:right-0 tw:h-16 tw:bg-linear-to-t tw:from-card tw:to-transparent" />
                     </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>
