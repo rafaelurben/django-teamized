@@ -41,8 +41,16 @@ export default function AppSidebarMenuItemWithSubmenu({
     getPageURL,
     pageSelector,
 }: Readonly<Props>) {
+    const isDefaultOpen = item.subitems.some(
+        (subitem) => subitem.page === selectedPage
+    );
+
     return (
-        <Collapsible asChild className="tw:group/collapsible">
+        <Collapsible
+            asChild
+            className="tw:group/collapsible"
+            defaultOpen={isDefaultOpen}
+        >
             <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                     <SidebarMenuButton size={item.small ? 'sm' : 'default'}>

@@ -31,6 +31,11 @@ export const PAGE_CONFIGS: {
         inheritFrom: 'team',
         description: 'Übersicht über alle Kalender deines Teams',
     },
+    calendars_manage: {
+        title: 'Kalender verwalten',
+        inheritFrom: 'team',
+        description: 'Verwalte alle Kalender deines Teams',
+    },
     todo: {
         title: 'To-do-Listen',
         inheritFrom: 'team',

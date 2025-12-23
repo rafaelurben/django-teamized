@@ -85,8 +85,18 @@ export default function AppSidebar() {
                                 },
                                 {
                                     label: 'Kalender',
-                                    page: 'calendars',
                                     icon: CalendarDays,
+                                    isSubmenu: true,
+                                    subitems: [
+                                        {
+                                            label: 'Ereignisse',
+                                            page: 'calendars',
+                                        },
+                                        {
+                                            label: 'Kalender verwalten',
+                                            page: 'calendars_manage',
+                                        },
+                                    ],
                                 },
                                 {
                                     label: 'To-do-Listen',

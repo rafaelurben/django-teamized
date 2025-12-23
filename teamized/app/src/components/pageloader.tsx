@@ -19,6 +19,9 @@ import {
 } from '../utils/navigation/navigationProvider';
 
 const CalendarsPage = lazy(() => import('./pages/calendars/calendarsPage'));
+const CalendarsManagePage = lazy(
+    () => import('./pages/calendars_manage/calendarsManagePage')
+);
 const ClubPage = lazy(() => import('./pages/club/clubPage'));
 const ClubAttendancePage = lazy(
     () => import('./pages/club_attendance/clubAttendancePage')
@@ -94,6 +97,8 @@ export function PageLoader() {
                 return <WorkingtimePage />;
             case 'calendars':
                 return <CalendarsPage />;
+            case 'calendars_manage':
+                return <CalendarsManagePage />;
             case 'todo':
                 return <TodoPage />;
             case 'club':
