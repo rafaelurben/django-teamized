@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { CardContent } from '@/shadcn/components/ui/card';
-
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
@@ -68,29 +66,28 @@ export function ParticipationTile({
             help="Verwalte die Anwesenheit für dieses Ereignis."
             loading={participations === null}
             ref={ref}
+            wrapInCardContent
         >
-            <CardContent>
-                {participations !== null && (
-                    <>
-                        <ParticipationTable
-                            participations={participations}
-                            isAdmin={isAdmin}
+            {participations !== null && (
+                <>
+                    <ParticipationTable
+                        participations={participations}
+                        isAdmin={isAdmin}
+                        team={team}
+                        event={selectedEvent}
+                        handleDelete={handleParticipationDelete}
+                        handleUpdate={handleParticipationUpdate}
+                    />
+                    {isAdmin && (
+                        <ParticipationAdder
                             team={team}
                             event={selectedEvent}
-                            handleDelete={handleParticipationDelete}
-                            handleUpdate={handleParticipationUpdate}
+                            participations={participations}
+                            handleCreate={handleParticipationsCreate}
                         />
-                        {isAdmin && (
-                            <ParticipationAdder
-                                team={team}
-                                event={selectedEvent}
-                                participations={participations}
-                                handleCreate={handleParticipationsCreate}
-                            />
-                        )}
-                    </>
-                )}
-            </CardContent>
+                    )}
+                </>
+            )}
         </Dashboard.CustomCard>
     );
 }

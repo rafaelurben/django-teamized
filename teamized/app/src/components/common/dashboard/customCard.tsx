@@ -3,7 +3,9 @@ import React from 'react';
 
 import {
     Card,
+    CardAction,
     CardContent,
+    CardDescription,
     CardHeader,
     CardTitle,
 } from '@/shadcn/components/ui/card';
@@ -11,39 +13,54 @@ import {
 import IconTooltip from '../tooltips/iconTooltip';
 
 interface Props {
-    title: string | React.ReactNode | null;
-    help: string | null;
+    title?: string | React.ReactNode;
+    help?: string;
+    description?: string | React.ReactNode;
+    action?: React.ReactNode;
     grow: boolean;
     className: string;
     children: React.ReactNode;
     loading: boolean;
-    ref: React.Ref<HTMLDivElement> | null;
+    ref?: React.Ref<HTMLDivElement>;
+    /**
+     * If true, the children will be wrapped in CardContent.
+     */
+    wrapInCardContent?: boolean;
 }
 
 export default function CustomCard({
-    title = null,
-    help = null,
+    title,
+    help,
+    description,
+    action,
     grow = false,
     className = '',
-    children = null,
+    children,
     loading = false,
-    ref = null,
+    ref,
+    wrapInCardContent,
 }: Readonly<Partial<Props>>) {
     const fullClassName = `dashboard-card tw:flex tw:flex-col ${grow ? 'tw:flex-grow' : ''} tw:m-1 ${className}`;
 
     return (
         <Card className={fullClassName} ref={ref}>
-            {title && (
+            {(title || action) && (
                 <CardHeader>
-                    <CardTitle className="tw:flex tw:items-center tw:gap-2">
-                        {title}
-                        {help && (
-                            <IconTooltip
-                                className="tw:text-muted-foreground"
-                                title={help}
-                            />
-                        )}
-                    </CardTitle>
+                    {title && (
+                        <CardTitle className="tw:flex tw:items-center tw:gap-2">
+                            {title}
+                            {help && (
+                                <IconTooltip
+                                    className="tw:text-muted-foreground"
+                                    title={help}
+                                />
+                            )}
+                        </CardTitle>
+                    )}
+                    {description && (
+                        <CardDescription>{description}</CardDescription>
+                    )}
+                    {action && <CardAction>{action}</CardAction>}
                 </CardHeader>
             )}
             {loading ? (
@@ -54,6 +71,10 @@ export default function CustomCard({
                             Daten werden geladen...
                         </span>
                     </div>
+                </CardContent>
+            ) : wrapInCardContent ? (
+                <CardContent className={grow ? 'tw:grow' : ''}>
+                    {children}
                 </CardContent>
             ) : (
                 children

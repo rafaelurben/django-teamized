@@ -26,10 +26,15 @@ export const PAGE_CONFIGS: {
         inheritFrom: 'team',
         description: 'Erfasse und verwalte deine Arbeitszeit',
     },
-    calendars: {
+    calendars_events: {
         title: 'Kalender',
         inheritFrom: 'team',
-        description: 'Übersicht über alle Kalender deines Teams',
+        description: 'Verwalte Ereignisse in Kalendern deines Teams',
+    },
+    calendars_manage: {
+        title: 'Kalender verwalten',
+        inheritFrom: 'team',
+        description: 'Verwalte alle Kalender deines Teams',
     },
     todo: {
         title: 'To-do-Listen',

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { CardContent } from '@/shadcn/components/ui/card';
 import ClubGroupsTileContent from '@/teamized/components/pages/club/clubGroupsTileContent';
 
 import * as ClubService from '../../../service/clubs.service';
@@ -43,73 +42,70 @@ export default function ClubPage() {
     return (
         <Dashboard.Page>
             <Dashboard.Column>
-                <Dashboard.CustomCard title="Vereinsinfos">
-                    <CardContent>
-                        <Tables.VerticalDataTable
-                            items={[
-                                {
-                                    label: 'Name',
-                                    value: club.name,
-                                },
-                                {
-                                    label: 'Login URL',
-                                    value: (
-                                        <a
-                                            target="_blank"
-                                            href={club.url}
-                                            rel="noreferrer"
-                                        >
-                                            {club.slug}
-                                        </a>
-                                    ),
-                                },
-                                {
-                                    label: 'Beschreibung',
-                                    value: <Urlize text={club.description} />,
-                                    limitWidth: true,
-                                },
-                                {
-                                    label: 'Mitglieder',
-                                    value: club.membercount,
-                                },
-                                {
-                                    label: 'ID',
-                                    value: club.id,
-                                    isDebugId: true,
-                                },
-                            ]}
+                <Dashboard.CustomCard title="Vereinsinfos" wrapInCardContent>
+                    <Tables.VerticalDataTable
+                        items={[
+                            {
+                                label: 'Name',
+                                value: club.name,
+                            },
+                            {
+                                label: 'Login URL',
+                                value: (
+                                    <a
+                                        target="_blank"
+                                        href={club.url}
+                                        rel="noreferrer"
+                                    >
+                                        {club.slug}
+                                    </a>
+                                ),
+                            },
+                            {
+                                label: 'Beschreibung',
+                                value: <Urlize text={club.description} />,
+                                limitWidth: true,
+                            },
+                            {
+                                label: 'Mitglieder',
+                                value: club.membercount,
+                            },
+                            {
+                                label: 'ID',
+                                value: club.id,
+                                isDebugId: true,
+                            },
+                        ]}
+                    >
+                        <Tables.ButtonFooter
+                            show={team.member!.is_owner}
+                            noTopBorder={true}
                         >
-                            <Tables.ButtonFooter
-                                show={team.member!.is_owner}
-                                noTopBorder={true}
+                            <Button
+                                variant="outline"
+                                onClick={handleClubEditButtonClick}
                             >
-                                <Button
-                                    variant="outline"
-                                    onClick={handleClubEditButtonClick}
-                                >
-                                    Verein&nbsp;bearbeiten
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    onClick={handleClubDeleteButtonClick}
-                                >
-                                    Verein&nbsp;löschen
-                                </Button>
-                            </Tables.ButtonFooter>
-                        </Tables.VerticalDataTable>
-                    </CardContent>
+                                Verein&nbsp;bearbeiten
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                onClick={handleClubDeleteButtonClick}
+                            >
+                                Verein&nbsp;löschen
+                            </Button>
+                        </Tables.ButtonFooter>
+                    </Tables.VerticalDataTable>
                 </Dashboard.CustomCard>
 
-                <Dashboard.CustomCard title="Vereinsmitglieder">
-                    <CardContent>
-                        <ClubMemberTileContent teamData={teamData} />
-                    </CardContent>
+                <Dashboard.CustomCard
+                    title="Vereinsmitglieder"
+                    wrapInCardContent
+                >
+                    <ClubMemberTileContent teamData={teamData} />
                 </Dashboard.CustomCard>
 
-                <Dashboard.CustomCard title="Vereinsgruppen">
-                    <CardContent>
-                        <ClubGroupsTileContent teamData={teamData} />
-                    </CardContent>
+                <Dashboard.CustomCard title="Vereinsgruppen" wrapInCardContent>
+                    <ClubGroupsTileContent teamData={teamData} />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>

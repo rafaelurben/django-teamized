@@ -102,7 +102,7 @@ export default function ListView({
                     <TableRow>
                         <TableCell className="tw:w-px">
                             <Button
-                                variant="success"
+                                variant="outline"
                                 size="icon-sm"
                                 disabled
                                 title="Neu"

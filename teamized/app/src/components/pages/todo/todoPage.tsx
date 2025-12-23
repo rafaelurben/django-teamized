@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { CardContent } from '@/shadcn/components/ui/card';
-
 import { ID } from '../../../interfaces/common';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as Todo from '../../../service/todo.service';
@@ -57,31 +55,29 @@ export default function TodoPage() {
                 <Dashboard.CustomCard
                     title="Listenübersicht"
                     help="Wechsle zwischen den To-do-Listen deines Teams oder erstelle eine neue."
+                    wrapInCardContent
                 >
-                    <CardContent>
-                        <ListSelector
-                            team={team}
-                            lists={Object.values(todolistMap)}
-                            selectedList={selectedList}
-                            onListSelect={setSelectedListId}
-                            isAdmin={isAdmin}
-                            loading={loading}
-                        />
-                    </CardContent>
+                    <ListSelector
+                        team={team}
+                        lists={Object.values(todolistMap)}
+                        selectedList={selectedList}
+                        onListSelect={setSelectedListId}
+                        isAdmin={isAdmin}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title="Listendetails"
                     help="Sieh dir Infos zur oben ausgewählten Liste an."
+                    wrapInCardContent
                 >
-                    <CardContent>
-                        <ListInfo
-                            team={team}
-                            selectedList={selectedList}
-                            onListDeleted={() => setSelectedListId(null)}
-                            isAdmin={isAdmin}
-                            loading={loading}
-                        />
-                    </CardContent>
+                    <ListInfo
+                        team={team}
+                        selectedList={selectedList}
+                        onListDeleted={() => setSelectedListId(null)}
+                        isAdmin={isAdmin}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 8 }}>
@@ -91,14 +87,13 @@ export default function TodoPage() {
                             ? 'To-do-Liste: ' + selectedList.name
                             : 'To-do-Liste'
                     }
+                    wrapInCardContent
                 >
-                    <CardContent>
-                        <ListView
-                            team={team}
-                            selectedList={selectedList}
-                            loading={loading}
-                        />
-                    </CardContent>
+                    <ListView
+                        team={team}
+                        selectedList={selectedList}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>

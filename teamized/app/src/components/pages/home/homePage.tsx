@@ -23,34 +23,28 @@ export default function HomePage() {
     return (
         <Dashboard.Page>
             <Dashboard.Column sizes={{ lg: 8 }}>
-                <Dashboard.CustomCard title="Willkommen">
-                    <CardContent>
-                        <p>
-                            <span>
-                                Verwende die Seitenleiste (links), um zu
-                                navigieren.
-                            </span>
-                            <a
-                                onClick={() => toggleDebug()}
-                                className="tw:ms-1 tw:opacity-0"
-                                aria-hidden="true"
-                            >
-                                DEBUG
-                            </a>
-                        </p>
-                        <Alert
-                            variant="warning"
-                            className="md:tw:hidden tw:mt-2"
+                <Dashboard.CustomCard title="Willkommen" wrapInCardContent>
+                    <p>
+                        <span>
+                            Verwende die Seitenleiste (links), um zu navigieren.
+                        </span>
+                        <a
+                            onClick={() => toggleDebug()}
+                            className="tw:ms-1 tw:opacity-0"
+                            aria-hidden="true"
                         >
-                            <Info className="tw:size-4" />
-                            <AlertTitle>Hinweis</AlertTitle>
-                            <AlertDescription>
-                                Diese Seite wurde zwar auch für mobile Geräte
-                                optimiert, funktioniert aber besser auf
-                                grösseren Geräten.
-                            </AlertDescription>
-                        </Alert>
-                    </CardContent>
+                            DEBUG
+                        </a>
+                    </p>
+                    <Alert variant="warning" className="tw:md:hidden tw:mt-2">
+                        <Info className="tw:size-4" />
+                        <AlertTitle>Hinweis</AlertTitle>
+                        <AlertDescription>
+                            Diese App wurde zwar auch für mobile Geräte
+                            optimiert, ist aber auf grösseren Geräten
+                            übersichtlicher.
+                        </AlertDescription>
+                    </Alert>
                 </Dashboard.CustomCard>
 
                 <SettingsCard settings={settings} />
@@ -88,7 +82,7 @@ export default function HomePage() {
                                 ))}
                             </div>
                         </ScrollArea>
-                        <div className="tw:pointer-events-none tw:absolute tw:bottom-2 tw:left-0 tw:right-0 tw:h-16 tw:bg-linear-to-t tw:from-card tw:to-transparent" />
+                        <div className="tw:pointer-events-none tw:absolute tw:bottom-0 tw:left-0 tw:right-0 tw:h-16 tw:bg-linear-to-t tw:from-card tw:to-transparent" />
                     </CardContent>
                 </Dashboard.CustomCard>
             </Dashboard.Column>

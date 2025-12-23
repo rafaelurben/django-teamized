@@ -1,7 +1,6 @@
 import React, { useEffect, useId, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { CardContent } from '@/shadcn/components/ui/card';
 import { Field, FieldGroup, FieldLabel } from '@/shadcn/components/ui/field';
 import { Input } from '@/shadcn/components/ui/input';
 
@@ -94,76 +93,78 @@ export default function WorkingtimePage() {
             <Dashboard.Column sizes={{ xl: 4 }}>
                 <Dashboard.Row>
                     <Dashboard.Column sizes={{ xl: 12, sm: 6, md: 6 }}>
-                        <Dashboard.CustomCard title="Sitzung aufzeichnen" grow>
-                            <CardContent>
-                                <WorksessionTrackingTileContent
-                                    team={team}
-                                ></WorksessionTrackingTileContent>
-                            </CardContent>
+                        <Dashboard.CustomCard
+                            title="Sitzung aufzeichnen"
+                            grow
+                            wrapInCardContent
+                        >
+                            <WorksessionTrackingTileContent
+                                team={team}
+                            ></WorksessionTrackingTileContent>
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
                     <Dashboard.Column sizes={{ xl: 12, sm: 6, md: 6 }}>
-                        <Dashboard.CustomCard title="Sitzung erfassen" grow>
-                            <CardContent>
-                                <p className="tw:text-sm tw:mb-4">
-                                    Aufzeichnung vergessen? Kein Problem. Hier
-                                    können Sitzungen nachträglich manuell
-                                    erfasst werden.
-                                </p>
-                                <Button
-                                    variant="success"
-                                    className="tw:w-full"
-                                    onClick={createSession}
-                                >
-                                    Sitzung hinzufügen
-                                </Button>
-                            </CardContent>
+                        <Dashboard.CustomCard
+                            title="Sitzung erfassen"
+                            grow
+                            wrapInCardContent
+                        >
+                            <p className="tw:text-sm tw:mb-4">
+                                Aufzeichnung vergessen? Kein Problem. Hier
+                                können Sitzungen nachträglich manuell erfasst
+                                werden.
+                            </p>
+                            <Button
+                                variant="success"
+                                className="tw:w-full"
+                                onClick={createSession}
+                            >
+                                Sitzung hinzufügen
+                            </Button>
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
                 <Dashboard.Row>
                     <Dashboard.Column>
-                        <Dashboard.CustomCard title="Filter">
-                            <CardContent>
-                                <FieldGroup className="tw:gap-3">
-                                    <Field>
-                                        <FieldLabel htmlFor={statsRangeStartId}>
-                                            Von
-                                        </FieldLabel>
-                                        <Input
-                                            type="datetime-local"
-                                            id={statsRangeStartId}
-                                            required
-                                            min="2022-01-01T00:00"
-                                            defaultValue={localInputFormat(
-                                                statsRangeStart
-                                            )}
-                                        />
-                                    </Field>
-                                    <Field>
-                                        <FieldLabel htmlFor={statsRangeEndId}>
-                                            Bis
-                                        </FieldLabel>
-                                        <Input
-                                            type="datetime-local"
-                                            id={statsRangeEndId}
-                                            required
-                                            min="2022-01-01T00:00"
-                                            defaultValue={localInputFormat(
-                                                statsRangeEnd
-                                            )}
-                                        />
-                                    </Field>
-                                    <Field orientation="horizontal">
-                                        <Button
-                                            className="tw:w-full"
-                                            onClick={applyStatsRange}
-                                        >
-                                            Anwenden
-                                        </Button>
-                                    </Field>
-                                </FieldGroup>
-                            </CardContent>
+                        <Dashboard.CustomCard title="Filter" wrapInCardContent>
+                            <FieldGroup className="tw:gap-3">
+                                <Field>
+                                    <FieldLabel htmlFor={statsRangeStartId}>
+                                        Von
+                                    </FieldLabel>
+                                    <Input
+                                        type="datetime-local"
+                                        id={statsRangeStartId}
+                                        required
+                                        min="2022-01-01T00:00"
+                                        defaultValue={localInputFormat(
+                                            statsRangeStart
+                                        )}
+                                    />
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor={statsRangeEndId}>
+                                        Bis
+                                    </FieldLabel>
+                                    <Input
+                                        type="datetime-local"
+                                        id={statsRangeEndId}
+                                        required
+                                        min="2022-01-01T00:00"
+                                        defaultValue={localInputFormat(
+                                            statsRangeEnd
+                                        )}
+                                    />
+                                </Field>
+                                <Field orientation="horizontal">
+                                    <Button
+                                        className="tw:w-full"
+                                        onClick={applyStatsRange}
+                                    >
+                                        Anwenden
+                                    </Button>
+                                </Field>
+                            </FieldGroup>
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
@@ -173,15 +174,14 @@ export default function WorkingtimePage() {
                     title="Statistiken"
                     help="Statistiken für den ausgewählten Zeitraum."
                     grow
+                    wrapInCardContent
                 >
-                    <CardContent className="tw:grow">
-                        <WorkingtimeStats
-                            sessions={sessions}
-                            start={statsRangeStart}
-                            end={statsRangeEnd}
-                            loading={loading}
-                        />
-                    </CardContent>
+                    <WorkingtimeStats
+                        sessions={sessions}
+                        start={statsRangeStart}
+                        end={statsRangeEnd}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
 
@@ -189,22 +189,20 @@ export default function WorkingtimePage() {
                 <Dashboard.CustomCard
                     title="Erfasste Zeiten"
                     help="Erfasste Zeiten im ausgewählten Zeitraum."
+                    wrapInCardContent
                 >
-                    <CardContent>
-                        <WorksessionTable
-                            sessions={sessions}
-                            team={team}
-                            loading={loading}
-                            reportURL={
-                                `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
-                                new URLSearchParams({
-                                    datetime_from:
-                                        statsRangeStart.toISOString(),
-                                    datetime_to: statsRangeEnd.toISOString(),
-                                }).toString()
-                            }
-                        />
-                    </CardContent>
+                    <WorksessionTable
+                        sessions={sessions}
+                        team={team}
+                        loading={loading}
+                        reportURL={
+                            `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
+                            new URLSearchParams({
+                                datetime_from: statsRangeStart.toISOString(),
+                                datetime_to: statsRangeEnd.toISOString(),
+                            }).toString()
+                        }
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
