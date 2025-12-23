@@ -1,7 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { CardContent } from '@/shadcn/components/ui/card';
 import {
     Field,
     FieldDescription,
@@ -56,65 +55,62 @@ export default function SettingsCard({ settings }: Readonly<Props>) {
                     )}
                 </>
             }
+            wrapInCardContent
         >
             {settings ? (
-                <CardContent>
-                    <FieldSet>
-                        <Field>
-                            <FieldLabel htmlFor="appearance">
-                                Erscheinungsbild
-                            </FieldLabel>
-                            <FieldDescription>
-                                &quot;Automatisch&quot; =
-                                Browser/System-Einstellung verwenden
-                            </FieldDescription>
-                            <RadioGroup
-                                value={getAppearanceValue(settings.darkmode)}
-                                onValueChange={applyAppearance}
-                                orientation="vertical"
-                                disabled={isSavingSettings}
-                            >
-                                <Field orientation="horizontal">
-                                    <RadioGroupItem
-                                        value="dark"
-                                        id="appearance_dark"
-                                        disabled={isSavingSettings}
-                                    />
-                                    <FieldLabel htmlFor="appearance_dark">
-                                        Dunkel
-                                    </FieldLabel>
-                                </Field>
-                                <Field orientation="horizontal">
-                                    <RadioGroupItem
-                                        value="auto"
-                                        id="appearance_auto"
-                                        disabled={isSavingSettings}
-                                    />
-                                    <FieldLabel htmlFor="appearance_auto">
-                                        Automatisch
-                                    </FieldLabel>
-                                </Field>
-                                <Field orientation="horizontal">
-                                    <RadioGroupItem
-                                        value="light"
-                                        id="appearance_light"
-                                        disabled={isSavingSettings}
-                                    />
-                                    <FieldLabel htmlFor="appearance_light">
-                                        Hell
-                                    </FieldLabel>
-                                </Field>
-                            </RadioGroup>
-                        </Field>
-                    </FieldSet>
-                </CardContent>
+                <FieldSet>
+                    <Field>
+                        <FieldLabel htmlFor="appearance">
+                            Erscheinungsbild
+                        </FieldLabel>
+                        <FieldDescription>
+                            &quot;Automatisch&quot; = Browser/System-Einstellung
+                            verwenden
+                        </FieldDescription>
+                        <RadioGroup
+                            value={getAppearanceValue(settings.darkmode)}
+                            onValueChange={applyAppearance}
+                            orientation="vertical"
+                            disabled={isSavingSettings}
+                        >
+                            <Field orientation="horizontal">
+                                <RadioGroupItem
+                                    value="dark"
+                                    id="appearance_dark"
+                                    disabled={isSavingSettings}
+                                />
+                                <FieldLabel htmlFor="appearance_dark">
+                                    Dunkel
+                                </FieldLabel>
+                            </Field>
+                            <Field orientation="horizontal">
+                                <RadioGroupItem
+                                    value="auto"
+                                    id="appearance_auto"
+                                    disabled={isSavingSettings}
+                                />
+                                <FieldLabel htmlFor="appearance_auto">
+                                    Automatisch
+                                </FieldLabel>
+                            </Field>
+                            <Field orientation="horizontal">
+                                <RadioGroupItem
+                                    value="light"
+                                    id="appearance_light"
+                                    disabled={isSavingSettings}
+                                />
+                                <FieldLabel htmlFor="appearance_light">
+                                    Hell
+                                </FieldLabel>
+                            </Field>
+                        </RadioGroup>
+                    </Field>
+                </FieldSet>
             ) : (
-                <CardContent>
-                    <div className="tw:space-y-4">
-                        <Skeleton className="tw:h-10 tw:w-full" />
-                        <Skeleton className="tw:h-4 tw:w-3/4" />
-                    </div>
-                </CardContent>
+                <div className="tw:space-y-4">
+                    <Skeleton className="tw:h-10 tw:w-full" />
+                    <Skeleton className="tw:h-4 tw:w-3/4" />
+                </div>
             )}
         </Dashboard.CustomCard>
     );

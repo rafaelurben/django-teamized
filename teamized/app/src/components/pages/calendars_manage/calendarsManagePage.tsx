@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { CardContent } from '@/shadcn/components/ui/card';
-
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
@@ -29,15 +27,13 @@ export default function CalendarsManagePage() {
     return (
         <Dashboard.Page>
             <Dashboard.Column>
-                <Dashboard.CustomCard title="Kalender">
-                    <CardContent>
-                        <CalendarsManageTable
-                            team={team}
-                            calendars={calendars}
-                            loading={loading}
-                            isAdmin={isAdmin}
-                        />
-                    </CardContent>
+                <Dashboard.CustomCard title="Kalender" wrapInCardContent>
+                    <CalendarsManageTable
+                        team={team}
+                        calendars={calendars}
+                        loading={loading}
+                        isAdmin={isAdmin}
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>

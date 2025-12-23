@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
 import { ButtonGroup } from '@/shadcn/components/ui/button-group';
-import { CardContent } from '@/shadcn/components/ui/card';
 import { Input } from '@/shadcn/components/ui/input';
 
 import { Team } from '../../../interfaces/teams/team';
@@ -65,49 +64,45 @@ export default function TeamlistPage({ teams }: Readonly<Props>) {
     return (
         <Dashboard.Page>
             <Dashboard.Column>
-                <Dashboard.CustomCard title="Teamübersicht">
-                    <CardContent>
-                        <TeamTable
-                            teams={teams}
-                            selectedTeamId={selectedTeamId}
-                        />
-                    </CardContent>
+                <Dashboard.CustomCard title="Teamübersicht" wrapInCardContent>
+                    <TeamTable teams={teams} selectedTeamId={selectedTeamId} />
                 </Dashboard.CustomCard>
 
-                <Dashboard.CustomCard title="Team erstellen oder beitreten">
-                    <CardContent>
-                        <p className="tw:mb-4">
-                            Klicke auf &quot;Team erstellen&quot;, um ein neues
-                            Team zu erstellen oder gib einen Einladungstoken ein
-                            und klicke auf &quot;Team beitreten&quot;, um einem
-                            Team beizutreten.
-                        </p>
-                        <div className="tw:flex tw:gap-2 tw:flex-wrap">
+                <Dashboard.CustomCard
+                    title="Team erstellen oder beitreten"
+                    wrapInCardContent
+                >
+                    <p className="tw:mb-4">
+                        Klicke auf &quot;Team erstellen&quot;, um ein neues Team
+                        zu erstellen oder gib einen Einladungstoken ein und
+                        klicke auf &quot;Team beitreten&quot;, um einem Team
+                        beizutreten.
+                    </p>
+                    <div className="tw:flex tw:gap-2 tw:flex-wrap">
+                        <Button
+                            variant="default"
+                            onClick={createTeam}
+                            className="tw:whitespace-nowrap tw:w-full tw:md:w-auto"
+                        >
+                            Team erstellen
+                        </Button>
+                        <ButtonGroup className="tw:flex-1">
+                            <Input
+                                id="invite-token"
+                                type="text"
+                                placeholder="Token der Einladung"
+                                defaultValue={prefilledInviteToken}
+                                className="tw:flex-1"
+                            />
                             <Button
-                                variant="default"
-                                onClick={createTeam}
-                                className="tw:whitespace-nowrap tw:w-full tw:md:w-auto"
+                                variant="outline"
+                                onClick={joinTeam}
+                                className="tw:whitespace-nowrap"
                             >
-                                Team erstellen
+                                Team beitreten
                             </Button>
-                            <ButtonGroup className="tw:flex-1">
-                                <Input
-                                    id="invite-token"
-                                    type="text"
-                                    placeholder="Token der Einladung"
-                                    defaultValue={prefilledInviteToken}
-                                    className="tw:flex-1"
-                                />
-                                <Button
-                                    variant="outline"
-                                    onClick={joinTeam}
-                                    className="tw:whitespace-nowrap"
-                                >
-                                    Team beitreten
-                                </Button>
-                            </ButtonGroup>
-                        </div>
-                    </CardContent>
+                        </ButtonGroup>
+                    </div>
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>

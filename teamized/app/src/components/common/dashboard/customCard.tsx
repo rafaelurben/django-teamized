@@ -22,6 +22,10 @@ interface Props {
     children: React.ReactNode;
     loading: boolean;
     ref?: React.Ref<HTMLDivElement>;
+    /**
+     * If true, the children will be wrapped in CardContent.
+     */
+    wrapInCardContent?: boolean;
 }
 
 export default function CustomCard({
@@ -34,6 +38,7 @@ export default function CustomCard({
     children,
     loading = false,
     ref,
+    wrapInCardContent,
 }: Readonly<Partial<Props>>) {
     const fullClassName = `dashboard-card tw:flex tw:flex-col ${grow ? 'tw:flex-grow' : ''} tw:m-1 ${className}`;
 
@@ -66,6 +71,10 @@ export default function CustomCard({
                             Daten werden geladen...
                         </span>
                     </div>
+                </CardContent>
+            ) : wrapInCardContent ? (
+                <CardContent className={grow ? 'tw:grow' : ''}>
+                    {children}
                 </CardContent>
             ) : (
                 children

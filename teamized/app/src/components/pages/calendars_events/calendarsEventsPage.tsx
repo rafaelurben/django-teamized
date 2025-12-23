@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { CardContent } from '@/shadcn/components/ui/card';
 import { CalendarOverviewWithEventSelector } from '@/teamized/components/pages/calendars_events/calendarOverviewAndEventSelector';
 
 import { ID } from '../../../interfaces/common';
@@ -117,20 +116,20 @@ export default function CalendarsEventsPage() {
                     title="Ausgewähltes Ereignis"
                     help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
                     className="tw:lg:order-2"
+                    wrapInCardContent
                 >
-                    <CardContent>
-                        <CalendarEventDisplay
-                            event={selectedEvent}
-                            team={team}
-                            calendars={visibleCalendars}
-                        />
-                    </CardContent>
+                    <CalendarEventDisplay
+                        event={selectedEvent}
+                        team={team}
+                        calendars={visibleCalendars}
+                    />
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
                     title="Angezeigte Kalender"
                     description="Behalte den Überblick."
                     help="Wähle aus, welche Kalender angezeigt werden sollen und welcher Kalender standardmäßig für neue Ereignisse verwendet wird."
                     className="tw:lg:order-1"
+                    wrapInCardContent
                     action={
                         <Button
                             variant="outline"
@@ -140,16 +139,14 @@ export default function CalendarsEventsPage() {
                         </Button>
                     }
                 >
-                    <CardContent>
-                        <CalendarTable
-                            calendars={calendars}
-                            selectedCalendarId={selectedCalendarId}
-                            visibleCalendarIds={visibleCalendarIds}
-                            onCalendarSelect={setSelectedCalendarId}
-                            onVisibilityToggle={handleVisibilityToggle}
-                            loading={loading}
-                        />
-                    </CardContent>
+                    <CalendarTable
+                        calendars={calendars}
+                        selectedCalendarId={selectedCalendarId}
+                        visibleCalendarIds={visibleCalendarIds}
+                        onCalendarSelect={setSelectedCalendarId}
+                        onVisibilityToggle={handleVisibilityToggle}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
