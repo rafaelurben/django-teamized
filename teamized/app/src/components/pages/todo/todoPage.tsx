@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { ID } from '../../../interfaces/common';
-import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as Todo from '../../../service/todo.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+import Dashboard from '@/teamized/components/common/dashboard';
+import { ID } from '@/teamized/interfaces/common';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
+import * as Todo from '@/teamized/service/todo.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
+
 import ListInfo from './listInfo';
 import ListSelector from './listSelector';
 import ListView from './listView';

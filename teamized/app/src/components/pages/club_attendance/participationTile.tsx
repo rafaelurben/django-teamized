@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import Dashboard from '../../common/dashboard';
+import Dashboard from '@/teamized/components/common/dashboard';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubAttendanceService from '@/teamized/service/clubAttendance.service';
+
 import { ParticipationAdder } from './participationAdder';
 import ParticipationTable from './participationTable';
 

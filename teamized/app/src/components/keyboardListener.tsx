@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { useEffect } from 'react';
 
-import { softRefresh } from '../app';
-import * as GeneralUtils from '../utils/general';
+import { softRefresh } from '@/teamized/app';
+import * as GeneralUtils from '@/teamized/utils/general';
 
 export default function KeyboardListener() {
     useEffect(() => {

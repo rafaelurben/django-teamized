@@ -6,17 +6,14 @@ import { TriangleAlert } from 'lucide-react';
 import React, { lazy, Suspense } from 'react';
 
 import { Spinner } from '@/shadcn/components/ui/spinner';
-import AppHeader from '@/teamized/components/layout/AppHeader';
-import {
-    calculateBreadcrumbs,
-    PAGE_CONFIGS,
-} from '@/teamized/components/layout/pages';
-
-import * as TeamsService from '../service/teams.service';
+import * as TeamsService from '@/teamized/service/teams.service';
 import {
     useCurrentTeamData,
     useNavigationState,
-} from '../utils/navigation/navigationProvider';
+} from '@/teamized/utils/navigation/navigationProvider';
+
+import AppHeader from './layout/AppHeader';
+import { calculateBreadcrumbs, PAGE_CONFIGS } from './layout/pages';
 
 const CalendarsEventsPage = lazy(
     () => import('./pages/calendars_events/calendarsEventsPage')

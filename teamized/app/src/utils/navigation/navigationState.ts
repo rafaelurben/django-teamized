@@ -1,4 +1,4 @@
-import { ID } from '../../interfaces/common';
+import { ID } from '@/teamized/interfaces/common';
 
 export interface NavigationState {
     selectedPage: string;

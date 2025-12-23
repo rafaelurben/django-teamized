@@ -17,6 +17,11 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css'],
+        /**
+         * Aliases - must match the following files:
+         * - eslint.config.mjs
+         * - tsconfig.json
+         */
         alias: {
             '@/shadcn/*': [path.resolve(__dirname, 'shadcn/*')],
             '@/teamized/*': [path.resolve(__dirname, 'src/*')],

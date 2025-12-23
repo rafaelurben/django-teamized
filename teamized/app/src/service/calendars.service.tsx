@@ -6,22 +6,24 @@ import $ from 'jquery';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-
-import * as CalendarAPI from '../api/calendar';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
+import * as CalendarAPI from '@/teamized/api/calendar';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import {
+    Calendar,
+    CalendarRequestDTO,
+} from '@/teamized/interfaces/calendar/calendar';
 import {
     CalendarEvent,
     CalendarEventRequestDTO,
-} from '../interfaces/calendar/calendarEvent';
-import { ID, IDIndexedObjectList } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
+} from '@/teamized/interfaces/calendar/calendarEvent';
+import { ID, IDIndexedObjectList } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
     fireAlert,
     Swal,
-} from '../utils/alerts';
+} from '@/teamized/utils/alerts';
 import {
     getDateString,
     getTimeString,
@@ -30,7 +32,8 @@ import {
     isSameDate,
     localInputFormat,
     roundDays,
-} from '../utils/datetime';
+} from '@/teamized/utils/datetime';
+
 import * as CacheService from './cache.service';
 
 // Reexport so that datetime.js functions can also be imported from calendars.js

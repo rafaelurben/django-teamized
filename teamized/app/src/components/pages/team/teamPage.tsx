@@ -2,19 +2,19 @@ import React from 'react';
 
 import { Badge } from '@/shadcn/components/ui/badge';
 import { Button } from '@/shadcn/components/ui/button';
-
-import * as ClubService from '../../../service/clubs.service';
-import * as TeamsService from '../../../service/teams.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import Dashboard from '@/teamized/components/common/dashboard';
+import Tables from '@/teamized/components/common/tables';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import Urlize from '@/teamized/components/common/utils/urlize';
+import * as ClubService from '@/teamized/service/clubs.service';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigator,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
-import Tables from '../../common/tables';
-import CustomTooltip from '../../common/tooltips/customTooltip';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import Urlize from '../../common/utils/urlize';
+} from '@/teamized/utils/navigation/navigationProvider';
+
 import TeamInviteTable from './teamInviteTable';
 import TeamMemberTable from './teamMemberTable';
 

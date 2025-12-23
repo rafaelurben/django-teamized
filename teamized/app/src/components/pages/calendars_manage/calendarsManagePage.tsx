@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+import Dashboard from '@/teamized/components/common/dashboard';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
+
 import CalendarsManageTable from './calendarsManageTable';
 
 export default function CalendarsManagePage() {

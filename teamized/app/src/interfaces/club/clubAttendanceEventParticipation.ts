@@ -1,4 +1,4 @@
-import { ID } from '../common';
+import { ID } from '@/teamized/interfaces/common';
 
 export enum ClubAttendanceMemberResponseChoice {
     YES = 'yes',

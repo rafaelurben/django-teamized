@@ -11,11 +11,10 @@ import {
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 import Urlize from '@/teamized/components/common/utils/urlize';
-
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { Team } from '../../../interfaces/teams/team';
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     calendar: Calendar;

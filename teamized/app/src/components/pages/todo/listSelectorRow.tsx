@@ -1,9 +1,8 @@
 import React from 'react';
 
 import { cn } from '@/shadcn/lib/utils';
-
-import { ID } from '../../../interfaces/common';
-import { Todolist } from '../../../interfaces/todolist/todolist';
+import { ID } from '@/teamized/interfaces/common';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
 
 interface Props {
     list: Todolist;

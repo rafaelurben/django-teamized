@@ -9,15 +9,15 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import Tables from '@/teamized/components/common/tables';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
+import { ClubMember } from '@/teamized/interfaces/club/clubMember';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { ClubMember } from '../../../interfaces/club/clubMember';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import ClubMembersTableRow from './clubMembersTableRow';
 
 interface Props {

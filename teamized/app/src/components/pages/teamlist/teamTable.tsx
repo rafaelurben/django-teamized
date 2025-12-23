@@ -9,10 +9,10 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
 
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamTableRow from './teamTableRow';
 
 interface Props {

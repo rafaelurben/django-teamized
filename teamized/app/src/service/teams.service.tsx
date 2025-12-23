@@ -5,21 +5,22 @@
 import $ from 'jquery';
 import React from 'react';
 
-import * as TeamsAPI from '../api/teams';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { ID } from '../interfaces/common';
-import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
-import { Member, MemberRequestDTO } from '../interfaces/teams/member';
-import { Team, TeamRequestDTO } from '../interfaces/teams/team';
+import * as TeamsAPI from '@/teamized/api/teams';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import { ID } from '@/teamized/interfaces/common';
+import { Invite, InviteRequestDTO } from '@/teamized/interfaces/teams/invite';
+import { Member, MemberRequestDTO } from '@/teamized/interfaces/teams/member';
+import { Team, TeamRequestDTO } from '@/teamized/interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
     fireAlert,
     infoAlert,
     Swal,
-} from '../utils/alerts';
-import { isoFormat, localInputFormat } from '../utils/datetime';
-import { validateUUID } from '../utils/general';
+} from '@/teamized/utils/alerts';
+import { isoFormat, localInputFormat } from '@/teamized/utils/datetime';
+import { validateUUID } from '@/teamized/utils/general';
+
 import * as CacheService from './cache.service';
 
 export { getTeamsList } from './cache.service';

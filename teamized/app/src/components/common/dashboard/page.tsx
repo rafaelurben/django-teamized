@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Row from '@/teamized/components/common/dashboard/row';
+import Row from './row';
 
 interface Props {
     children: React.ReactNode;

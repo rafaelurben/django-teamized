@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 
 import { SidebarProvider } from '@/shadcn/components/ui/sidebar';
 import AppSidebar from '@/teamized/components/layout/AppSidebar';
-import { PageLoader } from '@/teamized/components/pageloader';
 import * as SettingsService from '@/teamized/service/settings.service';
 import * as TeamsService from '@/teamized/service/teams.service';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
@@ -18,6 +17,8 @@ import {
     useNavigationState,
     useNavigationStateDispatch,
 } from '@/teamized/utils/navigation/navigationProvider';
+
+import { PageLoader } from './pageloader';
 
 export default function App() {
     const { selectedTeamId } = useNavigationState();

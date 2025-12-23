@@ -11,14 +11,15 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/shadcn/components/ui/sidebar';
-import AppSidebarMenuItemWithSubmenu, {
-    ItemWithSubmenu,
-} from '@/teamized/components/layout/AppSidebarMenuItemWithSubmenu';
 import {
     useNavigationState,
     usePageNavigator,
     usePageNavigatorURL,
 } from '@/teamized/utils/navigation/navigationProvider';
+
+import AppSidebarMenuItemWithSubmenu, {
+    ItemWithSubmenu,
+} from './AppSidebarMenuItemWithSubmenu';
 
 interface ItemWithoutSubmenu {
     label: string;

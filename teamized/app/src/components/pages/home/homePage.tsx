@@ -10,11 +10,12 @@ import { CardContent } from '@/shadcn/components/ui/card';
 import { ScrollArea } from '@/shadcn/components/ui/scroll-area';
 import Dashboard from '@/teamized/components/common/dashboard';
 import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
-import SettingsCard from '@/teamized/components/pages/home/settingsCard';
 import { CHANGELOG } from '@/teamized/data/changelog';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
 import { getDateString } from '@/teamized/utils/datetime';
 import { toggleDebug } from '@/teamized/utils/general';
+
+import SettingsCard from './settingsCard';
 
 export default function HomePage() {
     const appdata = useAppdata();

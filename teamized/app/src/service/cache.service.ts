@@ -2,12 +2,13 @@
  * Utils for the local team cache
  */
 
-import * as TeamsAPI from '../api/teams';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { CacheCategoryType } from '../interfaces/cache/cacheCategoryType';
-import { TeamCache } from '../interfaces/cache/teamCache';
-import { ID } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
+import * as TeamsAPI from '@/teamized/api/teams';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import { CacheCategoryType } from '@/teamized/interfaces/cache/cacheCategoryType';
+import { TeamCache } from '@/teamized/interfaces/cache/teamCache';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+
 import * as TeamsService from './teams.service';
 
 // Lookups

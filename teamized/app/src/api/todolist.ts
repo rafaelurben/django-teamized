@@ -2,12 +2,16 @@
  * Teamized Todolists API
  */
 
-import { ID } from '../interfaces/common';
-import { Todolist, TodolistRequestDTO } from '../interfaces/todolist/todolist';
+import { ID } from '@/teamized/interfaces/common';
+import {
+    Todolist,
+    TodolistRequestDTO,
+} from '@/teamized/interfaces/todolist/todolist';
 import {
     TodolistItem,
     TodolistItemRequestDTO,
-} from '../interfaces/todolist/todolistItem';
+} from '@/teamized/interfaces/todolist/todolistItem';
+
 import { API } from './_base';
 
 // Todolists

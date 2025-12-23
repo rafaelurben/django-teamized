@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubAttendanceService from '@/teamized/service/clubAttendance.service';
+import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
 
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
 import { ClubMemberSelector } from './clubMemberSelector';
 
 interface Props {

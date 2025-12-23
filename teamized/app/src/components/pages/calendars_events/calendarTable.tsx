@@ -14,9 +14,8 @@ import {
 } from '@/shadcn/components/ui/table';
 import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 import Urlize from '@/teamized/components/common/utils/urlize';
-
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { ID } from '../../../interfaces/common';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { ID } from '@/teamized/interfaces/common';
 
 interface Props {
     calendars: Calendar[];

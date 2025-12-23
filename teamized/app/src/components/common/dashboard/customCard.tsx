@@ -9,8 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/shadcn/components/ui/card';
-
-import IconTooltip from '../tooltips/iconTooltip';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 
 interface Props {
     title?: string | React.ReactNode;

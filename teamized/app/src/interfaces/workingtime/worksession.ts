@@ -1,4 +1,4 @@
-import { DateTimeString, ID } from '../common';
+import { DateTimeString, ID } from '@/teamized/interfaces/common';
 
 export interface Worksession {
     id: ID;

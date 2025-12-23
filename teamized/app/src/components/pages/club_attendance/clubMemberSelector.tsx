@@ -9,10 +9,9 @@ import {
     ItemGroup,
     ItemTitle,
 } from '@/shadcn/components/ui/item';
-
-import { ClubGroup } from '../../../interfaces/club/clubGroup';
-import { ClubMember } from '../../../interfaces/club/clubMember';
-import { ID } from '../../../interfaces/common';
+import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
+import { ClubMember } from '@/teamized/interfaces/club/clubMember';
+import { ID } from '@/teamized/interfaces/common';
 
 interface Props {
     members: ClubMember[];

@@ -3,15 +3,15 @@ import React from 'react';
 import { Button } from '@/shadcn/components/ui/button';
 import { ButtonGroup } from '@/shadcn/components/ui/button-group';
 import { Input } from '@/shadcn/components/ui/input';
-
-import { Team } from '../../../interfaces/teams/team';
-import * as TeamsService from '../../../service/teams.service';
-import { waitingAlert } from '../../../utils/alerts';
+import Dashboard from '@/teamized/components/common/dashboard';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { waitingAlert } from '@/teamized/utils/alerts';
 import {
     useNavigationState,
     useNavigationStateDispatch,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+} from '@/teamized/utils/navigation/navigationProvider';
+
 import TeamTable from './teamTable';
 
 interface Props {

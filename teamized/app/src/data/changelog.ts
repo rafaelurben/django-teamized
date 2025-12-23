@@ -1,4 +1,4 @@
-import { DateString } from '../interfaces/common';
+import { DateString } from '@/teamized/interfaces/common';
 
 export interface ChangelogItem {
     date: DateString;

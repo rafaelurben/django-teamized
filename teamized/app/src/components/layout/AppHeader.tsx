@@ -11,11 +11,12 @@ import {
 import { Separator } from '@/shadcn/components/ui/separator';
 import { SidebarTrigger } from '@/shadcn/components/ui/sidebar';
 import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
-import { Breadcrumbs } from '@/teamized/components/layout/pages';
 import {
     usePageNavigatorAsEventHandler,
     usePageNavigatorURL,
 } from '@/teamized/utils/navigation/navigationProvider';
+
+import { Breadcrumbs } from './pages';
 
 interface Props {
     breadcrumbs: Breadcrumbs;

@@ -21,12 +21,11 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { Member } from '../../../interfaces/teams/member';
-import { Team } from '../../../interfaces/teams/team';
-import * as TeamsService from '../../../service/teams.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { usePageNavigator } from '../../../utils/navigation/navigationProvider';
+import { Member } from '@/teamized/interfaces/teams/member';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { usePageNavigator } from '@/teamized/utils/navigation/navigationProvider';
 
 interface Props {
     team: Team;

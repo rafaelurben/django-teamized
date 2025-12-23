@@ -10,16 +10,15 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { Team } from '../../../interfaces/teams/team';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as WorkingtimeService from '../../../service/workingtime.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
+import * as WorkingtimeService from '@/teamized/service/workingtime.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import {
     getDateTimeString,
     seconds2HoursMinutesSeconds,
-} from '../../../utils/datetime';
-import IconTooltip from '../../common/tooltips/iconTooltip';
+} from '@/teamized/utils/datetime';
 
 interface Props {
     team: Team;

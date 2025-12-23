@@ -17,8 +17,12 @@
         /* Completeness */
         "skipLibCheck": true,
 
-        /* shadcn/ui */
         "baseUrl": ".",
+        /**
+         * Aliases - must match the following files:
+         * - eslint.config.mjs
+         * - webpack.config.js
+         */
         "paths": {
             "@/shadcn/*": ["./shadcn/*"],
             "@/teamized/*": ["./src/*"]

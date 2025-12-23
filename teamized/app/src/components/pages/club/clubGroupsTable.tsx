@@ -10,11 +10,11 @@ import {
 } from '@/shadcn/components/ui/table';
 import Tables from '@/teamized/components/common/tables';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { ClubGroup } from '../../../interfaces/club/clubGroup';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import ClubGroupsTableRow from './clubGroupsTableRow';
 
 interface Props {

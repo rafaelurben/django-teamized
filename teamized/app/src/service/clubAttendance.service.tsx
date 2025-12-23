@@ -5,17 +5,18 @@
 import $ from 'jquery';
 import React from 'react';
 
-import * as ClubAttendanceAPI from '../api/clubAttendance';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
+import * as ClubAttendanceAPI from '@/teamized/api/clubAttendance';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
 import {
     ClubAttendanceEvent,
     ClubAttendanceEventRequestDTO,
-} from '../interfaces/club/clubAttendanceEvent';
-import { ClubAttendanceEventParticipation } from '../interfaces/club/clubAttendanceEventParticipation';
-import { ID } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
-import { confirmAlert, fireAlert, Swal } from '../utils/alerts';
-import { isoFormat, localInputFormat } from '../utils/datetime';
+} from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { confirmAlert, fireAlert, Swal } from '@/teamized/utils/alerts';
+import { isoFormat, localInputFormat } from '@/teamized/utils/datetime';
+
 import * as CacheService from './cache.service';
 
 // Attendance events

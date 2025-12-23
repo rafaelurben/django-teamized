@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { CalendarOverviewWithEventSelector } from '@/teamized/components/pages/calendars_events/calendarOverviewAndEventSelector';
-
-import { ID } from '../../../interfaces/common';
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import Dashboard from '@/teamized/components/common/dashboard';
+import { ID } from '@/teamized/interfaces/common';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigatorAsEventHandler,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+} from '@/teamized/utils/navigation/navigationProvider';
+
 import CalendarEventDisplay from './calendarEventDisplay';
+import { CalendarOverviewWithEventSelector } from './calendarOverviewAndEventSelector';
 import CalendarTable from './calendarTable';
 
 export default function CalendarsEventsPage() {
@@ -94,7 +94,7 @@ export default function CalendarsEventsPage() {
             // Show all calendars by default
             setVisibleCalendarIds(new Set(calendars.map((c) => c.id)));
         }
-    }, [loading, calendars.length, visibleCalendarIds.size]);
+    }, [loading, visibleCalendarIds.size, calendars]);
 
     const handleVisibilityToggle = (calendarId: ID, visible: boolean) => {
         setVisibleCalendarIds((prev) => {

@@ -1,4 +1,5 @@
-import { ID, IDIndexedObjectList } from '../common';
+import { ID, IDIndexedObjectList } from '@/teamized/interfaces/common';
+
 import { TodolistItem } from './todolistItem';
 
 export interface Todolist {

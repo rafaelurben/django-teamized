@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { cn } from '@/shadcn/lib/utils';
-
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { ID } from '../../../interfaces/common';
-import { getDateTimeString } from '../../../utils/datetime';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ID } from '@/teamized/interfaces/common';
+import { getDateTimeString } from '@/teamized/utils/datetime';
 
 interface Props {
     isSelected: boolean;

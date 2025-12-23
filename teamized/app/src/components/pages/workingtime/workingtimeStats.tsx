@@ -2,9 +2,8 @@ import React from 'react';
 import * as Recharts from 'recharts';
 
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
-
-import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as WorkingtimeService from '../../../service/workingtime.service';
+import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
+import * as WorkingtimeService from '@/teamized/service/workingtime.service';
 
 interface Props {
     sessions: Worksession[];

@@ -28,8 +28,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/shadcn/components/ui/sidebar';
-
-import { User } from '../../interfaces/user';
+import { User } from '@/teamized/interfaces/user';
 
 interface Props {
     user: User;

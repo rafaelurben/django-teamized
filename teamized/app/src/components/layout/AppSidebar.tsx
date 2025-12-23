@@ -21,10 +21,6 @@ import {
     SidebarRail,
 } from '@/shadcn/components/ui/sidebar';
 import { softRefresh } from '@/teamized/app';
-import AppSidebarMainNavigation from '@/teamized/components/layout/AppSidebarMainNavigation';
-import AppSidebarSecondaryNavigation from '@/teamized/components/layout/AppSidebarSecondaryNavigation';
-import { AppSidebarTeamSwitcher } from '@/teamized/components/layout/AppSidebarTeamSwitcher';
-import { AppSidebarUserMenu } from '@/teamized/components/layout/AppSidebarUserMenu';
 import { User } from '@/teamized/interfaces/user';
 import * as TeamsService from '@/teamized/service/teams.service';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
@@ -33,6 +29,11 @@ import {
     useCurrentTeamData,
     useNavigationState,
 } from '@/teamized/utils/navigation/navigationProvider';
+
+import AppSidebarMainNavigation from './AppSidebarMainNavigation';
+import AppSidebarSecondaryNavigation from './AppSidebarSecondaryNavigation';
+import { AppSidebarTeamSwitcher } from './AppSidebarTeamSwitcher';
+import { AppSidebarUserMenu } from './AppSidebarUserMenu';
 
 export default function AppSidebar() {
     const appdata = useAppdata();

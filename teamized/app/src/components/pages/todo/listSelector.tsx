@@ -3,11 +3,11 @@ import React from 'react';
 import { Button } from '@/shadcn/components/ui/button';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
+import * as ToDo from '@/teamized/service/todo.service';
 
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as ToDo from '../../../service/todo.service';
 import ListSelectorRow from './listSelectorRow';
 
 interface Props {

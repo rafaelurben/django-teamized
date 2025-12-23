@@ -5,27 +5,31 @@
 import $ from 'jquery';
 import React from 'react';
 
-import * as ClubAPI from '../api/club';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { Club, ClubRequestDTO } from '../interfaces/club/club';
-import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
+import * as ClubAPI from '@/teamized/api/club';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import { Club, ClubRequestDTO } from '@/teamized/interfaces/club/club';
+import {
+    ClubGroup,
+    ClubGroupRequestDTO,
+} from '@/teamized/interfaces/club/clubGroup';
 import {
     ClubMember,
     ClubMemberRequestDTO,
-} from '../interfaces/club/clubMember';
+} from '@/teamized/interfaces/club/clubMember';
 import {
     ClubMemberPortfolio,
     ClubMemberPortfolioRequestDTO,
-} from '../interfaces/club/clubMemberPortfolio';
-import { ID, IDIndexedObjectList } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
+} from '@/teamized/interfaces/club/clubMemberPortfolio';
+import { ID, IDIndexedObjectList } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
     fireAlert,
     successAlert,
     Swal,
-} from '../utils/alerts';
+} from '@/teamized/utils/alerts';
+
 import * as CacheService from './cache.service';
 
 //// API calls ////

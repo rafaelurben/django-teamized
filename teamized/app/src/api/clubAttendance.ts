@@ -5,12 +5,13 @@
 import {
     ClubAttendanceEvent,
     ClubAttendanceEventRequestDTO,
-} from '../interfaces/club/clubAttendanceEvent';
+} from '@/teamized/interfaces/club/clubAttendanceEvent';
 import {
     ClubAttendanceEventParticipation,
     ClubAttendanceEventParticipationRequestDTO,
-} from '../interfaces/club/clubAttendanceEventParticipation';
-import { ID } from '../interfaces/common';
+} from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { ID } from '@/teamized/interfaces/common';
+
 import { API } from './_base';
 
 export async function createClubAttendanceEvent(

@@ -2,10 +2,11 @@
  * Teamized Teams API
  */
 
-import { ID } from '../interfaces/common';
-import { Invite, InviteRequestDTO } from '../interfaces/teams/invite';
-import { Member, MemberRequestDTO } from '../interfaces/teams/member';
-import { Team, TeamRequestDTO } from '../interfaces/teams/team';
+import { ID } from '@/teamized/interfaces/common';
+import { Invite, InviteRequestDTO } from '@/teamized/interfaces/teams/invite';
+import { Member, MemberRequestDTO } from '@/teamized/interfaces/teams/member';
+import { Team, TeamRequestDTO } from '@/teamized/interfaces/teams/team';
+
 import { API } from './_base';
 
 // Teams

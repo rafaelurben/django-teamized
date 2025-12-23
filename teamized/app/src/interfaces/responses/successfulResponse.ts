@@ -1,4 +1,5 @@
-import { ID } from '../common';
+import { ID } from '@/teamized/interfaces/common';
+
 import { Alert } from './alert';
 
 export interface SuccessfulResponse {

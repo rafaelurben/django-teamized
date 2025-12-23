@@ -12,12 +12,12 @@ import {
     TableCell,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
+import * as ToDo from '@/teamized/service/todo.service';
+import { errorAlert } from '@/teamized/utils/alerts';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { Team } from '../../../interfaces/teams/team';
-import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as ToDo from '../../../service/todo.service';
-import { errorAlert } from '../../../utils/alerts';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import ListViewItem from './listViewItem';
 
 interface Props {

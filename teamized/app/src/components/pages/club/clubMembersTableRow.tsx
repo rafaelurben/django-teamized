@@ -18,12 +18,11 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { ClubMember } from '../../../interfaces/club/clubMember';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { getAge, getDateString } from '../../../utils/datetime';
+import { ClubMember } from '@/teamized/interfaces/club/clubMember';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { getAge, getDateString } from '@/teamized/utils/datetime';
 
 interface Props {
     team: Team;

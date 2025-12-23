@@ -12,8 +12,9 @@ import {
     Root,
 } from 'react-day-picker';
 
-import { Button, buttonVariants } from '@/shadcn/components/ui/button';
 import { cn } from '@/shadcn/lib/utils';
+
+import { Button, buttonVariants } from './button';
 
 function Calendar({
     className,

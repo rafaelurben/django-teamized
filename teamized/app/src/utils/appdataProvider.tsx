@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
-import { Appdata } from '../interfaces/appdata';
+import { Appdata } from '@/teamized/interfaces/appdata';
 
 const AppdataContext = createContext<{ version: number; appdata: Appdata }>({
     version: 0,
