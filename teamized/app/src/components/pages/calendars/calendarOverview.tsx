@@ -5,6 +5,7 @@ import { Button } from '@/shadcn/components/ui/button';
 
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import * as CalendarService from '../../../service/calendars.service';
+import { getMonthYearString } from '../../../utils/datetime';
 import CalendarOverviewWeek from './calendarOverviewWeek';
 
 const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
@@ -48,10 +49,7 @@ export default function CalendarOverview({
         );
     const firstDayShown = CalendarService.getMondayOfWeek(selectedMonth);
 
-    const monthDisplay = selectedMonth.toLocaleString(undefined, {
-        month: 'long',
-        year: 'numeric',
-    });
+    const monthDisplay = getMonthYearString(selectedMonth);
 
     return (
         <div>

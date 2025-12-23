@@ -73,9 +73,9 @@ export function getMondayOfWeek(date: Date): Date {
  * @returns {String}
  */
 export function getDateString(date: Date): string {
-    return date.toLocaleString(undefined, {
-        day: 'numeric',
-        month: 'long',
+    return date.toLocaleString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
         year: 'numeric',
     });
 }
@@ -87,12 +87,12 @@ export function getDateString(date: Date): string {
  * @returns {String}
  */
 export function getDateTimeString(datetime: Date): string {
-    return datetime.toLocaleString(undefined, {
-        day: 'numeric',
-        month: 'long',
+    return datetime.toLocaleString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
         year: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
     });
 }
 
@@ -103,9 +103,22 @@ export function getDateTimeString(datetime: Date): string {
  * @returns {String}
  */
 export function getTimeString(datetime: Date): string {
-    return datetime.toLocaleString(undefined, {
-        hour: 'numeric',
-        minute: 'numeric',
+    return datetime.toLocaleString('de-CH', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+}
+
+/**
+ * Get a String representation of a Date object (month and year only)
+ *
+ * @param {Date} date
+ * @returns {String}
+ */
+export function getMonthYearString(date: Date): string {
+    return date.toLocaleString('de-CH', {
+        month: 'long',
+        year: 'numeric',
     });
 }
 

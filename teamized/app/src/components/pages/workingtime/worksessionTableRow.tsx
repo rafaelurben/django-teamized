@@ -15,7 +15,10 @@ import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
 import * as WorkingtimeService from '../../../service/workingtime.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { seconds2HoursMinutesSeconds } from '../../../utils/datetime';
+import {
+    getDateTimeString,
+    seconds2HoursMinutesSeconds,
+} from '../../../utils/datetime';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 
 interface Props {
@@ -54,9 +57,9 @@ export default function WorksessionTableRow({
         <TableRow>
             <TableCell>
                 <span>
-                    {new Date(session.time_start).toLocaleString()} bis
+                    {getDateTimeString(new Date(session.time_start))} bis
                     <br />
-                    {new Date(session.time_end!).toLocaleString()}
+                    {getDateTimeString(new Date(session.time_end!))}
                     {session.is_created_via_tracking ? (
                         <IconTooltip
                             icon={Timer}

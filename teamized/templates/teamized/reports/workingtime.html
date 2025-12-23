@@ -1,4 +1,5 @@
 {% extends 'teamized/reports/base.html' %}
+{% load tz %}
 
 {% block title %}Arbeitszeitbericht{% endblock %}
 
@@ -6,8 +7,8 @@
     <b>Teamized-Instanz</b>: <a href="{% url 'teamized:app' %}">{{ request.get_host }}</a><br />
     <b>Team</b>: {{ data.team.name }}<br />
     <b>Mitglied</b>: {{ data.user.first_name }} {{ data.user.last_name }}<br />
-    <b>Zeitraum von</b>: {{ data.datetime_from }}<br />
-    <b>Zeitraum bis</b>: {{ data.datetime_to }}
+    <b>Zeitraum von</b>: {{ data.datetime_from|date:"d.m.Y, H:i" }}<br />
+    <b>Zeitraum bis</b>: {{ data.datetime_to|date:"d.m.Y, H:i" }}
 
     <h4>Erfasste Zeiten</h4>
 
@@ -25,8 +26,8 @@
         {% for s in data.sessions %}
             <tr>
                 <td class="no-break">
-                    {{ s.time_start }} bis <br />
-                    {{ s.time_end }}
+                    {{ s.time_start|date:"d.m.Y, H:i" }} bis <br />
+                    {{ s.time_end|date:"d.m.Y, H:i" }}
                 </td>
                 <td>{{ s.duration_hours|floatformat:2 }}h</td>
                 <td>{% if s.unit_count %}{{ s.unit_count }}{% endif %}</td>

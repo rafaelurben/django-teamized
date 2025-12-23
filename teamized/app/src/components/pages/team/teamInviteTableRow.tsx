@@ -18,6 +18,7 @@ import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
 import { successAlert } from '../../../utils/alerts';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { getDateTimeString } from '../../../utils/datetime';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -80,7 +81,7 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
             <TableCell>
                 <span>
                     {invite.valid_until
-                        ? new Date(invite.valid_until).toLocaleString()
+                        ? getDateTimeString(new Date(invite.valid_until))
                         : '\u221e'}
                 </span>
             </TableCell>
