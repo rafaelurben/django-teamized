@@ -9,6 +9,8 @@
     <style>
         body {
             height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
         #react-root {
@@ -20,6 +22,7 @@
         #react-root-fallback {
             --fallback-fg: #000;
             --fallback-bg: #fff;
+            --fallback-error: #dc2626;
 
             background-color: var(--fallback-bg);
             position: absolute;
@@ -31,6 +34,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
             & .loading-spinner {
                 width: 3rem;
@@ -45,7 +49,55 @@
             & .loading-text {
                 margin: 0;
                 color: var(--fallback-fg);
-                font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            }
+
+            & .error-message {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                max-width: 500px;
+                padding: 2rem;
+                text-align: center;
+            }
+
+            & .error-icon {
+                font-size: 4rem;
+                color: var(--fallback-error);
+            }
+
+            & .error-title {
+                margin: 0;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: var(--fallback-error);
+            }
+
+            & .error-details {
+                margin: 0;
+                color: var(--fallback-fg);
+                line-height: 1.5;
+            }
+
+            & .error-reload-btn {
+                padding: 0.75rem 1.5rem;
+                background-color: var(--fallback-error);
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: opacity 0.2s;
+            }
+
+            &.error .loading-spinner,
+            &.error .loading-text {
+                display: none;
+            }
+
+            &.error .error-message {
+                display: flex;
             }
         }
 
@@ -59,6 +111,7 @@
             #react-root-fallback {
                 --fallback-fg: #fff;
                 --fallback-bg: #000;
+                --fallback-error: #ef4444;
             }
         }
     </style>
@@ -70,7 +123,22 @@
         <!-- Filled by React / fallback content: -->
         <div id="react-root-fallback">
             <div class="loading-spinner" role="status" aria-label="Laden..."></div>
-            <p class="loading-text">App wird geladen...</p>
+            <p class="loading-text">Teamized wird geladen...</p>
+
+            <div class="error-message">
+                <div class="error-icon">🙈</div>
+                <h2 class="error-title">Teamized konnte nicht geladen werden</h2>
+                <p class="error-details">
+                    Das Anwendungsskript konnte nicht geladen werden. Möglicherweise gibt es ein Problem mit der
+                    Netzwerkverbindung oder der Server ist vorübergehend nicht erreichbar. Bitte versuche es erneut.
+                </p>
+                <noscript>
+                    <h3>Teamized benötigt JavaScript. Bitte aktiviere JavaScript.</h3>
+                </noscript>
+                <button class="error-reload-btn" onclick="window.location.reload()">
+                    Seite neu laden
+                </button>
+            </div>
         </div>
     </div>
 
@@ -87,13 +155,37 @@
         /* Prevent dark-mode flickering by setting the device-theme as default until settings are loaded */
         const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
         document.body.dataset.tailwindTheme = prefersDarkScheme.matches ? 'dark' : 'light';
+
+        /* Show error if script fails to load */
+        function showAppLoadError() {
+            const fallback = document.getElementById('react-root-fallback');
+            if (fallback) {
+                fallback.classList.add('error');
+            }
+        }
     </script>
 
     <!-- Main app script -->
     {% if dev_server_host %}
-        <script src="{{ dev_server_host }}/mainapp.js"></script>
+        <script src="{{ dev_server_host }}/mainapp.js" onerror="showAppLoadError()"></script>
     {% else %}
-        <script src="{% static 'teamized/app/mainapp.js' %}"></script>
+        <script src="{% static 'teamized/app/mainapp.js' %}" onerror="showAppLoadError()"></script>
     {% endif %}
+
+    <noscript>
+        <style>
+            #react-root-fallback {
+                & .loading-spinner,
+                & .loading-text,
+                & .error-reload-btn {
+                    display: none;
+                }
+
+                & .error-message {
+                    display: flex;
+                }
+            }
+        </style>
+    </noscript>
 
 {% endblock body %}
