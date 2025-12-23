@@ -19,8 +19,13 @@ Added missing React imports to components that use JSX but did not explicitly im
 Added missing `tw:` prefixes to class names and `tw-` to custom properties in the following components:
 
 - Alert
+- Calendar
 - Field
 - Sidebar
+
+## Type fixes
+
+- Calendar
 
 ## Improvements
 

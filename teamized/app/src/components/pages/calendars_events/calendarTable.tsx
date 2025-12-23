@@ -36,7 +36,7 @@ export default function CalendarTable({
 }: Readonly<Props>) {
     if (!loading && calendars.length === 0) {
         return (
-            <p className="tw:ml-1 tw:mb-0 tw:text-muted-foreground">
+            <p className="tw:text-muted-foreground">
                 Keine Kalender vorhanden.
             </p>
         );

@@ -109,7 +109,9 @@ export default function ClubAttendancePage() {
                         help="Bitte wähle ein Ereignis aus der linken Spalte."
                     >
                         <CardContent>
-                            <span>Kein Ereignis ausgewählt.</span>
+                            <span className="tw:text-muted-foreground">
+                                Kein Ereignis ausgewählt.
+                            </span>
                         </CardContent>
                     </Dashboard.CustomCard>
                 )}

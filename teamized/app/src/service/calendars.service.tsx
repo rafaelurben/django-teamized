@@ -23,8 +23,11 @@ import {
     Swal,
 } from '../utils/alerts';
 import {
+    getDateString,
+    getTimeString,
     isInRange,
     isoFormat,
+    isSameDate,
     localInputFormat,
     roundDays,
 } from '../utils/datetime';
@@ -91,6 +94,81 @@ export function filterCalendarEventsByDate(
     return events.filter((event) => {
         return isDateInEvent(date, event);
     });
+}
+
+/**
+ * Sort an array of calendar events.
+ *
+ * @param events a new sorted array.
+ */
+export function sortCalendarEvents(events: CalendarEvent[]) {
+    return events.toSorted((a, b) => {
+        if (a.fullday && b.fullday) {
+            return new Date(a.dstart).getTime() - new Date(b.dstart).getTime();
+        } else if (!a.fullday && !b.fullday) {
+            return (
+                new Date(a.dtstart).getTime() - new Date(b.dtstart).getTime()
+            );
+        } else if (a.fullday) {
+            return -1;
+        } else {
+            return 1;
+        }
+    });
+}
+
+/**
+ * Get a display string for an event's date/time based on a selected date.
+ *
+ * @param event the event object
+ * @param selectedDate the selected date
+ * @returns {string}
+ */
+export function getEventDateDisplay(
+    event: CalendarEvent,
+    selectedDate?: Date
+): string {
+    const daystart = roundDays(selectedDate || new Date());
+    const dayend = roundDays(selectedDate || new Date(), 1);
+
+    if (event.fullday) {
+        const evtStart = new Date(event.dstart);
+        const evtEnd = new Date(event.dend);
+        const sameDayStart = isSameDate(daystart, evtStart);
+        const sameDayEnd = isSameDate(daystart, evtEnd);
+
+        if (sameDayStart && sameDayEnd) {
+            return 'Ganztägig';
+        } else {
+            return (
+                'Vom ' +
+                getDateString(evtStart) +
+                ' bis am ' +
+                getDateString(evtEnd)
+            );
+        }
+    } else {
+        const evtStart = new Date(event.dtstart);
+        const evtEnd = new Date(event.dtend);
+        const sameDayStart = evtStart.getTime() >= daystart.getTime();
+        const sameDayEnd = evtEnd.getTime() < dayend.getTime();
+
+        if (sameDayStart && sameDayEnd) {
+            return (
+                'Von ' +
+                getTimeString(evtStart) +
+                ' bis ' +
+                getTimeString(evtEnd) +
+                ' Uhr'
+            );
+        } else if (sameDayStart) {
+            return 'Ab ' + getTimeString(evtStart) + ' Uhr';
+        } else if (sameDayEnd) {
+            return 'Bis ' + getTimeString(evtEnd) + ' Uhr';
+        } else {
+            return 'Ganztägig';
+        }
+    }
 }
 
 // Calendar list

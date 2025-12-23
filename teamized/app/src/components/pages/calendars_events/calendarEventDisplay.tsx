@@ -56,7 +56,11 @@ export default function CalendarEventDisplay({
     };
 
     if (!event) {
-        return <span>Kein Ereignis ausgewählt.</span>;
+        return (
+            <span className="tw:text-muted-foreground">
+                Kein Ereignis ausgewählt.
+            </span>
+        );
     }
 
     let eventStartDisplay: string;

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
 import { CardContent } from '@/shadcn/components/ui/card';
+import { CalendarOverviewWithEventSelector } from '@/teamized/components/pages/calendars_events/calendarOverviewAndEventSelector';
 
 import { ID } from '../../../interfaces/common';
 import * as CalendarService from '../../../service/calendars.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
+import {
+    useCurrentTeamData,
+    usePageNavigatorAsEventHandler,
+} from '../../../utils/navigation/navigationProvider';
 import Dashboard from '../../common/dashboard';
 import CalendarEventDisplay from './calendarEventDisplay';
-import CalendarEventPicker from './calendarEventPicker';
-import CalendarOverview from './calendarOverview';
 import CalendarTable from './calendarTable';
 
 export default function CalendarsEventsPage() {
     const refreshData = useAppdataRefresh();
 
-    const [selectedDate, setSelectedDate] = useState(
-        CalendarService.roundDays(new Date())
-    );
     const [selectedCalendarId, setSelectedCalendarId] = useState<ID | null>(
         null
     );
@@ -26,14 +26,14 @@ export default function CalendarsEventsPage() {
         new Set()
     );
 
+    const pageSelector = usePageNavigatorAsEventHandler();
+
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
     const calendarsMap = teamData.calendars;
     const calendars = Object.values(calendarsMap);
     const loading = teamData._state.calendars._initial;
-
-    const isAdmin = team.member!.is_admin;
 
     const eventMap = CalendarService.flattenCalendarEvents(calendars);
 
@@ -58,17 +58,6 @@ export default function CalendarsEventsPage() {
             setVisibleCalendarIds(new Set(calendars.map((c) => c.id)));
         }
     }, [loading, calendars, visibleCalendarIds.size]);
-
-    const handleDateSelect = (date: Date) => {
-        setSelectedDate(CalendarService.roundDays(date));
-        // If the current selected event is not in the new selected date, deselect it
-        if (selectedEventId) {
-            const evt = eventMap[selectedEventId];
-            if (evt && !CalendarService.isDateInEvent(date, evt)) {
-                setSelectedEventId(null);
-            }
-        }
-    };
 
     const handleVisibilityToggle = (calendarId: ID, visible: boolean) => {
         setVisibleCalendarIds((prev) => {
@@ -104,8 +93,6 @@ export default function CalendarsEventsPage() {
         }
     };
 
-    const dayDisplay = CalendarService.getDateString(selectedDate);
-
     const visibleCalendars = calendars.filter((calendar) =>
         visibleCalendarIds.has(calendar.id)
     );
@@ -114,45 +101,22 @@ export default function CalendarsEventsPage() {
 
     return (
         <Dashboard.Page>
-            <Dashboard.Column sizes={{ lg: 6 }} className="tw:lg:order-2">
-                <Dashboard.CustomCard
-                    title="Ereignisübersicht"
-                    help="Hier werden Ereignisse aus allen sichtbaren Kalendern angezeigt"
-                >
-                    <CardContent>
-                        <CalendarOverview
-                            onDateSelect={handleDateSelect}
-                            selectedDate={selectedDate}
-                            events={visibleEvents}
-                        />
-                    </CardContent>
-                </Dashboard.CustomCard>
-                <Dashboard.CustomCard
-                    title={'Ereignisse am ' + dayDisplay}
-                    help="Klicke auf einen Tag in der Ereignisübersicht, um zu diesem zu wechseln."
-                >
-                    <CardContent>
-                        <CalendarEventPicker
-                            onEventSelect={setSelectedEventId}
-                            selectedDate={selectedDate}
-                            selectedEvent={selectedEvent}
-                            selectedCalendar={selectedCalendar}
-                            calendars={visibleCalendars}
-                            events={CalendarService.filterCalendarEventsByDate(
-                                visibleEvents,
-                                selectedDate
-                            )}
-                            team={team}
-                            isAdmin={isAdmin}
-                        />
-                    </CardContent>
-                </Dashboard.CustomCard>
+            <Dashboard.Column sizes={{ lg: 6 }}>
+                <CalendarOverviewWithEventSelector
+                    team={team}
+                    calendars={visibleCalendars}
+                    events={visibleEvents}
+                    selectedCalendar={selectedCalendar}
+                    selectedEventID={selectedEventId}
+                    onEventIDSelect={setSelectedEventId}
+                    loading={loading}
+                ></CalendarOverviewWithEventSelector>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 6 }}>
                 <Dashboard.CustomCard
                     title="Ausgewähltes Ereignis"
                     help="Klicke auf ein Ereignis in der Ereignisliste, um es auszuwählen/abzuwählen."
-                    className="tw:lg:order-3"
+                    className="tw:lg:order-2"
                 >
                     <CardContent>
                         <CalendarEventDisplay
@@ -163,8 +127,18 @@ export default function CalendarsEventsPage() {
                     </CardContent>
                 </Dashboard.CustomCard>
                 <Dashboard.CustomCard
-                    title="Kalender"
+                    title="Angezeigte Kalender"
+                    description="Behalte den Überblick."
                     help="Wähle aus, welche Kalender angezeigt werden sollen und welcher Kalender standardmäßig für neue Ereignisse verwendet wird."
+                    className="tw:lg:order-1"
+                    action={
+                        <Button
+                            variant="outline"
+                            onClick={pageSelector('calendars_manage')}
+                        >
+                            Verwalten
+                        </Button>
+                    }
                 >
                     <CardContent>
                         <CalendarTable
