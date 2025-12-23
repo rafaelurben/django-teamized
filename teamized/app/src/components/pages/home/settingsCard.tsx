@@ -1,11 +1,7 @@
 import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import {
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/shadcn/components/ui/card';
+import { CardContent } from '@/shadcn/components/ui/card';
 import {
     Field,
     FieldDescription,
@@ -51,16 +47,16 @@ export default function SettingsCard({ settings }: Readonly<Props>) {
     };
 
     return (
-        <Dashboard.CustomCard>
-            <CardHeader>
-                <CardTitle className="tw:flex tw:items-center tw:gap-2">
-                    Einstellungen
+        <Dashboard.CustomCard
+            title={
+                <>
+                    <span>Einstellungen</span>
                     {isSavingSettings && (
                         <Loader2 className="tw:size-4 tw:animate-spin tw:text-muted-foreground" />
                     )}
-                </CardTitle>
-            </CardHeader>
-
+                </>
+            }
+        >
             {settings ? (
                 <CardContent>
                     <FieldSet>

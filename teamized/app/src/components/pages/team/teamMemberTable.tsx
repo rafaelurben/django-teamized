@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -38,9 +39,9 @@ export default function TeamMemberTable({ teamData }: Readonly<Props>) {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="tw:w-[32px]">
+                    <TableHead className="tw:w-8">
                         <IconTooltip
-                            className="tw:mx-[8px]"
+                            className="tw:mx-2"
                             title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen"
                         />
                     </TableHead>
@@ -54,20 +55,26 @@ export default function TeamMemberTable({ teamData }: Readonly<Props>) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {loading ? (
-                    <TableRow>
-                        <TableCell colSpan={6}>Laden...</TableCell>
-                    </TableRow>
-                ) : (
-                    members.map((member) => (
-                        <TeamMembersTableRow
-                            key={member.id}
-                            member={member}
-                            team={team}
-                            loggedInMember={team.member!}
-                        />
-                    ))
-                )}
+                {loading
+                    ? Array.from({ length: team?.membercount || 3 }).map(
+                          (_, i) => (
+                              <TableRow key={i}>
+                                  {Array.from({ length: 5 }).map((_, j) => (
+                                      <TableCell key={j}>
+                                          <Skeleton className="tw:h-10 tw:w-full" />
+                                      </TableCell>
+                                  ))}
+                              </TableRow>
+                          )
+                      )
+                    : members.map((member) => (
+                          <TeamMembersTableRow
+                              key={member.id}
+                              member={member}
+                              team={team}
+                              loggedInMember={team.member!}
+                          />
+                      ))}
             </TableBody>
         </Table>
     );

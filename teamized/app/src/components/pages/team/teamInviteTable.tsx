@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import {
     Table,
     TableBody,
@@ -48,9 +49,7 @@ export default function TeamInviteTable({ teamData }: Readonly<Props>) {
                 <TableRow>
                     <TableHead>Notiz</TableHead>
                     <TableHead>Token</TableHead>
-                    <TableHead className="tw:min-w-[6rem]">
-                        Gültig bis
-                    </TableHead>
+                    <TableHead>Gültig bis</TableHead>
                     <TableHead className="tw:whitespace-nowrap">
                         <div className="tw:flex tw:items-center tw:gap-1">
                             <span>Verwendungen</span>
@@ -63,9 +62,15 @@ export default function TeamInviteTable({ teamData }: Readonly<Props>) {
             </TableHeader>
             <TableBody>
                 {loading ? (
-                    <TableRow>
-                        <TableCell colSpan={6}>Laden...</TableCell>
-                    </TableRow>
+                    Array.from({ length: 3 }).map((_, i) => (
+                        <TableRow key={i}>
+                            {Array.from({ length: 4 }).map((_, j) => (
+                                <TableCell key={j}>
+                                    <Skeleton className="tw:h-10 tw:w-full" />
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))
                 ) : invites.length === 0 ? (
                     <TableRow>
                         <TableCell colSpan={6}>

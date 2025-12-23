@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
+import { ButtonGroup } from '@/shadcn/components/ui/button-group';
 import { CardContent } from '@/shadcn/components/ui/card';
 import { Input } from '@/shadcn/components/ui/input';
 
@@ -83,26 +84,28 @@ export default function TeamlistPage({ teams }: Readonly<Props>) {
                         </p>
                         <div className="tw:flex tw:gap-2 tw:flex-wrap">
                             <Button
-                                variant="outline"
+                                variant="default"
                                 onClick={createTeam}
                                 className="tw:whitespace-nowrap tw:w-full tw:md:w-auto"
                             >
                                 Team erstellen
                             </Button>
-                            <Input
-                                id="invite-token"
-                                type="text"
-                                placeholder="Token der Einladung"
-                                defaultValue={prefilledInviteToken}
-                                className="tw:flex-1"
-                            />
-                            <Button
-                                variant="default"
-                                onClick={joinTeam}
-                                className="tw:whitespace-nowrap"
-                            >
-                                Team beitreten
-                            </Button>
+                            <ButtonGroup className="tw:flex-1">
+                                <Input
+                                    id="invite-token"
+                                    type="text"
+                                    placeholder="Token der Einladung"
+                                    defaultValue={prefilledInviteToken}
+                                    className="tw:flex-1"
+                                />
+                                <Button
+                                    variant="outline"
+                                    onClick={joinTeam}
+                                    className="tw:whitespace-nowrap"
+                                >
+                                    Team beitreten
+                                </Button>
+                            </ButtonGroup>
                         </div>
                     </CardContent>
                 </Dashboard.CustomCard>
