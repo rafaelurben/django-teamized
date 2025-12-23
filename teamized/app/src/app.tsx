@@ -26,7 +26,7 @@ window.appdata = {
     user: {
         id: '',
         username: 'Laden...',
-        avatar_url: 'https://www.gravatar.com/avatar/',
+        avatar_url: '',
         email: '',
         first_name: '',
         last_name: '',
