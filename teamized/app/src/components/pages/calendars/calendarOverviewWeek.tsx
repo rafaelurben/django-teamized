@@ -18,14 +18,14 @@ export default function CalendarOverviewWeek({
     selectedDate,
     selectedMonth,
     onDateSelect,
-}: Props) {
+}: Readonly<Props>) {
     const days: Date[] = [];
     for (let i = 0; i < 7; i++) {
         days.push(CalendarService.roundDays(firstDay, i));
     }
 
     return (
-        <div className="d-flex justify-content-around my-3">
+        <div className="tw:flex tw:justify-around tw:my-3">
             {days.map((date, i) => (
                 <CalendarOverviewDay
                     key={i}

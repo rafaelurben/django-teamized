@@ -1,4 +1,15 @@
+import { MoreVertical, Pencil, Timer, TimerOff, Trash2 } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
@@ -12,7 +23,10 @@ interface Props {
     session: Worksession;
 }
 
-export default function WorksessionTableRow({ team, session }: Props) {
+export default function WorksessionTableRow({
+    team,
+    session,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const handleDeleteButtonClick = () => {
@@ -37,58 +51,59 @@ export default function WorksessionTableRow({ team, session }: Props) {
     };
 
     return (
-        <tr>
-            <td>
+        <TableRow>
+            <TableCell>
                 <span>
                     {new Date(session.time_start).toLocaleString()} bis
                     <br />
                     {new Date(session.time_end!).toLocaleString()}
                     {session.is_created_via_tracking ? (
                         <IconTooltip
-                            icon="fa-solid fa-stopwatch"
+                            icon={Timer}
                             title="Diese Sitzung wurde via Aufzeichnung erstellt."
-                            className="ms-1"
-                        ></IconTooltip>
+                            className="tw:ms-1 tw:inline-block"
+                        />
                     ) : (
                         <IconTooltip
-                            icon="fa-solid fa-pencil"
+                            icon={TimerOff}
                             title="Diese Sitzung wurde manuell erfasst."
-                            className="ms-1"
-                        ></IconTooltip>
+                            className="tw:ms-1 tw:inline-block"
+                        />
                     )}
                 </span>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 <span>{getDurationDisplay()}</span>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 <span>{session.unit_count}</span>
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 <span>{session.note}</span>
-            </td>
-            {/* Action: Edit */}
-            <td>
-                <a
-                    className="btn btn-outline-dark border-1"
-                    onClick={handleEditButtonClick}
-                    title="Sitzung bearbeiten"
-                >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                </a>
-            </td>
-            {/* Action: Delete */}
-            <td>
-                <a
-                    className="btn btn-outline-danger border-1"
-                    onClick={handleDeleteButtonClick}
-                    title="Sitzung löschen"
-                >
-                    <i className="fa-solid fa-trash"></i>
-                </a>
-            </td>
-            {/* ID */}
-            <td className="debug-id">{session.id}</td>
-        </tr>
+            </TableCell>
+            <TableCell>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVertical className="tw:size-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleEditButtonClick}>
+                            <Pencil className="tw:size-4" />
+                            Bearbeiten
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            variant="destructive"
+                            onClick={handleDeleteButtonClick}
+                        >
+                            <Trash2 className="tw:size-4" />
+                            Löschen
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
+            <TableCellDebugID id={session.id} />
+        </TableRow>
     );
 }

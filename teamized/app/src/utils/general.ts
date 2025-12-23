@@ -46,19 +46,3 @@ export function toggleDebug(bypassConfirmation: boolean = false) {
 export function toggleDebugIds() {
     $('body').toggleClass('show-debug-ids');
 }
-
-export function toggleSidebar() {
-    document.body.classList.toggle('sidebar-visible');
-}
-
-export function hideSidebarOnMobile() {
-    if (window.innerWidth < 992) {
-        document.body.classList.remove('sidebar-visible');
-    }
-}
-
-export function showSidebarOnDesktop() {
-    if (window.innerWidth >= 992) {
-        document.body.classList.add('sidebar-visible');
-    }
-}

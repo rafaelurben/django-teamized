@@ -1,21 +1,23 @@
+import { Info, LucideIcon } from 'lucide-react';
 import React from 'react';
 
-import Tooltip from './tooltip';
+import CustomTooltip from './customTooltip';
 
 interface Props {
     title: string;
-    icon: string;
+    icon: LucideIcon;
     className: string;
 }
 
 export default function IconTooltip({
     title,
-    icon = 'fa-solid fa-info-circle',
+    icon = Info,
     className = '',
-}: Partial<Props>) {
+}: Readonly<Partial<Props>>) {
+    const data = { icon }; // Wrap in an object to use as a component
     return (
-        <Tooltip className={className} title={title}>
-            <i className={icon}></i>
-        </Tooltip>
+        <CustomTooltip className={className} title={title}>
+            <data.icon className="tw:size-4" />
+        </CustomTooltip>
     );
 }

@@ -1,9 +1,19 @@
 import React, { useEffect } from 'react';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as TeamsService from '../../../service/teams.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamMembersTableRow from './teamMemberTableRow';
 
@@ -11,11 +21,10 @@ interface Props {
     teamData: TeamCache;
 }
 
-export default function TeamMemberTable({ teamData }: Props) {
+export default function TeamMemberTable({ teamData }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const team = teamData.team;
-    const loggedInMember = team.member!;
 
     const members = Object.values(teamData.members);
     const loading = teamData._state.members._initial;
@@ -27,40 +36,46 @@ export default function TeamMemberTable({ teamData }: Props) {
     });
 
     return (
-        <Tables.SimpleTable>
-            <thead>
-                <tr>
-                    <th style={{ width: '32px' }} className="text-center">
-                        <IconTooltip title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen" />
-                    </th>
-                    <th>Name</th>
-                    <Tables.Th noWrapFlex={true}>
-                        Benutzername &amp; E-Mail
-                    </Tables.Th>
-                    <th>Rolle</th>
-                    {loggedInMember.is_owner && (
-                        <th style={{ width: '1px' }}></th>
-                    )}
-                    <th style={{ width: '1px' }}></th>
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                {loading ? (
-                    <tr>
-                        <td colSpan={4}>Laden...</td>
-                    </tr>
-                ) : (
-                    members.map((member) => (
-                        <TeamMembersTableRow
-                            key={member.id}
-                            member={member}
-                            team={team}
-                            loggedInMember={team.member!}
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="tw:w-8">
+                        <IconTooltip
+                            className="tw:mx-2"
+                            title="Das Profilbild wird anhand der E-Mail-Adresse auf gravatar.com abgerufen"
                         />
-                    ))
-                )}
-            </tbody>
-        </Tables.SimpleTable>
+                    </TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="tw:whitespace-nowrap">
+                        Benutzername &amp; E-Mail
+                    </TableHead>
+                    <TableHead>Rolle</TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
+                    <TableHeadDebugID />
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {loading
+                    ? Array.from({ length: team?.membercount || 3 }).map(
+                          (_, i) => (
+                              <TableRow key={i}>
+                                  {Array.from({ length: 5 }).map((_, j) => (
+                                      <TableCell key={j}>
+                                          <Skeleton className="tw:h-10 tw:w-full" />
+                                      </TableCell>
+                                  ))}
+                              </TableRow>
+                          )
+                      )
+                    : members.map((member) => (
+                          <TeamMembersTableRow
+                              key={member.id}
+                              member={member}
+                              team={team}
+                              loggedInMember={team.member!}
+                          />
+                      ))}
+            </TableBody>
+        </Table>
     );
 }

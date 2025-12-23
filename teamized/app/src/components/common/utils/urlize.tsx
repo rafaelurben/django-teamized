@@ -5,15 +5,16 @@ interface Props {
     preserveLineBreaks?: boolean;
 }
 
-export default function Urlize({ text, preserveLineBreaks = true }: Props) {
+export default function Urlize({
+    text,
+    preserveLineBreaks = true,
+}: Readonly<Props>) {
     const urlRegex = /((?:https?:\/\/|www\.)[^\s/$.?#].\S*)/gi;
 
     const parts = text.split(urlRegex);
 
     return (
-        <span
-            style={{ whiteSpace: preserveLineBreaks ? 'pre-wrap' : 'normal' }}
-        >
+        <span className={preserveLineBreaks ? 'tw:whitespace-pre-wrap' : ''}>
             {parts.map((part, index) => {
                 if (part.match(urlRegex)) {
                     const href = part.startsWith('http')
@@ -25,6 +26,7 @@ export default function Urlize({ text, preserveLineBreaks = true }: Props) {
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="tw:underline"
                         >
                             {part}
                         </a>

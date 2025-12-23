@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
 import { ID } from '../../../interfaces/common';
@@ -61,32 +63,34 @@ export function ParticipationTile({
     };
 
     return (
-        <Dashboard.Tile
+        <Dashboard.CustomCard
             title={'Ereignis: ' + selectedEvent.title}
             help="Verwalte die Anwesenheit für dieses Ereignis."
             loading={participations === null}
             ref={ref}
         >
-            {participations !== null && (
-                <>
-                    <ParticipationTable
-                        participations={participations}
-                        isAdmin={isAdmin}
-                        team={team}
-                        event={selectedEvent}
-                        handleDelete={handleParticipationDelete}
-                        handleUpdate={handleParticipationUpdate}
-                    />
-                    {isAdmin && (
-                        <ParticipationAdder
+            <CardContent>
+                {participations !== null && (
+                    <>
+                        <ParticipationTable
+                            participations={participations}
+                            isAdmin={isAdmin}
                             team={team}
                             event={selectedEvent}
-                            participations={participations}
-                            handleCreate={handleParticipationsCreate}
+                            handleDelete={handleParticipationDelete}
+                            handleUpdate={handleParticipationUpdate}
                         />
-                    )}
-                </>
-            )}
-        </Dashboard.Tile>
+                        {isAdmin && (
+                            <ParticipationAdder
+                                team={team}
+                                event={selectedEvent}
+                                participations={participations}
+                                handleCreate={handleParticipationsCreate}
+                            />
+                        )}
+                    </>
+                )}
+            </CardContent>
+        </Dashboard.CustomCard>
     );
 }

@@ -1,4 +1,22 @@
+import {
+    Check,
+    Eye,
+    MoreHorizontal,
+    PenSquare,
+    Trash2,
+    UserMinus,
+} from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import * as TeamsService from '../../../service/teams.service';
@@ -13,7 +31,7 @@ interface Props {
     isSelected: boolean;
 }
 
-export default function TeamTableRow({ team, isSelected }: Props) {
+export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const selectPage = usePageNavigator();
@@ -23,7 +41,7 @@ export default function TeamTableRow({ team, isSelected }: Props) {
         selectTeam(team.id);
     };
 
-    const handleManageButtonClick = () => {
+    const handleViewManageButtonClick = () => {
         selectTeam(team.id);
         selectPage('team');
     };
@@ -41,85 +59,74 @@ export default function TeamTableRow({ team, isSelected }: Props) {
     };
 
     return (
-        <tr>
+        <TableRow className={isSelected ? 'tw:bg-accent/100' : ''}>
             {/* Member count */}
-            <td className="align-middle text-center">
+            <TableCell className="tw:align-middle tw:text-center">
                 <span>{team.membercount}</span>
-            </td>
+            </TableCell>
             {/* Name and description */}
-            <td className="py-2">
+            <TableCell className="tw:py-2">
                 <span>{team.name}</span>
-                <br className="d-none d-lg-inline-block" />
-                <i className="d-none d-lg-inline-block">{team.description}</i>
-            </td>
+                <br />
+                <i>{team.description}</i>
+            </TableCell>
             {/* Member role */}
-            <td>
+            <TableCell>
                 <span>{team.member!.role_text}</span>
-            </td>
-            {/* Action: Switch to */}
-            {isSelected ? (
-                <td>
-                    <a
-                        className="btn btn-outline-success border-1"
-                        onClick={handleSwitchToButtonClick}
-                        title="Zu Team wechseln"
-                    >
-                        <i className="fa-regular fa-circle-check"></i>
-                    </a>
-                </td>
-            ) : (
-                <td>
-                    <a className="btn btn-success disabled" title="Ausgewählt">
-                        <i className="fa-solid fa-circle-check"></i>
-                    </a>
-                </td>
-            )}
-            {/* Action: Edit */}
-            {team.member!.is_admin ? (
-                <td>
-                    <a
-                        className="btn btn-outline-dark border-1"
-                        onClick={handleManageButtonClick}
-                        title="Verwalten"
-                    >
-                        <i className="fa-solid fa-pen-to-square"></i>
-                    </a>
-                </td>
-            ) : (
-                <td>
-                    <a
-                        className="btn btn-outline-dark border-1"
-                        onClick={handleManageButtonClick}
-                        title="Ansehen"
-                    >
-                        <i className="fa-solid fa-eye"></i>
-                    </a>
-                </td>
-            )}
-            {/* Action: Leave/Delete */}
-            {team.member!.is_owner ? (
-                <td>
-                    <a
-                        className="btn btn-outline-danger border-1"
-                        onClick={handleDeleteButtonClick}
-                        title="Team löschen"
-                    >
-                        <i className="fa-solid fa-trash"></i>
-                    </a>
-                </td>
-            ) : (
-                <td>
-                    <a
-                        className="btn btn-outline-danger border-1"
-                        onClick={handleLeaveButtonClick}
-                        title="Team verlassen"
-                    >
-                        <i className="fa-solid fa-right-from-bracket"></i>
-                    </a>
-                </td>
-            )}
+            </TableCell>
+            {/* Actions dropdown */}
+            <TableCell>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="tw:size-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            onClick={handleSwitchToButtonClick}
+                            disabled={isSelected}
+                        >
+                            <Check className="tw:size-4 tw:mr-2" />
+                            <span>
+                                {isSelected ? 'Ausgewählt' : 'Auswählen'}
+                            </span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleViewManageButtonClick}>
+                            {team.member!.is_admin ? (
+                                <>
+                                    <PenSquare className="tw:size-4 tw:mr-2" />
+                                    <span>Verwalten</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Eye className="tw:size-4 tw:mr-2" />
+                                    <span>Ansehen</span>
+                                </>
+                            )}
+                        </DropdownMenuItem>
+                        {team.member!.is_owner ? (
+                            <DropdownMenuItem
+                                onClick={handleDeleteButtonClick}
+                                variant="destructive"
+                            >
+                                <Trash2 className="tw:size-4 tw:mr-2" />
+                                <span>Team löschen</span>
+                            </DropdownMenuItem>
+                        ) : (
+                            <DropdownMenuItem
+                                onClick={handleLeaveButtonClick}
+                                variant="destructive"
+                            >
+                                <UserMinus className="tw:size-4 tw:mr-2" />
+                                <span>Team verlassen</span>
+                            </DropdownMenuItem>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
             {/* ID */}
-            <td className="debug-id">{team.id}</td>
-        </tr>
+            <TableCellDebugID id={team.id} />
+        </TableRow>
     );
 }

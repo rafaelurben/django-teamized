@@ -230,7 +230,7 @@ export async function doubleConfirmAlert<T>(
                 {content}
                 <br />
                 <br />
-                <b className="text-danger">ES GIBT KEIN ZURÜCK!</b>
+                <b className="tw:text-destructive">ES GIBT KEIN ZURÜCK!</b>
             </>,
             preConfirm,
             'Absolut sicher?'

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import { ID } from '../../../interfaces/common';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
 import * as ClubService from '../../../service/clubs.service';
@@ -61,34 +63,36 @@ export default function ClubAttendancePage() {
     const selectedEvent = eventsMap[selectedEventId!];
 
     return (
-        <Dashboard.Page
-            title="Anwesenheit"
-            subtitle="Verwalte die Anwesenheit von Vereinsmitgliedern"
-            loading={loading}
-        >
+        <Dashboard.Page>
             <Dashboard.Column sizes={{ xl: 4 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Ereignisübersicht"
                     help="Wähle ein Ereignis aus, um die Anwesenheit zu verwalten oder erstelle ein neues."
                 >
-                    <EventSelector
-                        team={team}
-                        events={events}
-                        selectedEvent={selectedEvent}
-                        onEventSelect={selectEvent}
-                        isAdmin={isAdmin}
-                    />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                    <CardContent>
+                        <EventSelector
+                            team={team}
+                            events={events}
+                            selectedEvent={selectedEvent}
+                            onEventSelect={selectEvent}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Ereignisdetails"
                     help="Wähle ein Ereignis aus, um dieses zu bearbeiten oder zu löschen."
                 >
-                    <EventInfo
-                        team={team}
-                        selectedEvent={selectedEvent}
-                        isAdmin={isAdmin}
-                    />
-                </Dashboard.Tile>
+                    <CardContent>
+                        <EventInfo
+                            team={team}
+                            selectedEvent={selectedEvent}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ xl: 8 }}>
                 {selectedEvent ? (
@@ -100,12 +104,14 @@ export default function ClubAttendancePage() {
                         key={selectedEvent.id} // Ensure re-render on event change
                     />
                 ) : (
-                    <Dashboard.Tile
+                    <Dashboard.CustomCard
                         title="Ausgewähltes Ereignis"
                         help="Bitte wähle ein Ereignis aus der linken Spalte."
                     >
-                        <p className="ms-1 mb-0">Kein Ereignis ausgewählt.</p>
-                    </Dashboard.Tile>
+                        <CardContent>
+                            <span>Kein Ereignis ausgewählt.</span>
+                        </CardContent>
+                    </Dashboard.CustomCard>
                 )}
             </Dashboard.Column>
         </Dashboard.Page>

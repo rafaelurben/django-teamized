@@ -1,4 +1,21 @@
+import {
+    CheckCircle2Icon,
+    CircleIcon,
+    EyeIcon,
+    MoreVerticalIcon,
+    Trash2Icon,
+} from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shadcn/components/ui/dropdown-menu';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
@@ -12,7 +29,7 @@ interface Props {
     item: TodolistItem;
 }
 
-export default function ListViewItem({ team, list, item }: Props) {
+export default function ListViewItem({ team, list, item }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const markDone = () => {
@@ -34,44 +51,55 @@ export default function ListViewItem({ team, list, item }: Props) {
     };
 
     return (
-        <tr>
-            <td>
+        <TableRow>
+            <TableCell className="tw:w-px">
                 {item.done ? (
-                    <a className="btn btn-success disabled" title="Erledigt">
-                        <i className="fa-solid fa-circle-check"></i>
-                    </a>
+                    <Button
+                        variant="success"
+                        size="icon-sm"
+                        disabled
+                        title="Erledigt"
+                    >
+                        <CheckCircle2Icon />
+                    </Button>
                 ) : (
-                    <a
-                        className="btn btn-outline-success border-1"
+                    <Button
+                        variant="outline"
+                        size="icon-sm"
                         onClick={markDone}
                         title="Als erledigt markieren"
+                        type="button"
                     >
-                        <i className="fa-regular fa-circle-check"></i>
-                    </a>
+                        <CircleIcon />
+                    </Button>
                 )}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 <span>{item.name}</span>
-            </td>
-            <td>
-                <a
-                    className="btn btn-outline-dark border-1"
-                    onClick={viewItem}
-                    title="Ansehen oder bearbeiten"
-                >
-                    <i className="fa-solid fa-eye"></i>
-                </a>
-            </td>
-            <td>
-                <a
-                    className="btn btn-outline-danger border-1"
-                    onClick={deleteItem}
-                    title="Löschen"
-                >
-                    <i className="fa-solid fa-trash"></i>
-                </a>
-            </td>
-            <td className="debug-id">{item.id}</td>
-        </tr>
+            </TableCell>
+            <TableCell className="tw:w-px">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVerticalIcon />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={viewItem}>
+                            <EyeIcon />
+                            Ansehen/Bearbeiten
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            variant="destructive"
+                            onClick={deleteItem}
+                        >
+                            <Trash2Icon />
+                            Löschen
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </TableCell>
+            <TableCellDebugID id={item.id} />
+        </TableRow>
     );
 }

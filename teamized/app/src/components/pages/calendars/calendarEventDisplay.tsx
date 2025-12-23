@@ -1,4 +1,7 @@
+import { CircleIcon } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
 
 import { Calendar } from '../../../interfaces/calendar/calendar';
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
@@ -18,7 +21,7 @@ export default function CalendarEventDisplay({
     team,
     event,
     calendars,
-}: Props) {
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const editEvent = () => {
@@ -53,7 +56,7 @@ export default function CalendarEventDisplay({
     };
 
     if (!event) {
-        return <p className="ms-1 mb-1">Kein Ereignis ausgewählt</p>;
+        return <span>Kein Ereignis ausgewählt.</span>;
     }
 
     let eventStartDisplay: string;
@@ -99,13 +102,13 @@ export default function CalendarEventDisplay({
                 {
                     label: 'Kalender',
                     value: (
-                        <>
-                            <i
+                        <span className="tw:flex tw:items-center tw:gap-2">
+                            <CircleIcon
+                                className="tw:size-3 tw:fill-current"
                                 style={{ color: event.calendar?.color }}
-                                className="fa-solid fa-circle small me-2"
-                            ></i>
+                            />
                             {event.calendar?.name}
-                        </>
+                        </span>
                     ),
                 },
                 {
@@ -115,19 +118,16 @@ export default function CalendarEventDisplay({
                 },
             ]}
         >
-            <Tables.ButtonFooter noTopBorder={true}>
-                <button className="btn btn-outline-dark" onClick={editEvent}>
+            <Tables.ButtonFooter>
+                <Button variant="outline" onClick={editEvent}>
                     Bearbeiten
-                </button>
-                <button className="btn btn-outline-dark" onClick={cloneEvent}>
+                </Button>
+                <Button variant="outline" onClick={cloneEvent}>
                     Duplizieren
-                </button>
-                <button
-                    className="btn btn-outline-danger"
-                    onClick={deleteEvent}
-                >
+                </Button>
+                <Button variant="destructive" onClick={deleteEvent}>
                     Löschen
-                </button>
+                </Button>
             </Tables.ButtonFooter>
         </Tables.VerticalDataTable>
     );

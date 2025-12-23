@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { CardContent } from '@/shadcn/components/ui/card';
+
 import { ID } from '../../../interfaces/common';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as Todo from '../../../service/todo.service';
@@ -50,50 +52,54 @@ export default function TodoPage() {
         teamData.todolists[selectedListId]) as Todolist | null;
 
     return (
-        <Dashboard.Page
-            title="To-do-Listen"
-            subtitle="Behalte den Überblick über die Aufgaben deines Teams"
-            loading={loading}
-        >
+        <Dashboard.Page>
             <Dashboard.Column sizes={{ lg: 4 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title="Listenübersicht"
                     help="Wechsle zwischen den To-do-Listen deines Teams oder erstelle eine neue."
                 >
-                    <ListSelector
-                        team={team}
-                        lists={Object.values(todolistMap)}
-                        selectedList={selectedList}
-                        onListSelect={setSelectedListId}
-                        isAdmin={isAdmin}
-                    />
-                </Dashboard.Tile>
-                <Dashboard.Tile
+                    <CardContent>
+                        <ListSelector
+                            team={team}
+                            lists={Object.values(todolistMap)}
+                            selectedList={selectedList}
+                            onListSelect={setSelectedListId}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
+                </Dashboard.CustomCard>
+                <Dashboard.CustomCard
                     title="Listendetails"
                     help="Sieh dir Infos zur oben ausgewählten Liste an."
                 >
-                    <ListInfo
-                        team={team}
-                        selectedList={selectedList}
-                        onListDeleted={() => setSelectedListId(null)}
-                        isAdmin={isAdmin}
-                    />
-                </Dashboard.Tile>
+                    <CardContent>
+                        <ListInfo
+                            team={team}
+                            selectedList={selectedList}
+                            onListDeleted={() => setSelectedListId(null)}
+                            isAdmin={isAdmin}
+                            loading={loading}
+                        />
+                    </CardContent>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ lg: 8 }}>
-                <Dashboard.Tile
+                <Dashboard.CustomCard
                     title={
                         selectedList
                             ? 'To-do-Liste: ' + selectedList.name
                             : 'To-do-Liste'
                     }
                 >
-                    <ListView
-                        team={team}
-                        selectedList={selectedList}
-                        isAdmin={isAdmin}
-                    />
-                </Dashboard.Tile>
+                    <CardContent>
+                        <ListView
+                            team={team}
+                            selectedList={selectedList}
+                            loading={loading}
+                        />
+                    </CardContent>
+                </Dashboard.CustomCard>
             </Dashboard.Column>
         </Dashboard.Page>
     );

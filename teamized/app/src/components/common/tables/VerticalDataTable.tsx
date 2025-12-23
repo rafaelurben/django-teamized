@@ -1,5 +1,14 @@
 import React from 'react';
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import { cn } from '@/shadcn/lib/utils';
+
 import ButtonFooter from './ButtonFooter';
 
 interface DataItem {
@@ -15,7 +24,10 @@ interface Props {
     children: React.ReactNode;
 }
 
-export default function VerticalDataTable({ items, children }: Props) {
+export default function VerticalDataTable({
+    items,
+    children,
+}: Readonly<Props>) {
     const slots: Record<string, React.ReactNode> = {
         head: null,
         foot: null,
@@ -42,31 +54,41 @@ export default function VerticalDataTable({ items, children }: Props) {
     });
 
     return (
-        <table className={`table mb-0`}>
+        <Table>
             {slots.head}
-            <tbody>
+            <TableBody>
                 {items
                     .map((item, index) => ({ item, index }))
                     .filter(({ item }) => !item.hide)
                     .map(({ item, index }) => (
-                        <tr
+                        <TableRow
                             key={index}
                             className={item.isDebugId ? 'debug-id' : ''}
                         >
-                            <th
+                            <TableHead
                                 scope="row"
-                                className={item.limitWidth ? 'pe-3' : ''}
-                                style={{
-                                    width: item.limitWidth ? '1px' : undefined,
-                                }}
+                                className={cn(
+                                    item.limitWidth ? 'tw:pe-3 tw:w-px' : '',
+                                    item.isDebugId
+                                        ? 'tw:text-muted-foreground'
+                                        : ''
+                                )}
                             >
                                 {item.label}:
-                            </th>
-                            <td>{item.value}</td>
-                        </tr>
+                            </TableHead>
+                            <TableCell
+                                className={
+                                    item.isDebugId
+                                        ? 'tw:text-xs tw:whitespace-nowrap'
+                                        : ''
+                                }
+                            >
+                                {item.value}
+                            </TableCell>
+                        </TableRow>
                     ))}
-            </tbody>
+            </TableBody>
             {slots.foot}
-        </table>
+        </Table>
     );
 }

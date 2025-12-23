@@ -4,10 +4,7 @@
 
         /* Language and Environment */
         "target": "es2023",
-        "lib": [
-            "dom",
-            "esnext"
-        ],
+        "lib": ["dom", "esnext"],
         "jsx": "react-jsx",
         /* Modules */
         "module": "esnext",
@@ -18,12 +15,16 @@
         /* Type Checking */
         "strict": true,
         /* Completeness */
-        "skipLibCheck": true
+        "skipLibCheck": true,
+
+        /* shadcn/ui */
+        "baseUrl": ".",
+        "paths": {
+            "@/shadcn/*": ["./shadcn/*"],
+            "@/teamized/*": ["./src/*"]
+        }
     },
-    "exclude": [
-        "node_modules",
-        "*.config.js"
-    ],
+    "exclude": ["node_modules", "*.config.js"],
     "ts-node": {
         "compilerOptions": {
             "module": "CommonJS"

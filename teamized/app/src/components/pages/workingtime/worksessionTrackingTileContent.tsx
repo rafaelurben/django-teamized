@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+
 import { Team } from '../../../interfaces/teams/team';
 import { Worksession } from '../../../interfaces/workingtime/worksession';
 import * as WorkingtimeService from '../../../service/workingtime.service';
@@ -8,7 +10,7 @@ import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
 
 function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
     if (currentWorksession) {
-        const now = new Date().getTime();
+        const now = Date.now();
         const start = new Date(currentWorksession.time_start).getTime();
         const timediff = now - start;
         const diff = ms2HoursMinutesSeconds(timediff);
@@ -22,7 +24,9 @@ interface Props {
     team: Team;
 }
 
-export default function WorksessionTrackingTileContent({ team }: Props) {
+export default function WorksessionTrackingTileContent({
+    team,
+}: Readonly<Props>) {
     const appdata = useAppdata();
     const refreshData = useAppdataRefresh();
 
@@ -105,33 +109,36 @@ export default function WorksessionTrackingTileContent({ team }: Props) {
 
     return (
         <>
-            <h1 className="text-center">{timeDisplay}</h1>
+            <div className="tw:text-center tw:text-4xl tw:font-bold tw:mb-4">
+                {timeDisplay}
+            </div>
 
-            <div className="text-center">
+            <div className="tw:flex tw:flex-col tw:gap-2">
                 {currentWorksession ? (
-                    <div className="row m-2 g-2">
-                        <button
-                            className="btn btn-danger col-12"
+                    <>
+                        <Button
+                            variant="destructive"
+                            className="tw:w-full"
                             onClick={stopSession}
                         >
                             Aufzeichnung beenden
-                        </button>
-                        <button
-                            className="btn btn-outline-dark col-12"
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="tw:w-full"
                             onClick={renameCurrentSession}
                         >
                             Aufzeichnung benennen
-                        </button>
-                    </div>
+                        </Button>
+                    </>
                 ) : (
-                    <div className="row m-2">
-                        <button
-                            className="btn btn-success col-12"
-                            onClick={startSession}
-                        >
-                            Aufzeichnung starten
-                        </button>
-                    </div>
+                    <Button
+                        variant="success"
+                        className="tw:w-full"
+                        onClick={startSession}
+                    >
+                        Aufzeichnung starten
+                    </Button>
                 )}
             </div>
         </>

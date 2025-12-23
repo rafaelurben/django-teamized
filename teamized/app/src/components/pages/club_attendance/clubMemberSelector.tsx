@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    Item,
+    ItemActions,
+    ItemContent,
+    ItemDescription,
+    ItemGroup,
+    ItemTitle,
+} from '@/shadcn/components/ui/item';
+
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { ClubMember } from '../../../interfaces/club/clubMember';
 import { ID } from '../../../interfaces/common';
@@ -18,7 +28,7 @@ export function ClubMemberSelector({
     groups,
     onCancel,
     onMembersSelected,
-}: Props) {
+}: Readonly<Props>) {
     const [selectedIds, setSelectedIds] = useState<ID[]>([]);
 
     const selectableMembers = members.filter(
@@ -31,7 +41,7 @@ export function ClubMemberSelector({
     );
 
     const handleSelectAll = () => {
-        setSelectedIds(selectableMembers.map((m) => m.id));
+        setSelectedIds(selectableMembers.map((m) => m.id).concat(selectedIds));
     };
 
     const handleSelectMember = (id: ID) => {
@@ -57,12 +67,12 @@ export function ClubMemberSelector({
     };
 
     return (
-        <div className="d-flex gap-3 flex-column flex-lg-row">
+        <div className="tw:flex tw:gap-3 tw:flex-col tw:lg:flex-row">
             {/* Left: Groups & Members */}
-            <div style={{ flex: 1 }}>
+            <div className="tw:flex-1">
                 {/* Groups */}
-                <h5>Gruppen</h5>
-                <ul className="list-group">
+                <h5 className="tw:text-lg tw:font-semibold tw:mb-2">Gruppen</h5>
+                <ItemGroup className="tw:gap-1">
                     {groups.map((group) => {
                         const unavailableCount = group.memberids.filter((id) =>
                             memberIdsUnavailable.includes(id)
@@ -77,117 +87,136 @@ export function ClubMemberSelector({
                         );
                         const canAddGroup = groupAvailableIds.length > 0;
                         return (
-                            <li
-                                key={group.id}
-                                className="list-group-item d-flex justify-content-between align-items-center"
-                            >
-                                <div>
-                                    <strong>{group.name}</strong>
-                                    <div className="small text-muted">
+                            <Item key={group.id} variant="outline" size="sm">
+                                <ItemContent>
+                                    <ItemTitle>{group.name}</ItemTitle>
+                                    <ItemDescription>
                                         {group.description}
-                                    </div>
-                                    <div className="small">
-                                        {unavailableCount > 0 && (
-                                            <span className="me-2">
-                                                ({unavailableCount} bereits
-                                                enthalten)
-                                            </span>
-                                        )}
-                                        {selectedCount > 0 && (
-                                            <span>
-                                                ({selectedCount} ausgewählt)
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                <button
-                                    className="btn btn-outline-primary btn-sm"
-                                    onClick={() => handleSelectGroup(group)}
-                                    disabled={!canAddGroup}
-                                >
-                                    Gruppe auswählen
-                                </button>
-                            </li>
+                                        <div className="tw:text-sm">
+                                            {unavailableCount > 0 && (
+                                                <span className="tw:mr-2">
+                                                    ({unavailableCount} bereits
+                                                    enthalten)
+                                                </span>
+                                            )}
+                                            {selectedCount > 0 && (
+                                                <span>
+                                                    ({selectedCount} ausgewählt)
+                                                </span>
+                                            )}
+                                        </div>
+                                    </ItemDescription>
+                                </ItemContent>
+                                <ItemActions>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleSelectGroup(group)}
+                                        disabled={!canAddGroup}
+                                    >
+                                        Gruppe auswählen
+                                    </Button>
+                                </ItemActions>
+                            </Item>
                         );
                     })}
-                </ul>
+                </ItemGroup>
                 {/* Selectable members */}
-                <h5 className="mt-3">Mitglieder</h5>
-                <button
-                    className="btn btn-outline-primary btn-sm mb-2"
+                <h5 className="tw:text-lg tw:font-semibold tw:mt-3 tw:mb-2">
+                    Mitglieder
+                </h5>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="tw:mb-2"
                     onClick={handleSelectAll}
                     disabled={selectableMembers.length === 0}
                 >
                     Alle auswählen
-                </button>
-                <ul className="list-group">
+                </Button>
+                <ItemGroup className="tw:gap-1">
                     {selectableMembers.map((m) => (
-                        <li
-                            key={m.id}
-                            className="list-group-item d-flex justify-content-between align-items-center"
-                        >
-                            <span>
-                                {m.first_name} {m.last_name}
-                            </span>
-                            <button
-                                className="btn btn-outline-primary btn-sm"
-                                onClick={() => handleSelectMember(m.id)}
-                            >
-                                Auswählen
-                            </button>
-                        </li>
+                        <Item key={m.id} variant="outline" size="sm">
+                            <ItemContent>
+                                <ItemTitle>
+                                    {m.first_name} {m.last_name}
+                                </ItemTitle>
+                            </ItemContent>
+                            <ItemActions>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleSelectMember(m.id)}
+                                >
+                                    Auswählen
+                                </Button>
+                            </ItemActions>
+                        </Item>
                     ))}
                     {selectableMembers.length === 0 && (
-                        <li className="list-group-item text-muted">
-                            Keine weiteren Mitglieder verfügbar.
-                        </li>
+                        <Item variant="muted" size="sm">
+                            <ItemContent>
+                                <ItemTitle>
+                                    Keine weiteren Mitglieder verfügbar.
+                                </ItemTitle>
+                            </ItemContent>
+                        </Item>
                     )}
-                </ul>
+                </ItemGroup>
             </div>
             {/* Right: Selected Members */}
-            <div style={{ flex: 1 }}>
-                <h5>Ausgewählte Mitglieder</h5>
-                <ul className="list-group">
+            <div className="tw:flex-1">
+                <h5 className="tw:text-lg tw:font-semibold tw:mb-2">
+                    Ausgewählte Mitglieder
+                </h5>
+                <ItemGroup className="tw:gap-1">
                     {selectedMembers.map((m) => (
-                        <li
-                            key={m.id}
-                            className="list-group-item d-flex justify-content-between align-items-center"
-                        >
-                            <span>
-                                {m.first_name} {m.last_name}
-                            </span>
-                            <button
-                                className="btn btn-outline-danger btn-sm"
-                                onClick={() => handleUnselectMember(m.id)}
-                            >
-                                Auswahl aufheben
-                            </button>
-                        </li>
+                        <Item key={m.id} variant="outline" size="sm">
+                            <ItemContent>
+                                <ItemTitle>
+                                    {m.first_name} {m.last_name}
+                                </ItemTitle>
+                            </ItemContent>
+                            <ItemActions>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleUnselectMember(m.id)}
+                                    className="tw:text-destructive hover:tw:bg-destructive hover:tw:text-destructive-foreground"
+                                >
+                                    Auswahl aufheben
+                                </Button>
+                            </ItemActions>
+                        </Item>
                     ))}
                     {selectedMembers.length === 0 && (
-                        <li className="list-group-item text-muted">
-                            Keine Mitglieder ausgewählt.
-                        </li>
+                        <Item variant="muted" size="sm">
+                            <ItemContent>
+                                <ItemTitle>
+                                    Keine Mitglieder ausgewählt.
+                                </ItemTitle>
+                            </ItemContent>
+                        </Item>
                     )}
-                </ul>
-                <div className="d-flex mt-3 align-content-start gap-2 flex-wrap">
-                    <button
-                        className="btn btn-primary"
+                </ItemGroup>
+                <div className="tw:flex tw:mt-3 tw:items-start tw:gap-2 tw:flex-wrap">
+                    <Button
+                        variant="default"
                         onClick={handleSubmit}
                         disabled={selectedMembers.length === 0}
                     >
                         Auswahl bestätigen
-                    </button>
-                    <button
-                        className="btn btn-outline-secondary"
+                    </Button>
+                    <Button
+                        variant="outline"
                         onClick={() => setSelectedIds([])}
                         disabled={selectedMembers.length === 0}
                     >
                         Auswahl zurücksetzen
-                    </button>
-                    <button className="btn btn-secondary" onClick={onCancel}>
+                    </Button>
+                    <Button variant="secondary" onClick={onCancel}>
                         Abbrechen
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

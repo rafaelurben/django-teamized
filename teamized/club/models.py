@@ -669,6 +669,7 @@ class ClubAttendanceEvent(models.Model):
         self.dt_start = validation.datetime(data, "dt_start", False, default=self.dt_start)
         self.dt_end = validation.datetime(data, "dt_end", False, default=self.dt_end)
         self.points = validation.integer(data, "points", False, default=self.points)
+        self.locked = validation.boolean(data, "locked", False, default=self.locked)
         self.save()
 
 

@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from '@/shadcn/components/ui/select';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+
 import { TeamCache } from '../../../interfaces/cache/teamCache';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import ClubGroupsTable from './clubGroupsTable';
 import ClubMembersTable from './clubMembersTable';
 
 interface Props {
     teamData: TeamCache;
 }
 
-export default function ClubMemberTileContent({ teamData }: Props) {
+export default function ClubMemberTileContent({ teamData }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
-    const [selectedTab, setSelectedTab] = useState('all');
+    const [selectedValue, setSelectedValue] = useState('all');
 
     const team = teamData.team;
     const isOwner = teamData.team.member!.is_owner;
@@ -35,87 +44,45 @@ export default function ClubMemberTileContent({ teamData }: Props) {
     });
 
     if (clubMembersLoading || clubGroupsLoading) {
-        return <p className="ms-2">Wird geladen...</p>;
+        return <Skeleton className="tw:w-full tw:h-48" />;
     }
+
+    const selectedGroup = clubGroups.find((g) => g.id === selectedValue);
+    const displayedMembers =
+        selectedValue === 'all'
+            ? clubMembers
+            : clubMembers.filter((cm) =>
+                  selectedGroup?.memberids.includes(cm.id)
+              );
 
     return (
         <>
-            <div className="m-2 border-0">
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <button
-                            className={
-                                selectedTab === 'all'
-                                    ? 'nav-link active'
-                                    : 'nav-link'
-                            }
-                            onClick={() => setSelectedTab('all')}
-                        >
-                            Alle ({clubMembers.length})
-                        </button>
-                    </li>
-                    {clubGroups.map((clubGroup) => (
-                        <li key={clubGroup.id} className="nav-item">
-                            <button
-                                className={
-                                    selectedTab === clubGroup.id
-                                        ? 'nav-link active'
-                                        : 'nav-link'
-                                }
-                                onClick={() => setSelectedTab(clubGroup.id)}
-                            >
+            <Select value={selectedValue} onValueChange={setSelectedValue}>
+                <SelectTrigger className="tw:w-full tw:mb-4">
+                    <SelectValue placeholder="Wähle eine Gruppe" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="all">
+                        Alle Mitglieder ({clubMembers.length})
+                    </SelectItem>
+                    <SelectGroup>
+                        <SelectLabel>Gruppen</SelectLabel>
+                        {clubGroups.map((clubGroup) => (
+                            <SelectItem key={clubGroup.id} value={clubGroup.id}>
                                 {clubGroup.name} ({clubGroup.memberids.length})
-                                {clubGroup.description && (
-                                    <IconTooltip
-                                        className="ms-1"
-                                        title={clubGroup.description}
-                                    />
-                                )}
-                            </button>
-                        </li>
-                    ))}
-                    <li className="nav-item ms-auto">
-                        <button
-                            className={
-                                selectedTab === 'edit'
-                                    ? 'nav-link active'
-                                    : 'nav-link'
-                            }
-                            onClick={() => setSelectedTab('edit')}
-                        >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            {selectedTab === 'all' ? (
-                // All club members
-                <ClubMembersTable
-                    team={team}
-                    clubMembers={clubMembers}
-                    isAdmin={isAdmin}
-                    isOwner={isOwner}
-                />
-            ) : selectedTab === 'edit' ? (
-                // Edit club groups
-                <ClubGroupsTable
-                    team={team}
-                    clubGroups={clubGroups}
-                    isAdmin={isAdmin}
-                />
-            ) : (
-                // Club members in selected group
-                <ClubMembersTable
-                    team={team}
-                    clubMembers={clubMembers.filter((cm) =>
-                        teamData.club_groups[selectedTab].memberids.includes(
-                            cm.id
-                        )
-                    )}
-                    isAdmin={isAdmin}
-                    isOwner={isOwner}
-                />
-            )}
+                            </SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+
+            <ClubMembersTable
+                team={team}
+                clubMembers={displayedMembers}
+                isAdmin={isAdmin}
+                isOwner={isOwner}
+                group={selectedGroup}
+            />
         </>
     );
 }

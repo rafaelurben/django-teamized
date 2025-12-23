@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/shadcn/lib/utils';
+
 import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
 import { ID } from '../../../interfaces/common';
 import * as CalendarService from '../../../service/calendars.service';
@@ -16,23 +18,13 @@ export default function CalendarEventPickerRow({
     onSelect,
     event,
     selectedDate,
-}: Props) {
+}: Readonly<Props>) {
     const handleSelect = () => {
         if (isSelected) {
             onSelect(null);
         } else {
             onSelect(event.id);
         }
-    };
-
-    const getStyle = () => {
-        return {
-            borderLeftWidth: '5px',
-            borderLeftStyle: event.fullday ? 'solid' : 'dotted',
-            borderLeftColor: event.calendar!.color,
-            cursor: 'pointer',
-            opacity: isSelected ? 0.75 : 1,
-        } satisfies React.CSSProperties;
     };
 
     const getDateDisplay = () => {
@@ -80,12 +72,26 @@ export default function CalendarEventPickerRow({
     };
 
     return (
-        <div className="ps-2 mb-1" style={getStyle()} onClick={handleSelect}>
-            <b className="d-inline-block w-100">{event.name}</b>
-            <span className="d-inline-block w-100">{getDateDisplay()}</span>
-            {event.location && (
-                <i className="d-inline-block w-100">{event.location}</i>
+        <button
+            className={cn(
+                'tw:pl-2 tw:mb-1 tw:cursor-pointer tw:transition-opacity tw:text-left',
+                isSelected ? 'tw:opacity-75' : 'tw:opacity-100'
             )}
-        </div>
+            style={{
+                borderLeftWidth: '5px',
+                borderLeftStyle: event.fullday ? 'solid' : 'dotted',
+                borderLeftColor: event.calendar!.color,
+            }}
+            onClick={handleSelect}
+            tabIndex={0}
+        >
+            <b className="tw:inline-block tw:w-full">{event.name}</b>
+            <span className="tw:inline-block tw:w-full">
+                {getDateDisplay()}
+            </span>
+            {event.location && (
+                <i className="tw:inline-block tw:w-full">{event.location}</i>
+            )}
+        </button>
     );
 }

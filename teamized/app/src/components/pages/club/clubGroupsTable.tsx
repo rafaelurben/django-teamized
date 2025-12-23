@@ -1,10 +1,20 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import Tables from '@/teamized/components/common/tables';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+
 import { ClubGroup } from '../../../interfaces/club/clubGroup';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubService from '../../../service/clubs.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
 import ClubGroupsTableRow from './clubGroupsTableRow';
 
 interface Props {
@@ -13,7 +23,11 @@ interface Props {
     isAdmin: boolean;
 }
 
-export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
+export default function ClubGroupsTable({
+    team,
+    clubGroups,
+    isAdmin,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const handleCreateButtonClick = () => {
@@ -23,22 +37,16 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
     };
 
     return (
-        <Tables.SimpleTable>
-            <thead>
-                <tr>
-                    <th>Gruppenname</th>
-                    <th>Beschreibung</th>
-                    {isAdmin && (
-                        <>
-                            <th style={{ width: '1px' }}></th>
-                            <th style={{ width: '1px' }}></th>
-                            <th style={{ width: '1px' }}></th>
-                        </>
-                    )}
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Gruppenname</TableHead>
+                    <TableHead>Beschreibung</TableHead>
+                    <TableHead className="tw:w-px"></TableHead>
+                    <TableHeadDebugID />
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {clubGroups.map((clubGroup) => (
                     <ClubGroupsTableRow
                         key={clubGroup.id}
@@ -47,16 +55,14 @@ export default function ClubGroupsTable({ team, clubGroups, isAdmin }: Props) {
                         isAdmin={isAdmin}
                     />
                 ))}
-            </tbody>
-            <Tables.ButtonFooter show={isAdmin}>
-                <button
-                    type="button"
-                    className="btn btn-outline-success border-1"
-                    onClick={handleCreateButtonClick}
-                >
-                    Gruppe erstellen
-                </button>
-            </Tables.ButtonFooter>
-        </Tables.SimpleTable>
+            </TableBody>
+            {isAdmin && (
+                <Tables.ButtonFooter>
+                    <Button variant="success" onClick={handleCreateButtonClick}>
+                        Gruppe erstellen
+                    </Button>
+                </Tables.ButtonFooter>
+            )}
+        </Table>
     );
 }

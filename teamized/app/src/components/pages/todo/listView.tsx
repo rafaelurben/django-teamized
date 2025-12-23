@@ -1,21 +1,36 @@
+import { CircleIcon, PlusIcon } from 'lucide-react';
 import React, { useId, useState } from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import { Input } from '@/shadcn/components/ui/input';
+import { Label } from '@/shadcn/components/ui/label';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import { Switch } from '@/shadcn/components/ui/switch';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from '@/shadcn/components/ui/table';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as ToDo from '../../../service/todo.service';
 import { errorAlert } from '../../../utils/alerts';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import ListViewItem from './listViewItem';
 
 interface Props {
     team: Team;
     selectedList: Todolist | null;
-    isAdmin: boolean;
+    loading: boolean;
 }
 
-export default function ListView({ team, selectedList, isAdmin }: Props) {
+export default function ListView({
+    team,
+    selectedList,
+    loading,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const [isCreating, setIsCreating] = useState(false);
@@ -23,8 +38,8 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
     const showDefaultToggleId = useId();
     const newItemNameInputId = useId();
 
-    const updateShowDone = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setShowDone((e.target as HTMLInputElement).checked);
+    const updateShowDone = (checked: boolean) => {
+        setShowDone(checked);
     };
 
     const createItem = (e: React.FormEvent) => {
@@ -48,19 +63,12 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
         }
     };
 
+    if (loading) {
+        return <Skeleton className="tw:h-32 tw-w-full" />;
+    }
+
     if (!selectedList) {
-        return (
-            <p className="ms-1 mb-0">
-                <span className="me-1">
-                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.
-                </span>
-                {isAdmin ? (
-                    <IconTooltip title='Du kannst mit den "Liste erstellen"-Knopf eine neue Liste erstellen.'></IconTooltip>
-                ) : (
-                    <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></IconTooltip>
-                )}
-            </p>
-        );
+        return <span>Du hast aktuell keine Liste ausgewählt.</span>;
     }
 
     let items = Object.values(selectedList.items);
@@ -70,33 +78,17 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
 
     return (
         <form onSubmit={createItem}>
-            <div className="form-check form-switch m-2">
-                <input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
+            <div className="tw:flex tw:items-center tw:gap-2 tw:mb-4">
+                <Switch
                     id={showDefaultToggleId}
-                    onChange={updateShowDone}
+                    checked={showDone}
+                    onCheckedChange={updateShowDone}
                 />
-                <label
-                    className="form-check-label ms-1"
-                    htmlFor={showDefaultToggleId}
-                >
-                    Erledigte anzeigen
-                </label>
+                <Label htmlFor={showDefaultToggleId}>Erledigte anzeigen</Label>
             </div>
 
-            <Tables.SimpleTable className="table-borderless">
-                <thead>
-                    <tr>
-                        <th className="p-0" style={{ width: '1px' }}></th>
-                        <th className="p-0"></th>
-                        <th className="p-0" style={{ width: '1px' }}></th>
-                        <th className="p-0" style={{ width: '1px' }}></th>
-                        <th className="p-0 debug-id"></th>
-                    </tr>
-                </thead>
-                <tbody>
+            <Table>
+                <TableBody>
                     {items.map((item) => (
                         <ListViewItem
                             key={item.id}
@@ -107,35 +99,40 @@ export default function ListView({ team, selectedList, isAdmin }: Props) {
                     ))}
 
                     {/* Create item */}
-                    <tr>
-                        <td>
-                            <a className="btn btn-outline-success border-1 disabled">
-                                <i className="fa-regular fa-circle-check"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <input
+                    <TableRow>
+                        <TableCell className="tw:w-px">
+                            <Button
+                                variant="success"
+                                size="icon-sm"
+                                disabled
+                                title="Neu"
+                            >
+                                <CircleIcon />
+                            </Button>
+                        </TableCell>
+                        <TableCell>
+                            <Input
                                 type="text"
-                                className="form-control"
                                 disabled={isCreating}
                                 placeholder="Neues Element hinzufügen"
                                 id={newItemNameInputId}
                                 maxLength={50}
                             />
-                        </td>
-                        <td colSpan={2}>
-                            <button
+                        </TableCell>
+                        <TableCell className="tw:w-px">
+                            <Button
                                 type="submit"
-                                className="btn btn-success"
+                                variant="success"
+                                size="icon-sm"
                                 disabled={isCreating}
                                 title="Erstellen"
                             >
-                                <i className="fa-solid fa-plus"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </Tables.SimpleTable>
+                                <PlusIcon />
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         </form>
     );
 }

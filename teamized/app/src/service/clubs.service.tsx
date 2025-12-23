@@ -116,7 +116,7 @@ export async function editClubPopup(team: Team) {
         html: (
             <>
                 <p>Verein: {team.club!.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -468,7 +468,7 @@ export async function editClubMemberPortfolioPopup(
         html: (
             <>
                 <label
-                    className="swal2-checkbox d-flex"
+                    className="swal2-checkbox tw:flex"
                     htmlFor="swal-input-visible"
                 >
                     <input
@@ -683,7 +683,7 @@ export async function createClubGroupPopup(team: Team) {
         html: (
             <>
                 <p>Verein: {team.club!.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -746,7 +746,7 @@ export async function editClubGroupPopup(team: Team, group: ClubGroup) {
         html: (
             <>
                 <p>Gruppe: {group.name}</p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label className="swal2-input-label" htmlFor="swal-input-name">
                     Name:
                 </label>
@@ -867,7 +867,7 @@ export async function updateClubMemberGroupsPopup(
                 <p>
                     Vereinsmitglied: {member.first_name} {member.last_name}
                 </p>
-                <hr />
+                <hr className="tw:my-2" />
                 <label
                     className="swal2-input-label"
                     htmlFor="swal-input-groups"
@@ -876,29 +876,23 @@ export async function updateClubMemberGroupsPopup(
                 </label>
                 <select
                     id="swal-input-groups"
-                    className="swal2-input h-auto py-3"
+                    className="swal2-select tw:h-auto tw:py-3"
                     multiple
                     size={groups.length}
-                ></select>
+                    defaultValue={currentGroupIds}
+                >
+                    {groups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                            {group.name}
+                        </option>
+                    ))}
+                </select>
             </>
         ),
         focusConfirm: false,
         showCancelButton: true,
         confirmButtonText: 'Aktualisieren',
         cancelButtonText: 'Abbrechen',
-        didOpen: () => {
-            const $groupsInput = $('#swal-input-groups');
-
-            $groupsInput.html(
-                groups
-                    .map(
-                        (group) =>
-                            `<option value="${group.id}">${group.name}</option>`
-                    )
-                    .join('')
-            );
-            $groupsInput.val(currentGroupIds);
-        },
         preConfirm: async () => {
             const selectedGroupIds = $('#swal-input-groups').val() as ID[];
 

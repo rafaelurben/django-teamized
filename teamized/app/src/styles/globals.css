@@ -1,0 +1,30 @@
+@import 'tailwindcss' prefix(tw);
+@import 'tw-animate-css';
+@import './theme.css';
+@import './sweetalertOverrides.css';
+@import './debug.css';
+
+/* Used in <Column /> component */
+/* https://tailwindcss.com/docs/detecting-classes-in-source-files#safelisting-specific-utilities */
+@source inline("tw:{sm:,md:,lg:,xl:,2xl:,}w-{1/2,1/3,2/3,1/4,3/4,1/6,5/6,full,}");
+
+/* Tailwind overrides */
+:root {
+    --tw-font-weight-medium: 600;
+}
+
+@layer base {
+    * {
+        @apply tw:border-border tw:outline-ring/50;
+    }
+
+    body {
+        @apply tw:bg-background tw:text-foreground;
+    }
+
+    /* Bring back pointer cursor */
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
+    }
+}

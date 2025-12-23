@@ -1,4 +1,19 @@
+import {
+    CheckSquare2Icon,
+    CircleHelpIcon,
+    MinusSquareIcon,
+    SquareCheckIcon,
+    Trash2Icon,
+    XCircleIcon,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import { Label } from '@/shadcn/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
+import { TableCell, TableRow } from '@/shadcn/components/ui/table';
+import { Textarea } from '@/shadcn/components/ui/textarea';
+import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import {
@@ -19,34 +34,29 @@ function getResponseStatusIcon(
         case ClubAttendanceMemberResponseChoice.YES:
             return (
                 <IconTooltip
-                    icon="fa-regular fa-square-check"
+                    icon={SquareCheckIcon}
                     title="Angemeldet"
-                    className={withColor ? 'text-success' : undefined}
+                    className={withColor ? 'tw:text-success' : undefined}
                 />
             );
         case ClubAttendanceMemberResponseChoice.NO:
             return (
                 <IconTooltip
-                    icon="fa-regular fa-circle-xmark"
+                    icon={XCircleIcon}
                     title="Abgemeldet"
-                    className={withColor ? 'text-danger' : undefined}
+                    className={withColor ? 'tw:text-destructive' : undefined}
                 />
             );
         case ClubAttendanceMemberResponseChoice.MAYBE:
             return (
                 <IconTooltip
-                    icon="fa-regular fa-square-minus"
+                    icon={MinusSquareIcon}
                     title="Vielleicht"
-                    className={withColor ? 'text-warning' : undefined}
+                    className={withColor ? 'tw:text-warning' : undefined}
                 />
             );
         case ClubAttendanceMemberResponseChoice.UNKNOWN:
-            return (
-                <IconTooltip
-                    icon="fa-regular fa-circle-question"
-                    title="Keine Antwort"
-                />
-            );
+            return <IconTooltip icon={CircleHelpIcon} title="Keine Antwort" />;
     }
 }
 
@@ -58,26 +68,21 @@ function getAttendanceStatusIcon(
         case true:
             return (
                 <IconTooltip
-                    icon="fa-solid fa-square-check"
+                    icon={CheckSquare2Icon}
                     title="Anwesend"
-                    className={withColor ? 'text-success' : undefined}
+                    className={withColor ? 'tw:text-success' : undefined}
                 />
             );
         case false:
             return (
                 <IconTooltip
-                    icon="fa-solid fa-circle-xmark"
+                    icon={XCircleIcon}
                     title="Nicht anwesend"
-                    className={withColor ? 'text-danger' : undefined}
+                    className={withColor ? 'tw:text-destructive' : undefined}
                 />
             );
         case null:
-            return (
-                <IconTooltip
-                    icon="fa-solid fa-circle-question"
-                    title="Unbekannt"
-                />
-            );
+            return <IconTooltip icon={CircleHelpIcon} title="Unbekannt" />;
     }
 }
 
@@ -102,7 +107,7 @@ export default function ParticipationTableRow({
     onDelete,
     onUpdate,
     editable,
-}: Props) {
+}: Readonly<Props>) {
     const teamData = useCurrentTeamData();
     const member = teamData.club_members[participation.member_id];
 
@@ -152,141 +157,103 @@ export default function ParticipationTableRow({
     };
 
     return (
-        <tr>
-            <td>
+        <TableRow>
+            <TableCell>
                 {member.first_name} {member.last_name}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 {editable ? (
-                    <div className="d-flex gap-1 flex-column flex-xl-row">
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                id={`attended-yes-${participation.id}`}
-                                name={`attended-${participation.id}`}
+                    <RadioGroup
+                        orientation="vertical"
+                        value={
+                            localParticipation.has_attended === true
+                                ? 'yes'
+                                : localParticipation.has_attended === false
+                                  ? 'no'
+                                  : 'unknown'
+                        }
+                        onValueChange={(value) =>
+                            handleHasAttendedChange(
+                                value === 'yes'
+                                    ? true
+                                    : value === 'no'
+                                      ? false
+                                      : null
+                            )
+                        }
+                    >
+                        <div className="tw:flex tw:items-center tw:gap-2">
+                            <RadioGroupItem
                                 value="yes"
-                                checked={
-                                    localParticipation.has_attended === true
-                                }
-                                onChange={() => handleHasAttendedChange(true)}
+                                id={`attended-yes-${participation.id}`}
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor={`attended-yes-${participation.id}`}
-                            >
+                            <Label htmlFor={`attended-yes-${participation.id}`}>
                                 Ja
-                            </label>
+                            </Label>
                         </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                id={`attended-no-${participation.id}`}
-                                name={`attended-${participation.id}`}
+                        <div className="tw:flex tw:items-center tw:gap-2">
+                            <RadioGroupItem
                                 value="no"
-                                checked={
-                                    localParticipation.has_attended === false
-                                }
-                                onChange={() => handleHasAttendedChange(false)}
+                                id={`attended-no-${participation.id}`}
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor={`attended-no-${participation.id}`}
-                            >
+                            <Label htmlFor={`attended-no-${participation.id}`}>
                                 Nein
-                            </label>
+                            </Label>
                         </div>
-                    </div>
+                    </RadioGroup>
                 ) : (
                     getAttendanceStatusIcon(participation.has_attended)
                 )}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 {editable ? (
-                    <div className="d-flex gap-1 flex-column flex-xl-row">
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
+                    <RadioGroup
+                        orientation="vertical"
+                        value={localParticipation.member_response}
+                        onValueChange={(value) =>
+                            handleMemberResponseChange(
+                                value as ClubAttendanceMemberResponseChoice
+                            )
+                        }
+                    >
+                        <div className="tw:flex tw:items-center tw:gap-2">
+                            <RadioGroupItem
+                                value={ClubAttendanceMemberResponseChoice.YES}
                                 id={`response-yes-${participation.id}`}
-                                name={`response-${participation.id}`}
-                                value="YES"
-                                checked={
-                                    localParticipation.member_response ===
-                                    ClubAttendanceMemberResponseChoice.YES
-                                }
-                                onChange={() =>
-                                    handleMemberResponseChange(
-                                        ClubAttendanceMemberResponseChoice.YES
-                                    )
-                                }
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor={`response-yes-${participation.id}`}
-                            >
+                            <Label htmlFor={`response-yes-${participation.id}`}>
                                 Ja
-                            </label>
+                            </Label>
                         </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
+                        <div className="tw:flex tw:items-center tw:gap-2">
+                            <RadioGroupItem
+                                value={ClubAttendanceMemberResponseChoice.NO}
                                 id={`response-no-${participation.id}`}
-                                name={`response-${participation.id}`}
-                                value="NO"
-                                checked={
-                                    localParticipation.member_response ===
-                                    ClubAttendanceMemberResponseChoice.NO
-                                }
-                                onChange={() =>
-                                    handleMemberResponseChange(
-                                        ClubAttendanceMemberResponseChoice.NO
-                                    )
-                                }
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor={`response-no-${participation.id}`}
-                            >
+                            <Label htmlFor={`response-no-${participation.id}`}>
                                 Nein
-                            </label>
+                            </Label>
                         </div>
-                        <div className="form-check form-check-inline">
-                            <input
-                                className="form-check-input"
-                                type="radio"
+                        <div className="tw:flex tw:items-center tw:gap-2">
+                            <RadioGroupItem
+                                value={ClubAttendanceMemberResponseChoice.MAYBE}
                                 id={`response-maybe-${participation.id}`}
-                                name={`response-${participation.id}`}
-                                value="MAYBE"
-                                checked={
-                                    localParticipation.member_response ===
-                                    ClubAttendanceMemberResponseChoice.MAYBE
-                                }
-                                onChange={() =>
-                                    handleMemberResponseChange(
-                                        ClubAttendanceMemberResponseChoice.MAYBE
-                                    )
-                                }
                             />
-                            <label
-                                className="form-check-label"
+                            <Label
                                 htmlFor={`response-maybe-${participation.id}`}
                             >
                                 Vielleicht
-                            </label>
+                            </Label>
                         </div>
-                    </div>
+                    </RadioGroup>
                 ) : (
                     getResponseStatusIcon(participation.member_response)
                 )}
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
                 {editable ? (
-                    <textarea
-                        className="form-control form-control-sm"
-                        style={{ minHeight: '1.5em', resize: 'vertical' }}
+                    <Textarea
+                        className="tw:min-h-[1.5em] tw:resize-y"
                         rows={
                             localParticipation.member_notes.split('\n')
                                 .length || 1
@@ -295,17 +262,16 @@ export default function ParticipationTableRow({
                         onBlur={(e) => handleMemberNotesChange(e.target.value)}
                     />
                 ) : (
-                    <span style={{ whiteSpace: 'pre-line' }}>
+                    <span className="tw:whitespace-pre-line">
                         {participation.member_notes}
                     </span>
                 )}
-            </td>
+            </TableCell>
             {isAdmin && (
-                <td>
+                <TableCell>
                     {editable ? (
-                        <textarea
-                            className="form-control form-control-sm"
-                            style={{ minHeight: '1.5em', resize: 'vertical' }}
+                        <Textarea
+                            className="tw:min-h-[1.5em] tw:resize-y"
                             rows={
                                 localParticipation.admin_notes.split('\n')
                                     .length || 1
@@ -316,25 +282,27 @@ export default function ParticipationTableRow({
                             }
                         />
                     ) : (
-                        <span style={{ whiteSpace: 'pre-line' }}>
+                        <span className="tw:whitespace-pre-line">
                             {participation.admin_notes}
                         </span>
                     )}
-                </td>
+                </TableCell>
             )}
             {isAdmin && editable && (
-                <td style={{ width: '1px' }}>
-                    <button
+                <TableCell className="tw:w-px">
+                    <Button
                         type="button"
-                        className="btn btn-sm btn-outline-danger"
+                        variant="outline"
+                        size="icon-sm"
                         title="Teilnahme löschen"
                         onClick={handleDelete}
+                        className="tw:text-destructive hover:tw:bg-destructive hover:tw:text-destructive-foreground"
                     >
-                        <i className="fa-solid fa-trash fa-sm" />
-                    </button>
-                </td>
+                        <Trash2Icon />
+                    </Button>
+                </TableCell>
             )}
-            <td className="debug-id">{participation.id}</td>
-        </tr>
+            <TableCellDebugID id={participation.id} />
+        </TableRow>
     );
 }

@@ -1,12 +1,26 @@
+import { CircleIcon, CircleQuestionMark } from 'lucide-react';
 import React from 'react';
+
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/shadcn/components/ui/tooltip';
+import IconTooltipWithText from '@/teamized/components/common/tooltips/iconTooltipWithText';
 
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as ToDo from '../../../service/todo.service';
 import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import Tables from '../../common/tables';
-import IconTooltip from '../../common/tooltips/iconTooltip';
-import Tooltip from '../../common/tooltips/tooltip';
 import Urlize from '../../common/utils/urlize';
 
 interface Props {
@@ -14,6 +28,7 @@ interface Props {
     selectedList: Todolist | null;
     onListDeleted: () => unknown;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
 export default function ListInfo({
@@ -21,7 +36,8 @@ export default function ListInfo({
     selectedList,
     onListDeleted,
     isAdmin,
-}: Props) {
+    loading = false,
+}: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
     const editList = () => {
@@ -39,18 +55,56 @@ export default function ListInfo({
         });
     };
 
+    if (loading) {
+        return (
+            <>
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-16" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-4 tw:w-full" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-24" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-4 tw:w-full" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="tw:font-medium">
+                                <Skeleton className="tw:h-4 tw:w-12" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="tw:h-3 tw:w-3" />
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                <div className="tw:flex tw:gap-2 tw:mt-3 tw:justify-end">
+                    <Skeleton className="tw:h-9 tw:w-28" />
+                    <Skeleton className="tw:h-9 tw:w-20" />
+                </div>
+            </>
+        );
+    }
+
     if (!selectedList) {
         return (
-            <p className="ms-1 mb-0">
-                <span className="me-1">
-                    Im ausgewählten Team ist noch keine To-do-Liste vorhanden.
-                </span>
-                {isAdmin ? (
-                    <IconTooltip title='Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'></IconTooltip>
-                ) : (
-                    <IconTooltip title="Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen."></IconTooltip>
-                )}
-            </p>
+            <IconTooltipWithText
+                icon={CircleQuestionMark}
+                title={
+                    isAdmin
+                        ? 'Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
+                        : 'Bitte wende dich an einen Admin dieses Teams, um eine neue Liste zu erstellen.'
+                }
+                text="Im ausgewählten Team ist noch keine To-do-Liste vorhanden."
+            />
         );
     }
 
@@ -69,10 +123,10 @@ export default function ListInfo({
                 {
                     label: 'Farbe',
                     value: (
-                        <i
+                        <CircleIcon
+                            className="tw:size-3 tw:fill-current"
                             style={{ color: selectedList.color }}
-                            className="fa-solid fa-circle small"
-                        ></i>
+                        />
                     ),
                 },
                 {
@@ -82,27 +136,28 @@ export default function ListInfo({
                 },
             ]}
         >
-            <Tables.ButtonFooter noTopBorder={true}>
+            <Tables.ButtonFooter>
                 {isAdmin ? (
                     <>
-                        <button
-                            className="btn btn-outline-dark me-2"
-                            onClick={editList}
-                        >
+                        <Button variant="outline" onClick={editList}>
                             Bearbeiten
-                        </button>
-                        <button
-                            className="btn btn-outline-danger"
-                            onClick={deleteList}
-                        >
+                        </Button>
+                        <Button variant="destructive" onClick={deleteList}>
                             Löschen
-                        </button>
+                        </Button>
                     </>
                 ) : (
-                    <Tooltip title="Diese Aktionen stehen nur Admins zur Verfügung">
-                        <button className="btn btn-outline-dark disabled">
-                            Bearbeiten/Löschen
-                        </button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <span>
+                                <Button variant="outline" disabled>
+                                    Bearbeiten/Löschen
+                                </Button>
+                            </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Diese Aktionen stehen nur Admins zur Verfügung
+                        </TooltipContent>
                     </Tooltip>
                 )}
             </Tables.ButtonFooter>

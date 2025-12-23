@@ -1,10 +1,13 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import { Todolist } from '../../../interfaces/todolist/todolist';
 import * as ToDo from '../../../service/todo.service';
-import Tooltip from '../../common/tooltips/tooltip';
 import ListSelectorRow from './listSelectorRow';
 
 interface Props {
@@ -13,6 +16,7 @@ interface Props {
     selectedList: Todolist | null;
     onListSelect: (listId: ID) => unknown;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
 export default function ListSelector({
@@ -21,7 +25,8 @@ export default function ListSelector({
     selectedList,
     onListSelect,
     isAdmin,
-}: Props) {
+    loading = false,
+}: Readonly<Props>) {
     const createList = () => {
         ToDo.createToDoListPopup(team).then((result) => {
             if (result.isConfirmed) {
@@ -30,10 +35,23 @@ export default function ListSelector({
         });
     };
 
+    if (loading) {
+        return (
+            <>
+                <div className="tw:mb-2 tw:space-y-2">
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                    <Skeleton className="tw:h-8 tw:w-full" />
+                </div>
+                <Skeleton className="tw:h-9 tw:w-full" />
+            </>
+        );
+    }
+
     return (
         <>
             {lists.length > 0 && (
-                <div className="mb-2">
+                <div className="tw:mb-2 tw:flex tw:flex-col">
                     {lists.map((list) => (
                         <ListSelectorRow
                             key={list.id}
@@ -45,18 +63,15 @@ export default function ListSelector({
                 </div>
             )}
             {isAdmin ? (
-                <button
-                    className="btn btn-outline-success"
-                    onClick={createList}
-                >
+                <Button variant="success" onClick={createList}>
                     Liste erstellen
-                </button>
+                </Button>
             ) : (
-                <Tooltip title="Diese Aktion steht nur Admins zur Verfügung">
-                    <button className="btn btn-outline-dark disabled">
+                <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
+                    <Button variant="outline" disabled>
                         Liste erstellen
-                    </button>
-                </Tooltip>
+                    </Button>
+                </CustomTooltip>
             )}
         </>
     );

@@ -4,6 +4,7 @@
  */
 
 import './globals';
+import './styles/globals.css';
 
 import $ from 'jquery';
 import React from 'react';
@@ -25,7 +26,7 @@ window.appdata = {
     user: {
         id: '',
         username: 'Laden...',
-        avatar_url: 'https://www.gravatar.com/avatar/',
+        avatar_url: '',
         email: '',
         first_name: '',
         last_name: '',
@@ -77,8 +78,6 @@ async function initialize() {
     }
 
     setupCSRFToken();
-
-    GeneralUtils.showSidebarOnDesktop();
     render();
 }
 

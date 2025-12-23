@@ -1,10 +1,13 @@
 import React from 'react';
 
+import { Button } from '@/shadcn/components/ui/button';
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
+
 import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
 import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import Tooltip from '../../common/tooltips/tooltip';
+import CustomTooltip from '../../common/tooltips/customTooltip';
 import EventSelectorRow from './eventSelectorRow';
 
 interface Props {
@@ -13,6 +16,7 @@ interface Props {
     selectedEvent: ClubAttendanceEvent;
     onEventSelect: (eventId: ID) => unknown;
     isAdmin: boolean;
+    loading?: boolean;
 }
 
 export default function EventSelector({
@@ -21,7 +25,8 @@ export default function EventSelector({
     selectedEvent,
     onEventSelect,
     isAdmin,
-}: Props) {
+    loading = false,
+}: Readonly<Props>) {
     const createEvent = () => {
         ClubAttendanceService.createAttendanceEventPopup(team).then(
             (result) => {
@@ -32,10 +37,23 @@ export default function EventSelector({
         );
     };
 
+    if (loading) {
+        return (
+            <>
+                <div className="tw:mb-2 tw:space-y-2">
+                    <Skeleton className="tw:h-14 tw:w-full" />
+                    <Skeleton className="tw:h-14 tw:w-full" />
+                    <Skeleton className="tw:h-14 tw:w-full" />
+                </div>
+                <Skeleton className="tw:h-9 tw:w-full" />
+            </>
+        );
+    }
+
     return (
         <>
             {events.length > 0 && (
-                <div className="mb-2">
+                <div className="tw:mb-2 tw:flex tw:flex-col">
                     {events.map((event) => (
                         <EventSelectorRow
                             key={event.id}
@@ -47,18 +65,15 @@ export default function EventSelector({
                 </div>
             )}
             {isAdmin ? (
-                <button
-                    className="btn btn-outline-success"
-                    onClick={createEvent}
-                >
+                <Button variant="success" onClick={createEvent}>
                     Ereignis erstellen
-                </button>
+                </Button>
             ) : (
-                <Tooltip title="Diese Aktion steht nur Admins zur Verfügung">
-                    <button className="btn btn-outline-dark disabled">
+                <CustomTooltip title="Diese Aktion steht nur Admins zur Verfügung">
+                    <Button variant="outline" disabled>
                         Ereignis erstellen
-                    </button>
-                </Tooltip>
+                    </Button>
+                </CustomTooltip>
             )}
         </>
     );

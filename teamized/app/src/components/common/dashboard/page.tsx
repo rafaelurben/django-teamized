@@ -1,41 +1,15 @@
 import React from 'react';
 
+import Row from '@/teamized/components/common/dashboard/row';
+
 interface Props {
-    loading: boolean;
-    title: React.ReactNode | null;
-    subtitle: React.ReactNode | null;
-    text: React.ReactNode | null;
     children: React.ReactNode;
 }
 
-export default function Page({
-    loading = false,
-    title = null,
-    subtitle = null,
-    text = null,
-    children,
-}: Partial<Props>) {
+export default function Page({ children }: Readonly<Partial<Props>>) {
     return (
-        <div className="dashboard p-0 w-100 h-100 d-flex flex-column">
-            {title && (
-                <h4 className="dashboard-title pt-3 mx-3 text-bold">{title}</h4>
-            )}
-            {subtitle && (
-                <h5 className="dashboard-subtitle mt-2 mx-3">{subtitle}</h5>
-            )}
-            {text && <p className="dashboard-text mt-2 mx-3">{text}</p>}
-            {loading ? (
-                <div className="w-100 flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-                    <div className="spinner-border mb-3" role="status">
-                        <span className="visually-hidden">Laden...</span>
-                    </div>
-                    <p>Seiteninhalt wird geladen...</p>
-                </div>
-            ) : (
-                <div className="dashboard-row row w-100 g-0 ms-0 px-2 pt-2">
-                    {children}
-                </div>
-            )}
+        <div className="dashboard tw:p-1 tw:w-full tw:h-auto tw:flex tw:flex-col">
+            <Row>{children}</Row>
         </div>
     );
 }

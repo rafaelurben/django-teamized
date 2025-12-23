@@ -1,8 +1,17 @@
+import { Users } from 'lucide-react';
 import React from 'react';
+
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/shadcn/components/ui/table';
+import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 
 import { ID } from '../../../interfaces/common';
 import { Team } from '../../../interfaces/teams/team';
-import Tables from '../../common/tables';
 import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamTableRow from './teamTableRow';
 
@@ -11,39 +20,34 @@ interface Props {
     selectedTeamId: ID;
 }
 
-export default function TeamTable({ teams, selectedTeamId }: Props) {
+export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
     return (
-        <Tables.SimpleTable>
-            <thead>
-                <tr>
-                    <th className="text-center" style={{ width: '1px' }}>
-                        <IconTooltip
-                            icon="fa-solid fa-users"
-                            title="Anzahl Mitglieder"
-                        />
-                    </th>
-                    <th>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="tw:text-center tw:w-px">
+                        <IconTooltip icon={Users} title="Anzahl Mitglieder" />
+                    </TableHead>
+                    <TableHead>
                         <span>Name </span>
-                        <span className="d-none d-lg-inline-block">
+                        <span className="tw:hidden lg:tw:inline-block">
                             &amp; Beschreibung
                         </span>
-                    </th>
-                    <th>Deine Rolle</th>
-                    <th style={{ width: '1px' }}></th>
-                    <th style={{ width: '1px' }}></th>
-                    <th style={{ width: '1px' }}></th>
-                    <th className="debug-id">ID</th>
-                </tr>
-            </thead>
-            <tbody>
+                    </TableHead>
+                    <TableHead>Deine Rolle</TableHead>
+                    <TableHead className="tw:w-px" />
+                    <TableHeadDebugID />
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {teams.map((team) => (
                     <TeamTableRow
                         key={team.id}
                         team={team}
-                        isSelected={team.id !== selectedTeamId}
+                        isSelected={team.id === selectedTeamId}
                     />
                 ))}
-            </tbody>
-        </Tables.SimpleTable>
+            </TableBody>
+        </Table>
     );
 }

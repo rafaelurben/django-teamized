@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
 import { ID } from '../../interfaces/common';
 import { useAppdata } from '../appdataProvider';
-import { hideSidebarOnMobile } from '../general';
 import { NavigationState, NavigationStateChange } from './navigationState';
 import {
     exportNavigationStateToURL,
@@ -22,7 +21,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function NavigationProvider({ children }: Props) {
+export function NavigationProvider({ children }: Readonly<Props>) {
     const [navigationState, dispatch] = useReducer(
         navigationStateReducer,
         importNavigationStateFromURL()
@@ -106,7 +105,6 @@ export function useNavigationStateDispatchURLPreview() {
  */
 export function usePageNavigator() {
     const dispatch = useNavigationStateDispatch();
-    hideSidebarOnMobile();
     return (pageName: string) => {
         return dispatch({ update: { selectedPage: pageName } });
     };

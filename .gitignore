@@ -134,3 +134,4 @@ dmypy.json
 .idea/
 teamized/app/node_modules/
 teamized/static/teamized/app
+!**/shadcn/lib
