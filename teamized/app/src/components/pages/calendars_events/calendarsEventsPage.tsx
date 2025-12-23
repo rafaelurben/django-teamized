@@ -106,6 +106,9 @@ export default function CalendarsEventsPage() {
 
     const dayDisplay = CalendarService.getDateString(selectedDate);
 
+    const visibleCalendars = calendars.filter((calendar) =>
+        visibleCalendarIds.has(calendar.id)
+    );
     const selectedCalendar = teamData.calendars[selectedCalendarId!];
     const selectedEvent = eventMap[selectedEventId!];
 
@@ -134,7 +137,7 @@ export default function CalendarsEventsPage() {
                             selectedDate={selectedDate}
                             selectedEvent={selectedEvent}
                             selectedCalendar={selectedCalendar}
-                            calendars={calendars}
+                            calendars={visibleCalendars}
                             events={CalendarService.filterCalendarEventsByDate(
                                 visibleEvents,
                                 selectedDate
@@ -155,7 +158,7 @@ export default function CalendarsEventsPage() {
                         <CalendarEventDisplay
                             event={selectedEvent}
                             team={team}
-                            calendars={calendars}
+                            calendars={visibleCalendars}
                         />
                     </CardContent>
                 </Dashboard.CustomCard>

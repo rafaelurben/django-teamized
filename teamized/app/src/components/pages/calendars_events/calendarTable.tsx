@@ -44,7 +44,7 @@ export default function CalendarTable({
 
     return (
         <RadioGroup
-            defaultValue={selectedCalendarId || undefined}
+            value={selectedCalendarId || undefined}
             onValueChange={onCalendarSelect}
         >
             <Table>
