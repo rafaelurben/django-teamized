@@ -74,8 +74,8 @@ export function getMondayOfWeek(date: Date): Date {
  */
 export function getDateString(date: Date): string {
     return date.toLocaleString('de-CH', {
-        day: '2-digit',
-        month: '2-digit',
+        day: 'numeric',
+        month: 'long',
         year: 'numeric',
     });
 }
@@ -88,8 +88,8 @@ export function getDateString(date: Date): string {
  */
 export function getDateTimeString(datetime: Date): string {
     return datetime.toLocaleString('de-CH', {
-        day: '2-digit',
-        month: '2-digit',
+        day: 'numeric',
+        month: 'long',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
