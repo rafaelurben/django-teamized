@@ -165,7 +165,7 @@ export function CalendarOverviewWithEventSelector({
                                         <span className="tw:flex tw:gap-0 tw:mt-0.5 tw:h-2">
                                             {colors.map((color, i) => (
                                                 <CircleIcon
-                                                    key={i}
+                                                    key={color + i}
                                                     className={`tw:fill-current tw:size-2 ${i > 0 ? 'tw:-ml-1' : ''}`}
                                                     style={{ color: color }}
                                                 />

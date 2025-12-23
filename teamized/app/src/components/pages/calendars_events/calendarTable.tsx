@@ -112,12 +112,22 @@ export default function CalendarTable({
                                                   checked
                                               )
                                           }
+                                          disabled={
+                                              visibleCalendarIds.has(
+                                                  calendar.id
+                                              ) && visibleCalendarIds.size === 1
+                                          }
                                       />
                                   </TableCell>
                                   <TableCell>
                                       <RadioGroupItem
                                           value={calendar.id}
                                           id={`select-${calendar.id}`}
+                                          disabled={
+                                              !visibleCalendarIds.has(
+                                                  calendar.id
+                                              )
+                                          }
                                       />
                                   </TableCell>
                               </TableRow>

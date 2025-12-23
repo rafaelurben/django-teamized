@@ -22,7 +22,7 @@ export default function CalendarsManagePage() {
         if (loading) {
             CalendarService.getCalendars(team.id).then(refreshData);
         }
-    });
+    }, [loading, team.id, refreshData]);
 
     return (
         <Dashboard.Page>

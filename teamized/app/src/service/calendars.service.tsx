@@ -99,7 +99,8 @@ export function filterCalendarEventsByDate(
 /**
  * Sort an array of calendar events.
  *
- * @param events a new sorted array.
+ * @param events
+ * @returns a new sorted array.
  */
 export function sortCalendarEvents(events: CalendarEvent[]) {
     return events.toSorted((a, b) => {
