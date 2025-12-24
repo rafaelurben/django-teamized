@@ -1,9 +1,11 @@
 import { Users } from 'lucide-react';
 import React from 'react';
 
+import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import {
     Table,
     TableBody,
+    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -18,9 +20,14 @@ import TeamTableRow from './teamTableRow';
 interface Props {
     teams: Team[];
     selectedTeamId: ID;
+    loading: boolean;
 }
 
-export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
+export default function TeamTable({
+    teams,
+    selectedTeamId,
+    loading,
+}: Readonly<Props>) {
     return (
         <Table>
             <TableHeader>
@@ -40,13 +47,30 @@ export default function TeamTable({ teams, selectedTeamId }: Readonly<Props>) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {teams.map((team) => (
-                    <TeamTableRow
-                        key={team.id}
-                        team={team}
-                        isSelected={team.id === selectedTeamId}
-                    />
-                ))}
+                {loading
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                          <TableRow key={i}>
+                              <TableCell>
+                                  <Skeleton className="tw:h-6 tw:w-6" />
+                              </TableCell>
+                              <TableCell>
+                                  <Skeleton className="tw:h-6 tw:w-full" />
+                              </TableCell>
+                              <TableCell>
+                                  <Skeleton className="tw:h-6 tw:w-full" />
+                              </TableCell>
+                              <TableCell>
+                                  <Skeleton className="tw:h-6 tw:w-6" />
+                              </TableCell>
+                          </TableRow>
+                      ))
+                    : teams.map((team) => (
+                          <TeamTableRow
+                              key={team.id}
+                              team={team}
+                              isSelected={team.id === selectedTeamId}
+                          />
+                      ))}
             </TableBody>
         </Table>
     );

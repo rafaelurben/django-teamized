@@ -3,35 +3,15 @@
  */
 
 import { TriangleAlert } from 'lucide-react';
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import { Spinner } from '@/shadcn/components/ui/spinner';
-import * as TeamsService from '@/teamized/service/teams.service';
+import AppHeader from '@/teamized/components/layout/AppHeader';
+import { PAGE_CONFIGS } from '@/teamized/components/pages/pageConfigs';
 import {
     useCurrentTeamData,
     useNavigationState,
 } from '@/teamized/utils/navigation/navigationProvider';
-
-import AppHeader from './layout/AppHeader';
-import { calculateBreadcrumbs, PAGE_CONFIGS } from './layout/pages';
-
-const CalendarsEventsPage = lazy(
-    () => import('./pages/calendars_events/calendarsEventsPage')
-);
-const CalendarsManagePage = lazy(
-    () => import('./pages/calendars_manage/calendarsManagePage')
-);
-const ClubPage = lazy(() => import('./pages/club/clubPage'));
-const ClubAttendancePage = lazy(
-    () => import('./pages/club_attendance/clubAttendancePage')
-);
-const HomePage = lazy(() => import('./pages/home/homePage'));
-const TeamPage = lazy(() => import('./pages/team/teamPage'));
-const TeamlistPage = lazy(() => import('./pages/teamlist/teamlistPage'));
-const TodoPage = lazy(() => import('./pages/todo/todoPage'));
-const WorkingtimePage = lazy(
-    () => import('./pages/workingtime/workingtimePage')
-);
 
 export function PageLoader() {
     const { selectedPage } = useNavigationState();
@@ -63,7 +43,7 @@ export function PageLoader() {
             );
         }
 
-        if (!teamData && !pageData.canHandleNoAppData) {
+        if (!teamData && !pageData.canHandleNoTeamData) {
             return (
                 <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
                     <Spinner className="tw:size-12 tw:mb-3" />
@@ -85,44 +65,12 @@ export function PageLoader() {
             );
         }
 
-        switch (selectedPage) {
-            case 'home':
-                return <HomePage />;
-            case 'teamlist':
-                return <TeamlistPage teams={TeamsService.getTeamsList()} />;
-            case 'team':
-                return <TeamPage />;
-            case 'workingtime':
-                return <WorkingtimePage />;
-            case 'calendars_events':
-                return <CalendarsEventsPage />;
-            case 'calendars_manage':
-                return <CalendarsManagePage />;
-            case 'todo':
-                return <TodoPage />;
-            case 'club':
-                return <ClubPage />;
-            case 'club_attendance':
-                return <ClubAttendancePage />;
-            default:
-                return (
-                    <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
-                        <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
-                        <h3 className="tw:text-xl tw:font-bold tw:mb-2">
-                            UUPS! Seite nicht gefunden.
-                        </h3>
-                        <p className="tw:text-muted-foreground">
-                            Etwas ist schiefgelaufen. Die angeforderte Seite
-                            konnte nicht geladen werden.
-                        </p>
-                    </div>
-                );
-        }
+        return <pageData.component />;
     };
 
     return (
         <>
-            <AppHeader breadcrumbs={calculateBreadcrumbs(selectedPage)} />
+            <AppHeader />
             <Suspense
                 fallback={
                     <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center">
