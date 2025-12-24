@@ -32,11 +32,17 @@ def home(request):
 @teamized_prep()
 def app(request):
     """Show the app page"""
+    dev_server_host_normalized = None
+    if settings.DEBUG:
+        dev_server_host = os.getenv("TEAMIZED_DEV_SERVER_HOST")
+        if dev_server_host:
+            dev_server_host_normalized = dev_server_host.removesuffix("/")
+
     return render(
         request,
         "teamized/app.html",
         {
-            "dev_server_host": os.getenv("TEAMIZED_DEV_SERVER_HOST").removesuffix("/") if settings.DEBUG else None,
+            "dev_server_host": dev_server_host_normalized,
         },
     )
 
