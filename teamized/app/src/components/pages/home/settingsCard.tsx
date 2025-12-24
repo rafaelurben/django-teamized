@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import React, { useState } from 'react';
 
 import {
@@ -51,7 +51,7 @@ export default function SettingsCard({ settings }: Readonly<Props>) {
                 <>
                     <span>Einstellungen</span>
                     {isSavingSettings && (
-                        <Loader2 className="tw:size-4 tw:animate-spin tw:text-muted-foreground" />
+                        <Loader2Icon className="tw:size-4 tw:animate-spin tw:text-muted-foreground" />
                     )}
                 </>
             }

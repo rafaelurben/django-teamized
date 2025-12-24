@@ -81,6 +81,7 @@ export default function ListViewItem({ team, list, item }: Readonly<Props>) {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon-sm">
                             <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

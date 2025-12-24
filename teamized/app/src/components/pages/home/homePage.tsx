@@ -1,4 +1,4 @@
-import { Flag, Info } from 'lucide-react';
+import { FlagIcon, InfoIcon } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -38,7 +38,7 @@ export default function HomePage() {
                         </a>
                     </p>
                     <Alert variant="warning" className="tw:md:hidden tw:mt-2">
-                        <Info className="tw:size-4" />
+                        <InfoIcon className="tw:size-4" />
                         <AlertTitle>Hinweis</AlertTitle>
                         <AlertDescription>
                             Diese App wurde zwar auch für mobile Geräte
@@ -70,7 +70,7 @@ export default function HomePage() {
                                             )}
                                             {item.milestone && (
                                                 <CustomTooltip title="Meilenstein">
-                                                    <Flag className="tw:size-4 tw:text-red-500" />
+                                                    <FlagIcon className="tw:size-4 tw:text-red-500" />
                                                 </CustomTooltip>
                                             )}
                                         </h6>

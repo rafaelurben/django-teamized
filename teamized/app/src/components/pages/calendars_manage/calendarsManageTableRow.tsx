@@ -1,4 +1,10 @@
-import { CircleIcon, MoreVertical, Pencil, Trash2, Wifi } from 'lucide-react';
+import {
+    CircleIcon,
+    MoreVerticalIcon,
+    PencilIcon,
+    Trash2Icon,
+    WifiIcon,
+} from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -68,26 +74,27 @@ export default function CalendarsManageTableRow({
             <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreVertical />
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={handleSubscribe}>
-                            <Wifi />
+                            <WifiIcon />
                             Abonnieren
                         </DropdownMenuItem>
                         {isAdmin && (
                             <>
                                 <DropdownMenuItem onClick={handleEdit}>
-                                    <Pencil />
+                                    <PencilIcon />
                                     Bearbeiten
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={handleDelete}
                                     variant="destructive"
                                 >
-                                    <Trash2 />
+                                    <Trash2Icon />
                                     Löschen
                                 </DropdownMenuItem>
                             </>

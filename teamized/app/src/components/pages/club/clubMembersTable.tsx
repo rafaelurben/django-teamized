@@ -1,4 +1,4 @@
-import { AlertCircle } from 'lucide-react';
+import { AlertCircleIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -64,7 +64,7 @@ export default function ClubMembersTable({
                         <span>E-Mail-Adresse</span>
                         <IconTooltip
                             title="Eine E-Mail-Adresse kann nicht mehrfach verwendet werden."
-                            icon={AlertCircle}
+                            icon={AlertCircleIcon}
                             className="tw:text-yellow-600"
                         />
                     </TableHead>

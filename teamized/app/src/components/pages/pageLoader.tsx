@@ -2,7 +2,7 @@
  *  This component is used to render the pages.
  */
 
-import { TriangleAlert } from 'lucide-react';
+import { TriangleAlertIcon } from 'lucide-react';
 import React, { Suspense } from 'react';
 
 import { Spinner } from '@/shadcn/components/ui/spinner';
@@ -30,7 +30,7 @@ export function PageLoader() {
         if (!pageData) {
             return (
                 <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
-                    <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
+                    <TriangleAlertIcon className="tw:size-12 tw:text-destructive tw:mb-4" />
                     <h3 className="tw:text-xl tw:font-bold tw:mb-2">
                         404 Nicht gefunden
                     </h3>
@@ -55,7 +55,7 @@ export function PageLoader() {
         if (selectedPage.startsWith('club') && teamData?.team?.club === null) {
             return (
                 <div className="tw:w-full tw:h-full tw:flex tw:flex-col tw:items-center tw:justify-center tw:text-center tw:p-4">
-                    <TriangleAlert className="tw:size-12 tw:text-destructive tw:mb-4" />
+                    <TriangleAlertIcon className="tw:size-12 tw:text-destructive tw:mb-4" />
                     <p>
                         Die Vereinsfunktionen sind in diesem Team noch nicht
                         aktiviert! Bitte wähle ein anderes Team oder eine andere

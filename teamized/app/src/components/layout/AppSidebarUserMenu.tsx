@@ -1,11 +1,6 @@
 'use client';
 
-import {
-    ChevronsUpDown,
-    ExternalLink,
-    LogOut,
-    User as UserIcon,
-} from 'lucide-react';
+import { ChevronsUpDown, ExternalLink, LogOut, UserIcon } from 'lucide-react';
 import React from 'react';
 
 import {

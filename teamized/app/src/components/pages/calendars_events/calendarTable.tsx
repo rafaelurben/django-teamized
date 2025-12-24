@@ -1,4 +1,4 @@
-import { CircleIcon, Eye, MousePointer2 } from 'lucide-react';
+import { CircleIcon, EyeIcon, MousePointer2Icon } from 'lucide-react';
 import React from 'react';
 
 import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
@@ -56,11 +56,11 @@ export default function CalendarTable({
                             Beschreibung
                         </TableHead>
                         <TableHead className="tw:w-px">
-                            <IconTooltip icon={Eye} title="Sichtbar?" />
+                            <IconTooltip icon={EyeIcon} title="Sichtbar?" />
                         </TableHead>
                         <TableHead className="tw:w-px">
                             <IconTooltip
-                                icon={MousePointer2}
+                                icon={MousePointer2Icon}
                                 title="Standard für neue Ereignisse"
                             />
                         </TableHead>

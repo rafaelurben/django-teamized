@@ -1,4 +1,4 @@
-import { CircleIcon, CircleQuestionMark } from 'lucide-react';
+import { CircleIcon, CircleQuestionMarkIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -96,7 +96,7 @@ export default function ListInfo({
     if (!selectedList) {
         return (
             <IconTooltipWithText
-                icon={CircleQuestionMark}
+                icon={CircleQuestionMarkIcon}
                 title={
                     isAdmin
                         ? 'Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'

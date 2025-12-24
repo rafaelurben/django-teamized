@@ -1,4 +1,10 @@
-import { Key, Link, MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import {
+    KeyIcon,
+    LinkIcon,
+    MoreVerticalIcon,
+    PencilIcon,
+    Trash2Icon,
+} from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -95,21 +101,22 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon-sm">
-                            <MoreVertical className="tw:size-4" />
+                            <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={copyToken}>
-                            <Key className="tw:size-4" />
+                            <KeyIcon className="tw:size-4" />
                             Token kopieren
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={copyURL}>
-                            <Link className="tw:size-4" />
+                            <LinkIcon className="tw:size-4" />
                             Einladungslink kopieren
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={handleEditButtonClick}>
-                            <Pencil className="tw:size-4" />
+                            <PencilIcon className="tw:size-4" />
                             Einladung bearbeiten
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -117,7 +124,7 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
                             onClick={handleDeleteButtonClick}
                             variant="destructive"
                         >
-                            <Trash2 className="tw:size-4" />
+                            <Trash2Icon className="tw:size-4" />
                             Einladung löschen
                         </DropdownMenuItem>
                     </DropdownMenuContent>

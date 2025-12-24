@@ -1,4 +1,10 @@
-import { MoreVertical, Pencil, Timer, TimerOff, Trash2 } from 'lucide-react';
+import {
+    MoreVerticalIcon,
+    PencilIcon,
+    TimerIcon,
+    TimerOffIcon,
+    Trash2Icon,
+} from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -61,13 +67,13 @@ export default function WorksessionTableRow({
                     {getDateTimeString(new Date(session.time_end!))}
                     {session.is_created_via_tracking ? (
                         <IconTooltip
-                            icon={Timer}
+                            icon={TimerIcon}
                             title="Diese Sitzung wurde via Aufzeichnung erstellt."
                             className="tw:ms-1 tw:inline-block"
                         />
                     ) : (
                         <IconTooltip
-                            icon={TimerOff}
+                            icon={TimerOffIcon}
                             title="Diese Sitzung wurde manuell erfasst."
                             className="tw:ms-1 tw:inline-block"
                         />
@@ -87,19 +93,20 @@ export default function WorksessionTableRow({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon-sm">
-                            <MoreVertical className="tw:size-4" />
+                            <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={handleEditButtonClick}>
-                            <Pencil className="tw:size-4" />
+                            <PencilIcon className="tw:size-4" />
                             Bearbeiten
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             variant="destructive"
                             onClick={handleDeleteButtonClick}
                         >
-                            <Trash2 className="tw:size-4" />
+                            <Trash2Icon className="tw:size-4" />
                             Löschen
                         </DropdownMenuItem>
                     </DropdownMenuContent>

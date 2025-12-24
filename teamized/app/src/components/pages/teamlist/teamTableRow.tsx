@@ -1,10 +1,10 @@
 import {
-    Check,
-    Eye,
-    MoreHorizontal,
-    PenSquare,
-    Trash2,
-    UserMinus,
+    CheckIcon,
+    EyeIcon,
+    MoreVerticalIcon,
+    PenSquareIcon,
+    Trash2Icon,
+    UserMinusIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -58,7 +58,7 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
     };
 
     return (
-        <TableRow className={isSelected ? 'tw:bg-accent/100' : ''}>
+        <TableRow className={isSelected ? 'tw:bg-accent' : ''}>
             {/* Member count */}
             <TableCell className="tw:align-middle tw:text-center">
                 <span>{team.membercount}</span>
@@ -77,8 +77,9 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
             <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="tw:size-4" />
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -86,7 +87,7 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
                             onClick={handleSwitchToButtonClick}
                             disabled={isSelected}
                         >
-                            <Check className="tw:size-4 tw:mr-2" />
+                            <CheckIcon className="tw:size-4 tw:mr-2" />
                             <span>
                                 {isSelected ? 'Ausgewählt' : 'Auswählen'}
                             </span>
@@ -94,12 +95,12 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
                         <DropdownMenuItem onClick={handleViewManageButtonClick}>
                             {team.member!.is_admin ? (
                                 <>
-                                    <PenSquare className="tw:size-4 tw:mr-2" />
+                                    <PenSquareIcon className="tw:size-4 tw:mr-2" />
                                     <span>Verwalten</span>
                                 </>
                             ) : (
                                 <>
-                                    <Eye className="tw:size-4 tw:mr-2" />
+                                    <EyeIcon className="tw:size-4 tw:mr-2" />
                                     <span>Ansehen</span>
                                 </>
                             )}
@@ -109,7 +110,7 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
                                 onClick={handleDeleteButtonClick}
                                 variant="destructive"
                             >
-                                <Trash2 className="tw:size-4 tw:mr-2" />
+                                <Trash2Icon className="tw:size-4 tw:mr-2" />
                                 <span>Team löschen</span>
                             </DropdownMenuItem>
                         ) : (
@@ -117,7 +118,7 @@ export default function TeamTableRow({ team, isSelected }: Readonly<Props>) {
                                 onClick={handleLeaveButtonClick}
                                 variant="destructive"
                             >
-                                <UserMinus className="tw:size-4 tw:mr-2" />
+                                <UserMinusIcon className="tw:size-4 tw:mr-2" />
                                 <span>Team verlassen</span>
                             </DropdownMenuItem>
                         )}

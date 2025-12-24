@@ -1,9 +1,9 @@
 import {
-    LogOut,
-    MoreVertical,
-    Trash2,
-    TrendingDown,
-    TrendingUp,
+    LogOutIcon,
+    MoreVerticalIcon,
+    Trash2Icon,
+    TrendingDownIcon,
+    TrendingUpIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -121,7 +121,8 @@ export default function TeamMemberTableRow({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon-sm">
-                                <MoreVertical className="tw:size-4" />
+                                <MoreVerticalIcon />
+                                <span className="tw:sr-only">Mehr</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -130,14 +131,14 @@ export default function TeamMemberTableRow({
                                     <DropdownMenuItem
                                         onClick={handleDemoteButtonClick}
                                     >
-                                        <TrendingDown className="tw:size-4" />
+                                        <TrendingDownIcon className="tw:size-4" />
                                         Degradieren
                                     </DropdownMenuItem>
                                 ) : (
                                     <DropdownMenuItem
                                         onClick={handlePromoteButtonClick}
                                     >
-                                        <TrendingUp className="tw:size-4" />
+                                        <TrendingUpIcon className="tw:size-4" />
                                         Befördern
                                     </DropdownMenuItem>
                                 ))}
@@ -147,7 +148,7 @@ export default function TeamMemberTableRow({
                                     variant="destructive"
                                     disabled={loggedInMember.is_owner}
                                 >
-                                    <LogOut className="tw:size-4" />
+                                    <LogOutIcon className="tw:size-4" />
                                     Team verlassen
                                 </DropdownMenuItem>
                             )}
@@ -156,7 +157,7 @@ export default function TeamMemberTableRow({
                                     onClick={handleRemoveButtonClick}
                                     variant="destructive"
                                 >
-                                    <Trash2 className="tw:size-4" />
+                                    <Trash2Icon className="tw:size-4" />
                                     Mitglied entfernen
                                 </DropdownMenuItem>
                             )}

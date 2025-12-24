@@ -1,4 +1,4 @@
-import { Users } from 'lucide-react';
+import { UsersIcon } from 'lucide-react';
 import React from 'react';
 
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
@@ -33,7 +33,10 @@ export default function TeamTable({
             <TableHeader>
                 <TableRow>
                     <TableHead className="tw:text-center tw:w-px">
-                        <IconTooltip icon={Users} title="Anzahl Mitglieder" />
+                        <IconTooltip
+                            icon={UsersIcon}
+                            title="Anzahl Mitglieder"
+                        />
                     </TableHead>
                     <TableHead>
                         <span>Name </span>
