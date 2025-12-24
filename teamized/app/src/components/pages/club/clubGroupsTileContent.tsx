@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import { TeamCache } from '@/teamized/interfaces/cache/teamCache';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { TeamCache } from '../../../interfaces/cache/teamCache';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
 import ClubGroupsTable from './clubGroupsTable';
 
 interface Props {

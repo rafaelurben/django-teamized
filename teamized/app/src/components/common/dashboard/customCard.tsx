@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -9,8 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/shadcn/components/ui/card';
-
-import IconTooltip from '../tooltips/iconTooltip';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 
 interface Props {
     title?: string | React.ReactNode;
@@ -66,7 +65,7 @@ export default function CustomCard({
             {loading ? (
                 <CardContent className={grow ? 'tw:grow' : ''}>
                     <div className="tw:flex tw:flex-col tw:items-center tw:justify-center tw:my-5 tw:gap-2">
-                        <Loader2 className="tw:size-6 tw:animate-spin" />
+                        <Loader2Icon className="tw:size-6 tw:animate-spin" />
                         <span className="tw:text-sm">
                             Daten werden geladen...
                         </span>

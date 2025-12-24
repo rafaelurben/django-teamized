@@ -2,10 +2,9 @@ import React from 'react';
 
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import { cn } from '@/shadcn/lib/utils';
-
-import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
-import { ID } from '../../../interfaces/common';
-import * as CalendarService from '../../../service/calendars.service';
+import { CalendarEvent } from '@/teamized/interfaces/calendar/calendarEvent';
+import { ID } from '@/teamized/interfaces/common';
+import * as CalendarService from '@/teamized/service/calendars.service';
 
 interface Props {
     events: CalendarEvent[];

@@ -1,15 +1,15 @@
 import {
-    Bug,
-    CalendarDays,
-    ClipboardClock,
-    ClipboardList,
-    Contact,
-    Grid2x2,
-    House,
-    Info,
-    ListTodo,
-    RefreshCw,
-    Users,
+    BugIcon,
+    CalendarDaysIcon,
+    ClipboardClockIcon,
+    ClipboardListIcon,
+    ContactIcon,
+    Grid2x2Icon,
+    HouseIcon,
+    InfoIcon,
+    ListTodoIcon,
+    RefreshCwIcon,
+    UsersIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -21,10 +21,6 @@ import {
     SidebarRail,
 } from '@/shadcn/components/ui/sidebar';
 import { softRefresh } from '@/teamized/app';
-import AppSidebarMainNavigation from '@/teamized/components/layout/AppSidebarMainNavigation';
-import AppSidebarSecondaryNavigation from '@/teamized/components/layout/AppSidebarSecondaryNavigation';
-import { AppSidebarTeamSwitcher } from '@/teamized/components/layout/AppSidebarTeamSwitcher';
-import { AppSidebarUserMenu } from '@/teamized/components/layout/AppSidebarUserMenu';
 import { User } from '@/teamized/interfaces/user';
 import * as TeamsService from '@/teamized/service/teams.service';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
@@ -33,6 +29,11 @@ import {
     useCurrentTeamData,
     useNavigationState,
 } from '@/teamized/utils/navigation/navigationProvider';
+
+import AppSidebarMainNavigation from './AppSidebarMainNavigation';
+import AppSidebarSecondaryNavigation from './AppSidebarSecondaryNavigation';
+import { AppSidebarTeamSwitcher } from './AppSidebarTeamSwitcher';
+import { AppSidebarUserMenu } from './AppSidebarUserMenu';
 
 export default function AppSidebar() {
     const appdata = useAppdata();
@@ -59,12 +60,12 @@ export default function AppSidebar() {
                                 {
                                     label: 'Startseite',
                                     page: 'home',
-                                    icon: House,
+                                    icon: HouseIcon,
                                 },
                                 {
                                     label: 'Teams',
                                     page: 'teamlist',
-                                    icon: Grid2x2,
+                                    icon: Grid2x2Icon,
                                 },
                             ],
                         },
@@ -76,16 +77,16 @@ export default function AppSidebar() {
                                 {
                                     label: 'Team',
                                     page: 'team',
-                                    icon: Users,
+                                    icon: UsersIcon,
                                 },
                                 {
                                     label: 'Arbeitszeit',
                                     page: 'workingtime',
-                                    icon: ClipboardClock,
+                                    icon: ClipboardClockIcon,
                                 },
                                 {
                                     label: 'Kalender',
-                                    icon: CalendarDays,
+                                    icon: CalendarDaysIcon,
                                     isSubmenu: true,
                                     subitems: [
                                         {
@@ -101,7 +102,7 @@ export default function AppSidebar() {
                                 {
                                     label: 'To-do-Listen',
                                     page: 'todo',
-                                    icon: ListTodo,
+                                    icon: ListTodoIcon,
                                 },
                             ],
                         },
@@ -113,12 +114,12 @@ export default function AppSidebar() {
                                 {
                                     label: 'Verein',
                                     page: 'club',
-                                    icon: Contact,
+                                    icon: ContactIcon,
                                 },
                                 {
                                     label: 'Anwesenheit',
                                     page: 'club_attendance',
-                                    icon: ClipboardList,
+                                    icon: ClipboardListIcon,
                                     isBeta: true,
                                 },
                             ],
@@ -129,7 +130,7 @@ export default function AppSidebar() {
                     items={[
                         {
                             label: 'Teamized v' + __TEAMIZED_VERSION__,
-                            icon: Info,
+                            icon: InfoIcon,
                             onClick: () => {
                                 window.open(
                                     window.teamized_globals.home_url,
@@ -140,19 +141,19 @@ export default function AppSidebar() {
                         },
                         {
                             label: 'Neu laden (F5)',
-                            icon: RefreshCw,
+                            icon: RefreshCwIcon,
                             onClick: () => {
                                 softRefresh();
                             },
                         },
                         {
                             label: 'Debug-Menü',
-                            icon: Bug,
+                            icon: BugIcon,
                             className: 'debug-only',
                             dropdownItems: [
                                 {
                                     label: 'Debug-Seite öffnen',
-                                    icon: Bug,
+                                    icon: BugIcon,
                                     onClick: () => {
                                         window.open(
                                             window.teamized_globals.debug_url,
@@ -162,18 +163,18 @@ export default function AppSidebar() {
                                 },
                                 {
                                     label: 'Debug-Modus verlassen (Shift+F6)',
-                                    icon: Bug,
+                                    icon: BugIcon,
                                     onClick: () => GeneralUtils.toggleDebug(),
                                 },
                                 {
                                     label: 'Toggle Debug-IDs',
-                                    icon: Bug,
+                                    icon: BugIcon,
                                     onClick: () =>
                                         GeneralUtils.toggleDebugIds(),
                                 },
                                 {
                                     label: 'location.reload()',
-                                    icon: RefreshCw,
+                                    icon: RefreshCwIcon,
                                     onClick: () => location.reload(),
                                 },
                             ],

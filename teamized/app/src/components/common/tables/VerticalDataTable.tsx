@@ -16,7 +16,6 @@ interface DataItem {
     value: React.ReactNode;
     hide?: boolean;
     isDebugId?: boolean;
-    limitWidth?: boolean;
 }
 
 interface Props {
@@ -68,7 +67,7 @@ export default function VerticalDataTable({
                             <TableHead
                                 scope="row"
                                 className={cn(
-                                    item.limitWidth ? 'tw:pe-3 tw:w-px' : '',
+                                    'tw:p-2 tw:align-top tw:pe-3 tw:w-px',
                                     item.isDebugId
                                         ? 'tw:text-muted-foreground'
                                         : ''

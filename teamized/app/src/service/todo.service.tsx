@@ -4,23 +4,27 @@
 
 import React from 'react';
 
-import * as TodolistAPI from '../api/todolist';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { ID } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
-import { Todolist, TodolistRequestDTO } from '../interfaces/todolist/todolist';
+import * as TodolistAPI from '@/teamized/api/todolist';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import {
+    Todolist,
+    TodolistRequestDTO,
+} from '@/teamized/interfaces/todolist/todolist';
 import {
     TodolistItem,
     TodolistItemRequestDTO,
-} from '../interfaces/todolist/todolistItem';
+} from '@/teamized/interfaces/todolist/todolistItem';
 import {
     confirmAlert,
     doubleConfirmAlert,
     fireAlert,
     Swal,
     SweetAlertResult,
-} from '../utils/alerts';
-import { getDateString } from '../utils/datetime';
+} from '@/teamized/utils/alerts';
+import { getDateString } from '@/teamized/utils/datetime';
+
 import * as CacheService from './cache.service';
 
 // ToDoList list

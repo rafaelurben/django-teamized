@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
 
-import { ID } from '../../interfaces/common';
-import { useAppdata } from '../appdataProvider';
+import { ID } from '@/teamized/interfaces/common';
+import { useAppdata } from '@/teamized/utils/appdataProvider';
+
 import { NavigationState, NavigationStateChange } from './navigationState';
 import {
     exportNavigationStateToURL,

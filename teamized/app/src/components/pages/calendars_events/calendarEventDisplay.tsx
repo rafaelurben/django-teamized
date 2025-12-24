@@ -2,14 +2,13 @@ import { CircleIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { CalendarEvent } from '../../../interfaces/calendar/calendarEvent';
-import { Team } from '../../../interfaces/teams/team';
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
-import Urlize from '../../common/utils/urlize';
+import Tables from '@/teamized/components/common/tables';
+import Urlize from '@/teamized/components/common/utils/urlize';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { CalendarEvent } from '@/teamized/interfaces/calendar/calendarEvent';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -88,7 +87,6 @@ export default function CalendarEventDisplay({
                     label: 'Beschreibung',
                     value: <Urlize text={event.description} />,
                     hide: !event.description,
-                    limitWidth: true,
                 },
                 {
                     label: 'Ort',

@@ -3,24 +3,24 @@ import React from 'react';
 import { Button } from '@/shadcn/components/ui/button';
 import { ButtonGroup } from '@/shadcn/components/ui/button-group';
 import { Input } from '@/shadcn/components/ui/input';
-
-import { Team } from '../../../interfaces/teams/team';
-import * as TeamsService from '../../../service/teams.service';
-import { waitingAlert } from '../../../utils/alerts';
+import Dashboard from '@/teamized/components/common/dashboard';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { waitingAlert } from '@/teamized/utils/alerts';
+import { useAppdata } from '@/teamized/utils/appdataProvider';
 import {
     useNavigationState,
     useNavigationStateDispatch,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+} from '@/teamized/utils/navigation/navigationProvider';
+
 import TeamTable from './teamTable';
 
-interface Props {
-    teams: Team[];
-}
-
-export default function TeamlistPage({ teams }: Readonly<Props>) {
+export default function TeamlistPage() {
     const { selectedTeamId } = useNavigationState();
     const updateNavigationState = useNavigationStateDispatch();
+
+    const appdata = useAppdata();
+    const teams = Object.values(appdata.teamCache).map((t) => t.team);
+    const loading = teams.length === 0;
 
     const joinTeam = () => {
         const token = (
@@ -65,7 +65,11 @@ export default function TeamlistPage({ teams }: Readonly<Props>) {
         <Dashboard.Page>
             <Dashboard.Column>
                 <Dashboard.CustomCard title="Teamübersicht" wrapInCardContent>
-                    <TeamTable teams={teams} selectedTeamId={selectedTeamId} />
+                    <TeamTable
+                        teams={teams}
+                        selectedTeamId={selectedTeamId}
+                        loading={loading}
+                    />
                 </Dashboard.CustomCard>
 
                 <Dashboard.CustomCard

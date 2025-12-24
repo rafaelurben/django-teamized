@@ -1,3 +1,4 @@
+import importAlias from '@dword-design/eslint-plugin-import-alias';
 import pluginJs from '@eslint/js';
 import pluginPrettierConfigRecommended from 'eslint-plugin-prettier/recommended';
 import pluginReact from 'eslint-plugin-react';
@@ -23,7 +24,23 @@ export default [
             'react-hooks/exhaustive-deps': 'warn',
             'simple-import-sort/imports': 'error',
             'simple-import-sort/exports': 'warn',
+            '@dword-design/import-alias/prefer-alias': [
+                'error',
+                {
+                    /**
+                     * Aliases - must match the following files:
+                     * - tsconfig.json
+                     * - webpack.config.js
+                     */
+                    alias: {
+                        '@/shadcn': './shadcn',
+                        '@/teamized': './src',
+                    },
+                    aliasForSubpaths: true,
+                },
+            ],
         },
     },
     pluginPrettierConfigRecommended,
+    importAlias.configs.recommended,
 ];

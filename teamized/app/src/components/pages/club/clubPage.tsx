@@ -1,17 +1,17 @@
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import ClubGroupsTileContent from '@/teamized/components/pages/club/clubGroupsTileContent';
-
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import Dashboard from '@/teamized/components/common/dashboard';
+import Tables from '@/teamized/components/common/tables';
+import Urlize from '@/teamized/components/common/utils/urlize';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigator,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
-import Tables from '../../common/tables';
-import Urlize from '../../common/utils/urlize';
+} from '@/teamized/utils/navigation/navigationProvider';
+
+import ClubGroupsTileContent from './clubGroupsTileContent';
 import ClubMemberTileContent from './clubMemberTileContent';
 
 export default function ClubPage() {
@@ -64,7 +64,6 @@ export default function ClubPage() {
                             {
                                 label: 'Beschreibung',
                                 value: <Urlize text={club.description} />,
-                                limitWidth: true,
                             },
                             {
                                 label: 'Mitglieder',

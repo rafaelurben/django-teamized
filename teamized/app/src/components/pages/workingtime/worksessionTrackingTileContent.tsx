@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-
-import { Team } from '../../../interfaces/teams/team';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
-import * as WorkingtimeService from '../../../service/workingtime.service';
-import { useAppdata, useAppdataRefresh } from '../../../utils/appdataProvider';
-import { ms2HoursMinutesSeconds } from '../../../utils/datetime';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
+import * as WorkingtimeService from '@/teamized/service/workingtime.service';
+import {
+    useAppdata,
+    useAppdataRefresh,
+} from '@/teamized/utils/appdataProvider';
+import { ms2HoursMinutesSeconds } from '@/teamized/utils/datetime';
 
 function getTimeDisplay(currentWorksession: Worksession | null | undefined) {
     if (currentWorksession) {

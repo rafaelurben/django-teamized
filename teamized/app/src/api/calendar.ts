@@ -2,12 +2,16 @@
  * Teamized Calendars API
  */
 
-import { Calendar, CalendarRequestDTO } from '../interfaces/calendar/calendar';
+import {
+    Calendar,
+    CalendarRequestDTO,
+} from '@/teamized/interfaces/calendar/calendar';
 import {
     CalendarEvent,
     CalendarEventRequestDTO,
-} from '../interfaces/calendar/calendarEvent';
-import { ID } from '../interfaces/common';
+} from '@/teamized/interfaces/calendar/calendarEvent';
+import { ID } from '@/teamized/interfaces/common';
+
 import { API } from './_base';
 
 // Calendars

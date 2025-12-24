@@ -1,4 +1,4 @@
-import { DateString, ID } from '../common';
+import { DateString, ID } from '@/teamized/interfaces/common';
 
 export interface ClubMember {
     id: ID;

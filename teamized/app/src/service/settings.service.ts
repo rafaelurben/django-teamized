@@ -2,9 +2,9 @@
  * Utils for settings and profile
  */
 
-import * as GeneralAPI from '../api/general';
-import { render } from '../app';
-import { Settings } from '../interfaces/settings';
+import * as GeneralAPI from '@/teamized/api/general';
+import { render } from '@/teamized/app';
+import { Settings } from '@/teamized/interfaces/settings';
 
 // User profile
 

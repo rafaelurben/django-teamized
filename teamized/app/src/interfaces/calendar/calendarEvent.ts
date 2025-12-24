@@ -1,4 +1,5 @@
-import { DateString, DateTimeString, ID } from '../common';
+import { DateString, DateTimeString, ID } from '@/teamized/interfaces/common';
+
 import { Calendar } from './calendar';
 
 // CalendarEvent

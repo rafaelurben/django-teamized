@@ -10,11 +10,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import Tables from '@/teamized/components/common/tables';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
 
-import { Team } from '../../../interfaces/teams/team';
-import { Worksession } from '../../../interfaces/workingtime/worksession';
-import Tables from '../../common/tables';
 import WorksessionTableRow from './worksessionTableRow';
 
 interface Props {

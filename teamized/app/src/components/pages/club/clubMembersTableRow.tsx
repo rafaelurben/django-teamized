@@ -1,10 +1,10 @@
 import {
-    FileEdit,
-    Key,
-    MoreVertical,
-    Trash2,
-    UserPen,
-    UsersRound,
+    FileEditIcon,
+    KeyIcon,
+    MoreVerticalIcon,
+    Trash2Icon,
+    UserPenIcon,
+    UsersRoundIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -18,12 +18,11 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { ClubMember } from '../../../interfaces/club/clubMember';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { getAge, getDateString } from '../../../utils/datetime';
+import { ClubMember } from '@/teamized/interfaces/club/clubMember';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { getAge, getDateString } from '@/teamized/utils/datetime';
 
 interface Props {
     team: Team;
@@ -99,7 +98,8 @@ export default function ClubMembersTableRow({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon-sm">
-                                <MoreVertical className="tw:size-4" />
+                                <MoreVerticalIcon />
+                                <span className="tw:sr-only">Mehr</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -107,7 +107,7 @@ export default function ClubMembersTableRow({
                                 <DropdownMenuItem
                                     onClick={handleCreateMagicLinkButtonClick}
                                 >
-                                    <Key className="tw:size-4" />
+                                    <KeyIcon className="tw:size-4" />
                                     Magischen Link erstellen
                                 </DropdownMenuItem>
                             )}
@@ -117,19 +117,19 @@ export default function ClubMembersTableRow({
                                     <DropdownMenuItem
                                         onClick={handleEditButtonClick}
                                     >
-                                        <UserPen className="tw:size-4" />
+                                        <UserPenIcon className="tw:size-4" />
                                         Mitglied bearbeiten
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={handlePortfolioEditButtonClick}
                                     >
-                                        <FileEdit className="tw:size-4" />
+                                        <FileEditIcon className="tw:size-4" />
                                         Portfolio bearbeiten
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={handleGroupEditButtonClick}
                                     >
-                                        <UsersRound className="tw:size-4" />
+                                        <UsersRoundIcon className="tw:size-4" />
                                         Gruppen anpassen
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
@@ -137,7 +137,7 @@ export default function ClubMembersTableRow({
                                         onClick={handleRemoveButtonClick}
                                         variant="destructive"
                                     >
-                                        <Trash2 className="tw:size-4" />
+                                        <Trash2Icon className="tw:size-4" />
                                         Mitglied entfernen
                                     </DropdownMenuItem>
                                 </>

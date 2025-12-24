@@ -12,25 +12,44 @@ if (!host) {
 if (typeof host !== 'string') {
     throw new TypeError('Host must be a string');
 }
-if (!host.startsWith('http://') && !host.startsWith('https://')) {
+
+// Parse the host URL using regex to extract protocol, hostname, port, and path
+const hostRegex = /^(https?):\/\/([^:/]+)(?::(\d+))?(\/.*)?$/;
+const match = host.match(hostRegex);
+
+if (!match) {
     throw new Error(
-        'Host must start with "http://" or "https://" for development server'
+        'Invalid host format. Expected format: http(s)://hostname[:port][/path/]'
     );
 }
 
+const [, protocol, hostname, port, pathPrefix] = match;
+const pathPrefixNormalized = pathPrefix
+    ? pathPrefix.replace(/\/+$/, '') + '/'
+    : '/';
+const publicPath = pathPrefixNormalized;
+
 console.log(`
-    ==================================================
-    The local dev server runs on port 8081.
+    ===================================================
+    Parsed URL:
+      Protocol: ${protocol}
+      Hostname: ${hostname}
+      Port: ${port || '(default)'}
+      Path Prefix: ${pathPrefixNormalized}
+
+    The Webpack dev server runs on port 8081.
     Make sure the above host proxies to localhost:8081.
-    ==================================================
+    ===================================================
 `);
+
+const WS_POSTFIX = 'devserver-ws';
 
 module.exports = merge(baseConfig, {
     mode: 'development',
     devtool: 'eval-source-map',
 
     output: {
-        publicPath: host + '/',
+        publicPath: publicPath,
         filename: 'mainapp.js',
     },
 
@@ -49,9 +68,17 @@ module.exports = merge(baseConfig, {
 
         client: {
             webSocketURL: {
-                protocol: host.startsWith('https://') ? 'wss' : 'ws',
-                hostname: host.split('://')[1].split(':')[0],
-                port: host.split(':')[2] || '',
+                protocol: protocol === 'https' ? 'wss' : 'ws',
+                hostname: hostname,
+                port: port || (protocol === 'https' ? 443 : 80),
+                pathname: pathPrefixNormalized + WS_POSTFIX,
+            },
+        },
+
+        webSocketServer: {
+            type: 'ws',
+            options: {
+                path: pathPrefixNormalized + WS_POSTFIX,
             },
         },
     },

@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubAttendanceService from '@/teamized/service/clubAttendance.service';
 
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import CustomTooltip from '../../common/tooltips/customTooltip';
 import EventSelectorRow from './eventSelectorRow';
 
 interface Props {

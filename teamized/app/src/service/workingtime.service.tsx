@@ -5,28 +5,29 @@
 import $ from 'jquery';
 import React from 'react';
 
-import * as WorkingtimeAPI from '../api/workingtime';
-import { CacheCategory } from '../interfaces/cache/cacheCategory';
-import { ID } from '../interfaces/common';
-import { Team } from '../interfaces/teams/team';
+import * as WorkingtimeAPI from '@/teamized/api/workingtime';
+import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
 import {
     Worksession,
     WorksessionRequestDTO,
-} from '../interfaces/workingtime/worksession';
+} from '@/teamized/interfaces/workingtime/worksession';
 import {
     confirmAlert,
     fireAlert,
     successAlert,
     Swal,
     waitingAlert,
-} from '../utils/alerts';
+} from '@/teamized/utils/alerts';
 import {
     getDateString,
     isInRange,
     isoFormat,
     localInputFormat,
     roundDays,
-} from '../utils/datetime';
+} from '@/teamized/utils/datetime';
+
 import * as CacheService from './cache.service';
 
 export async function getMyWorkSessionsInTeam(teamId: ID) {

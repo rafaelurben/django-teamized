@@ -2,17 +2,21 @@
  * Teamized Club API
  */
 
-import { Club, ClubRequestDTO } from '../interfaces/club/club';
-import { ClubGroup, ClubGroupRequestDTO } from '../interfaces/club/clubGroup';
+import { Club, ClubRequestDTO } from '@/teamized/interfaces/club/club';
+import {
+    ClubGroup,
+    ClubGroupRequestDTO,
+} from '@/teamized/interfaces/club/clubGroup';
 import {
     ClubMember,
     ClubMemberRequestDTO,
-} from '../interfaces/club/clubMember';
+} from '@/teamized/interfaces/club/clubMember';
 import {
     ClubMemberPortfolio,
     ClubMemberPortfolioRequestDTO,
-} from '../interfaces/club/clubMemberPortfolio';
-import { ID } from '../interfaces/common';
+} from '@/teamized/interfaces/club/clubMemberPortfolio';
+import { ID } from '@/teamized/interfaces/common';
+
 import { API } from './_base';
 
 // Clubs

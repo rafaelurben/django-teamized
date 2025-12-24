@@ -12,12 +12,12 @@ import {
     TableRow,
 } from '@/shadcn/components/ui/table';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { ClubAttendanceEventParticipation } from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
 
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { ClubAttendanceEventParticipation } from '../../../interfaces/club/clubAttendanceEventParticipation';
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import ParticipationTableRow from './participationTableRow';
 
 interface Props {

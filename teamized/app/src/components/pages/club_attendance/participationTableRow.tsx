@@ -14,17 +14,16 @@ import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import { Textarea } from '@/shadcn/components/ui/textarea';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
 import {
     ClubAttendanceEventParticipation,
     ClubAttendanceMemberResponseChoice,
-} from '../../../interfaces/club/clubAttendanceEventParticipation';
-import { ID } from '../../../interfaces/common';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import { useCurrentTeamData } from '../../../utils/navigation/navigationProvider';
-import IconTooltip from '../../common/tooltips/iconTooltip';
+} from '@/teamized/interfaces/club/clubAttendanceEventParticipation';
+import { ID } from '@/teamized/interfaces/common';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubAttendanceService from '@/teamized/service/clubAttendance.service';
+import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
 
 function getResponseStatusIcon(
     response: ClubAttendanceMemberResponseChoice,

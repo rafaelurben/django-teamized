@@ -1,4 +1,5 @@
-import { ID, IDIndexedObjectList } from '../common';
+import { ID, IDIndexedObjectList } from '@/teamized/interfaces/common';
+
 import { CalendarEvent } from './calendarEvent';
 
 export interface Calendar {

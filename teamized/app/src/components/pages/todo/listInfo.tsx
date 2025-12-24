@@ -1,4 +1,4 @@
-import { CircleIcon, CircleQuestionMark } from 'lucide-react';
+import { CircleIcon, CircleQuestionMarkIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -14,14 +14,13 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/shadcn/components/ui/tooltip';
+import Tables from '@/teamized/components/common/tables';
 import IconTooltipWithText from '@/teamized/components/common/tooltips/iconTooltipWithText';
-
-import { Team } from '../../../interfaces/teams/team';
-import { Todolist } from '../../../interfaces/todolist/todolist';
-import * as ToDo from '../../../service/todo.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import Tables from '../../common/tables';
-import Urlize from '../../common/utils/urlize';
+import Urlize from '@/teamized/components/common/utils/urlize';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
+import * as ToDo from '@/teamized/service/todo.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -97,7 +96,7 @@ export default function ListInfo({
     if (!selectedList) {
         return (
             <IconTooltipWithText
-                icon={CircleQuestionMark}
+                icon={CircleQuestionMarkIcon}
                 title={
                     isAdmin
                         ? 'Du kannst mit den "Liste erstellen"-Knopf weiter oben eine neue Liste erstellen.'
@@ -118,7 +117,6 @@ export default function ListInfo({
                 {
                     label: 'Beschreibung',
                     value: <Urlize text={selectedList.description} />,
-                    limitWidth: true,
                 },
                 {
                     label: 'Farbe',

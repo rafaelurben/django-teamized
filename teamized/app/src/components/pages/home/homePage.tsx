@@ -1,4 +1,4 @@
-import { Flag, Info } from 'lucide-react';
+import { FlagIcon, InfoIcon } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -10,11 +10,12 @@ import { CardContent } from '@/shadcn/components/ui/card';
 import { ScrollArea } from '@/shadcn/components/ui/scroll-area';
 import Dashboard from '@/teamized/components/common/dashboard';
 import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
-import SettingsCard from '@/teamized/components/pages/home/settingsCard';
 import { CHANGELOG } from '@/teamized/data/changelog';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
 import { getDateString } from '@/teamized/utils/datetime';
 import { toggleDebug } from '@/teamized/utils/general';
+
+import SettingsCard from './settingsCard';
 
 export default function HomePage() {
     const appdata = useAppdata();
@@ -37,7 +38,7 @@ export default function HomePage() {
                         </a>
                     </p>
                     <Alert variant="warning" className="tw:md:hidden tw:mt-2">
-                        <Info className="tw:size-4" />
+                        <InfoIcon className="tw:size-4" />
                         <AlertTitle>Hinweis</AlertTitle>
                         <AlertDescription>
                             Diese App wurde zwar auch für mobile Geräte
@@ -69,7 +70,7 @@ export default function HomePage() {
                                             )}
                                             {item.milestone && (
                                                 <CustomTooltip title="Meilenstein">
-                                                    <Flag className="tw:size-4 tw:text-red-500" />
+                                                    <FlagIcon className="tw:size-4 tw:text-red-500" />
                                                 </CustomTooltip>
                                             )}
                                         </h6>

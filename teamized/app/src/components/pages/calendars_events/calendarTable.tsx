@@ -1,4 +1,4 @@
-import { CircleIcon, Eye, MousePointer2 } from 'lucide-react';
+import { CircleIcon, EyeIcon, MousePointer2Icon } from 'lucide-react';
 import React from 'react';
 
 import { RadioGroup, RadioGroupItem } from '@/shadcn/components/ui/radio-group';
@@ -14,9 +14,8 @@ import {
 } from '@/shadcn/components/ui/table';
 import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
 import Urlize from '@/teamized/components/common/utils/urlize';
-
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { ID } from '../../../interfaces/common';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { ID } from '@/teamized/interfaces/common';
 
 interface Props {
     calendars: Calendar[];
@@ -57,11 +56,11 @@ export default function CalendarTable({
                             Beschreibung
                         </TableHead>
                         <TableHead className="tw:w-px">
-                            <IconTooltip icon={Eye} title="Sichtbar?" />
+                            <IconTooltip icon={EyeIcon} title="Sichtbar?" />
                         </TableHead>
                         <TableHead className="tw:w-px">
                             <IconTooltip
-                                icon={MousePointer2}
+                                icon={MousePointer2Icon}
                                 title="Standard für neue Ereignisse"
                             />
                         </TableHead>
@@ -112,12 +111,22 @@ export default function CalendarTable({
                                                   checked
                                               )
                                           }
+                                          disabled={
+                                              visibleCalendarIds.has(
+                                                  calendar.id
+                                              ) && visibleCalendarIds.size === 1
+                                          }
                                       />
                                   </TableCell>
                                   <TableCell>
                                       <RadioGroupItem
                                           value={calendar.id}
                                           id={`select-${calendar.id}`}
+                                          disabled={
+                                              !visibleCalendarIds.has(
+                                                  calendar.id
+                                              )
+                                          }
                                       />
                                   </TableCell>
                               </TableRow>

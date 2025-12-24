@@ -1,5 +1,5 @@
-import { ID } from '../common';
-import { User } from '../user';
+import { ID } from '@/teamized/interfaces/common';
+import { User } from '@/teamized/interfaces/user';
 
 export interface Member {
     id: ID;

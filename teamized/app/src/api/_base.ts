@@ -10,8 +10,11 @@ import {
     SuccessfulPostResponse,
     SuccessfulPutResponse,
     SuccessfulResponse,
-} from '../interfaces/responses/successfulResponse';
-import { apiRequestErrorAlert, apiRequestSuccessAlert } from '../utils/alerts';
+} from '@/teamized/interfaces/responses/successfulResponse';
+import {
+    apiRequestErrorAlert,
+    apiRequestSuccessAlert,
+} from '@/teamized/utils/alerts';
 
 type HTTPRequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 type HTTPRequestOptions = {

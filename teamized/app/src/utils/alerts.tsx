@@ -14,9 +14,9 @@ import withReactContent, {
     ReactSweetAlertOptions as SweetAlertOptions,
 } from 'sweetalert2-react-content';
 
-import { ErrorResponse } from '../interfaces/responses/errorResponse';
-import { SuccessfulResponse } from '../interfaces/responses/successfulResponse';
-import { getSwalTheme } from '../service/settings.service';
+import { ErrorResponse } from '@/teamized/interfaces/responses/errorResponse';
+import { SuccessfulResponse } from '@/teamized/interfaces/responses/successfulResponse';
+import { getSwalTheme } from '@/teamized/service/settings.service';
 
 export const Swal = withReactContent(OrigSwal);
 export type { SweetAlertOptions, SweetAlertResult };

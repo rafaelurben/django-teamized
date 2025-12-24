@@ -10,14 +10,14 @@ import {
     TableHeader,
     TableRow,
 } from '@/shadcn/components/ui/table';
+import Tables from '@/teamized/components/common/tables';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
 import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { Team } from '@/teamized/interfaces/teams/team';
 import * as CalendarService from '@/teamized/service/calendars.service';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { Team } from '../../../interfaces/teams/team';
-import Tables from '../../common/tables';
 import CalendarsManageTableRow from './calendarsManageTableRow';
 
 interface Props {

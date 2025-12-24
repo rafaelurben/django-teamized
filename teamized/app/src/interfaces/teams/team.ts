@@ -1,5 +1,6 @@
-import { Club } from '../club/club';
-import { ID } from '../common';
+import { Club } from '@/teamized/interfaces/club/club';
+import { ID } from '@/teamized/interfaces/common';
+
 import { Member } from './member';
 
 export interface Team {

@@ -1,6 +1,11 @@
 'use client';
 
-import { CheckIcon, ChevronsUpDown, Settings, Users } from 'lucide-react';
+import {
+    CheckIcon,
+    ChevronsUpDownIcon,
+    SettingsIcon,
+    UsersIcon,
+} from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -47,7 +52,7 @@ export function AppSidebarTeamSwitcher({
                                 className="tw:data-[state=open]:bg-sidebar-accent tw:data-[state=open]:text-sidebar-accent-foreground"
                             >
                                 <div className="tw:bg-sidebar-primary tw:text-sidebar-primary-foreground tw:flex tw:aspect-square tw:size-8 tw:items-center tw:justify-center tw:rounded-lg">
-                                    <Users className="tw:size-4" />
+                                    <UsersIcon className="tw:size-4" />
                                 </div>
                                 <div className="tw:grid tw:flex-1 tw:text-left tw:text-sm tw:leading-tight">
                                     <span className="tw:truncate tw:font-medium">
@@ -57,7 +62,7 @@ export function AppSidebarTeamSwitcher({
                                         {selectedTeam.member?.role_text}
                                     </span>
                                 </div>
-                                <ChevronsUpDown className="tw:ml-auto" />
+                                <ChevronsUpDownIcon className="tw:ml-auto" />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
@@ -76,7 +81,7 @@ export function AppSidebarTeamSwitcher({
                                     className="tw:gap-2 tw:p-2"
                                 >
                                     <div className="tw:flex tw:size-6 tw:items-center tw:justify-center tw:rounded-md tw:border">
-                                        <Users className="tw:size-3.5 tw:shrink-0" />
+                                        <UsersIcon className="tw:size-3.5 tw:shrink-0" />
                                     </div>
                                     {team.name}
                                     {selectedTeam.id === team.id && (
@@ -93,7 +98,7 @@ export function AppSidebarTeamSwitcher({
                                 }}
                             >
                                 <div className="tw:flex tw:size-6 tw:items-center tw:justify-center tw:rounded-md tw:border tw:bg-transparent">
-                                    <Settings className="tw:size-3.5" />
+                                    <SettingsIcon className="tw:size-3.5" />
                                 </div>
                                 <div className="tw:text-muted-foreground tw:font-medium">
                                     Teams Verwalten
@@ -107,7 +112,7 @@ export function AppSidebarTeamSwitcher({
                         className="tw:data-[state=open]:bg-sidebar-accent tw:data-[state=open]:text-sidebar-accent-foreground"
                     >
                         <div className="tw:bg-sidebar-primary tw:text-sidebar-primary-foreground tw:flex tw:aspect-square tw:size-8 tw:items-center tw:justify-center tw:rounded-lg">
-                            <Users className="tw:size-4" />
+                            <UsersIcon className="tw:size-4" />
                         </div>
                         <div className="tw:grid tw:flex-1 tw:text-left tw:text-sm tw:leading-tight">
                             <span className="tw:truncate tw:font-medium">

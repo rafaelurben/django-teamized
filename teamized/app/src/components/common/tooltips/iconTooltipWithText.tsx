@@ -2,7 +2,8 @@ import { LucideIcon } from 'lucide-react';
 import React from 'react';
 
 import { cn } from '@/shadcn/lib/utils';
-import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+
+import IconTooltip from './iconTooltip';
 
 interface Props {
     title: string;

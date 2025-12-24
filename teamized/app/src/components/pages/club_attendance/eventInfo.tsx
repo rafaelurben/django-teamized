@@ -8,15 +8,14 @@ import {
     TableCell,
     TableRow,
 } from '@/shadcn/components/ui/table';
-
-import { ClubAttendanceEvent } from '../../../interfaces/club/clubAttendanceEvent';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubAttendanceService from '../../../service/clubAttendance.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { getDateTimeString } from '../../../utils/datetime';
-import Tables from '../../common/tables';
-import CustomTooltip from '../../common/tooltips/customTooltip';
-import Urlize from '../../common/utils/urlize';
+import Tables from '@/teamized/components/common/tables';
+import CustomTooltip from '@/teamized/components/common/tooltips/customTooltip';
+import Urlize from '@/teamized/components/common/utils/urlize';
+import { ClubAttendanceEvent } from '@/teamized/interfaces/club/clubAttendanceEvent';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubAttendanceService from '@/teamized/service/clubAttendance.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { getDateTimeString } from '@/teamized/utils/datetime';
 
 interface Props {
     team: Team;
@@ -106,7 +105,6 @@ export default function EventInfo({
                 {
                     label: 'Beschreibung',
                     value: <Urlize text={selectedEvent.description} />,
-                    limitWidth: true,
                 },
                 {
                     label: 'Start',

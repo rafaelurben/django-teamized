@@ -1,4 +1,10 @@
-import { CircleIcon, MoreVertical, Pencil, Trash2, Wifi } from 'lucide-react';
+import {
+    CircleIcon,
+    MoreVerticalIcon,
+    PencilIcon,
+    Trash2Icon,
+    WifiIcon,
+} from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -11,11 +17,10 @@ import {
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
 import Urlize from '@/teamized/components/common/utils/urlize';
-
-import { Calendar } from '../../../interfaces/calendar/calendar';
-import { Team } from '../../../interfaces/teams/team';
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { Calendar } from '@/teamized/interfaces/calendar/calendar';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     calendar: Calendar;
@@ -69,26 +74,27 @@ export default function CalendarsManageTableRow({
             <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreVertical />
+                        <Button variant="ghost" size="icon-sm">
+                            <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={handleSubscribe}>
-                            <Wifi />
+                            <WifiIcon />
                             Abonnieren
                         </DropdownMenuItem>
                         {isAdmin && (
                             <>
                                 <DropdownMenuItem onClick={handleEdit}>
-                                    <Pencil />
+                                    <PencilIcon />
                                     Bearbeiten
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={handleDelete}
                                     variant="destructive"
                                 >
-                                    <Trash2 />
+                                    <Trash2Icon />
                                     Löschen
                                 </DropdownMenuItem>
                             </>

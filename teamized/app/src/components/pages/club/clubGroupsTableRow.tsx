@@ -1,4 +1,9 @@
-import { MoreVertical, Pencil, Share2, Trash2 } from 'lucide-react';
+import {
+    MoreVerticalIcon,
+    PencilIcon,
+    Share2Icon,
+    Trash2Icon,
+} from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
@@ -11,11 +16,10 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { ClubGroup } from '../../../interfaces/club/clubGroup';
-import { Team } from '../../../interfaces/teams/team';
-import * as ClubService from '../../../service/clubs.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { ClubGroup } from '@/teamized/interfaces/club/clubGroup';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as ClubService from '@/teamized/service/clubs.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -62,18 +66,19 @@ export default function ClubGroupsTableRow({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon-sm">
-                                <MoreVertical className="tw:size-4" />
+                                <MoreVerticalIcon />
+                                <span className="tw:sr-only">Mehr</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem
                                 onClick={handleSharePortfolioButtonClick}
                             >
-                                <Share2 className="tw:size-4" />
+                                <Share2Icon className="tw:size-4" />
                                 Mitgliederportfolios teilen (API)
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleEditButtonClick}>
-                                <Pencil className="tw:size-4" />
+                                <PencilIcon className="tw:size-4" />
                                 Gruppe bearbeiten
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
@@ -81,7 +86,7 @@ export default function ClubGroupsTableRow({
                                 onClick={handleRemoveButtonClick}
                                 variant="destructive"
                             >
-                                <Trash2 className="tw:size-4" />
+                                <Trash2Icon className="tw:size-4" />
                                 Gruppe löschen
                             </DropdownMenuItem>
                         </DropdownMenuContent>

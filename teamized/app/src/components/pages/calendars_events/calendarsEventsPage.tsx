@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { CalendarOverviewWithEventSelector } from '@/teamized/components/pages/calendars_events/calendarOverviewAndEventSelector';
-
-import { ID } from '../../../interfaces/common';
-import * as CalendarService from '../../../service/calendars.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import Dashboard from '@/teamized/components/common/dashboard';
+import { ID } from '@/teamized/interfaces/common';
+import * as CalendarService from '@/teamized/service/calendars.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import {
     useCurrentTeamData,
     usePageNavigatorAsEventHandler,
-} from '../../../utils/navigation/navigationProvider';
-import Dashboard from '../../common/dashboard';
+} from '@/teamized/utils/navigation/navigationProvider';
+
 import CalendarEventDisplay from './calendarEventDisplay';
+import { CalendarOverviewWithEventSelector } from './calendarOverviewAndEventSelector';
 import CalendarTable from './calendarTable';
 
 export default function CalendarsEventsPage() {
@@ -41,14 +41,52 @@ export default function CalendarsEventsPage() {
         (event) => event.calendar && visibleCalendarIds.has(event.calendar.id)
     );
 
+    // Ensure visible calendar IDs are valid
     useEffect(() => {
-        ensureValidCalendarId();
-        ensureValidEventId();
+        const newSet = new Set<ID>();
+        visibleCalendarIds.forEach((id) => {
+            if (Object.hasOwn(calendarsMap, id)) {
+                newSet.add(id);
+            }
+        });
+        if (newSet.size !== visibleCalendarIds.size) {
+            setVisibleCalendarIds(newSet);
+        }
+    }, [visibleCalendarIds, setVisibleCalendarIds, calendarsMap, team.id]);
 
+    // Ensure selected calendar ID is valid
+    useEffect(() => {
+        const isValid = visibleCalendarIds.has(selectedCalendarId!);
+
+        if (!isValid && visibleCalendarIds.size > 0) {
+            // If the current calendar is invalid and there are calendars, select the first one.
+            setSelectedCalendarId(visibleCalendarIds.values().next().value!);
+        } else if (!isValid) {
+            // If the current calendar is set but there are no calendars, select null.
+            setSelectedCalendarId(null);
+        }
+    }, [
+        selectedCalendarId,
+        setSelectedCalendarId,
+        visibleCalendarIds,
+        team.id,
+    ]);
+
+    // Ensure selected event ID is valid
+    useEffect(() => {
+        if (!selectedEventId) return;
+
+        if (!Object.hasOwn(eventMap, selectedEventId)) {
+            setSelectedEventId(null);
+        }
+    }, [selectedEventId, setSelectedEventId, eventMap, team.id]);
+
+    // Fetch calendars on load
+    useEffect(() => {
         if (loading) {
             CalendarService.getCalendars(team.id).then(refreshData);
         }
-    });
+    }, [loading, refreshData, team.id]);
 
     // Initialize visible calendars when calendars are loaded
     useEffect(() => {
@@ -56,7 +94,7 @@ export default function CalendarsEventsPage() {
             // Show all calendars by default
             setVisibleCalendarIds(new Set(calendars.map((c) => c.id)));
         }
-    }, [loading, calendars, visibleCalendarIds.size]);
+    }, [loading, visibleCalendarIds.size, calendars]);
 
     const handleVisibilityToggle = (calendarId: ID, visible: boolean) => {
         setVisibleCalendarIds((prev) => {
@@ -68,28 +106,6 @@ export default function CalendarsEventsPage() {
             }
             return newSet;
         });
-    };
-
-    const ensureValidCalendarId = () => {
-        const isValid = Object.hasOwn(calendarsMap, selectedCalendarId!);
-        const calendarIds = Object.keys(calendarsMap);
-        const hasCalendar = calendarIds.length > 0;
-
-        if (!isValid && hasCalendar) {
-            // If the current calendar is invalid and there are calendars, select the first one.
-            setSelectedCalendarId(calendarIds[0]);
-        } else if (!isValid) {
-            // If the current calendar is set but there are no calendars, select null.
-            setSelectedCalendarId(null);
-        }
-    };
-
-    const ensureValidEventId = () => {
-        if (!selectedEventId) return;
-
-        if (!Object.hasOwn(eventMap, selectedEventId)) {
-            setSelectedEventId(null);
-        }
     };
 
     const visibleCalendars = calendars.filter((calendar) =>

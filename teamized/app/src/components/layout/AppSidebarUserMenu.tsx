@@ -1,11 +1,6 @@
 'use client';
 
-import {
-    ChevronsUpDown,
-    ExternalLink,
-    LogOut,
-    User as UserIcon,
-} from 'lucide-react';
+import { ChevronsUpDown, ExternalLink, LogOut, UserIcon } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -28,8 +23,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/shadcn/components/ui/sidebar';
-
-import { User } from '../../interfaces/user';
+import { User } from '@/teamized/interfaces/user';
 
 interface Props {
     user: User;

@@ -16,12 +16,11 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { Team } from '../../../interfaces/teams/team';
-import { Todolist } from '../../../interfaces/todolist/todolist';
-import { TodolistItem } from '../../../interfaces/todolist/todolistItem';
-import * as ToDo from '../../../service/todo.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
+import { Team } from '@/teamized/interfaces/teams/team';
+import { Todolist } from '@/teamized/interfaces/todolist/todolist';
+import { TodolistItem } from '@/teamized/interfaces/todolist/todolistItem';
+import * as ToDo from '@/teamized/service/todo.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 interface Props {
     team: Team;
@@ -82,6 +81,7 @@ export default function ListViewItem({ team, list, item }: Readonly<Props>) {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon-sm">
                             <MoreVerticalIcon />
+                            <span className="tw:sr-only">Mehr</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

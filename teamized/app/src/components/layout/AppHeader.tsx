@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import {
     Breadcrumb,
@@ -11,19 +11,50 @@ import {
 import { Separator } from '@/shadcn/components/ui/separator';
 import { SidebarTrigger } from '@/shadcn/components/ui/sidebar';
 import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
-import { Breadcrumbs } from '@/teamized/components/layout/pages';
+import { PAGE_CONFIGS } from '@/teamized/components/pages/pageConfigs';
 import {
+    useNavigationState,
     usePageNavigatorAsEventHandler,
     usePageNavigatorURL,
 } from '@/teamized/utils/navigation/navigationProvider';
 
-interface Props {
-    breadcrumbs: Breadcrumbs;
+export type Breadcrumbs = {
+    label: string;
+    page: string;
+    description?: string;
+}[];
+
+export function calculateBreadcrumbs(page: string) {
+    const breadcrumbs: Breadcrumbs = [];
+
+    function addBreadcrumbsRecursively(pageKey: string) {
+        const config = PAGE_CONFIGS[pageKey];
+        if (!config) return;
+
+        if (config.inheritFrom) {
+            addBreadcrumbsRecursively(config.inheritFrom);
+        }
+
+        breadcrumbs.push({
+            label: config.title,
+            page: pageKey,
+            description: config?.description,
+        });
+    }
+
+    addBreadcrumbsRecursively(page);
+    return breadcrumbs;
 }
 
-export default function AppHeader({ breadcrumbs }: Readonly<Props>) {
+export default function AppHeader() {
     const selectPage = usePageNavigatorAsEventHandler();
     const getPageURL = usePageNavigatorURL();
+    const { selectedPage } = useNavigationState();
+
+    const breadcrumbs = useMemo(
+        () => calculateBreadcrumbs(selectedPage),
+        [selectedPage]
+    );
 
     return (
         <header className="tw:flex tw:items-center tw:h-10 tw:gap-2 tw:border-b tw:px-2">

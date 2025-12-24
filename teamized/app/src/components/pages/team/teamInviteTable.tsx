@@ -12,11 +12,11 @@ import {
 } from '@/shadcn/components/ui/table';
 import Tables from '@/teamized/components/common/tables';
 import TableHeadDebugID from '@/teamized/components/common/tables/TableHeadDebugID';
+import IconTooltip from '@/teamized/components/common/tooltips/iconTooltip';
+import { TeamCache } from '@/teamized/interfaces/cache/teamCache';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
-import { TeamCache } from '../../../interfaces/cache/teamCache';
-import * as TeamsService from '../../../service/teams.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import IconTooltip from '../../common/tooltips/iconTooltip';
 import TeamInviteTableRow from './teamInviteTableRow';
 
 interface Props {

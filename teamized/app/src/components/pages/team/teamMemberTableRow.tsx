@@ -1,9 +1,9 @@
 import {
-    LogOut,
-    MoreVertical,
-    Trash2,
-    TrendingDown,
-    TrendingUp,
+    LogOutIcon,
+    MoreVerticalIcon,
+    Trash2Icon,
+    TrendingDownIcon,
+    TrendingUpIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -21,12 +21,11 @@ import {
 } from '@/shadcn/components/ui/dropdown-menu';
 import { TableCell, TableRow } from '@/shadcn/components/ui/table';
 import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebugID';
-
-import { Member } from '../../../interfaces/teams/member';
-import { Team } from '../../../interfaces/teams/team';
-import * as TeamsService from '../../../service/teams.service';
-import { useAppdataRefresh } from '../../../utils/appdataProvider';
-import { usePageNavigator } from '../../../utils/navigation/navigationProvider';
+import { Member } from '@/teamized/interfaces/teams/member';
+import { Team } from '@/teamized/interfaces/teams/team';
+import * as TeamsService from '@/teamized/service/teams.service';
+import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
+import { usePageNavigator } from '@/teamized/utils/navigation/navigationProvider';
 
 interface Props {
     team: Team;
@@ -122,7 +121,8 @@ export default function TeamMemberTableRow({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon-sm">
-                                <MoreVertical className="tw:size-4" />
+                                <MoreVerticalIcon />
+                                <span className="tw:sr-only">Mehr</span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -131,14 +131,14 @@ export default function TeamMemberTableRow({
                                     <DropdownMenuItem
                                         onClick={handleDemoteButtonClick}
                                     >
-                                        <TrendingDown className="tw:size-4" />
+                                        <TrendingDownIcon className="tw:size-4" />
                                         Degradieren
                                     </DropdownMenuItem>
                                 ) : (
                                     <DropdownMenuItem
                                         onClick={handlePromoteButtonClick}
                                     >
-                                        <TrendingUp className="tw:size-4" />
+                                        <TrendingUpIcon className="tw:size-4" />
                                         Befördern
                                     </DropdownMenuItem>
                                 ))}
@@ -148,7 +148,7 @@ export default function TeamMemberTableRow({
                                     variant="destructive"
                                     disabled={loggedInMember.is_owner}
                                 >
-                                    <LogOut className="tw:size-4" />
+                                    <LogOutIcon className="tw:size-4" />
                                     Team verlassen
                                 </DropdownMenuItem>
                             )}
@@ -157,7 +157,7 @@ export default function TeamMemberTableRow({
                                     onClick={handleRemoveButtonClick}
                                     variant="destructive"
                                 >
-                                    <Trash2 className="tw:size-4" />
+                                    <Trash2Icon className="tw:size-4" />
                                     Mitglied entfernen
                                 </DropdownMenuItem>
                             )}
