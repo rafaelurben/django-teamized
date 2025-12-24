@@ -117,7 +117,6 @@ export default function ListInfo({
                 {
                     label: 'Beschreibung',
                     value: <Urlize text={selectedList.description} />,
-                    limitWidth: true,
                 },
                 {
                     label: 'Farbe',

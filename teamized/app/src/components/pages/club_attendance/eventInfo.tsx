@@ -105,7 +105,6 @@ export default function EventInfo({
                 {
                     label: 'Beschreibung',
                     value: <Urlize text={selectedEvent.description} />,
-                    limitWidth: true,
                 },
                 {
                     label: 'Start',

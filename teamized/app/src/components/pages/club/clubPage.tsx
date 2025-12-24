@@ -64,7 +64,6 @@ export default function ClubPage() {
                             {
                                 label: 'Beschreibung',
                                 value: <Urlize text={club.description} />,
-                                limitWidth: true,
                             },
                             {
                                 label: 'Mitglieder',

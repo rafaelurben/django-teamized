@@ -87,7 +87,6 @@ export default function CalendarEventDisplay({
                     label: 'Beschreibung',
                     value: <Urlize text={event.description} />,
                     hide: !event.description,
-                    limitWidth: true,
                 },
                 {
                     label: 'Ort',

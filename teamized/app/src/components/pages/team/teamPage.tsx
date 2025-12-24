@@ -90,7 +90,6 @@ export default function TeamPage() {
                             {
                                 label: 'Beschreibung',
                                 value: <Urlize text={team.description} />,
-                                limitWidth: true,
                             },
                             {
                                 label: 'Mitglieder',
