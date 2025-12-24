@@ -36,7 +36,7 @@ def app(request):
         request,
         "teamized/app.html",
         {
-            "dev_server_host": os.getenv("TEAMIZED_DEV_SERVER_HOST") if settings.DEBUG else None,
+            "dev_server_host": os.getenv("TEAMIZED_DEV_SERVER_HOST").removesuffix("/") if settings.DEBUG else None,
         },
     )
 
