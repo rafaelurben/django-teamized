@@ -15,7 +15,7 @@ import {
 import { Team } from '@/teamized/interfaces/teams/team';
 import { Todolist } from '@/teamized/interfaces/todolist/todolist';
 import * as ToDo from '@/teamized/service/todo.service';
-import { errorAlert } from '@/teamized/utils/alerts';
+import { errorToast } from '@/teamized/utils/alerts';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 
 import ListViewItem from './listViewItem';
@@ -50,7 +50,7 @@ export default function ListView({
         const name = nameInput.value;
 
         if (name === '') {
-            errorAlert('Leeres Feld', 'Bitte gib einen Namen ein');
+            errorToast('Leeres Feld', 'Bitte gib etwas ein.');
         } else {
             setIsCreating(true);
             ToDo.createToDoListItem(team.id, selectedList!.id, { name }).then(
