@@ -1,5 +1,6 @@
 """Main API endpoints"""
 
+from django.contrib import messages
 from django.db import models
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
@@ -43,6 +44,17 @@ def endpoint_settings(request):
         user.update_settings_from_post_data(request.POST)
         return JsonResponse({"success": True, "settings": user.settings_as_dict()})
     return None
+
+
+@api_view(["get"])
+@teamized_prep()
+def endpoint_messages(request):
+    """
+    Endpoint for getting all django messages for the current request.
+    """
+    storage = messages.get_messages(request)
+    message_list = [{"type": msg.level_tag, "text": msg.message} for msg in storage]
+    return JsonResponse({"messages": message_list})
 
 
 @api_view(["get", "post"])

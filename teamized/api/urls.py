@@ -10,6 +10,7 @@ urlpatterns = [
     # Main API views
     path("profile", ep.main.endpoint_profile, name="api-profile"),
     path("settings", ep.main.endpoint_settings, name="api-settings"),
+    path("messages", ep.main.endpoint_messages, name="api-messages"),
     path("teams", ep.main.endpoint_teams, name="api-teams"),
     path("teams/<team>", ep.main.endpoint_team, name="api-team"),
     path("teams/<team>/members", ep.main.endpoint_members, name="api-members"),

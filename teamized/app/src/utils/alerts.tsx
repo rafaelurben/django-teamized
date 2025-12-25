@@ -21,6 +21,8 @@ import { getSwalTheme } from '@/teamized/service/settings.service';
 export const Swal = withReactContent(OrigSwal);
 export type { SweetAlertOptions, SweetAlertResult };
 
+export { toast } from 'sonner';
+
 /**
  * Wrapper for Swal.fire() to set the theme
  */
