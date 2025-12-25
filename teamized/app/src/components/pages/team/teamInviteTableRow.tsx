@@ -34,8 +34,6 @@ interface Props {
 export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
 
-    const inviteURL = location.href.split('?')[0] + '?invite=' + invite.token;
-
     const handleDeleteButtonClick = () => {
         TeamsService.deleteInvitePopup(team, invite).then((result) => {
             if (result.isConfirmed) refreshData();
@@ -61,7 +59,7 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
 
     const copyURL = () => {
         navigator.clipboard
-            .writeText(inviteURL)
+            .writeText(invite.url)
             .then(() =>
                 successAlert(
                     'Der Link wurde in die Zwischenablage kopiert.',

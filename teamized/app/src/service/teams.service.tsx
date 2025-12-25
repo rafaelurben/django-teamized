@@ -17,6 +17,7 @@ import {
     fireAlert,
     infoAlert,
     Swal,
+    toast,
 } from '@/teamized/utils/alerts';
 import { isoFormat, localInputFormat } from '@/teamized/utils/datetime';
 import { validateUUID } from '@/teamized/utils/general';
@@ -288,11 +289,31 @@ export async function getInvites(teamId: ID) {
 
 // Invite creation
 
-export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
-    return await TeamsAPI.createInvite(teamId, invite).then((data) => {
-        CacheService.getTeamData(teamId).invites[data.invite.id] = data.invite;
-        return data.invite;
-    });
+export async function createInvite(
+    teamId: ID,
+    invite: InviteRequestDTO
+): Promise<Invite> {
+    return await toast
+        .promise(
+            TeamsAPI.createInvite(teamId, invite).then((data) => {
+                CacheService.getTeamData(teamId).invites[data.invite.id] =
+                    data.invite;
+                toast.success('Einladung erstellt', {
+                    description: `Token: ${data.invite.token}`,
+                    action: {
+                        label: 'URL kopieren',
+                        onClick: () =>
+                            void navigator.clipboard.writeText(data.invite.url),
+                    },
+                    duration: 100000,
+                });
+                return data.invite;
+            }),
+            {
+                loading: 'Einladung wird erstellt...',
+            }
+        )
+        .unwrap();
 }
 
 export async function createInvitePopup(team: Team) {

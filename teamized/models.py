@@ -11,7 +11,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib import admin
 from django.db import models
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -393,7 +393,7 @@ class Invite(models.Model):
         verbose_name_plural = _("Einladungen")
         db_table = "teamized_invite"
 
-    def as_dict(self) -> dict:
+    def as_dict(self, request: HttpRequest) -> dict:
         return {
             "id": self.uid,
             "token": self.token,
@@ -402,6 +402,7 @@ class Invite(models.Model):
             "uses_left": self.uses_left,
             "uses_used": self.uses_used,
             "valid_until": None if self.valid_until is None else self.valid_until.isoformat(),
+            "url": request.build_absolute_uri(self.url) if request else self.url,
         }
 
     def is_valid_uses(self) -> bool:

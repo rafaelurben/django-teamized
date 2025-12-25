@@ -115,6 +115,8 @@ export default function App() {
                           : 'system'
                 }
                 position="top-center"
+                expand={true}
+                richColors
             />
         </SidebarProvider>
     );
