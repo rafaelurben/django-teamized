@@ -5,6 +5,7 @@
 import React, { useEffect } from 'react';
 
 import { SidebarProvider } from '@/shadcn/components/ui/sidebar';
+import { Toaster } from '@/shadcn/components/ui/sonner';
 import AppSidebar from '@/teamized/components/layout/AppSidebar';
 import { PageLoader } from '@/teamized/components/pages/pageLoader';
 import * as SettingsService from '@/teamized/service/settings.service';
@@ -81,6 +82,16 @@ export default function App() {
             >
                 <PageLoader />
             </main>
+            <Toaster
+                theme={
+                    appdata.settings.darkmode === true
+                        ? 'dark'
+                        : appdata.settings.darkmode === false
+                          ? 'light'
+                          : 'system'
+                }
+                position="top-center"
+            />
         </SidebarProvider>
     );
 }

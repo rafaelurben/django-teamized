@@ -12,6 +12,7 @@ Added missing React imports to components that use JSX but did not explicitly im
 - Collapsible
 - Field
 - Skeleton
+- Sonner
 - Spinner
 
 ### Missing tw-prefixes
