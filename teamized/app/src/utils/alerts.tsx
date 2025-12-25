@@ -92,7 +92,7 @@ export function successToast(title: string, text: string) {
  * Show a simple waiting alert toast (indicating that something is loading)
  *
  * @param {String} text
- * @param {object} promise
+ * @param {Promise<unknown>} promise
  */
 export function waitingToast<T>(text: string, promise: Promise<T>) {
     return toast

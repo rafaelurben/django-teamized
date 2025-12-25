@@ -98,7 +98,9 @@ class User(models.Model):
         The email address itself is never passed to the service.
         More info: https://gravatar.com/site/implement/images/
         """
-        mailhash = hashlib.md5(str(self.auth_user.email).encode("utf-8")).hexdigest()
+        mailhash = hashlib.md5(
+            str(self.auth_user.email).encode("utf-8"), usedforsecurity=False
+        ).hexdigest()
         return "https://www.gravatar.com/avatar/" + mailhash + "?s=80&d=retro"
 
     def create_team(self, name, description) -> "Team":
@@ -393,7 +395,7 @@ class Invite(models.Model):
         verbose_name_plural = _("Einladungen")
         db_table = "teamized_invite"
 
-    def as_dict(self, request: HttpRequest) -> dict:
+    def as_dict(self, request: HttpRequest | None) -> dict:
         return {
             "id": self.uid,
             "token": self.token,

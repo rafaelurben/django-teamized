@@ -44,3 +44,8 @@ Added missing `tw:` prefixes to class names and `tw-` to custom properties in th
 
 - Card
     - reduced gap
+
+## Other changes
+
+- Sonner
+    - remove usage of `next-themes`
