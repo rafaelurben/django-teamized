@@ -14,9 +14,11 @@ import { Team, TeamRequestDTO } from '@/teamized/interfaces/teams/team';
 import {
     confirmAlert,
     doubleConfirmAlert,
+    errorToast,
     fireAlert,
-    infoAlert,
     Swal,
+    toast,
+    waitingToast,
 } from '@/teamized/utils/alerts';
 import { isoFormat, localInputFormat } from '@/teamized/utils/datetime';
 import { validateUUID } from '@/teamized/utils/general';
@@ -288,11 +290,27 @@ export async function getInvites(teamId: ID) {
 
 // Invite creation
 
-export async function createInvite(teamId: ID, invite: InviteRequestDTO) {
-    return await TeamsAPI.createInvite(teamId, invite).then((data) => {
-        CacheService.getTeamData(teamId).invites[data.invite.id] = data.invite;
-        return data.invite;
-    });
+export async function createInvite(
+    teamId: ID,
+    invite: InviteRequestDTO
+): Promise<Invite> {
+    return await waitingToast(
+        'Einladung wird erstellt...',
+        TeamsAPI.createInvite(teamId, invite).then((data) => {
+            CacheService.getTeamData(teamId).invites[data.invite.id] =
+                data.invite;
+            toast.success('Einladung erstellt', {
+                description: `Token: ${data.invite.token}`,
+                action: {
+                    label: 'URL kopieren',
+                    onClick: () =>
+                        void navigator.clipboard.writeText(data.invite.url),
+                },
+                duration: 100000,
+            });
+            return data.invite;
+        })
+    );
 }
 
 export async function createInvitePopup(team: Team) {
@@ -482,14 +500,17 @@ export async function acceptInvite(token: string) {
 
 export async function checkInvitePopup(token: string) {
     if (!validateUUID(token)) {
-        infoAlert(
+        errorToast(
             'Ungültiges Einladungsformat',
             'Diese Einladung liegt nicht im richtigen Format vor.'
         );
         throw new Error('invalid-invite-format');
     }
 
-    const data = await TeamsAPI.checkInvite(token);
+    const data = await waitingToast(
+        'Einladung prüfen...',
+        TeamsAPI.checkInvite(token)
+    );
 
     if (data.status !== 'invite-valid') {
         throw new Error('invalid-invite');

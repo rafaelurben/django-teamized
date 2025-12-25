@@ -8,6 +8,7 @@ export interface Invite {
     uses_left: number;
     uses_used: number;
     valid_until: DateTimeString | null;
+    url: string;
 }
 
 export interface InviteRequestDTO {

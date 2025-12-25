@@ -1,3 +1,4 @@
-import type { SweetAlertOptions } from 'sweetalert2';
-
-export type Alert = SweetAlertOptions;
+export interface Alert {
+    title: string;
+    text: string;
+}

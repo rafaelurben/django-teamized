@@ -330,16 +330,6 @@ def endpoint_member_create_magic_link(request, team: Team, member: ClubMember):
             {
                 "success": True,
                 "url": url,
-                "alert": {
-                    "title": _("Magischer Link erstellt"),
-                    "html": f"URL: <a href='{url}'>%s</a>" % _("Bitte kopier mich!"),
-                    "timer": 0,
-                    "showConfirmButton": True,
-                    "toast": False,
-                    "position": "center",
-                    "allowOutsideClick": False,
-                    "allowEscapeKey": False,
-                },
             }
         )
     return None

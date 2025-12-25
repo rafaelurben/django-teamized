@@ -11,10 +11,7 @@ import {
     SuccessfulPutResponse,
     SuccessfulResponse,
 } from '@/teamized/interfaces/responses/successfulResponse';
-import {
-    apiRequestErrorAlert,
-    apiRequestSuccessAlert,
-} from '@/teamized/utils/alerts';
+import { apiRequestErrorAlert, successToast } from '@/teamized/utils/alerts';
 
 type HTTPRequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'HEAD';
 type HTTPRequestOptions = {
@@ -49,7 +46,7 @@ export abstract class API {
                 data: data,
                 success: (data: T) => {
                     if (!options?.disableSuccessAlert && data.alert) {
-                        apiRequestSuccessAlert(data);
+                        successToast(data.alert.title, data.alert.text);
                     }
                     resolve(data);
                 },

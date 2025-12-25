@@ -21,6 +21,7 @@ import TableCellDebugID from '@/teamized/components/common/tables/TableCellDebug
 import { ClubMember } from '@/teamized/interfaces/club/clubMember';
 import { Team } from '@/teamized/interfaces/teams/team';
 import * as ClubService from '@/teamized/service/clubs.service';
+import { toast, waitingToast } from '@/teamized/utils/alerts';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import { getAge, getDateString } from '@/teamized/utils/datetime';
 
@@ -64,7 +65,23 @@ export default function ClubMembersTableRow({
     };
 
     const handleCreateMagicLinkButtonClick = async () => {
-        await ClubService.createClubMemberMagicLink(team.id, clubMember.id);
+        await waitingToast(
+            'Magischer Link wird erstellt...',
+            ClubService.createClubMemberMagicLink(team.id, clubMember.id).then(
+                (url) => {
+                    toast.success('Magischer Link erstellt', {
+                        description: 'Der Link wurde erfolgreich erstellt.',
+                        action: {
+                            label: 'URL kopieren',
+                            onClick: () =>
+                                void navigator.clipboard.writeText(url),
+                        },
+                        duration: 100000,
+                        dismissible: false,
+                    });
+                }
+            )
+        );
     };
 
     return (

@@ -6,7 +6,7 @@ import { Input } from '@/shadcn/components/ui/input';
 import Dashboard from '@/teamized/components/common/dashboard';
 import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
-import { errorAlert } from '@/teamized/utils/alerts';
+import { errorToast } from '@/teamized/utils/alerts';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import { localInputFormat, roundDays } from '@/teamized/utils/datetime';
 import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
@@ -45,11 +45,11 @@ export default function WorkingtimePage() {
         console.log(startVal, start, endVal, end);
 
         if (!startVal || !endVal || !start || !end) {
-            errorAlert('Was ist das?', 'Ein angegebenes Datum ist ungültig');
+            errorToast('Was ist das?', 'Ein angegebenes Datum ist ungültig');
             return;
         }
         if (start > end) {
-            errorAlert(
+            errorToast(
                 'Hallo Zeitreisender!',
                 'Das Startdatum muss vor dem Enddatum liegen.'
             );

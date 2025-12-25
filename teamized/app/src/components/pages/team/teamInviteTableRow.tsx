@@ -22,7 +22,7 @@ import Urlize from '@/teamized/components/common/utils/urlize';
 import { Invite } from '@/teamized/interfaces/teams/invite';
 import { Team } from '@/teamized/interfaces/teams/team';
 import * as TeamsService from '@/teamized/service/teams.service';
-import { successAlert } from '@/teamized/utils/alerts';
+import { successToast } from '@/teamized/utils/alerts';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
 import { getDateTimeString } from '@/teamized/utils/datetime';
 
@@ -33,8 +33,6 @@ interface Props {
 
 export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
     const refreshData = useAppdataRefresh();
-
-    const inviteURL = location.href.split('?')[0] + '?invite=' + invite.token;
 
     const handleDeleteButtonClick = () => {
         TeamsService.deleteInvitePopup(team, invite).then((result) => {
@@ -52,20 +50,20 @@ export default function TeamInviteTableRow({ team, invite }: Readonly<Props>) {
         navigator.clipboard
             .writeText(invite.token)
             .then(() =>
-                successAlert(
-                    'Der Token wurde in die Zwischenablage kopiert.',
-                    'Token kopiert'
+                successToast(
+                    'Token kopiert',
+                    'Der Token wurde in die Zwischenablage kopiert.'
                 )
             );
     };
 
     const copyURL = () => {
         navigator.clipboard
-            .writeText(inviteURL)
+            .writeText(invite.url)
             .then(() =>
-                successAlert(
-                    'Der Link wurde in die Zwischenablage kopiert.',
-                    'Link kopiert'
+                successToast(
+                    'Link kopiert',
+                    'Der Link wurde in die Zwischenablage kopiert.'
                 )
             );
     };

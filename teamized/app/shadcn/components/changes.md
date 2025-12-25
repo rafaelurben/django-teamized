@@ -12,6 +12,7 @@ Added missing React imports to components that use JSX but did not explicitly im
 - Collapsible
 - Field
 - Skeleton
+- Sonner
 - Spinner
 
 ### Missing tw-prefixes
@@ -43,3 +44,8 @@ Added missing `tw:` prefixes to class names and `tw-` to custom properties in th
 
 - Card
     - reduced gap
+
+## Other changes
+
+- Sonner
+    - remove usage of `next-themes`

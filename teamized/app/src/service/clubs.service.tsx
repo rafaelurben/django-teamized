@@ -26,7 +26,7 @@ import {
     confirmAlert,
     doubleConfirmAlert,
     fireAlert,
-    successAlert,
+    successToast,
     Swal,
 } from '@/teamized/utils/alerts';
 
@@ -917,9 +917,9 @@ export async function updateClubMemberGroupsPopup(
                 }
             }
             await Promise.all(requests);
-            successAlert(
-                'Die Gruppenzuordnung wurde aktualisiert.',
-                'Gruppenzuordnung aktualisiert'
+            successToast(
+                'Gruppenzuordnung aktualisiert',
+                'Die Gruppenzuordnung wurde aktualisiert.'
             );
             return true;
         },

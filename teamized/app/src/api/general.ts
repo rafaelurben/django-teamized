@@ -30,3 +30,16 @@ export async function updateSettings(settings: Settings) {
         }
     );
 }
+
+// Messages
+
+export async function getMessages() {
+    return await API.get<{
+        messages: {
+            type: string;
+            text: string;
+        }[];
+    }>('messages').then((data) => {
+        return data.messages;
+    });
+}

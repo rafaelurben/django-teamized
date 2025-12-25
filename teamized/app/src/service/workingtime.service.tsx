@@ -16,9 +16,9 @@ import {
 import {
     confirmAlert,
     fireAlert,
-    successAlert,
+    successToast,
     Swal,
-    waitingAlert,
+    waitingToast,
 } from '@/teamized/utils/alerts';
 import {
     getDateString,
@@ -303,12 +303,17 @@ export async function deleteWorkSessionPopup(team: Team, session: Worksession) {
 // Tracking
 
 export async function startTrackingSession(teamId: ID) {
-    waitingAlert('Wird gestartet...');
-    return await WorkingtimeAPI.startTrackingSession(teamId).then((data) => {
-        successAlert('Die Zeitmessung wurde gestartet', 'Tracking gestartet');
-        window.appdata.current_worksession = data.session;
-        return data.session;
-    });
+    return await waitingToast(
+        'Wird gestartet...',
+        WorkingtimeAPI.startTrackingSession(teamId).then((data) => {
+            successToast(
+                'Tracking gestartet',
+                'Die Zeitmessung wurde gestartet'
+            );
+            window.appdata.current_worksession = data.session;
+            return data.session;
+        })
+    );
 }
 
 export async function getTrackingSession() {
@@ -325,15 +330,17 @@ export async function getTrackingSession() {
 }
 
 export async function stopTrackingSession() {
-    waitingAlert('Wird gestoppt...');
-    return await WorkingtimeAPI.stopTrackingSession().then((data) => {
-        successAlert('Die Zeitmessung wurde gestoppt', 'Tracking gestoppt');
-        window.appdata.current_worksession = null;
-        CacheService.getTeamData(data.session._team_id).me_worksessions[
-            data.session.id
-        ] = data.session;
-        return data.session;
-    });
+    return await waitingToast(
+        'Wird gestoppt...',
+        WorkingtimeAPI.stopTrackingSession().then((data) => {
+            successToast('Tracking gestoppt', 'Die Zeitmessung wurde gestoppt');
+            window.appdata.current_worksession = null;
+            CacheService.getTeamData(data.session._team_id).me_worksessions[
+                data.session.id
+            ] = data.session;
+            return data.session;
+        })
+    );
 }
 
 // Rename session without the date options/text

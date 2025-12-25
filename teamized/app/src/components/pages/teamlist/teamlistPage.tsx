@@ -5,7 +5,6 @@ import { ButtonGroup } from '@/shadcn/components/ui/button-group';
 import { Input } from '@/shadcn/components/ui/input';
 import Dashboard from '@/teamized/components/common/dashboard';
 import * as TeamsService from '@/teamized/service/teams.service';
-import { waitingAlert } from '@/teamized/utils/alerts';
 import { useAppdata } from '@/teamized/utils/appdataProvider';
 import {
     useNavigationState,
@@ -27,7 +26,6 @@ export default function TeamlistPage() {
             document.getElementById('invite-token') as HTMLInputElement
         ).value;
 
-        waitingAlert('Einladung wird geprüft...');
         TeamsService.checkInvitePopup(token)
             .then((result) => {
                 if (result.isConfirmed) {

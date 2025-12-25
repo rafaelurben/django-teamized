@@ -5,11 +5,14 @@
 import React, { useEffect } from 'react';
 
 import { SidebarProvider } from '@/shadcn/components/ui/sidebar';
+import { Toaster } from '@/shadcn/components/ui/sonner';
+import * as GeneralAPI from '@/teamized/api/general';
 import AppSidebar from '@/teamized/components/layout/AppSidebar';
 import { PageLoader } from '@/teamized/components/pages/pageLoader';
 import * as SettingsService from '@/teamized/service/settings.service';
 import * as TeamsService from '@/teamized/service/teams.service';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
+import { toast } from '@/teamized/utils/alerts';
 import {
     useAppdata,
     useAppdataRefresh,
@@ -41,6 +44,28 @@ export default function App() {
             refreshData();
         });
         WorkingtimeService.getTrackingSession().then(refreshData);
+
+        // Fetch and display Django messages
+        GeneralAPI.getMessages().then((messages) => {
+            messages.forEach((msg) => {
+                switch (msg.type) {
+                    case 'success':
+                        toast.success(msg.text);
+                        break;
+                    case 'error':
+                        toast.error(msg.text);
+                        break;
+                    case 'warning':
+                        toast.warning(msg.text);
+                        break;
+                    case 'info':
+                        toast.info(msg.text);
+                        break;
+                    default:
+                        toast(msg.text);
+                }
+            });
+        });
 
         // Check URL for invite
         TeamsService.checkURLInvite()
@@ -81,6 +106,18 @@ export default function App() {
             >
                 <PageLoader />
             </main>
+            <Toaster
+                theme={
+                    appdata.settings.darkmode === true
+                        ? 'dark'
+                        : appdata.settings.darkmode === false
+                          ? 'light'
+                          : 'system'
+                }
+                position="top-center"
+                expand={true}
+                richColors
+            />
         </SidebarProvider>
     );
 }

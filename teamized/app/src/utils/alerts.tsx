@@ -5,6 +5,7 @@
 
 import type { ReactNode } from 'react';
 import React from 'react';
+import { toast } from 'sonner';
 import type {
     SweetAlertOptions as BaseSweetAlertOptions,
     SweetAlertResult,
@@ -14,12 +15,14 @@ import withReactContent, {
     ReactSweetAlertOptions as SweetAlertOptions,
 } from 'sweetalert2-react-content';
 
+import { Alert } from '@/teamized/interfaces/responses/alert';
 import { ErrorResponse } from '@/teamized/interfaces/responses/errorResponse';
-import { SuccessfulResponse } from '@/teamized/interfaces/responses/successfulResponse';
 import { getSwalTheme } from '@/teamized/service/settings.service';
 
 export const Swal = withReactContent(OrigSwal);
 export type { SweetAlertOptions, SweetAlertResult };
+
+export { toast } from 'sonner';
 
 /**
  * Wrapper for Swal.fire() to set the theme
@@ -47,20 +50,10 @@ export function apiRequestErrorAlert(request: JQuery.jqXHR) {
         };
     }
 
-    let alertData: Partial<SweetAlertOptions>;
-    if (jsonData.alert) {
-        alertData = {
-            icon: 'error',
-            ...jsonData.alert,
-        };
-    } else {
-        alertData = {
-            icon: 'error',
-            title: `Uupsie! Es ist ein Fehler aufgetreten`,
-            text: jsonData.message,
-            footer: `Error-Code: ${jsonData.error}`,
-        };
-    }
+    const alertData: Alert = jsonData.alert ?? {
+        title: `Es ist ein Fehler aufgetreten (Code ${jsonData.error})`,
+        text: jsonData.message,
+    };
 
     if (Swal.isVisible() && Swal.isLoading()) {
         // If a Swal is currently shown, show the error as a validation message
@@ -68,111 +61,45 @@ export function apiRequestErrorAlert(request: JQuery.jqXHR) {
         Swal.showValidationMessage(`${alertData.title} - ${alertData.text}`);
         Swal.hideLoading();
     } else {
-        // If no Swal is currently shown, fire a Swal modal.
-        return fireAlert(alertData as SweetAlertOptions);
+        // If no Swal is currently shown, fire a toast.
+        errorToast(alertData.title, alertData.text);
     }
-}
-
-/**
- * Create an alert based on successfull ajax request json data
- *
- * @param {object} data
- */
-export function apiRequestSuccessAlert(data: SuccessfulResponse) {
-    return fireAlert({
-        toast: true,
-        icon: 'success',
-        position: 'top-right',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        ...data.alert,
-    } satisfies SweetAlertOptions);
 }
 
 // Informational alerts
 
 /**
- * Show a simple error alert
+ * Show a simple error alert toast
  *
  * @param {String} title
- * @param {String} message
- * @param {object} options
+ * @param {String} text
  */
-export function errorAlert(
-    title: string,
-    message: string,
-    options: SweetAlertOptions = {}
-) {
-    return fireAlert({
-        title: title,
-        text: message,
-        icon: 'error',
-        ...options,
-    } satisfies SweetAlertOptions);
+export function errorToast(title: string, text: string) {
+    toast.error(title, { description: text });
 }
 
 /**
- * Show a simple info alert
+ * Show a simple success alert toast
  *
  * @param {String} title
- * @param {String} message
- * @param {object} options
+ * @param {String} text
  */
-export function infoAlert(
-    title: string,
-    message: string,
-    options: SweetAlertOptions = {}
-) {
-    return fireAlert({
-        title: title,
-        text: message,
-        icon: 'info',
-        ...options,
-    } satisfies SweetAlertOptions);
+export function successToast(title: string, text: string) {
+    toast.success(title, { description: text });
 }
 
 /**
  * Show a simple waiting alert toast (indicating that something is loading)
  *
  * @param {String} text
- * @param {object} options
+ * @param {Promise<unknown>} promise
  */
-export function waitingAlert(text: string, options: SweetAlertOptions = {}) {
-    return fireAlert({
-        title: 'In Bearbeitung...',
-        text: text,
-        toast: true,
-        icon: 'info',
-        position: 'top-right',
-        showConfirmButton: false,
-        ...options,
-    } satisfies SweetAlertOptions);
-}
-
-/**
- * Show a simple success alert toast
- *
- * @param {String} text
- * @param {String} title
- * @param {object} options
- */
-export function successAlert(
-    text: string,
-    title: string,
-    options: SweetAlertOptions = {}
-) {
-    return fireAlert({
-        toast: true,
-        icon: 'success',
-        position: 'top-right',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        title: title || 'Aktion erfolgreich!',
-        text: text,
-        ...options,
-    } satisfies SweetAlertOptions);
+export function waitingToast<T>(text: string, promise: Promise<T>) {
+    return toast
+        .promise(promise, {
+            loading: text,
+        })
+        .unwrap();
 }
 
 // Interactive alerts

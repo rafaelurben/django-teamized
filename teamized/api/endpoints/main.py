@@ -1,5 +1,6 @@
 """Main API endpoints"""
 
+from django.contrib import messages
 from django.db import models
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
@@ -43,6 +44,17 @@ def endpoint_settings(request):
         user.update_settings_from_post_data(request.POST)
         return JsonResponse({"success": True, "settings": user.settings_as_dict()})
     return None
+
+
+@api_view(["get"])
+@teamized_prep()
+def endpoint_messages(request):
+    """
+    Endpoint for getting all django messages for the current request.
+    """
+    storage = messages.get_messages(request)
+    message_list = [{"type": msg.level_tag, "text": msg.message} for msg in storage]
+    return JsonResponse({"messages": message_list})
 
 
 @api_view(["get", "post"])
@@ -298,22 +310,13 @@ def endpoint_invites(request, team: Team):
     if request.method == "GET":
         invites = team.invites.all().order_by("valid_until")
 
-        return JsonResponse({"invites": [i.as_dict() for i in invites]})
+        return JsonResponse({"invites": [i.as_dict(request) for i in invites]})
     if request.method == "POST":
         inv = Invite.from_post_data(request.POST, team)
         return JsonResponse(
             {
                 "success": True,
-                "invite": inv.as_dict(),
-                "alert": {
-                    "title": _("Einladung erstellt"),
-                    "html": f"Token: {inv.token}<br />URL: <a href='{inv.url}'>%s</a>"
-                    % _("Bitte kopier mich!"),
-                    "timer": 0,
-                    "showConfirmButton": True,
-                    "toast": False,
-                    "position": "center",
-                },
+                "invite": inv.as_dict(request),
             }
         )
     return None
@@ -343,7 +346,7 @@ def endpoint_invite(request, team: Team, invite: Invite):
             {
                 "success": True,
                 "id": invite.uid,
-                "invite": invite.as_dict(),
+                "invite": invite.as_dict(request),
                 "alert": {
                     "title": _("Einladung geändert"),
                     "text": _("Die Einladung wurde erfolgreich geändert."),
