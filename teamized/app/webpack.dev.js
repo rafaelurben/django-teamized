@@ -27,7 +27,7 @@ const [, protocol, hostname, port, pathPrefix] = match;
 const pathPrefixNormalized = pathPrefix
     ? pathPrefix.replace(/\/+$/, '') + '/'
     : '/';
-const publicPath = pathPrefixNormalized;
+const publicPath = `${protocol}://${hostname}${port ? ':' + port : ''}${pathPrefixNormalized}`;
 
 console.log(`
     ===================================================
@@ -36,6 +36,8 @@ console.log(`
       Hostname: ${hostname}
       Port: ${port || '(default)'}
       Path Prefix: ${pathPrefixNormalized}
+
+    Public Path for Webpack: ${publicPath}
 
     The Webpack dev server runs on port 8081.
     Make sure the above host proxies to localhost:8081.
