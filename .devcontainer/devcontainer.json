@@ -5,8 +5,11 @@
         "ghcr.io/devcontainers/features/node:1": {}
     },
     "containerEnv": {
-        "TEAMIZED_DEV_SERVER_HOST": "${localEnv:CODESPACE_NAME:}",
-        "DJANGO_SETTINGS_MODULE": "devproject.settings"
+        "TEAMIZED_DEV_SERVER_HOST": "https://${localEnv:CODESPACE_NAME}-8081.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
+        "DJANGO_SETTINGS_MODULE": "devproject.settings",
+        "DJANGO_SUPERUSER_PASSWORD": "admin",
+        "DJANGO_SUPERUSER_USERNAME": "admin",
+        "DJANGO_SUPERUSER_EMAIL": "admin@localhost"
     },
     "forwardPorts": [8000, 8081],
     "portsAttributes": {
@@ -19,13 +22,19 @@
             "onAutoForward": "notify"
         }
     },
-    "postCreateCommand": "pip install -r requirements.txt -r requirements-dev.txt && pip install -e . && cd teamized/app && npm install",
+    "postCreateCommand": "chmod +x ./devproject/post-create.sh && ./devproject/post-create.sh",
+    "postAttachCommand": {
+        "django": "python -m django runserver",
+        "devserver": "cd teamized/app && npm run build-dev"
+    },
     "customizations": {
         "vscode": {
             "extensions": [
                 "ms-python.python",
                 "ms-python.vscode-pylance",
-                "dbaeumer.vscode-eslint"
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "batisteo.vscode-django"
             ]
         }
     }

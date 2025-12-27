@@ -18,5 +18,5 @@ account_patterns = [
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/", include((account_patterns, "account"))),
-    path("", include("teamized.urls")),
+    path("teamized/", include("teamized.urls")),
 ]

@@ -4,7 +4,6 @@ Django settings for devproject.
 Minimal settings for developing django-teamized.
 """
 
-import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +26,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "teamized",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -57,6 +58,10 @@ TEMPLATES = [
     },
 ]
 
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_COLLAPSED': True,
+}
+
 # Database
 DATABASES = {
     "default": {
@@ -66,10 +71,16 @@ DATABASES = {
 }
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# Internationalization
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-# Teamized settings
-TEAMIZED_DEV_SERVER_HOST = os.environ.get("TEAMIZED_DEV_SERVER_HOST", "")
+LANGUAGE_CODE = 'de-CH'
+TIME_ZONE = 'Europe/Zurich'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+# Other settings
+LOGIN_URL = "/account/login"
