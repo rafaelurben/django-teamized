@@ -59,7 +59,7 @@ TEMPLATES = [
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_COLLAPSED': True,
+    "SHOW_COLLAPSED": True,
 }
 
 # Database
@@ -71,13 +71,13 @@ DATABASES = {
 }
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'de-CH'
-TIME_ZONE = 'Europe/Zurich'
+LANGUAGE_CODE = "de-CH"
+TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
