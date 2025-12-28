@@ -5,7 +5,9 @@
         "ghcr.io/devcontainers/features/node:1": {}
     },
     "containerEnv": {
+        // On localhost: "TEAMIZED_DEV_SERVER_HOST": "http://localhost:8081",
         "TEAMIZED_DEV_SERVER_HOST": "https://${localEnv:CODESPACE_NAME}-8081.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
+        // On localhost: "PUBLIC_URL": "http://localhost:8000",
         "PUBLIC_URL": "https://${localEnv:CODESPACE_NAME}-8000.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
         "DJANGO_SETTINGS_MODULE": "devproject.settings",
         "DJANGO_SUPERUSER_PASSWORD": "admin",
@@ -19,7 +21,7 @@
             "onAutoForward": "notify"
         },
         "8081": {
-            "label": "Liveserver",
+            "label": "Webpack Dev Server",
             "onAutoForward": "notify"
         }
     },
