@@ -15,6 +15,8 @@ SECRET_KEY = "django-insecure-dev-key-only-for-local-development"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# NOTE: This wildcard is intentionally used only for local development / devcontainer
+# setups where the hostname can be dynamic. Do NOT reuse this setting in production.
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -60,7 +62,11 @@ TEMPLATES = [
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_COLLAPSED": True,
+    "SHOW_TOOLBAR_CALLBACK": lambda _: True,
 }
+
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 # Database
 DATABASES = {
@@ -74,12 +80,11 @@ DATABASES = {
 STATIC_URL = "/static/"
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
+# https://docs.djangoproject.com/en/stable/topics/i18n/
 
 LANGUAGE_CODE = "de-CH"
 TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Other settings

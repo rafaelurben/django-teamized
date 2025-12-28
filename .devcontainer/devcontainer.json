@@ -6,7 +6,7 @@
     },
     "containerEnv": {
         "TEAMIZED_DEV_SERVER_HOST": "https://${localEnv:CODESPACE_NAME}-8081.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
-        "PUBLIC_URL": "https://${localEnv:CODESPACE_NAME}-8080.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
+        "PUBLIC_URL": "https://${localEnv:CODESPACE_NAME}-8000.${localEnv:GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}",
         "DJANGO_SETTINGS_MODULE": "devproject.settings",
         "DJANGO_SUPERUSER_PASSWORD": "admin",
         "DJANGO_SUPERUSER_USERNAME": "admin",
@@ -25,7 +25,7 @@
     },
     "postCreateCommand": "chmod +x ./devproject/post-create.sh && ./devproject/post-create.sh",
     "postAttachCommand": {
-        "django": "python -m django runserver",
+        "django": "python -m django runserver 0.0.0.0:8000",
         "devserver": "cd teamized/app && npm run build-dev",
         "print-urls": "echo Django application available at: $PUBLIC_URL && echo Webpack dev server available at: $TEAMIZED_DEV_SERVER_HOST"
     },

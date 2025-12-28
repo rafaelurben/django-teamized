@@ -4,6 +4,7 @@ URL configuration for devproject.
 Minimal URL configuration for developing django-teamized.
 """
 
+from debug_toolbar.toolbar import debug_toolbar_urls
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
@@ -27,3 +28,5 @@ urlpatterns = [
     path("teamized/", include("teamized.urls")),
     path("", RedirectView.as_view(pattern_name="teamized:app")),
 ]
+
+urlpatterns += debug_toolbar_urls()
