@@ -24,10 +24,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         oldcwd = os.getcwd()
 
-        # Navigate to the "app" directory relative from this file
+        # Navigate to the "app" directory at repository root
         filepath = os.path.abspath(__file__)
-        folderpath = os.path.dirname(os.path.dirname(os.path.dirname(filepath)))
-        newcwd = os.path.join(folderpath, "app")
+        # Go up from teamized/management/commands to teamized, then to repo root
+        teamized_path = os.path.dirname(os.path.dirname(os.path.dirname(filepath)))
+        repo_root = os.path.dirname(teamized_path)
+        newcwd = os.path.join(repo_root, "app")
         os.chdir(newcwd)
 
         self.stdout.write("Installing Teamized app dependencies...")

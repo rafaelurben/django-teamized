@@ -5,14 +5,14 @@ const path = require('node:path');
 const webpack = require('webpack');
 
 const version = fs
-    .readFileSync(path.resolve(__dirname, '../../_version.txt'), 'utf-8')
+    .readFileSync(path.resolve(__dirname, '../_version.txt'), 'utf-8')
     .trim();
 
 module.exports = {
     name: 'mainapp',
     entry: './src/app.tsx',
     output: {
-        path: path.resolve(__dirname, '../static/teamized/app/'),
+        path: path.resolve(__dirname, '../teamized/static/teamized/app/'),
         filename: 'mainapp.js',
     },
     resolve: {
