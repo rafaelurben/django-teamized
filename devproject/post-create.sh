@@ -9,5 +9,5 @@ python -m django migrate
 python -m django createsuperuser --noinput || true
 
 # Node.js setup
-cd teamized/app
+cd app
 npm install

@@ -83,8 +83,8 @@ Note: Ensure that DEBUG is set to True in your Django settings for development p
 
 #### Frontend
 
-1. Navigate to the `teamized/app` directory
-    - `cd teamized/frontend`
+1. Navigate to the `app` directory
+    - `cd app`
 2. Install the dependencies
     - `npm install`
 3. Start the development server
@@ -102,7 +102,7 @@ To ensure code quality, you can run the following tools:
 
 #### Frontend
 
-(from the `teamized/app` directory)
+(from the `app` directory)
 
 - ESLint: `npm run eslint-fix`
 - Prettier: `npm run prettier-fix`
