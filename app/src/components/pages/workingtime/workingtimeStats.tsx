@@ -1,12 +1,12 @@
-import React from 'react';
 import { Activity } from 'lucide-react';
+import React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import {
+    type ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-    type ChartConfig,
 } from '@/shadcn/components/ui/chart';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
