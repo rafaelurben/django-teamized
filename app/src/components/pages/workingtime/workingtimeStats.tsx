@@ -68,7 +68,6 @@ export default function WorkingtimeStats({
                         tickMargin={8}
                     />
                     <YAxis
-                        dataKey="duration_h"
                         tickLine={false}
                         axisLine={false}
                         tickMargin={8}
