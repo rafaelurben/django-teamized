@@ -1,7 +1,7 @@
 {
     "name": "teamized-reactapp",
     "version": "1.0.0",
-    "description": "The build commands can also be run via 'python manage.py teamized_build [--live]'",
+    "description": "Frontend application for Teamized",
     "main": "src/app.tsx",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
