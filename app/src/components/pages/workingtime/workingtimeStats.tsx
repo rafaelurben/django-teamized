@@ -1,10 +1,12 @@
-import { Activity, Box } from 'lucide-react';
+import { ClockIcon, SigmaIcon } from 'lucide-react';
 import React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 import {
     type ChartConfig,
     ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from '@/shadcn/components/ui/chart';
@@ -21,14 +23,14 @@ interface Props {
 
 const chartConfig = {
     duration_h: {
-        label: 'Dauer',
+        label: 'Dauer (h)',
         color: 'var(--chart-1)',
-        icon: Activity,
+        icon: ClockIcon,
     },
     unit_count: {
         label: 'Einheiten',
         color: 'var(--chart-2)',
-        icon: Box,
+        icon: SigmaIcon,
     },
 } satisfies ChartConfig;
 
@@ -43,7 +45,7 @@ export default function WorkingtimeStats({
     const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
 
     if (loading) {
-        return <Skeleton className="tw:w-full tw:h-100" />;
+        return <Skeleton className="tw:w-full tw:h-125" />;
     }
 
     return (
@@ -54,8 +56,8 @@ export default function WorkingtimeStats({
                     {totalUnitCount}
                 </span>
             </div>
-            <ChartContainer config={chartConfig} className="tw:min-h-[400px]">
-                <AreaChart
+            <ChartContainer config={chartConfig} className="tw:w-full tw:h-125">
+                <BarChart
                     accessibilityLayer
                     data={data}
                     margin={{
@@ -70,30 +72,24 @@ export default function WorkingtimeStats({
                         dataKey="name"
                         tickLine={false}
                         axisLine={false}
-                        tickMargin={8}
+                        tickMargin={10}
                     />
-                    <YAxis tickLine={false} axisLine={false} tickMargin={8} />
                     <ChartTooltip
                         cursor={false}
-                        content={<ChartTooltipContent hideLabel />}
+                        content={<ChartTooltipContent />}
                     />
-                    <Area
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar
                         dataKey="duration_h"
-                        type="step"
                         fill="var(--color-duration_h)"
-                        fillOpacity={0.4}
-                        stroke="var(--color-duration_h)"
-                        stackId="duration"
+                        radius={8}
                     />
-                    <Area
+                    <Bar
                         dataKey="unit_count"
-                        type="step"
                         fill="var(--color-unit_count)"
-                        fillOpacity={0.4}
-                        stroke="var(--color-unit_count)"
-                        stackId="units"
+                        radius={8}
                     />
-                </AreaChart>
+                </BarChart>
             </ChartContainer>
         </>
     );
