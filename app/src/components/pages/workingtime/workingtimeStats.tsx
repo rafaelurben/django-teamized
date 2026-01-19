@@ -1,6 +1,13 @@
 import React from 'react';
-import * as Recharts from 'recharts';
+import { Activity } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+    type ChartConfig,
+} from '@/shadcn/components/ui/chart';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
@@ -11,6 +18,14 @@ interface Props {
     end: Date;
     loading: boolean;
 }
+
+const chartConfig = {
+    duration_h: {
+        label: 'Dauer',
+        color: 'var(--chart-1)',
+        icon: Activity,
+    },
+} satisfies ChartConfig;
 
 export default function WorkingtimeStats({
     sessions,
@@ -34,31 +49,48 @@ export default function WorkingtimeStats({
                     {totalUnitCount}
                 </span>
             </div>
-            <Recharts.ResponsiveContainer
-                width="100%"
-                minHeight={400}
-                height="90%"
-            >
-                <Recharts.BarChart
+            <ChartContainer config={chartConfig} className="tw:min-h-[400px]">
+                <AreaChart
+                    accessibilityLayer
                     data={data}
-                    margin={{ top: 30, right: 20, left: 0, bottom: 5 }}
+                    margin={{
+                        left: 12,
+                        right: 12,
+                        top: 12,
+                        bottom: 12,
+                    }}
                 >
-                    <Recharts.CartesianGrid strokeDasharray="3 3" />
-                    <Recharts.XAxis dataKey="name" />
-                    <Recharts.YAxis
-                        dataKey="duration_h"
-                        domain={[0, 'dataMax']}
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                        dataKey="name"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
                     />
-                    <Recharts.Tooltip />
-                    <Recharts.Legend />
-                    <Recharts.Bar
+                    <YAxis
                         dataKey="duration_h"
-                        name="Dauer"
-                        unit="h"
-                        fill="#8884d8"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
                     />
-                </Recharts.BarChart>
-            </Recharts.ResponsiveContainer>
+                    <ChartTooltip
+                        cursor={false}
+                        content={
+                            <ChartTooltipContent
+                                hideLabel
+                                formatter={(value) => `${value}h`}
+                            />
+                        }
+                    />
+                    <Area
+                        dataKey="duration_h"
+                        type="step"
+                        fill="var(--color-duration_h)"
+                        fillOpacity={0.4}
+                        stroke="var(--color-duration_h)"
+                    />
+                </AreaChart>
+            </ChartContainer>
         </>
     );
 }
