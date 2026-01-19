@@ -72,11 +72,7 @@ export default function WorkingtimeStats({
                         axisLine={false}
                         tickMargin={8}
                     />
-                    <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                    />
+                    <YAxis tickLine={false} axisLine={false} tickMargin={8} />
                     <ChartTooltip
                         cursor={false}
                         content={<ChartTooltipContent hideLabel />}
