@@ -1,6 +1,15 @@
+import { ClockIcon, SigmaIcon } from 'lucide-react';
 import React from 'react';
-import * as Recharts from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
+import {
+    type ChartConfig,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+} from '@/shadcn/components/ui/chart';
 import { Skeleton } from '@/shadcn/components/ui/skeleton';
 import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
@@ -11,6 +20,19 @@ interface Props {
     end: Date;
     loading: boolean;
 }
+
+const chartConfig = {
+    duration_h: {
+        label: 'Dauer (h)',
+        color: 'var(--chart-1)',
+        icon: ClockIcon,
+    },
+    unit_count: {
+        label: 'Einheiten',
+        color: 'var(--chart-2)',
+        icon: SigmaIcon,
+    },
+} satisfies ChartConfig;
 
 export default function WorkingtimeStats({
     sessions,
@@ -23,7 +45,7 @@ export default function WorkingtimeStats({
     const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
 
     if (loading) {
-        return <Skeleton className="tw:w-full tw:h-100" />;
+        return <Skeleton className="tw:w-full tw:h-125" />;
     }
 
     return (
@@ -34,31 +56,41 @@ export default function WorkingtimeStats({
                     {totalUnitCount}
                 </span>
             </div>
-            <Recharts.ResponsiveContainer
-                width="100%"
-                minHeight={400}
-                height="90%"
-            >
-                <Recharts.BarChart
+            <ChartContainer config={chartConfig} className="tw:w-full tw:h-125">
+                <BarChart
+                    accessibilityLayer
                     data={data}
-                    margin={{ top: 30, right: 20, left: 0, bottom: 5 }}
+                    margin={{
+                        left: 12,
+                        right: 12,
+                        top: 12,
+                        bottom: 12,
+                    }}
                 >
-                    <Recharts.CartesianGrid strokeDasharray="3 3" />
-                    <Recharts.XAxis dataKey="name" />
-                    <Recharts.YAxis
-                        dataKey="duration_h"
-                        domain={[0, 'dataMax']}
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                        dataKey="name"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={10}
                     />
-                    <Recharts.Tooltip />
-                    <Recharts.Legend />
-                    <Recharts.Bar
-                        dataKey="duration_h"
-                        name="Dauer"
-                        unit="h"
-                        fill="#8884d8"
+                    <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent />}
                     />
-                </Recharts.BarChart>
-            </Recharts.ResponsiveContainer>
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar
+                        dataKey="duration_h"
+                        fill="var(--color-duration_h)"
+                        radius={8}
+                    />
+                    <Bar
+                        dataKey="unit_count"
+                        fill="var(--color-unit_count)"
+                        radius={8}
+                    />
+                </BarChart>
+            </ChartContainer>
         </>
     );
 }

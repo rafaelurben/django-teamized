@@ -21,6 +21,7 @@ Added missing `tw:` prefixes to class names and `tw-` to custom properties in th
 
 - Alert
 - Calendar
+- Chart
 - Field
 - Sidebar
 
