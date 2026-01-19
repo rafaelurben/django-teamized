@@ -488,7 +488,7 @@ export function chartDataByDays(
         const day = roundDays(new Date(session.time_start)).getTime();
         days[day].duration_s += session.duration;
         days[day].duration_h = +(days[day].duration_s / 3600).toFixed(2);
-        if (session.unit_count !== null) {
+        if (session.unit_count != null) {
             days[day].unit_count += session.unit_count;
         }
     });
@@ -512,6 +512,6 @@ export function totalDuration(sessions: Worksession[]): number {
 export function totalUnitCount(sessions: Worksession[]): number {
     return sessions
         .map((session) => session.unit_count)
-        .filter((count) => count !== null)
+        .filter((count) => count != null)
         .reduce((a, b) => a + b, 0);
 }

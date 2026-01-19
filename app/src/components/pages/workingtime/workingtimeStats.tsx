@@ -83,7 +83,7 @@ export default function WorkingtimeStats({
                         fill="var(--color-duration_h)"
                         fillOpacity={0.4}
                         stroke="var(--color-duration_h)"
-                        stackId="a"
+                        stackId="duration"
                     />
                     <Area
                         dataKey="unit_count"
@@ -91,7 +91,7 @@ export default function WorkingtimeStats({
                         fill="var(--color-unit_count)"
                         fillOpacity={0.4}
                         stroke="var(--color-unit_count)"
-                        stackId="b"
+                        stackId="units"
                     />
                 </AreaChart>
             </ChartContainer>
