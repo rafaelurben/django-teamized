@@ -461,7 +461,12 @@ export function chartDataByDays(
 ) {
     // Create a dictionary of all days in the range
     const days: {
-        [key: number]: { name: string; duration_s: number; duration_h: number };
+        [key: number]: {
+            name: string;
+            duration_s: number;
+            duration_h: number;
+            unit_count: number;
+        };
     } = {};
     let i = 0;
     let dayTime: number;
@@ -472,16 +477,20 @@ export function chartDataByDays(
             name: getDateString(dayObj),
             duration_s: 0,
             duration_h: 0,
+            unit_count: 0,
         };
     } while (dayTime < roundDays(new Date(end.getTime() - 1)).getTime());
 
     // Split sessions that start before midnight and end after midnight
     const splitSessions = splitMultiDaySessions(sessions);
-    // Add the duration of each session to the corresponding day
+    // Add the duration and unit count of each session to the corresponding day
     splitSessions.forEach((session) => {
         const day = roundDays(new Date(session.time_start)).getTime();
         days[day].duration_s += session.duration;
         days[day].duration_h = +(days[day].duration_s / 3600).toFixed(2);
+        if (session.unit_count !== null) {
+            days[day].unit_count += session.unit_count;
+        }
     });
     return Object.values(days);
 }

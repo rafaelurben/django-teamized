@@ -1,4 +1,4 @@
-import { Activity } from 'lucide-react';
+import { Activity, Box } from 'lucide-react';
 import React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
@@ -24,6 +24,11 @@ const chartConfig = {
         label: 'Dauer',
         color: 'var(--chart-1)',
         icon: Activity,
+    },
+    unit_count: {
+        label: 'Einheiten',
+        color: 'var(--chart-2)',
+        icon: Box,
     },
 } satisfies ChartConfig;
 
@@ -74,12 +79,7 @@ export default function WorkingtimeStats({
                     />
                     <ChartTooltip
                         cursor={false}
-                        content={
-                            <ChartTooltipContent
-                                hideLabel
-                                formatter={(value) => `${value}h`}
-                            />
-                        }
+                        content={<ChartTooltipContent hideLabel />}
                     />
                     <Area
                         dataKey="duration_h"
@@ -87,6 +87,15 @@ export default function WorkingtimeStats({
                         fill="var(--color-duration_h)"
                         fillOpacity={0.4}
                         stroke="var(--color-duration_h)"
+                        stackId="a"
+                    />
+                    <Area
+                        dataKey="unit_count"
+                        type="step"
+                        fill="var(--color-unit_count)"
+                        fillOpacity={0.4}
+                        stroke="var(--color-unit_count)"
+                        stackId="b"
                     />
                 </AreaChart>
             </ChartContainer>
