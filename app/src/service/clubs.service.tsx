@@ -484,6 +484,46 @@ export async function editClubMemberPortfolioPopup(
                 </label>
 
                 <label
+                    className="swal2-checkbox tw:flex"
+                    htmlFor="swal-input-show_age"
+                >
+                    <input
+                        type="checkbox"
+                        id="swal-input-show_age"
+                        defaultChecked={portfolio.show_age}
+                    />
+                    <span>Alter anzeigen?</span>
+                </label>
+
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-nickname"
+                >
+                    Spitzname:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-nickname"
+                    className="swal2-input"
+                    placeholder="Max"
+                    defaultValue={portfolio.nickname ?? ''}
+                />
+
+                <label
+                    className="swal2-input-label"
+                    htmlFor="swal-input-groups"
+                >
+                    Gruppen:
+                </label>
+                <input
+                    type="text"
+                    id="swal-input-groups"
+                    className="swal2-input"
+                    placeholder="Vorstand, Trainer"
+                    defaultValue={portfolio.groups ?? ''}
+                />
+
+                <label
                     className="swal2-input-label"
                     htmlFor="swal-input-image1_url"
                 >
@@ -621,6 +661,11 @@ export async function editClubMemberPortfolioPopup(
         cancelButtonText: 'Abbrechen',
         preConfirm: async () => {
             const visible = $('#swal-input-visible').prop('checked') as boolean;
+            const show_age = $('#swal-input-show_age').prop(
+                'checked'
+            ) as boolean;
+            const nickname = $('#swal-input-nickname').val() as string;
+            const groups = $('#swal-input-groups').val() as string;
             const image1_url = $('#swal-input-image1_url').val() as string;
             const image2_url = $('#swal-input-image2_url').val() as string;
             const member_since = $('#swal-input-member_since').val() as number;
@@ -637,6 +682,9 @@ export async function editClubMemberPortfolioPopup(
             Swal.showLoading();
             return await editClubMemberPortfolio(team.id, member.id, {
                 visible,
+                show_age,
+                nickname,
+                groups,
                 image1_url,
                 image2_url,
                 member_since,

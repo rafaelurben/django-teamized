@@ -217,7 +217,7 @@ def endpoint_member_portfolio(request, team: Team, member: ClubMember):
         return JsonResponse(
             {
                 "id": member.uid,
-                "portfolio": member.portfolio_as_dict(),
+                "portfolio": member.portfolio_as_dict(for_public_view=False),
             }
         )
 
@@ -227,7 +227,7 @@ def endpoint_member_portfolio(request, team: Team, member: ClubMember):
             {
                 "success": True,
                 "id": member.uid,
-                "portfolio": member.portfolio_as_dict(),
+                "portfolio": member.portfolio_as_dict(for_public_view=False),
                 "alert": {
                     "title": _("Portfolio aktualisiert"),
                     "text": _("Das Vereinsmitglied wurde erfolgreich aktualisiert."),
