@@ -380,10 +380,10 @@ class ClubMember(models.Model):
             data, "image2_url", False, default=self.portfolio_image2_url
         )
         self.portfolio_member_since = validation.integer(
-            data, "member_since", False, default=self.portfolio_member_since
+            data, "member_since", False, default=self.portfolio_member_since, null=True
         )
         self.portfolio_hobby_since = validation.integer(
-            data, "hobby_since", False, default=self.portfolio_hobby_since
+            data, "hobby_since", False, default=self.portfolio_hobby_since, null=True
         )
         self.portfolio_role = validation.text(data, "role", False, default=self.portfolio_role)
         self.portfolio_profession = validation.text(
