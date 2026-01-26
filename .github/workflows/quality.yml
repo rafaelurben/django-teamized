@@ -70,6 +70,19 @@ jobs:
       - name: Check code quality with pylint
         run: |
           python -m pylint . --output-format=github
+      - name: Run Tests with coverage
+        run: |
+          coverage run --source="teamized" runtests.py
+      - name: Export coverage report
+        run: |
+          coverage xml -o coverage.xml
+      - name: Upload coverage results as artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        if: ${{ matrix.python-version == '3.14' }} # only upload once
+        with:
+          name: coverage-report
+          if-no-files-found: 'warn'
+          path: coverage.xml
 
   sonarqube:
     name: SonarQube
@@ -85,6 +98,12 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
+      - name: Download coverage report
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: coverage-report
+          path: .
+
       - name: Read version from file
         id: version
         run: |
@@ -95,5 +114,6 @@ jobs:
         with:
           args: >
             -Dsonar.projectVersion=${{ steps.version.outputs.VERSION }}
+            -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
