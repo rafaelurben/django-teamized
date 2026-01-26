@@ -2,7 +2,6 @@ from django.contrib import admin
 
 import teamized.club.models as models
 
-
 # Register your models here.
 
 

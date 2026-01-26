@@ -20,7 +20,6 @@ import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
 from teamized.translations import TranslationConstants
 
-
 # Create your models here.
 
 

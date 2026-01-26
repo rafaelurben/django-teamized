@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from teamized.api.utils.constants import ENDPOINT_NOT_FOUND, OBJ_NOT_FOUND
 from teamized.club.models import ClubMemberGroup
 
-
 # Public URLs
 
 

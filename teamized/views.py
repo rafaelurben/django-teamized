@@ -14,7 +14,6 @@ from teamized import validation
 from teamized.decorators import teamized_prep, validation_func
 from teamized.models import Calendar, Member
 
-
 # General views
 
 
