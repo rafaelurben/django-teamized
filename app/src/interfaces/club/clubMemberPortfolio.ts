@@ -3,6 +3,9 @@ import { ID } from '@/teamized/interfaces/common';
 export interface ClubMemberPortfolio {
     id: ID;
     visible: boolean;
+    show_age: boolean;
+    nickname: string;
+    groups: string;
     image1_url: string;
     image2_url: string;
     member_since: number;
@@ -17,6 +20,9 @@ export interface ClubMemberPortfolio {
 
 export interface ClubMemberPortfolioRequestDTO {
     visible: boolean;
+    show_age: boolean;
+    nickname: string;
+    groups: string;
     image1_url: string;
     image2_url: string;
     member_since: number;

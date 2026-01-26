@@ -159,7 +159,14 @@ class ClubMember(models.Model):
         verbose_name=TranslationConstants.MODIFIED_AT, auto_now=True
     )
 
-    portfolio_visible = models.BooleanField(verbose_name=_("Portfolio sichtbar?"), default=True)
+    portfolio_visible = models.BooleanField(verbose_name=_("Portfolio sichtbar?"), default=False)
+    portfolio_show_age = models.BooleanField(verbose_name=_("Alter anzeigen?"), default=False)
+    portfolio_nickname = models.CharField(
+        verbose_name=_("Spitzname"), max_length=50, default="", blank=True
+    )
+    portfolio_groups = models.CharField(
+        verbose_name=_("Gruppen"), max_length=200, default="", blank=True
+    )
     portfolio_image1_url = models.URLField(
         verbose_name=_("Portfolio-Bild 1"), default="", blank=True
     )
@@ -226,10 +233,11 @@ class ClubMember(models.Model):
             "birth_date": str(self.birth_date) if self.birth_date is not None else None,
         }
 
-    def portfolio_as_dict(self):
-        return {
+    def portfolio_as_dict(self, for_public_view=False):
+        data = {
             "id": str(self.memberuid),
-            "visible": self.portfolio_visible,
+            "nickname": self.portfolio_nickname,
+            "groups": self.portfolio_groups,
             "image1_url": self.portfolio_image1_url,
             "image2_url": self.portfolio_image2_url,
             "member_since": self.portfolio_member_since,
@@ -241,6 +249,23 @@ class ClubMember(models.Model):
             "biography": self.portfolio_biography,
             "contact_email": self.portfolio_contact_email,
         }
+
+        if for_public_view:
+            # Calculate and add age if show_age is true and birth_date is set
+            if self.portfolio_show_age and self.birth_date:
+                today = timezone.now().date()
+                age = today.year - self.birth_date.year
+                # Adjust if birthday hasn't occurred yet this year
+                if (today.month, today.day) < (self.birth_date.month, self.birth_date.day):
+                    age -= 1
+                data["age"] = age
+            else:
+                data["age"] = None
+        else:
+            data["visible"] = self.portfolio_visible
+            data["show_age"] = self.portfolio_show_age
+
+        return data
 
     def can_login_with_magicuid(self, magic_uid):
         if not utils.is_valid_uuid(magic_uid):
@@ -338,6 +363,15 @@ class ClubMember(models.Model):
     def update_portfolio_from_post_data(self, data: dict):
         self.portfolio_visible = validation.boolean(
             data, "visible", False, default=self.portfolio_visible
+        )
+        self.portfolio_show_age = validation.boolean(
+            data, "show_age", False, default=self.portfolio_show_age
+        )
+        self.portfolio_nickname = validation.text(
+            data, "nickname", False, default=self.portfolio_nickname
+        )
+        self.portfolio_groups = validation.text(
+            data, "groups", False, default=self.portfolio_groups
         )
         self.portfolio_image1_url = validation.text(
             data, "image1_url", False, default=self.portfolio_image1_url
@@ -534,12 +568,13 @@ class ClubMemberGroup(models.Model):
         """Get all members portfolios"""
 
         portfolios = []
+        member: ClubMember
         for member in self.members.filter(portfolio_visible=True):
             portfolios.append(
                 {
                     "first_name": member.first_name,
                     "last_name": member.last_name,
-                    **member.portfolio_as_dict(),
+                    **member.portfolio_as_dict(for_public_view=True),
                 }
             )
         return {
