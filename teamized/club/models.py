@@ -17,7 +17,6 @@ from django.utils.translation import gettext_lazy as _
 from teamized import utils, decorators, validation
 from teamized.translations import TranslationConstants
 
-
 # Create your models here.
 
 

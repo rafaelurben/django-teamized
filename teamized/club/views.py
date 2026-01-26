@@ -5,7 +5,6 @@ from django.urls import reverse
 import teamized.club.models as models
 from teamized.club.decorators import clubview
 
-
 # Create your views here.
 
 

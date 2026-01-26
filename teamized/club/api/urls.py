@@ -2,7 +2,6 @@ from django.urls import path, re_path
 
 from teamized.club.api import views
 
-
 urlpatterns = [
     path(
         "public/group-portfolios/<uuid:uuid>",

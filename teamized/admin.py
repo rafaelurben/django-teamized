@@ -11,7 +11,6 @@ import teamized.api.utils.admin  # pylint: disable=unused-import # noqa # This i
 import teamized.club.admin  # pylint: disable=unused-import # noqa # This is required for the club admin views
 from teamized import models
 
-
 # Register your models here.
 
 

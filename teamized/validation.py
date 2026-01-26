@@ -11,7 +11,6 @@ from django.utils.translation import gettext as _
 
 from teamized.exceptions import ValidationError
 
-
 # Base validator class
 
 
