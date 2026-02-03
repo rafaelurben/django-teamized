@@ -78,7 +78,9 @@ export default function WorkingtimeStats({
                         cursor={false}
                         content={<ChartTooltipContent />}
                     />
-                    <ChartLegend content={<ChartLegendContent />} />
+                    <ChartLegend
+                        content={<ChartLegendContent hideIcon={true} />}
+                    />
                     <Bar
                         dataKey="duration_h"
                         fill="var(--color-duration_h)"
