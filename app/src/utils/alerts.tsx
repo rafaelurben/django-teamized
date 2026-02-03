@@ -6,11 +6,8 @@
 import type { ReactNode } from 'react';
 import React from 'react';
 import { toast } from 'sonner';
-import type {
-    SweetAlertOptions as BaseSweetAlertOptions,
-    SweetAlertResult,
-} from 'sweetalert2';
-import { default as OrigSwal } from 'sweetalert2';
+import type { SweetAlertOptions as BaseSweetAlertOptions } from 'sweetalert2';
+import OrigSwal from 'sweetalert2';
 import withReactContent, {
     ReactSweetAlertOptions as SweetAlertOptions,
 } from 'sweetalert2-react-content';
@@ -20,8 +17,6 @@ import { ErrorResponse } from '@/teamized/interfaces/responses/errorResponse';
 import { getSwalTheme } from '@/teamized/service/settings.service';
 
 export const Swal = withReactContent(OrigSwal);
-export type { SweetAlertOptions, SweetAlertResult };
-
 export { toast } from 'sonner';
 
 /**

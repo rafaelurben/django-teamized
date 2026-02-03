@@ -101,7 +101,7 @@ export function AppSidebarTeamSwitcher({
                                     <SettingsIcon className="tw:size-3.5" />
                                 </div>
                                 <div className="tw:text-muted-foreground tw:font-medium">
-                                    Teams Verwalten
+                                    Teams verwalten
                                 </div>
                             </DropdownMenuItem>
                         </DropdownMenuContent>

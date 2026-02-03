@@ -20,7 +20,7 @@ import {
     ClubMemberPortfolio,
     ClubMemberPortfolioRequestDTO,
 } from '@/teamized/interfaces/club/clubMemberPortfolio';
-import { ID, IDIndexedObjectList } from '@/teamized/interfaces/common';
+import { ID } from '@/teamized/interfaces/common';
 import { Team } from '@/teamized/interfaces/teams/team';
 import {
     confirmAlert,
@@ -396,9 +396,7 @@ export async function deleteClubMember(teamId: ID, memberId: ID) {
         teamData.team.club!.membercount -= 1;
 
         // Remove member from all groups
-        for (const group of Object.values(
-            teamData.club_groups as IDIndexedObjectList<ClubGroup>
-        )) {
+        for (const group of Object.values(teamData.club_groups)) {
             if (group.memberids.includes(memberId)) {
                 teamData.club_groups[group.id].memberids.splice(
                     teamData.club_groups[group.id].memberids.indexOf(memberId),
@@ -904,9 +902,7 @@ export async function updateClubMemberGroupsPopup(
 ) {
     // Show a sweetalert with a multi-select of all groups; on submit, make add/remove requests for each group respectively
     const teamData = CacheService.getTeamData(team.id);
-    const groups = Object.values(
-        teamData.club_groups as IDIndexedObjectList<ClubGroup>
-    );
+    const groups = Object.values(teamData.club_groups);
 
     const currentGroupIds: ID[] = Object.values(groups)
         .filter((group) => group.memberids.includes(member.id))
@@ -981,8 +977,10 @@ export async function showClubGroupPortfolioExportPopup(group: ClubGroup) {
         title: 'Mitgliederportfolios exportieren',
         html: (
             <>
-                Über folgende URL können die Mitgliederportfolios der Gruppe{' '}
-                <b>{group.name}</b> im JSON-Format abgerufen werden:
+                <span>
+                    Über folgende URL können die Mitgliederportfolios der Gruppe{' '}
+                    <b>{group.name}</b> im JSON-Format abgerufen werden:
+                </span>
                 <input
                     className="swal2-input"
                     type="text"

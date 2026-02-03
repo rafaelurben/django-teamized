@@ -22,7 +22,7 @@ export function ParticipationTile({
     selectedEvent,
     isAdmin,
     ref,
-}: Props) {
+}: Readonly<Props>) {
     const [participations, setParticipations] = useState<
         ClubAttendanceEventParticipation[] | null
     >(null);

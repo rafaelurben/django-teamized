@@ -138,7 +138,7 @@ export async function createWorkSessionPopup(team: Team) {
             Swal.showLoading();
             return await createWorkSession(team.id, {
                 note,
-                unit_count: isNaN(unit_count) ? null : unit_count,
+                unit_count: Number.isNaN(unit_count) ? null : unit_count,
                 time_start: isoFormat(dtstart),
                 time_end: isoFormat(dtend),
             });
@@ -167,7 +167,7 @@ export async function editWorkSession(
 export async function editWorkSessionPopup(team: Team, session: Worksession) {
     let dtstart = localInputFormat(session.time_start);
     let dtend =
-        session.time_end !== null ? localInputFormat(session.time_end) : '';
+        session.time_end === null ? '' : localInputFormat(session.time_end);
     return await fireAlert<Worksession>({
         title: `Sitzung bearbeiten`,
         html: (
@@ -270,7 +270,7 @@ export async function editWorkSessionPopup(team: Team, session: Worksession) {
             Swal.showLoading();
             return await editWorkSession(team.id, session.id, {
                 note,
-                unit_count: isNaN(unit_count) ? null : unit_count,
+                unit_count: Number.isNaN(unit_count) ? null : unit_count,
                 time_start: isoFormat(dtstart),
                 time_end: isoFormat(dtend),
             });
@@ -359,10 +359,7 @@ export async function renameWorkSession(
             CacheService.getTeamData(teamId).me_worksessions[data.session.id] =
                 data.session;
         }
-        if (
-            window.appdata.current_worksession &&
-            window.appdata.current_worksession.id === data.session.id
-        ) {
+        if (window.appdata.current_worksession?.id === data.session.id) {
             window.appdata.current_worksession = data.session;
         }
         return data.session;

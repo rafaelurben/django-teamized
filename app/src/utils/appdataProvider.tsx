@@ -12,7 +12,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function AppdataProvider({ children }: Props) {
+export function AppdataProvider({ children }: Readonly<Props>) {
     const [appdataVersion, incrementAppdataVersion] = useReducer(
         (x) => x + 1,
         0

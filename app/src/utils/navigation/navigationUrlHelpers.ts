@@ -48,13 +48,13 @@ export function exportNavigationStateToURL(state: NavigationState) {
 
     // If the URL has changed, update the URL
     if (oldURL.href !== newURL.href) {
-        if (!window.appdata.initialLoadComplete) {
+        if (window.appdata.initialLoadComplete) {
+            // Add a new history entry (allows the user to use the back button to go back to the current state)
+            window.history.pushState(null, '', newURL.href);
+        } else {
             // Replace the current history entry with the new options (keeps the last page in the history for the back button)
             // This is done to prevent the back button from looping back to the same page on the initial load
             window.history.replaceState(null, '', newURL.href);
-        } else {
-            // Add a new history entry (allows the user to use the back button to go back to the current state)
-            window.history.pushState(null, '', newURL.href);
         }
     }
 

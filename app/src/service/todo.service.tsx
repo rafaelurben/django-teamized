@@ -21,7 +21,6 @@ import {
     doubleConfirmAlert,
     fireAlert,
     Swal,
-    SweetAlertResult,
 } from '@/teamized/utils/alerts';
 import { getDateString } from '@/teamized/utils/datetime';
 
@@ -372,7 +371,7 @@ export async function viewToDoListItemPopup(
         showCancelButton: true,
         confirmButtonText: 'Bearbeiten',
         cancelButtonText: 'Schliessen',
-    }).then(async (result: SweetAlertResult) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
             return await editToDoListItemPopup(team, todolist, item);
         }

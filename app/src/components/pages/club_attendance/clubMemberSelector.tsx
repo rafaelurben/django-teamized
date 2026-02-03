@@ -91,7 +91,7 @@ export function ClubMemberSelector({
                                     <ItemTitle>{group.name}</ItemTitle>
                                     <ItemDescription>
                                         {group.description}
-                                        <div className="tw:text-sm">
+                                        <span className="tw:text-sm tw:ml-1">
                                             {unavailableCount > 0 && (
                                                 <span className="tw:mr-2">
                                                     ({unavailableCount} bereits
@@ -103,7 +103,7 @@ export function ClubMemberSelector({
                                                     ({selectedCount} ausgewählt)
                                                 </span>
                                             )}
-                                        </div>
+                                        </span>
                                     </ItemDescription>
                                 </ItemContent>
                                 <ItemActions>
