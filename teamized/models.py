@@ -455,9 +455,11 @@ class Invite(models.Model):
         IMPORTANT: This does not check validity! Use check_validity_for_user() first!
         """
 
-        self.uses_left -= 1
-        self.uses_used += 1
-        self.save()
+        Invite.objects.filter(pk=self.pk).update(
+            uses_left=models.F('uses_left') - 1,
+            uses_used=models.F('uses_used') + 1
+        )
+        self.refresh_from_db()
 
         return self.team.join(user)
 
