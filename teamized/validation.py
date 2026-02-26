@@ -160,7 +160,7 @@ class RegexValidator(StringValidator):
     def _convert(cls, value, regex="", **kwargs):
         if not re.match(regex, value):
             raise ValidationError(
-                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value)
+                _("Der Wert '{}' folgt nicht der Regex-Bedingung '{regex}'!").format(value, regex=regex)
             )
         return value
 
