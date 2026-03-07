@@ -36,7 +36,7 @@
         }
 
         function _debug_load(wd) {
-            data = JSON.parse(JSON.stringify(wd.appdata));
+            data = structuredClone(wd.appdata);
             _debug_display();
         }
 
@@ -65,19 +65,19 @@
         }
 
         function debug_reload() {
-            if (window.opener !== null) {
-                _debug_load(window.opener);
-            } else {
+            if (window.opener === null) {
                 alert('Die ursprüngliche App-Seite wurde geschlossen!');
+            } else {
+                _debug_load(window.opener);
             }
         }
 
         window.addEventListener('load', () => {
-            if (window.opener !== null) {
-                _debug_load(window.opener);
-            } else {
+            if (window.opener === null) {
                 alert('Diese Seite muss aus dem DEBUG-Menu geöffnet werden!');
-                location.href = "about:blank";
+                location.href = 'about:blank';
+            } else {
+                _debug_load(window.opener);
             }
         });
     </script>

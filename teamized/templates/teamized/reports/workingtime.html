@@ -15,11 +15,11 @@
     <table>
         <thead>
         <tr>
-            <th>Zeitpunkt</th>
-            <th>Dauer</th>
-            <th>Einheiten</th>
-            <th>Beschreibung</th>
-            <th></th>
+            <th scope="col">Zeitpunkt</th>
+            <th scope="col">Dauer</th>
+            <th scope="col">Einheiten</th>
+            <th scope="col">Beschreibung</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -48,10 +48,10 @@
         </tbody>
         <tfoot>
         <tr>
-            <th colspan="1" style="text-align: right;">Total:</th>
-            <th>{{ data.total_hours|floatformat:2 }}h</th>
-            <th>{{ data.total_units }}</th>
-            <th colspan="2"></th>
+            <th scope="row" colspan="1" style="text-align: right;">Total:</th>
+            <th scope="col">{{ data.total_hours|floatformat:2 }}h</th>
+            <th scope="col">{{ data.total_units }}</th>
+            <th scope="col" colspan="2"></th>
         </tr>
         </tfoot>
     </table>

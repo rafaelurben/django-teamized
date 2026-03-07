@@ -14,8 +14,7 @@ if (typeof host !== 'string') {
 }
 
 // Parse the host URL using regex to extract protocol, hostname, port, and path
-const hostRegex = /^(https?):\/\/([^:/]+)(?::(\d+))?(\/.*)?$/;
-const match = host.match(hostRegex);
+const match = /^(https?):\/\/([^:/]+)(?::(\d+))?(\/.*)?$/.exec(host);
 
 if (!match) {
     throw new Error(

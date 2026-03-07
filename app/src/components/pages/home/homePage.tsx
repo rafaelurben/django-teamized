@@ -29,13 +29,13 @@ export default function HomePage() {
                         <span>
                             Verwende die Seitenleiste (links), um zu navigieren.
                         </span>
-                        <a
+                        <span
                             onClick={() => toggleDebug()}
                             className="tw:ms-1 tw:opacity-0"
                             aria-hidden="true"
                         >
                             DEBUG
-                        </a>
+                        </span>
                     </p>
                     <Alert variant="warning" className="tw:md:hidden tw:mt-2">
                         <InfoIcon className="tw:size-4" />

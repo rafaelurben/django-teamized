@@ -14,6 +14,13 @@ export function validateUUID(uuid: string): boolean {
 }
 
 /**
+ * Check if the given string is a valid slug
+ */
+export function validateSlug(data: string): boolean {
+    return /^[0-9a-z\-_]+$/.test(data);
+}
+
+/**
  * Pad a number with leading zeros
  *
  * @param {Number} num the number
