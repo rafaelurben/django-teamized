@@ -132,6 +132,7 @@ dmypy.json
 
 .vscode/
 .idea/
+!.idea/runConfigurations/
 app/node_modules/
 teamized/static/teamized/app
 !**/shadcn/lib
