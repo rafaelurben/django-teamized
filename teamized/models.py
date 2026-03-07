@@ -456,8 +456,7 @@ class Invite(models.Model):
         """
 
         Invite.objects.filter(pk=self.pk).update(
-            uses_left=models.F('uses_left') - 1,
-            uses_used=models.F('uses_used') + 1
+            uses_left=models.F("uses_left") - 1, uses_used=models.F("uses_used") + 1
         )
         self.refresh_from_db()
 
