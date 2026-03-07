@@ -29,6 +29,7 @@ import {
     successToast,
     Swal,
 } from '@/teamized/utils/alerts';
+import { validateSlug } from '@/teamized/utils/general';
 
 import * as CacheService from './cache.service';
 
@@ -92,7 +93,7 @@ export async function createClubPopup(team: Team) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
                 return false;
             }
-            if (!slug.match(/^[0-9a-z\-_]+$/)) {
+            if (!validateSlug(slug)) {
                 Swal.showValidationMessage(
                     'Der Slug darf nur aus Kleinbuchstaben, Zahlen und Bindestrichen bestehen!'
                 );

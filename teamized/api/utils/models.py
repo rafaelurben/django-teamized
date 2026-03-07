@@ -2,9 +2,9 @@
 
 import uuid
 
-from django.db import models
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
+from django.db import models
 
 
 class ApiKey(models.Model):
@@ -41,15 +41,13 @@ class ApiKey(models.Model):
 
     @admin.display(description="Api key")
     def __str__(self):
-        perms = (
-            "read"
-            if self.read and not self.write
-            else (
-                "write"
-                if self.write and not self.read
-                else "read/write" if self.read and self.write else "UNUSABLE"
-            )
-        )
+        perms = "UNUSABLE"
+        if self.read and not self.write:
+            perms = "read"
+        elif self.write and not self.read:
+            perms = "write"
+        elif self.read and self.write:
+            perms = "read/write"
         return f"{self.name} ({perms}; {self.user.username})"
 
     @admin.display(description="Key preview")

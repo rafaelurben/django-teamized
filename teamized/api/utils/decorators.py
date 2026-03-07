@@ -1,13 +1,13 @@
 """API decorators"""
 
 import uuid
-
 from functools import wraps
 
 from django.db.models import fields
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
 
+from teamized import exceptions
 from teamized.api.utils.constants import (
     NO_PERMISSION_APIKEY,
     APIKEY_INVALID,
@@ -18,7 +18,6 @@ from teamized.api.utils.constants import (
     NOT_AN_UUID,
 )
 from teamized.api.utils.models import ApiKey
-from teamized import exceptions
 
 
 def _is_valid_uuid(val):
@@ -29,7 +28,7 @@ def _is_valid_uuid(val):
         return False
 
 
-def api_view(allowed_methods: list[str] = None, perms_required=tuple()):
+def api_view(allowed_methods: list[str] = None, perms_required=()):
     """Decorator: Protect an api view from unauthorized access."""
 
     if allowed_methods is None:
@@ -39,7 +38,7 @@ def api_view(allowed_methods: list[str] = None, perms_required=tuple()):
         @wraps(function)
         def wrap(request, *args, **kwargs):
             try:
-                if request.method.lower() not in map(lambda x: x.lower(), allowed_methods):
+                if request.method.lower() not in [x.lower() for x in allowed_methods]:
                     return METHOD_NOT_ALLOWED
 
                 apikey = request.GET.get("apikey", None)
