@@ -1,4 +1,4 @@
-import { JSX, lazy, LazyExoticComponent } from 'react';
+import { ComponentType, lazy, LazyExoticComponent } from 'react';
 
 const CalendarsEventsPage = lazy(
     () =>
@@ -37,7 +37,7 @@ export const PAGE_CONFIGS: {
         inheritFrom?: string;
         description?: string;
         canHandleNoTeamData?: boolean;
-        component: LazyExoticComponent<() => JSX.Element>;
+        component: LazyExoticComponent<ComponentType<unknown>>;
     };
 } = {
     home: {
