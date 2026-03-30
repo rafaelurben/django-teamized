@@ -1,14 +1,14 @@
 import * as React from 'react';
+import type { TooltipValueType } from 'recharts';
 import * as RechartsPrimitive from 'recharts';
-import type {
-    NameType,
-    ValueType,
-} from 'recharts/types/component/DefaultTooltipContent';
 
 import { cn } from '@/shadcn/lib/utils';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const;
+
+const INITIAL_DIMENSION = { width: 320, height: 200 } as const;
+type TooltipNameType = number | string;
 
 export type ChartConfig = Record<
     string,
@@ -21,9 +21,9 @@ export type ChartConfig = Record<
     )
 >;
 
-interface ChartContextProps {
+type ChartContextProps = {
     config: ChartConfig;
-}
+};
 
 const ChartContext = React.createContext<ChartContextProps | null>(null);
 
@@ -37,36 +37,23 @@ function useChart() {
     return context;
 }
 
-interface ChartContainerProps
-    extends
-        Omit<React.ComponentProps<'div'>, 'children'>,
-        Pick<
-            React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>,
-            | 'initialDimension'
-            | 'aspect'
-            | 'debounce'
-            | 'minHeight'
-            | 'minWidth'
-            | 'maxHeight'
-            | 'height'
-            | 'width'
-            | 'onResize'
-            | 'children'
-        > {
-    config: ChartConfig;
-    innerResponsiveContainerStyle?: React.ComponentProps<
-        typeof RechartsPrimitive.ResponsiveContainer
-    >['style'];
-}
-
 function ChartContainer({
     id,
-    config,
-    initialDimension = { width: 320, height: 200 },
     className,
     children,
+    config,
+    initialDimension = INITIAL_DIMENSION,
     ...props
-}: Readonly<ChartContainerProps>) {
+}: React.ComponentProps<'div'> & {
+    config: ChartConfig;
+    children: React.ComponentProps<
+        typeof RechartsPrimitive.ResponsiveContainer
+    >['children'];
+    initialDimension?: {
+        width: number;
+        height: number;
+    };
+}) {
     const uniqueId = React.useId();
     const chartId = `chart-${id ?? uniqueId.replace(/:/g, '')}`;
 
@@ -76,7 +63,7 @@ function ChartContainer({
                 data-slot="chart"
                 data-chart={chartId}
                 className={cn(
-                    "tw:[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground tw:[&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 tw:[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border tw:[&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border tw:[&_.recharts-radial-bar-background-sector]:fill-muted tw:[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted tw:[&_.recharts-reference-line_[stroke='#ccc']]:stroke-border tw:flex tw:aspect-video tw:justify-center tw:text-xs tw:[&_.recharts-dot[stroke='#fff']]:stroke-transparent tw:[&_.recharts-layer]:outline-hidden tw:[&_.recharts-sector]:outline-hidden tw:[&_.recharts-sector[stroke='#fff']]:stroke-transparent tw:[&_.recharts-surface]:outline-hidden",
+                    'tw:flex tw:aspect-video tw:justify-center tw:text-xs tw:[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground tw:[&_.recharts-cartesian-grid_line[stroke=#ccc]]:stroke-border/50 tw:[&_.recharts-curve.recharts-tooltip-cursor]:stroke-border tw:[&_.recharts-dot[stroke=#fff]]:stroke-transparent tw:[&_.recharts-layer]:outline-hidden tw:[&_.recharts-polar-grid_[stroke=#ccc]]:stroke-border tw:[&_.recharts-radial-bar-background-sector]:fill-muted tw:[&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted tw:[&_.recharts-reference-line_[stroke=#ccc]]:stroke-border tw:[&_.recharts-sector]:outline-hidden tw:[&_.recharts-sector[stroke=#fff]]:stroke-transparent tw:[&_.recharts-surface]:outline-hidden',
                     className
                 )}
                 {...props}
@@ -149,7 +136,10 @@ function ChartTooltipContent({
         nameKey?: string;
         labelKey?: string;
     } & Omit<
-        RechartsPrimitive.DefaultTooltipContentProps<ValueType, NameType>,
+        RechartsPrimitive.DefaultTooltipContentProps<
+            TooltipValueType,
+            TooltipNameType
+        >,
         'accessibilityLayer'
     >) {
     const { config } = useChart();
@@ -201,7 +191,7 @@ function ChartTooltipContent({
     return (
         <div
             className={cn(
-                'tw:border-border/50 tw:bg-background tw:grid tw:min-w-[8rem] tw:items-start tw:gap-1.5 tw:rounded-lg tw:border tw:px-2.5 tw:py-1.5 tw:text-xs tw:shadow-xl',
+                'tw:grid tw:min-w-[8rem] tw:items-start tw:gap-1.5 tw:rounded-lg tw:border tw:border-border/50 tw:bg-background tw:px-2.5 tw:py-1.5 tw:text-xs tw:shadow-xl',
                 className
             )}
         >
@@ -223,8 +213,8 @@ function ChartTooltipContent({
                             <div
                                 key={index}
                                 className={cn(
-                                    'tw:[&>svg]:text-muted-foreground tw:flex tw:w-full tw:flex-wrap tw:items-stretch tw:gap-2 tw:[&>svg]:h-2.5 tw:[&>svg]:w-2.5',
-                                    indicator === 'dot' && 'items-center'
+                                    'tw:flex tw:w-full tw:flex-wrap tw:items-stretch tw:gap-2 tw:[&>svg]:h-2.5 tw:[&>svg]:w-2.5 tw:[&>svg]:text-muted-foreground',
+                                    indicator === 'dot' && 'tw:items-center'
                                 )}
                             >
                                 {formatter &&
@@ -291,7 +281,7 @@ function ChartTooltipContent({
                                                 </span>
                                             </div>
                                             {item.value != null && (
-                                                <span className="tw:text-foreground tw:font-mono tw:font-medium tw:tabular-nums">
+                                                <span className="tw:font-mono tw:font-medium tw:text-foreground tw:tabular-nums">
                                                     {typeof item.value ===
                                                     'number'
                                                         ? item.value.toLocaleString()
@@ -314,9 +304,9 @@ const ChartLegend = RechartsPrimitive.Legend;
 function ChartLegendContent({
     className,
     hideIcon = false,
-    nameKey,
     payload,
-    verticalAlign,
+    verticalAlign = 'bottom',
+    nameKey,
 }: React.ComponentProps<'div'> & {
     hideIcon?: boolean;
     nameKey?: string;
@@ -337,7 +327,7 @@ function ChartLegendContent({
         >
             {payload
                 .filter((item) => item.type !== 'none')
-                .map((item) => {
+                .map((item, index) => {
                     const key = `${nameKey ?? item.dataKey ?? 'value'}`;
                     const itemConfig = getPayloadConfigFromPayload(
                         config,
@@ -347,9 +337,9 @@ function ChartLegendContent({
 
                     return (
                         <div
-                            key={item.value}
+                            key={index}
                             className={cn(
-                                'tw:[&>svg]:text-muted-foreground tw:flex tw:items-center tw:gap-1.5 tw:[&>svg]:h-3 tw:[&>svg]:w-3'
+                                'tw:flex tw:items-center tw:gap-1.5 tw:[&>svg]:h-3 tw:[&>svg]:w-3 tw:[&>svg]:text-muted-foreground'
                             )}
                         >
                             {itemConfig?.icon && !hideIcon ? (
