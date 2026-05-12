@@ -28,7 +28,7 @@
     "postCreateCommand": "chmod +x ./devproject/post-create.sh && ./devproject/post-create.sh",
     "postAttachCommand": {
         "django": "python -m django runserver 0.0.0.0:8000",
-        "devserver": "cd teamized/app && npm run build-dev",
+        "devserver": "cd app && npm run build-dev",
         "print-urls": "echo Django application available at: $PUBLIC_URL && echo Webpack dev server available at: $TEAMIZED_DEV_SERVER_HOST"
     },
     "customizations": {

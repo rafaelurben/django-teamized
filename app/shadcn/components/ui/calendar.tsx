@@ -1,16 +1,16 @@
 import {
-    ChevronDownIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-} from 'lucide-react';
-import * as React from 'react';
-import {
     Chevron,
     type DayButton,
     DayPicker,
     getDefaultClassNames,
     Root,
-} from 'react-day-picker';
+} from '@daypicker/react';
+import {
+    ChevronDownIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+} from 'lucide-react';
+import * as React from 'react';
 
 import { cn } from '@/shadcn/lib/utils';
 
@@ -92,7 +92,7 @@ function Calendar({
                         : 'tw:rounded-md tw:pl-2 tw:pr-1 tw:flex tw:items-center tw:gap-1 tw:text-sm tw:h-8 tw:[&>svg]:text-muted-foreground tw:[&>svg]:size-3.5',
                     defaultClassNames.caption_label
                 ),
-                table: 'tw:w-full tw:border-collapse',
+                month_grid: 'tw:w-full tw:border-collapse',
                 weekdays: cn('tw:flex', defaultClassNames.weekdays),
                 weekday: cn(
                     'tw:text-muted-foreground tw:rounded-md tw:flex-1 tw:font-normal tw:text-[0.8rem] tw:select-none',

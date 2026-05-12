@@ -1,7 +1,7 @@
+import { DayButton } from '@daypicker/react';
 import { de } from 'date-fns/locale';
 import { CircleIcon, PlusIcon } from 'lucide-react';
 import React, { useState } from 'react';
-import { DayButton } from 'react-day-picker';
 
 import { Button } from '@/shadcn/components/ui/button';
 import { Calendar, CalendarDayButton } from '@/shadcn/components/ui/calendar';
