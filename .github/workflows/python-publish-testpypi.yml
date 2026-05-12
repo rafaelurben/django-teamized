@@ -30,9 +30,7 @@ jobs:
         working-directory: app
         run: npm run build
       - name: Install python build dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install --upgrade build
+        run: python -m pip install pip==26.1.1 build==1.5.1
       - name: Build release distributions
         run: |
           python -m build
