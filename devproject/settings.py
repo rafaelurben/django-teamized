@@ -18,6 +18,7 @@ DEBUG = True
 # NOTE: This wildcard is intentionally used only for local development / devcontainer
 # setups where the hostname can be dynamic. Do NOT reuse this setting in production.
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost:8000", "http://localhost:8000"]
 
 # Application definition
 INSTALLED_APPS = [
