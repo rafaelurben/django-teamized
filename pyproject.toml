@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -29,6 +29,15 @@ requires-python = ">= 3.12"
 dependencies = ["Django>=5.2"]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+dev = [
+    "black==26.3.1",
+    "pylint==4.0.5",
+    "pylint-django==2.7.0",
+    "django-debug-toolbar==6.3.0",
+    "coverage==7.14.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/rafaelurben/django-teamized"
 Docs = "https://github.com/rafaelurben/django-teamized#readme"
@@ -52,7 +61,7 @@ target-version = ['py312', 'py313', 'py314']
 include = '\.pyi?$'
 
 [tool.pylint.main]
-ignore = ["migrations", "node_modules"]
+ignore = ["migrations", "node_modules", ".venv"]
 disable= [
     "missing-module-docstring",
     "missing-class-docstring",
