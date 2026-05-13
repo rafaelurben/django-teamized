@@ -66,10 +66,9 @@ frontend development server needs this to correctly load other assets from the m
 
 #### Backend
 
-1. Install the dependencies (preferably in a virtual environment)
-    - `pip install -r requirements.txt requirements-dev.txt`
-2. Install the backend
-    - `python -m pip install -e .`
+1. Install `uv` (if not already installed): https://docs.astral.sh/uv/getting-started/installation/
+2. Install the dependencies (in editable mode for development)
+    - `uv sync --all-extras`
 3. Add the `teamized` settings to your Django project's settings file
     - `INSTALLED_APPS += ['teamized']`
 4. Add the `teamized` URLs to your Django project's `urls.py` file
@@ -97,8 +96,8 @@ To ensure code quality, you can run the following tools:
 
 #### Backend
 
-- Pylint: `python -m pylint .`
-- Black: `python -m black .`
+- Pylint: `uv run python -m pylint .`
+- Black: `uv run python -m black .`
 
 #### Frontend
 

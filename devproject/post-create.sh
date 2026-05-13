@@ -2,11 +2,12 @@
 
 set -e
 
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Django setup
-pip install --only-binary :all: -r requirements.txt -r requirements-dev.txt
-pip install --only-binary :all: -e .
-python -m django migrate
-python -m django createsuperuser --noinput || true
+uv sync --all-extras
+uv run python -m django migrate
+uv run python -m django createsuperuser --noinput || true
 
 # Node.js setup
 cd app
