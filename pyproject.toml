@@ -35,7 +35,7 @@ dev = [
     "pylint==4.0.5",
     "pylint-django==2.7.0",
     "django-debug-toolbar==6.3.0",
-    "coverage==7.14.0",
+    "coverage==7.14.1",
 ]
 
 [project.urls]
