@@ -18,5 +18,4 @@ interface NavigationStateReplace {
 }
 
 export type NavigationStateChange =
-    | NavigationStateUpdate
-    | NavigationStateReplace;
+    NavigationStateUpdate | NavigationStateReplace;
