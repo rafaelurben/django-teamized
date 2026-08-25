@@ -98,6 +98,8 @@ def endpoint_teams(request):
 
         name = request.POST.get("name", "")[:49]
         description = request.POST.get("description", "")
+        color = request.POST.get("color", "#000000")
+        icon = request.POST.get("icon", "UsersIcon")
 
         if not name or not description:
             return JsonResponse(
@@ -111,7 +113,7 @@ def endpoint_teams(request):
                 status=400,
             )
 
-        team = user.create_team(name, description)
+        team = user.create_team(name, description, color=color, icon=icon)
 
         return JsonResponse(
             {

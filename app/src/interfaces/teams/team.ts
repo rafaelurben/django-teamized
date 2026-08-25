@@ -7,6 +7,8 @@ export interface Team {
     id: ID;
     name: string;
     description: string;
+    color: string;
+    icon: string;
     club: Club | null;
     membercount: number;
     member?: Member;
@@ -15,4 +17,6 @@ export interface Team {
 export interface TeamRequestDTO {
     name: string;
     description: string;
+    color: string;
+    icon: string;
 }

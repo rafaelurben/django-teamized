@@ -102,7 +102,7 @@ class User(models.Model):
         ).hexdigest()
         return "https://www.gravatar.com/avatar/" + mailhash + "?s=80&d=retro"
 
-    def create_team(self, name, description) -> "Team":
+    def create_team(self, name, description, color="#000000", icon="UsersIcon") -> "Team":
         """
         Shortcut: Create a new team and add this user as an owner.
         """
@@ -110,6 +110,22 @@ class User(models.Model):
         team = Team.objects.create(
             name=name,
             description=description,
+            color=validation.RegexValidator.validate(
+                {"color": color},
+                "color",
+                required=False,
+                default="#000000",
+                max_length=7,
+                regex=Team.COLOR_REGEX,
+            ),
+            icon=validation.RegexValidator.validate(
+                {"icon": icon},
+                "icon",
+                required=False,
+                default="UsersIcon",
+                max_length=100,
+                regex=Team.ICON_REGEX,
+            ),
         )
         team.join(self, role=enums.Roles.OWNER)
         return team
@@ -149,6 +165,9 @@ class User(models.Model):
 class Team(models.Model):
     """A team"""
 
+    COLOR_REGEX = r"^#[0-9A-Fa-f]{6}$"
+    ICON_REGEX = r"^[A-Za-z][A-Za-z0-9]*Icon$"
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -163,6 +182,8 @@ class Team(models.Model):
         blank=True,
         default="",
     )
+    color = models.CharField(max_length=7, default="#000000")
+    icon = models.CharField(max_length=100, default="UsersIcon")
 
     linked_club = models.OneToOneField(
         to=club_models.Club,
@@ -194,6 +215,8 @@ class Team(models.Model):
             "id": self.uid,
             "name": self.name,
             "description": self.description,
+            "color": self.color,
+            "icon": self.icon,
             "club": self.linked_club.as_dict() if self.linked_club else None,
             "membercount": membercount or self.members.count(),
             **additional_items,
@@ -249,6 +272,12 @@ class Team(models.Model):
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, self.name, max_length=50)
         self.description = validation.text(data, "description", False, self.description)
+        self.color = validation.RegexValidator.validate(
+            data, "color", False, self.color, max_length=7, regex=self.COLOR_REGEX
+        )
+        self.icon = validation.RegexValidator.validate(
+            data, "icon", False, self.icon, max_length=100, regex=self.ICON_REGEX
+        )
         self.save()
 
 
