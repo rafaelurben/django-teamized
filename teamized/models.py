@@ -8,7 +8,6 @@ import typing
 import uuid
 from datetime import datetime
 
-import teamized.club.models as club_models
 from django.conf import settings
 from django.contrib import admin
 from django.core.validators import RegexValidator
@@ -17,9 +16,10 @@ from django.http import HttpResponse, HttpRequest
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
+
+import teamized.club.models as club_models
 from teamized import enums, options, exceptions, utils, decorators, validation
 from teamized.translations import TranslationConstants
-
 
 # Create your models here.
 
@@ -113,7 +113,7 @@ class User(models.Model):
             team = Team.objects.create(
                 name=_("Team von %s") % self.auth_user.username,
                 description=_("Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
-                icon="user"
+                icon="user",
             )
             team.join(self, role=enums.Roles.OWNER)
 
@@ -157,8 +157,12 @@ class Team(models.Model):
         blank=True,
         default="",
     )
-    color = models.CharField(max_length=7, default="#000000", validators=[RegexValidator(COLOR_REGEX)])
-    icon = models.CharField(max_length=100, default="users", validators=[RegexValidator(ICON_REGEX)])
+    color = models.CharField(
+        max_length=7, default="#000000", validators=[RegexValidator(COLOR_REGEX)]
+    )
+    icon = models.CharField(
+        max_length=100, default="users", validators=[RegexValidator(ICON_REGEX)]
+    )
 
     linked_club = models.OneToOneField(
         to=club_models.Club,
@@ -249,14 +253,14 @@ class Team(models.Model):
         """Create a new Team from POST data"""
 
         team = cls.objects.create(
-            name = validation.text(data, "name", True, max_length=50),
-            description = validation.text(data, "description", True),
-            color = validation.RegexValidator.validate(
+            name=validation.text(data, "name", True, max_length=50),
+            description=validation.text(data, "description", True),
+            color=validation.RegexValidator.validate(
                 data, "color", False, "#000000", max_length=7, regex=cls.COLOR_REGEX
             ),
-            icon = validation.RegexValidator.validate(
+            icon=validation.RegexValidator.validate(
                 data, "icon", False, "users", max_length=100, regex=cls.ICON_REGEX
-            )
+            ),
         )
         team.join(owner, role=enums.Roles.OWNER)
         return team

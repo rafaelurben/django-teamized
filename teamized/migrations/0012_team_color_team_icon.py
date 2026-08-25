@@ -7,18 +7,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teamized', '0011_various_verbose_names'),
+        ("teamized", "0011_various_verbose_names"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='team',
-            name='color',
-            field=models.CharField(default='#000000', max_length=7, validators=[django.core.validators.RegexValidator('^#[0-9A-Fa-f]{6}$')]),
+            model_name="team",
+            name="color",
+            field=models.CharField(
+                default="#000000",
+                max_length=7,
+                validators=[django.core.validators.RegexValidator("^#[0-9A-Fa-f]{6}$")],
+            ),
         ),
         migrations.AddField(
-            model_name='team',
-            name='icon',
-            field=models.CharField(default='users', max_length=100, validators=[django.core.validators.RegexValidator('^[a-z0-9\\-]+$')]),
+            model_name="team",
+            name="icon",
+            field=models.CharField(
+                default="users",
+                max_length=100,
+                validators=[django.core.validators.RegexValidator("^[a-z0-9\\-]+$")],
+            ),
         ),
     ]
