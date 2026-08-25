@@ -3,9 +3,10 @@
  */
 
 import $ from 'jquery';
-import * as LucideIcons from 'lucide-react';
+import { IconName } from 'lucide-react/dynamic';
 import React from 'react';
 
+import { IconPicker } from '@/shadcn/components/ui/icon-picker';
 import * as TeamsAPI from '@/teamized/api/teams';
 import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
 import { ID } from '@/teamized/interfaces/common';
@@ -27,11 +28,6 @@ import { validateUUID } from '@/teamized/utils/general';
 import * as CacheService from './cache.service';
 
 export { getTeamsList } from './cache.service';
-
-const TEAM_COLOR_REGEX = /^#[0-9A-Fa-f]{6}$/;
-const teamIconNames = Object.keys(LucideIcons)
-    .filter((name) => /^[A-Za-z][A-Za-z0-9]*Icon$/.test(name))
-    .sort();
 
 //// API calls ////
 
@@ -90,18 +86,7 @@ export async function createTeamPopup() {
                 <label className="swal2-input-label" htmlFor="swal-input-icon">
                     Icon:
                 </label>
-                <input
-                    type="text"
-                    id="swal-input-icon"
-                    className="swal2-input"
-                    list="swal-input-icon-list"
-                    defaultValue="UsersIcon"
-                />
-                <datalist id="swal-input-icon-list">
-                    {teamIconNames.map((icon) => (
-                        <option key={icon} value={icon} />
-                    ))}
-                </datalist>
+                <IconPicker id="swal-input-icon" defaultValue="users" />
             </>
         ),
         focusConfirm: false,
@@ -112,22 +97,10 @@ export async function createTeamPopup() {
             const name = $('#swal-input-name').val() as string;
             const description = $('#swal-input-description').val() as string;
             const color = $('#swal-input-color').val() as string;
-            const icon = $('#swal-input-icon').val() as string;
+            const icon = $('#swal-input-icon').text().trim() as IconName;
 
-            if (!name || !description) {
+            if (!name || !description || !color || !icon) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                return false;
-            }
-            if (!TEAM_COLOR_REGEX.test(color)) {
-                Swal.showValidationMessage(
-                    'Bitte wähle eine gültige Farbe aus.'
-                );
-                return false;
-            }
-            if (!teamIconNames.includes(icon)) {
-                Swal.showValidationMessage(
-                    'Bitte wähle ein gültiges Lucide-Icon aus.'
-                );
                 return false;
             }
 
@@ -187,18 +160,7 @@ export async function editTeamPopup(team: Team) {
                 <label className="swal2-input-label" htmlFor="swal-input-icon">
                     Icon:
                 </label>
-                <input
-                    type="text"
-                    id="swal-input-icon"
-                    className="swal2-input"
-                    list="swal-input-icon-list"
-                    defaultValue={team.icon}
-                />
-                <datalist id="swal-input-icon-list">
-                    {teamIconNames.map((icon) => (
-                        <option key={icon} value={icon} />
-                    ))}
-                </datalist>
+                <IconPicker id="swal-input-icon" defaultValue={team.icon} />
             </>
         ),
         focusConfirm: false,
@@ -209,22 +171,10 @@ export async function editTeamPopup(team: Team) {
             const name = $('#swal-input-name').val() as string;
             const description = $('#swal-input-description').val() as string;
             const color = $('#swal-input-color').val() as string;
-            const icon = $('#swal-input-icon').val() as string;
+            const icon = $('#swal-input-icon').text().trim() as IconName;
 
-            if (!name || !description) {
+            if (!name || !description || !color || !icon) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
-                return false;
-            }
-            if (!TEAM_COLOR_REGEX.test(color)) {
-                Swal.showValidationMessage(
-                    'Bitte wähle eine gültige Farbe aus.'
-                );
-                return false;
-            }
-            if (!teamIconNames.includes(icon)) {
-                Swal.showValidationMessage(
-                    'Bitte wähle ein gültiges Lucide-Icon aus.'
-                );
                 return false;
             }
 

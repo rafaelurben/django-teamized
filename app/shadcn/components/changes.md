@@ -2,6 +2,11 @@
 
 Apart from code formatting, the following changes were made to the original shadcn/ui components.
 
+## Added components
+
+- Icon picker: https://github.com/alan-crts/shadcn-iconpicker
+    - `npx shadcn@latest add "https://icon-picker.alan-courtois.fr/r/icon-picker"`
+
 ## Fixes
 
 ### Missing React imports

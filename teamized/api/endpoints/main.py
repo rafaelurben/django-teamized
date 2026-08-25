@@ -96,24 +96,7 @@ def endpoint_teams(request):
                 status=400,
             )
 
-        name = request.POST.get("name", "")[:49]
-        description = request.POST.get("description", "")
-        color = request.POST.get("color", "#000000")
-        icon = request.POST.get("icon", "UsersIcon")
-
-        if not name or not description:
-            return JsonResponse(
-                {
-                    "error": "data_invalid",
-                    "alert": {
-                        "title": _("Daten ungültig"),
-                        "text": _("Bitte fülle alle Felder aus."),
-                    },
-                },
-                status=400,
-            )
-
-        team = user.create_team(name, description, color=color, icon=icon)
+        team = Team.from_post_data(request.POST, owner=user)
 
         return JsonResponse(
             {

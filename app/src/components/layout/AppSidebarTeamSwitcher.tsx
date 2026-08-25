@@ -1,13 +1,12 @@
 'use client';
 
-import * as LucideIcons from 'lucide-react';
 import {
     CheckIcon,
     ChevronsUpDownIcon,
-    LucideIcon,
     SettingsIcon,
     UsersIcon,
 } from 'lucide-react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 import * as React from 'react';
 
 import {
@@ -35,11 +34,6 @@ interface Props {
     selectedTeam: Team | null;
 }
 
-function getTeamIcon(iconName: string): LucideIcon {
-    const icon = LucideIcons[iconName as keyof typeof LucideIcons];
-    return typeof icon === 'function' ? (icon as LucideIcon) : UsersIcon;
-}
-
 export function AppSidebarTeamSwitcher({
     teams,
     selectedTeam,
@@ -47,9 +41,6 @@ export function AppSidebarTeamSwitcher({
     const { isMobile, setOpenMobile } = useSidebar();
     const selectTeam = useTeamSwitcher();
     const selectPage = usePageNavigator();
-    const selectedTeamIcon = selectedTeam
-        ? getTeamIcon(selectedTeam.icon)
-        : UsersIcon;
 
     return (
         <SidebarMenu>
@@ -67,9 +58,13 @@ export function AppSidebarTeamSwitcher({
                                         backgroundColor: selectedTeam.color,
                                     }}
                                 >
-                                    {React.createElement(selectedTeamIcon, {
-                                        className: 'tw:size-4',
-                                    })}
+                                    <DynamicIcon
+                                        name={selectedTeam.icon}
+                                        className="tw:size-4"
+                                        style={{
+                                            color: `contrast-color(${selectedTeam.color})`,
+                                        }}
+                                    />
                                 </div>
                                 <div className="tw:grid tw:flex-1 tw:text-left tw:text-sm tw:leading-tight">
                                     <span className="tw:truncate tw:font-medium">
@@ -101,13 +96,13 @@ export function AppSidebarTeamSwitcher({
                                         className="tw:flex tw:size-6 tw:items-center tw:justify-center tw:rounded-md tw:border"
                                         style={{ backgroundColor: team.color }}
                                     >
-                                        {React.createElement(
-                                            getTeamIcon(team.icon),
-                                            {
-                                                className:
-                                                    'tw:size-3.5 tw:shrink-0',
-                                            }
-                                        )}
+                                        <DynamicIcon
+                                            name={team.icon}
+                                            className="tw:size-3.5 tw:shrink-0"
+                                            style={{
+                                                color: `contrast-color(${team.color})`,
+                                            }}
+                                        />
                                     </div>
                                     {team.name}
                                     {selectedTeam.id === team.id && (
