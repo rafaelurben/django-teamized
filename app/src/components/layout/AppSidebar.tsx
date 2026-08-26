@@ -83,6 +83,10 @@ export default function AppSidebar() {
                                     label: 'Arbeitszeit',
                                     page: 'workingtime',
                                     icon: ClipboardClockIcon,
+                                    afterLabelContent:
+                                        appdata.current_worksession ? (
+                                            <span className="tw:animate-pulse tw:bg-destructive tw:rounded-full tw:w-3 tw:h-3" />
+                                        ) : null,
                                 },
                                 {
                                     label: 'Kalender',
