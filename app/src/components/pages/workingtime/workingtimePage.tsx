@@ -1,63 +1,30 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/shadcn/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/shadcn/components/ui/field';
-import { Input } from '@/shadcn/components/ui/input';
 import Dashboard from '@/teamized/components/common/dashboard';
+import { DatePickerWithRange } from '@/teamized/components/common/utils/datetime/dateRangePicker';
 import { Worksession } from '@/teamized/interfaces/workingtime/worksession';
 import * as WorkingtimeService from '@/teamized/service/workingtime.service';
-import { errorToast } from '@/teamized/utils/alerts';
 import { useAppdataRefresh } from '@/teamized/utils/appdataProvider';
-import { localInputFormat, roundDays } from '@/teamized/utils/datetime';
+import {
+    DateRangeRequired,
+    getDateRange1Month,
+} from '@/teamized/utils/datetime';
 import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
 
 import WorkingtimeStats from './workingtimeStats';
 import WorksessionTable from './worksessionTable';
 import WorksessionTrackingTileContent from './worksessionTrackingTileContent';
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const WORKSESSION_SORTER = (a: Worksession, b: Worksession) => {
+    return new Date(b.time_start).getTime() - new Date(a.time_start).getTime();
+};
 
 export default function WorkingtimePage() {
     const refreshData = useAppdataRefresh();
 
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
-
-    const [statsRangeStart, setStatsRangeStart] = useState(
-        roundDays(new Date(Date.now() - 7 * ONE_DAY_MS))
-    );
-    const [statsRangeEnd, setStatsRangeEnd] = useState(
-        roundDays(new Date(), 1)
-    );
-
-    const statsRangeStartId = useId();
-    const statsRangeEndId = useId();
-
-    const applyStatsRange = () => {
-        const startVal = (
-            document.getElementById(statsRangeStartId) as HTMLInputElement
-        ).value;
-        const start = new Date(startVal);
-        const endVal = (
-            document.getElementById(statsRangeEndId) as HTMLInputElement
-        ).value;
-        const end = new Date(endVal);
-        console.log(startVal, start, endVal, end);
-
-        if (!startVal || !endVal || !start || !end) {
-            errorToast('Was ist das?', 'Ein angegebenes Datum ist ungültig');
-            return;
-        }
-        if (start > end) {
-            errorToast(
-                'Hallo Zeitreisender!',
-                'Das Startdatum muss vor dem Enddatum liegen.'
-            );
-            return;
-        }
-        setStatsRangeStart(start);
-        setStatsRangeEnd(end);
-    };
 
     const createSession = () => {
         WorkingtimeService.createWorkSessionPopup(team).then((result) => {
@@ -78,15 +45,23 @@ export default function WorkingtimePage() {
         }
     });
 
-    const sessions: Worksession[] = WorkingtimeService.filterByDateRange(
+    const [statsDateRange, setStatsDateRange] =
+        useState<DateRangeRequired>(getDateRange1Month());
+
+    const statsSessions: Worksession[] = WorkingtimeService.filterByDateRange(
         allMyWorksessionsInCurrentTeam,
-        statsRangeStart,
-        statsRangeEnd
-    ).sort((a, b) => {
-        return (
-            new Date(b.time_start).getTime() - new Date(a.time_start).getTime()
-        );
-    });
+        statsDateRange.from,
+        statsDateRange.to
+    ).sort(WORKSESSION_SORTER);
+
+    const [tableDateRange, setTableDateRange] =
+        useState<DateRangeRequired>(getDateRange1Month());
+
+    const tableSessions: Worksession[] = WorkingtimeService.filterByDateRange(
+        allMyWorksessionsInCurrentTeam,
+        tableDateRange.from,
+        tableDateRange.to
+    ).sort(WORKSESSION_SORTER);
 
     return (
         <Dashboard.Page>
@@ -124,62 +99,24 @@ export default function WorkingtimePage() {
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
-                <Dashboard.Row>
-                    <Dashboard.Column>
-                        <Dashboard.CustomCard title="Filter" wrapInCardContent>
-                            <FieldGroup className="tw:gap-3">
-                                <Field>
-                                    <FieldLabel htmlFor={statsRangeStartId}>
-                                        Von
-                                    </FieldLabel>
-                                    <Input
-                                        type="datetime-local"
-                                        id={statsRangeStartId}
-                                        required
-                                        min="2022-01-01T00:00"
-                                        defaultValue={localInputFormat(
-                                            statsRangeStart
-                                        )}
-                                    />
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor={statsRangeEndId}>
-                                        Bis
-                                    </FieldLabel>
-                                    <Input
-                                        type="datetime-local"
-                                        id={statsRangeEndId}
-                                        required
-                                        min="2022-01-01T00:00"
-                                        defaultValue={localInputFormat(
-                                            statsRangeEnd
-                                        )}
-                                    />
-                                </Field>
-                                <Field orientation="horizontal">
-                                    <Button
-                                        className="tw:w-full"
-                                        onClick={applyStatsRange}
-                                    >
-                                        Anwenden
-                                    </Button>
-                                </Field>
-                            </FieldGroup>
-                        </Dashboard.CustomCard>
-                    </Dashboard.Column>
-                </Dashboard.Row>
             </Dashboard.Column>
             <Dashboard.Column sizes={{ xl: 8 }}>
                 <Dashboard.CustomCard
                     title="Statistiken"
-                    help="Statistiken für den ausgewählten Zeitraum."
+                    help="Aus dem rechts ausgewählten Zeitraum"
+                    action={
+                        <DatePickerWithRange
+                            defaultValue={statsDateRange}
+                            onChange={setStatsDateRange}
+                        />
+                    }
                     grow
                     wrapInCardContent
                 >
                     <WorkingtimeStats
-                        sessions={sessions}
-                        start={statsRangeStart}
-                        end={statsRangeEnd}
+                        sessions={statsSessions}
+                        start={statsDateRange.from}
+                        end={statsDateRange.to}
                         loading={loading}
                     />
                 </Dashboard.CustomCard>
@@ -188,18 +125,25 @@ export default function WorkingtimePage() {
             <Dashboard.Column>
                 <Dashboard.CustomCard
                     title="Erfasste Zeiten"
-                    help="Erfasste Zeiten im ausgewählten Zeitraum."
+                    help="Im rechts ausgewählten Zeitraum"
+                    action={
+                        <DatePickerWithRange
+                            defaultValue={tableDateRange}
+                            onChange={setTableDateRange}
+                        />
+                    }
                     wrapInCardContent
                 >
                     <WorksessionTable
-                        sessions={sessions}
+                        sessions={tableSessions}
                         team={team}
                         loading={loading}
                         reportURL={
                             `${window.teamized_globals.home_url}reports/workingtime/${team.id}?` +
                             new URLSearchParams({
-                                datetime_from: statsRangeStart.toISOString(),
-                                datetime_to: statsRangeEnd.toISOString(),
+                                datetime_from:
+                                    tableDateRange.from.toISOString(),
+                                datetime_to: tableDateRange.to.toISOString(),
                             }).toString()
                         }
                     />

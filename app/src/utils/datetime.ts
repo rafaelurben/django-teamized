@@ -189,3 +189,17 @@ export function getAge(birthDateString: string): number {
         age--;
     return age;
 }
+
+// Date range utils
+
+export type DateRangeRequired = {
+    from: Date;
+    to: Date;
+};
+
+export function getDateRange1Month(): DateRangeRequired {
+    return {
+        from: roundDays(new Date(), -31),
+        to: roundDays(new Date(), 1),
+    };
+}
