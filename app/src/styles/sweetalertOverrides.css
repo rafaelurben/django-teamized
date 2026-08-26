@@ -5,6 +5,10 @@ body.swal2-shown:not(.swal2-no-backdrop) {
     height: 100vh !important;
 }
 
+div.swal2-container {
+    z-index: 49;
+}
+
 .swal2-input,
 .swal2-file,
 .swal2-textarea,

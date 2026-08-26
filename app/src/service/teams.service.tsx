@@ -3,8 +3,10 @@
  */
 
 import $ from 'jquery';
+import { IconName } from 'lucide-react/dynamic';
 import React from 'react';
 
+import { IconPicker } from '@/shadcn/components/ui/icon-picker';
 import * as TeamsAPI from '@/teamized/api/teams';
 import { CacheCategory } from '@/teamized/interfaces/cache/cacheCategory';
 import { ID } from '@/teamized/interfaces/common';
@@ -72,6 +74,19 @@ export async function createTeamPopup() {
                     className="swal2-textarea"
                     placeholder="Teambeschreibung"
                 />
+                <label className="swal2-input-label" htmlFor="swal-input-color">
+                    Farbe:
+                </label>
+                <input
+                    type="color"
+                    id="swal-input-color"
+                    className="swal2-input"
+                    defaultValue="#000000"
+                />
+                <label className="swal2-input-label" htmlFor="swal-input-icon">
+                    Icon:
+                </label>
+                <IconPicker id="swal-input-icon" defaultValue="users" />
             </>
         ),
         focusConfirm: false,
@@ -81,14 +96,16 @@ export async function createTeamPopup() {
         preConfirm: async () => {
             const name = $('#swal-input-name').val() as string;
             const description = $('#swal-input-description').val() as string;
+            const color = $('#swal-input-color').val() as string;
+            const icon = $('#swal-input-icon').text().trim() as IconName;
 
-            if (!name || !description) {
+            if (!name || !description || !color || !icon) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
                 return false;
             }
 
             Swal.showLoading();
-            return await createTeam({ name, description });
+            return await createTeam({ name, description, color, icon });
         },
     });
 }
@@ -131,6 +148,19 @@ export async function editTeamPopup(team: Team) {
                     placeholder={team.description ?? ''}
                     defaultValue={team.description ?? ''}
                 />
+                <label className="swal2-input-label" htmlFor="swal-input-color">
+                    Farbe:
+                </label>
+                <input
+                    type="color"
+                    id="swal-input-color"
+                    className="swal2-input"
+                    defaultValue={team.color}
+                />
+                <label className="swal2-input-label" htmlFor="swal-input-icon">
+                    Icon:
+                </label>
+                <IconPicker id="swal-input-icon" defaultValue={team.icon} />
             </>
         ),
         focusConfirm: false,
@@ -140,14 +170,16 @@ export async function editTeamPopup(team: Team) {
         preConfirm: async () => {
             const name = $('#swal-input-name').val() as string;
             const description = $('#swal-input-description').val() as string;
+            const color = $('#swal-input-color').val() as string;
+            const icon = $('#swal-input-icon').text().trim() as IconName;
 
-            if (!name || !description) {
+            if (!name || !description || !color || !icon) {
                 Swal.showValidationMessage('Bitte fülle alle Felder aus!');
                 return false;
             }
 
             Swal.showLoading();
-            return await editTeam(team.id, { name, description });
+            return await editTeam(team.id, { name, description, color, icon });
         },
     });
 }

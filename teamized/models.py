@@ -10,6 +10,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.contrib import admin
+from django.core.validators import RegexValidator
 from django.db import models
 from django.http import HttpResponse, HttpRequest
 from django.urls import reverse
@@ -102,18 +103,6 @@ class User(models.Model):
         ).hexdigest()
         return "https://www.gravatar.com/avatar/" + mailhash + "?s=80&d=retro"
 
-    def create_team(self, name, description) -> "Team":
-        """
-        Shortcut: Create a new team and add this user as an owner.
-        """
-
-        team = Team.objects.create(
-            name=name,
-            description=description,
-        )
-        team.join(self, role=enums.Roles.OWNER)
-        return team
-
     def ensure_team(self) -> None:
         """
         Ensure that the user owns at least one team.
@@ -121,10 +110,12 @@ class User(models.Model):
         """
 
         if not self.member_instances.filter(role=enums.Roles.OWNER).exists():
-            self.create_team(
+            team = Team.objects.create(
                 name=_("Team von %s") % self.auth_user.username,
                 description=_("Persönlicher Arbeitsbereich von %s") % self.auth_user.username,
+                icon="user",
             )
+            team.join(self, role=enums.Roles.OWNER)
 
     def can_create_team(self) -> bool:
         """
@@ -149,6 +140,9 @@ class User(models.Model):
 class Team(models.Model):
     """A team"""
 
+    COLOR_REGEX = r"^#[0-9A-Fa-f]{6}$"
+    ICON_REGEX = r"^[a-z0-9\-]+$"
+
     uid = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -162,6 +156,12 @@ class Team(models.Model):
     description = models.TextField(
         blank=True,
         default="",
+    )
+    color = models.CharField(
+        max_length=7, default="#000000", validators=[RegexValidator(COLOR_REGEX)]
+    )
+    icon = models.CharField(
+        max_length=100, default="users", validators=[RegexValidator(ICON_REGEX)]
     )
 
     linked_club = models.OneToOneField(
@@ -194,6 +194,8 @@ class Team(models.Model):
             "id": self.uid,
             "name": self.name,
             "description": self.description,
+            "color": self.color,
+            "icon": self.icon,
             "club": self.linked_club.as_dict() if self.linked_club else None,
             "membercount": membercount or self.members.count(),
             **additional_items,
@@ -245,10 +247,34 @@ class Team(models.Model):
 
         return self.members.get(user=user)
 
+    @classmethod
+    @decorators.validation_func()
+    def from_post_data(cls, data: dict, owner: User) -> "Team":
+        """Create a new Team from POST data"""
+
+        team = cls.objects.create(
+            name=validation.text(data, "name", True, max_length=50),
+            description=validation.text(data, "description", True),
+            color=validation.RegexValidator.validate(
+                data, "color", False, "#000000", max_length=7, regex=cls.COLOR_REGEX
+            ),
+            icon=validation.RegexValidator.validate(
+                data, "icon", False, "users", max_length=100, regex=cls.ICON_REGEX
+            ),
+        )
+        team.join(owner, role=enums.Roles.OWNER)
+        return team
+
     @decorators.validation_func()
     def update_from_post_data(self, data: dict):
         self.name = validation.text(data, "name", False, self.name, max_length=50)
         self.description = validation.text(data, "description", False, self.description)
+        self.color = validation.RegexValidator.validate(
+            data, "color", False, self.color, max_length=7, regex=self.COLOR_REGEX
+        )
+        self.icon = validation.RegexValidator.validate(
+            data, "icon", False, self.icon, max_length=100, regex=self.ICON_REGEX
+        )
         self.save()
 
 

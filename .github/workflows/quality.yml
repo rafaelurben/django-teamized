@@ -66,9 +66,11 @@ jobs:
         run: |
           uv sync --all-extras --locked
       - name: Check code formatting with black
+        if: ${{ matrix.python-version == '3.14' }}
         run: |
           uv run --locked python -m black --check .
       - name: Check code quality with pylint
+        if: ${{ matrix.python-version == '3.14' }}
         run: |
           uv run --locked python -m pylint . --output-format=github
       - name: Run Tests with coverage
