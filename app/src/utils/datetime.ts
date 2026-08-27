@@ -22,6 +22,23 @@ export function roundDays(oldDate: Date, offset: number = 0): Date {
 }
 
 /**
+ * Round a date to the beginning of the week (start of week = monday)
+ *
+ * @param {Date} oldDate
+ * @param {Number} offset in weeks
+ * @returns {Date}
+ */
+export function roundWeeks(oldDate: Date, offset: number = 0): Date {
+    const totalOffset =
+        offset * 7 - (oldDate.getDay() === 0 ? 6 : oldDate.getDay() - 1);
+    return new Date(
+        oldDate.getFullYear(),
+        oldDate.getMonth(),
+        oldDate.getDate() + totalOffset
+    );
+}
+
+/**
  * Round a date to the beginning of the month (+ offset months)
  *
  * @param {Date} oldDate
@@ -30,6 +47,17 @@ export function roundDays(oldDate: Date, offset: number = 0): Date {
  */
 export function roundMonths(oldDate: Date, offset: number = 0): Date {
     return new Date(oldDate.getFullYear(), oldDate.getMonth() + offset, 1);
+}
+
+/**
+ * Round a date to the beginning of the year (+ offset years)
+ *
+ * @param {Date} oldDate
+ * @param {Number} offset in years
+ * @returns {Date}
+ */
+export function roundYears(oldDate: Date, offset: number = 0): Date {
+    return new Date(oldDate.getFullYear() + offset, 0, 1);
 }
 
 /**
