@@ -21,11 +21,15 @@ import {
     waitingToast,
 } from '@/teamized/utils/alerts';
 import {
+    formatDate,
     getDateString,
     isInRange,
     isoFormat,
     localInputFormat,
     roundDays,
+    roundMonths,
+    roundWeeks,
+    roundYears,
 } from '@/teamized/utils/datetime';
 
 import * as CacheService from './cache.service';
@@ -448,48 +452,101 @@ function splitMultiDaySessions(sessions: Worksession[]): Worksession[] {
     return result;
 }
 
+interface WorkingtimeChartItem {
+    name: string;
+    duration_s: number;
+    duration_h: number;
+    unit_count: number;
+}
+
+type WorkingtimeChartData = {
+    [key: number]: WorkingtimeChartItem;
+};
+
 /**
- * Generate chart data for a chart split by day
+ * Generate chart data for a chart
+ * @param sessions list of worksessions
+ * @param start the start of the selected date range
+ * @param end the end of the selected date range
+ * @param groupFn function to group, round and offset dates
+ * @param formatFn function to format the group name
  */
-export function chartDataByDays(
+function chartDataBy(
     sessions: Worksession[],
     start: Date,
-    end: Date
+    end: Date,
+    groupFn: (date: Date, offset?: number) => Date,
+    formatFn: (date: Date) => string
 ) {
-    // Create a dictionary of all days in the range
-    const days: {
-        [key: number]: {
-            name: string;
-            duration_s: number;
-            duration_h: number;
-            unit_count: number;
-        };
-    } = {};
+    // Create a dictionary of all group units in the range
+    const groups: WorkingtimeChartData = {};
+    const lastGroupTime = groupFn(end).getTime();
     let i = 0;
-    let dayTime: number;
+    let groupDate: Date;
+    let groupTime: number;
     do {
-        const dayObj = roundDays(start, i++);
-        dayTime = dayObj.getTime();
-        days[dayTime] = {
-            name: getDateString(dayObj),
+        groupDate = groupFn(start, i++);
+        groupTime = groupDate.getTime();
+        groups[groupTime] = {
+            name: formatFn(groupDate),
             duration_s: 0,
             duration_h: 0,
             unit_count: 0,
         };
-    } while (dayTime < roundDays(new Date(end.getTime() - 1)).getTime());
+    } while (groupTime < lastGroupTime);
 
     // Split sessions that start before midnight and end after midnight
     const splitSessions = splitMultiDaySessions(sessions);
-    // Add the duration and unit count of each session to the corresponding day
+    // Add the duration and unit count of each session to the corresponding week
     splitSessions.forEach((session) => {
-        const day = roundDays(new Date(session.time_start)).getTime();
-        days[day].duration_s += session.duration;
-        days[day].duration_h = +(days[day].duration_s / 3600).toFixed(2);
+        const day = groupFn(new Date(session.time_start)).getTime();
+        groups[day].duration_s += session.duration;
+        groups[day].duration_h = +(groups[day].duration_s / 3600).toFixed(2);
         if (session.unit_count != null) {
-            days[day].unit_count += session.unit_count;
+            groups[day].unit_count += session.unit_count;
         }
     });
-    return Object.values(days);
+    return Object.values(groups);
+}
+
+export function chartData(sessions: Worksession[], start: Date, end: Date) {
+    const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+    if (dayDiff > 365) {
+        // by year
+        return chartDataBy(sessions, start, end, roundYears, (date) =>
+            formatDate(date, {
+                year: 'numeric',
+            })
+        );
+    } else if (dayDiff > 70) {
+        // by month
+        return chartDataBy(sessions, start, end, roundMonths, (date) =>
+            formatDate(date, {
+                month: 'long',
+                year: 'numeric',
+            })
+        );
+    } else if (dayDiff > 21) {
+        // by week
+        return chartDataBy(
+            sessions,
+            start,
+            end,
+            roundWeeks,
+            (date) =>
+                formatDate(date, {
+                    day: 'numeric',
+                    month: 'numeric',
+                }) +
+                ' - ' +
+                formatDate(roundDays(date, 6), {
+                    day: 'numeric',
+                    month: 'numeric',
+                })
+        );
+    }
+    // by date
+    return chartDataBy(sessions, start, end, roundDays, getDateString);
 }
 
 /**

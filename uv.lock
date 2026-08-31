@@ -215,7 +215,7 @@ dependencies = [
     { name = "django" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "black" },
     { name = "coverage" },
@@ -225,15 +225,16 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "black", marker = "extra == 'dev'", specifier = "==26.5.1" },
-    { name = "coverage", marker = "extra == 'dev'", specifier = "==7.15.4" },
-    { name = "django", specifier = ">=5.2" },
-    { name = "django-debug-toolbar", marker = "extra == 'dev'", specifier = "==7.1.1" },
-    { name = "pylint", marker = "extra == 'dev'", specifier = "==4.0.7" },
-    { name = "pylint-django", marker = "extra == 'dev'", specifier = "==2.8.0" },
+requires-dist = [{ name = "django", specifier = ">=5.2" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = "==26.5.1" },
+    { name = "coverage", specifier = "==7.15.4" },
+    { name = "django-debug-toolbar", specifier = "==7.1.1" },
+    { name = "pylint", specifier = "==4.0.7" },
+    { name = "pylint-django", specifier = "==2.8.0" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "isort"
