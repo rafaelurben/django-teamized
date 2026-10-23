@@ -31,6 +31,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/shadcn/components/ui/select';
+import { cn } from '@/shadcn/lib/utils';
 import { DateRangeRequired, isSameDate } from '@/teamized/utils/datetime';
 
 export interface DateRangePreset {
@@ -93,6 +94,8 @@ interface Props {
     startMonth?: Date;
     endMonth?: Date;
     presets?: DateRangePreset[];
+    className?: string;
+    buttonClassName?: string;
 }
 
 export function DatePickerWithRange({
@@ -101,6 +104,8 @@ export function DatePickerWithRange({
     startMonth = new Date(2021, 11, 25),
     endMonth = new Date(),
     presets,
+    className,
+    buttonClassName,
 }: Readonly<Props>) {
     const activePresets = useMemo(
         () => presets ?? getDefaultPresets(),
@@ -153,7 +158,7 @@ export function DatePickerWithRange({
 
     return (
         <Field
-            className="mx-auto w-60"
+            className={cn('mx-auto w-60', className)}
             aria-description="Datumsbereich auswählen"
         >
             <Popover>
@@ -161,7 +166,10 @@ export function DatePickerWithRange({
                     <Button
                         variant="outline"
                         id="date-picker-range"
-                        className="justify-start px-2.5 font-normal"
+                        className={cn(
+                            'justify-start px-2.5 font-normal',
+                            buttonClassName
+                        )}
                     >
                         <CalendarIcon />
                         {dateRange?.from ? (

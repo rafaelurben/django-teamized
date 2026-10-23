@@ -13,6 +13,7 @@ import {
 import { useCurrentTeamData } from '@/teamized/utils/navigation/navigationProvider';
 
 import WorkingtimeStats from './workingtimeStats';
+import { WorksessionCreateForm } from './worksessionCreateForm';
 import WorksessionTable from './worksessionTable';
 import WorksessionTrackingTileContent from './worksessionTrackingTileContent';
 
@@ -26,11 +27,7 @@ export default function WorkingtimePage() {
     const teamData = useCurrentTeamData();
     const team = teamData?.team;
 
-    const createSession = () => {
-        WorkingtimeService.createWorkSessionPopup(team).then((result) => {
-            if (result.isConfirmed) refreshData();
-        });
-    };
+    const [isCreatingSession, setIsCreatingSession] = useState(false);
 
     const allMyWorksessionsInCurrentTeam = Object.values(
         teamData.me_worksessions
@@ -84,18 +81,33 @@ export default function WorkingtimePage() {
                             grow
                             wrapInCardContent
                         >
-                            <p className="tw:text-sm tw:mb-4">
-                                Aufzeichnung vergessen? Kein Problem. Hier
-                                können Sitzungen nachträglich manuell erfasst
-                                werden.
-                            </p>
-                            <Button
-                                variant="success"
-                                className="tw:w-full"
-                                onClick={createSession}
-                            >
-                                Sitzung hinzufügen
-                            </Button>
+                            {isCreatingSession ? (
+                                <WorksessionCreateForm
+                                    team={team}
+                                    onSuccess={() => {
+                                        refreshData();
+                                        setIsCreatingSession(false);
+                                    }}
+                                    onCancel={() => setIsCreatingSession(false)}
+                                />
+                            ) : (
+                                <>
+                                    <p className="tw:text-sm tw:mb-4">
+                                        Aufzeichnung vergessen? Kein Problem.
+                                        Hier können Sitzungen nachträglich
+                                        manuell erfasst werden.
+                                    </p>
+                                    <Button
+                                        variant="success"
+                                        className="tw:w-full"
+                                        onClick={() =>
+                                            setIsCreatingSession(true)
+                                        }
+                                    >
+                                        Sitzung hinzufügen
+                                    </Button>
+                                </>
+                            )}
                         </Dashboard.CustomCard>
                     </Dashboard.Column>
                 </Dashboard.Row>
