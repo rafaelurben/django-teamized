@@ -1,5 +1,5 @@
 import { LucideIcon } from 'lucide-react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Badge } from '@/shadcn/components/ui/badge';
 import {
@@ -27,6 +27,7 @@ interface ItemWithoutSubmenu {
     small?: boolean;
     isBeta?: boolean;
     page: string;
+    afterLabelContent?: ReactNode;
 }
 
 interface Props {
@@ -93,6 +94,7 @@ export default function AppSidebarMainNavigation({ groups }: Readonly<Props>) {
                                                     Beta
                                                 </Badge>
                                             )}
+                                            {item.afterLabelContent || null}
                                         </a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

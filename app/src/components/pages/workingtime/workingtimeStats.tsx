@@ -40,7 +40,7 @@ export default function WorkingtimeStats({
     end,
     loading,
 }: Readonly<Props>) {
-    const data = WorkingtimeService.chartDataByDays(sessions, start, end);
+    const data = WorkingtimeService.chartData(sessions, start, end);
     const totalHours = WorkingtimeService.totalDuration(sessions) / 3600;
     const totalUnitCount = WorkingtimeService.totalUnitCount(sessions);
 
