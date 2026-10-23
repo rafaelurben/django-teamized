@@ -296,7 +296,10 @@ export async function deleteWorkSessionPopup(team: Team, session: Worksession) {
             <br />
             <b>Notiz:</b> {session.note}
         </>,
-        async () => await deleteWorkSession(team.id, session.id)
+        async () => await deleteWorkSession(team.id, session.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 

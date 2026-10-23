@@ -411,6 +411,9 @@ export async function deleteToDoListItemPopup(
             <b>Beschreibung: </b>
             {item.description}
         </>,
-        async () => await deleteToDoListItem(team.id, todolist.id, item.id)
+        async () => await deleteToDoListItem(team.id, todolist.id, item.id),
+        {
+            variant: 'destructive',
+        }
     );
 }

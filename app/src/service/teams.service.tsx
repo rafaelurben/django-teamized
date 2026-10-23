@@ -204,7 +204,11 @@ export async function deleteTeamPopup(team: Team) {
             <br />
             <b>ID:</b> {team.id}
         </>,
-        async () => await deleteTeam(team.id)
+        async () => await deleteTeam(team.id),
+        {
+            confirmations: 3,
+            requireText: team.name,
+        }
     );
 }
 
@@ -228,7 +232,10 @@ export async function leaveTeamPopup(team: Team) {
             <br />
             <b>ID:</b> {team.id}
         </>,
-        async () => await leaveTeam(team.id)
+        async () => await leaveTeam(team.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 
@@ -307,7 +314,10 @@ export async function deleteMemberPopup(team: Team, member: Member) {
             </b>{' '}
             aus dem Team {team.name} entfernen?
         </>,
-        async () => await deleteMember(team.id, member.id)
+        async () => await deleteMember(team.id, member.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 
@@ -516,7 +526,10 @@ export async function deleteInvitePopup(team: Team, invite: Invite) {
             <br />
             <b>Token:</b> {invite.token}
         </>,
-        async () => await deleteInvite(team.id, invite.id)
+        async () => await deleteInvite(team.id, invite.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 
@@ -566,10 +579,10 @@ export async function checkInvitePopup(token: string) {
         async () => {
             return await acceptInvite(token);
         },
-        'Du wurdest eingeladen',
         {
+            title: 'Du wurdest eingeladen',
             icon: 'info',
-            confirmButtonColor: 'green',
+            variant: 'success',
             confirmButtonText: 'Einladung akzeptieren',
             cancelButtonText: 'Nein, später',
         }

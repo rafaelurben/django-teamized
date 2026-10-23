@@ -11,6 +11,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './components/app';
+import { ConfirmDialogProvider } from './components/common/dialogs/confirmDialog';
 import KeyboardListener from './components/keyboardListener';
 import { AppdataProvider } from './utils/appdataProvider';
 import * as GeneralUtils from './utils/general';
@@ -44,12 +45,14 @@ let root = createRoot(rootElem);
 export function render() {
     root.render(
         <React.StrictMode>
-            <AppdataProvider>
-                <NavigationProvider>
-                    <KeyboardListener />
-                    <App />
-                </NavigationProvider>
-            </AppdataProvider>
+            <ConfirmDialogProvider>
+                <AppdataProvider>
+                    <NavigationProvider>
+                        <KeyboardListener />
+                        <App />
+                    </NavigationProvider>
+                </AppdataProvider>
+            </ConfirmDialogProvider>
         </React.StrictMode>
     );
 }
