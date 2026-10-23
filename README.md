@@ -69,14 +69,16 @@ frontend development server needs this to correctly load other assets from the m
 1. Install `uv` (if not already installed): https://docs.astral.sh/uv/getting-started/installation/
 2. Install the dependencies (in editable mode for development)
     - `uv sync --all-extras`
-3. Add the `teamized` settings to your Django project's settings file
-    - `INSTALLED_APPS += ['teamized']`
-4. Add the `teamized` URLs to your Django project's `urls.py` file
-    - `path('teamized/', include('teamized.urls'))`
-5. Run the migrations
-    - `python manage.py migrate teamized`
-6. Run the development server
-    - `python manage.py runserver`
+3. Either continue with your existing Django project or use the provided `devproject`
+    - Using your existing Django project:
+        1. Add the `teamized` settings to your Django project's settings file
+            - `INSTALLED_APPS += ['teamized']`
+        2. Add the `teamized` URLs to your Django project's `urls.py` file
+            - `path('teamized/', include('teamized.urls'))`
+        3. Run the migrations
+            - `python manage.py migrate teamized`
+        4. Run the development server
+            - `python manage.py runserver`
 
 Note: Ensure that DEBUG is set to True in your Django settings for development purposes.
 
