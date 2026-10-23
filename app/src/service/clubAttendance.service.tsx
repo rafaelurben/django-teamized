@@ -318,7 +318,10 @@ export async function deleteAttendanceEventPopup(
             Willst du das Anwesenheitsevent <b>{event.title}</b> wirklich
             löschen?
         </>,
-        async () => await deleteAttendanceEvent(team.id, event.id)
+        async () => await deleteAttendanceEvent(team.id, event.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 
@@ -390,6 +393,9 @@ export async function deleteClubAttendanceEventParticipationPopup(
                 team.id,
                 event.id,
                 participation.id
-            )
+            ),
+        {
+            variant: 'destructive',
+        }
     );
 }

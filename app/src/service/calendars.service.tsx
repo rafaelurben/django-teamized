@@ -846,6 +846,9 @@ export async function deleteEventPopup(
             <b>Beschreibung: </b>
             {event.description}
         </>,
-        async () => await deleteEvent(team.id, calendar.id, event.id)
+        async () => await deleteEvent(team.id, calendar.id, event.id),
+        {
+            variant: 'destructive',
+        }
     );
 }

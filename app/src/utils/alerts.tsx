@@ -12,6 +12,11 @@ import withReactContent, {
     ReactSweetAlertOptions as SweetAlertOptions,
 } from 'sweetalert2-react-content';
 
+import {
+    ConfirmDialogOptions,
+    ConfirmDialogResult,
+    globalConfirm,
+} from '@/teamized/components/common/dialogs/confirmDialog';
 import { Alert } from '@/teamized/interfaces/responses/alert';
 import { ErrorResponse } from '@/teamized/interfaces/responses/errorResponse';
 import { getSwalTheme } from '@/teamized/service/settings.service';
@@ -104,34 +109,24 @@ export function waitingToast<T>(text: string, promise: Promise<T>) {
  *
  * @param {*} content content of the alert
  * @param {*} preConfirm function that is called when the user confirms the alert
- * @param {String} title
  * @param {object} options
- * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
+ * @returns a promise resolving to the ConfirmDialogResult containing the return value of preConfirm
  */
-export async function confirmAlert<T>(
+export async function confirmAlert<T = unknown>(
     content: ReactNode,
-    preConfirm: (() => Promise<T>) | null,
-    title: string = '',
-    options: SweetAlertOptions = {}
-) {
-    const data: SweetAlertOptions = {
-        theme: getSwalTheme(),
-        title: title || 'Sicher?',
-        html: content as string,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
+    preConfirm: (() => Promise<T>) | null = null,
+    options: Partial<ConfirmDialogOptions<T>> = {}
+): Promise<ConfirmDialogResult<T>> {
+    return await globalConfirm<T>({
+        title: options.title || 'Sicher?',
+        description: content,
         confirmButtonText: 'Ja',
         cancelButtonText: 'Nein, abbrechen',
+        confirmations: options.confirmations ?? 1,
+        requireText: options.requireText,
+        preConfirm,
         ...options,
-    } satisfies SweetAlertOptions;
-
-    if (preConfirm !== undefined && preConfirm !== null) {
-        data.preConfirm = preConfirm;
-        data.showLoaderOnConfirm = true;
-    }
-
-    return await fireAlert<T>(data);
+    });
 }
 
 /**
@@ -139,25 +134,33 @@ export async function confirmAlert<T>(
  *
  * @param {*} content
  * @param {*} preConfirm function that is called when the user confirms the alert twice
- * @returns a promise resolving to the SweetAlertResult containing the return value of preConfirm
+ * @param {object} options
+ * @returns a promise resolving to the ConfirmDialogResult containing the return value of preConfirm
  */
-export async function doubleConfirmAlert<T>(
+export async function doubleConfirmAlert<T = unknown>(
     content: ReactNode,
-    preConfirm: () => Promise<T>
-) {
-    const firstAlertResult = await confirmAlert<null>(content, null, 'Sicher?');
-    if (firstAlertResult.isConfirmed) {
-        return await confirmAlert<T>(
+    preConfirm: () => Promise<T>,
+    options: Partial<ConfirmDialogOptions<T>> = {}
+): Promise<ConfirmDialogResult<T>> {
+    return await confirmAlert<T>(content, preConfirm, {
+        stepTitles: ['Sicher?', 'Absolut sicher?'],
+        stepDescriptions: [
+            content,
             <>
                 {content}
                 <br />
                 <br />
                 <b className="tw:text-destructive">ES GIBT KEIN ZURÜCK!</b>
             </>,
-            preConfirm,
-            'Absolut sicher?'
-        );
-    } else {
-        return firstAlertResult;
-    }
+        ],
+        confirmations: 2,
+        variant: 'destructive',
+        ...options,
+    });
 }
+
+export {
+    type ConfirmDialogOptions,
+    ConfirmDialogProvider,
+    SweetAlertResult,
+} from '@/teamized/components/common/dialogs/confirmDialog';

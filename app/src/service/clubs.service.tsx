@@ -860,7 +860,10 @@ export async function deleteClubGroupPopup(team: Team, group: ClubGroup) {
             Mitglieder dieser Gruppe werden nicht gelöscht, sondern nur aus der
             Gruppe entfernt.
         </>,
-        async () => await deleteClubGroup(team.id, group.id)
+        async () => await deleteClubGroup(team.id, group.id),
+        {
+            variant: 'destructive',
+        }
     );
 }
 
