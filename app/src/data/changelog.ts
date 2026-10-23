@@ -9,11 +9,14 @@ export interface ChangelogItem {
 
 export const CHANGELOG: ChangelogItem[] = [
     {
-        date: '3333-03-03',
-        version: 'next',
+        date: '2026-10-23',
+        version: '0.5.0',
         changes: [
+            '[Teams]: Anpassbare Farben und Icons',
             '[Arbeitszeit]: Aggregierte Statistik bei längeren Zeiträumen',
             '[Arbeitszeit]: Einfachere Erfassung von Sitzungen',
+            '[Arbeitszeit]: Schnellauswahl für Datumsbereiche',
+            '[Arbeitszeit]: Anzeige einer laufenden Erfassung in der Seitenleiste',
             'Aktualisierte Löschen-Dialoge',
         ],
     },
