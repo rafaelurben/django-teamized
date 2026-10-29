@@ -113,7 +113,7 @@ export function WorksessionCreateForm({
                         id="worksession-unit-count"
                         type="number"
                         min={0}
-                        step={1}
+                        step="any"
                         placeholder="z. B. 1"
                         value={unitCount}
                         onChange={(e) => setUnitCount(e.target.value)}
