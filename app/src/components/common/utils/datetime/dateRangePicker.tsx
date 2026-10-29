@@ -173,7 +173,9 @@ export function DatePickerWithRange({
                     >
                         <CalendarIcon />
                         {dateRange?.from ? (
-                            dateRange.to ? (
+                            dateRange.to &&
+                            dateRange.to.getUTCDate() !==
+                                dateRange.from.getUTCDate() ? (
                                 <>
                                     {dateRange.from.toLocaleDateString()} -{' '}
                                     {dateRange.to.toLocaleDateString()}
