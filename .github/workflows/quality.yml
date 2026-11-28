@@ -59,7 +59,7 @@ jobs:
         uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
         with:
           # Install a specific version of uv.
-          version: "0.13.9"
+          version: "0.13.10"
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - name: Install dependencies
@@ -113,7 +113,7 @@ jobs:
           echo "VERSION=$(cat _version.txt | tr -d '\r\n')" >> $GITHUB_OUTPUT
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@59202af334b4ba7b5db01b701b8e79f8b3bef0f4 # v8.5.0
+        uses: SonarSource/sonarqube-scan-action@70bad232163b09d998ea0707ee80c0ec80798c16 # v8.5.1
         with:
           args: >
             -Dsonar.projectVersion=${{ steps.version.outputs.VERSION }}
